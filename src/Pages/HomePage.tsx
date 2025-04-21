@@ -1,5 +1,5 @@
+import "../Common/styles/home.css"
 import { useState } from "react";
-import Navbar from "src/Layout/Navbar";
 
 export default function HomePage() {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -11,9 +11,14 @@ export default function HomePage() {
 
     return (
         <div className="homepage">
-            <Navbar/>
             <main className="main-content">
-                
+                <div className="main-inner main-img"></div>
+                <div className="main-inner">
+                    <div className="main-sub-inner">
+                        <div className="main-content-title">Korean live class</div>
+                        <div className="main-content-desc">Study korean language anytime, anywhere!</div>
+                    </div>
+                </div>
             </main>
         </div>
     );

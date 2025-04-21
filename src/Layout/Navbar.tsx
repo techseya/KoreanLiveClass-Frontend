@@ -1,10 +1,17 @@
 import "../Common/styles/navbar.css";
 import { useState } from "react";
 import lms_logo from "../Assets/Images/lms_logo.png"
+import { useNavigate } from "react-router-dom";
 
-export default function Navbar() {
+interface Props {
+    children: React.ReactElement;
+  }
+
+export default function Navbar({ children }: Readonly<Props>) {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+
+    const navigate = useNavigate();
 
     const cartCount = 3;
 
@@ -12,10 +19,25 @@ export default function Navbar() {
     const toggleDropdown = (menu: string) =>
         setOpenDropdown(openDropdown === menu ? null : menu);
 
+    const handleNavAllCourses = () =>{
+        setOpenDropdown(null)
+        navigate("/all-courses")
+    }
+
+    const handleNavMyCourses = () =>{
+        setOpenDropdown(null)
+        navigate("/my-courses")
+    }
+
+    const handleNavHome = () =>{
+        setOpenDropdown(null)
+        navigate("/")
+    }
+
     return (
         <div className="homepage">
             <nav className="navbar">
-                <img className="logo" src={lms_logo} alt="" />
+                <img className="logo" src={lms_logo} alt="" onClick={handleNavHome} style={{cursor: 'pointer'}}/>
 
                 <button className="menu-toggle" onClick={toggleMenu}>
                     ☰
@@ -34,8 +56,8 @@ export default function Navbar() {
                         <span onClick={() => toggleDropdown("courses")}>Courses ▾</span>
                         {openDropdown === "courses" && (
                             <ul className="dropdown-menu">
-                                <li><a href="#">All Courses</a></li>
-                                <li><a href="#">My Courses</a></li>
+                                <li><a onClick={handleNavAllCourses}>All Courses</a></li>
+                                <li><a onClick={handleNavMyCourses}>My Courses</a></li>
                             </ul>
                         )}
                     </li>
@@ -57,6 +79,9 @@ export default function Navbar() {
                     </li>
                 </ul>
             </nav>
+            <main className="main-content">
+                {children}
+            </main>
         </div>
     );
 }
