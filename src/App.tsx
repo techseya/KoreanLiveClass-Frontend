@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
-import Landing from "./Pages/LandingPage";
+import HomePage from "./Pages/HomePage";
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -8,7 +8,7 @@ const App: React.FC = () => {
 
   return (
     <Routes>
-      <Route path="/" element={<Landing/>} />
+      <Route path="/" element={<HomePage/>} />
     </Routes>
   );
 };
