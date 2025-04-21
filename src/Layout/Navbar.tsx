@@ -21,7 +21,7 @@ export default function Navbar({ children }: Readonly<Props>) {
 
     const handleNavAllCourses = () =>{
         setOpenDropdown(null)
-        navigate("/all-courses")
+        //navigate("/all-courses")
     }
 
     const handleNavMyCourses = () =>{
@@ -56,17 +56,9 @@ export default function Navbar({ children }: Readonly<Props>) {
                         />
                         <button className="search-button">Search</button>
                     </li>
-                    <li className="dropdown">
-                        <span onClick={() => toggleDropdown("courses")}>Courses ▾</span>
-                        {openDropdown === "courses" && (
-                            <ul className="dropdown-menu">
-                                <li><a onClick={handleNavAllCourses}>All Courses</a></li>
-                                <li><a onClick={handleNavMyCourses}>My Courses</a></li>
-                            </ul>
-                        )}
-                    </li>
 
-                    <li><a href="#">Korean Words</a></li>
+                    <li><a onClick={handleNavAllCourses}>Courses</a></li>
+
 
                     <li className="cart-icon">
                         <a href="#">

@@ -283,15 +283,6 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
           <div className="toolbar-inner">
           <nav className="navbar" style={{height: "60px !important" , padding: "0 25px"}}>
 
-                <li className="search-bar">
-                  <input
-                    type="text"
-                    placeholder="Search courses..."
-                    className="search-input"
-                  />
-                  <button className="search-button">Search</button>
-                </li>
-
                 <li className="cart-icon invisible">
                   <a href="#">
                     🛒
