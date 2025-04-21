@@ -1,4 +1,4 @@
-*{
+* {
     font-family: 'Open Sans', sans-serif !important;
 }
 
@@ -16,7 +16,7 @@
     margin-top: 10px;
 }
 
-.main-inner{
+.main-inner {
     width: 50%;
     height: 60vh;
     display: flex;
@@ -24,26 +24,114 @@
     justify-content: center;
 }
 
-.main-img{
+.main-img {
     background-image: url("../../Assets/Images/students.jpg");
     background-size: cover;
     background-repeat: no-repeat;
 }
 
-.main-sub-inner{
+.main-sub-inner {
     width: 100%;
     height: auto;
     display: block;
     text-align: center;
 }
 
-.main-content-title{
+.main-content-title {
     font-size: 50px;
     font-weight: bold;
     color: #3b82f6;
 }
 
-.main-content-desc{
+.main-content-desc {
     font-size: 18px;
     margin-top: 15px;
+}
+
+.slide-text {
+    font-size: 20px;
+    font-weight: 600;
+    color: #fdfdfd;
+    opacity: 0;
+    transform: translateX(-100%);
+}
+
+.slide-text.animate {
+    animation: slideLeftToRight 3s ease-in-out;
+}
+
+.anime-outer {
+    width: 100%;
+    height: auto;
+    display: flex;
+    margin-top: 25px;
+    justify-content: center;
+}
+
+.anime-inner {
+    width: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 20px;
+    background-color: #3b82f6;
+    border-radius: 10px;
+}
+
+.anime-logo {
+    width: 30px;
+    margin-right: 15px;
+}
+
+.typing {
+    font-size: 50px;
+    font-weight: bold;
+    color: #3b82f6;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.cursor {
+    display: inline-block;
+    width: 1px;
+    background-color: #1f2937;
+    margin-left: 2px;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+
+    0%,
+    50%,
+    100% {
+        opacity: 1;
+    }
+
+    25%,
+    75% {
+        opacity: 0;
+    }
+}
+
+
+@keyframes slideLeftToRight {
+    0% {
+        opacity: 0;
+        transform: translateY(50%);
+    }
+
+    20% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    80% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-50%);
+    }
 }
