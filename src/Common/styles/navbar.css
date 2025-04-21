@@ -198,4 +198,8 @@ html {
   .search-bar {
     display: none;
   }
+
+  .invisible{
+    display: none !important;
+  }
 }

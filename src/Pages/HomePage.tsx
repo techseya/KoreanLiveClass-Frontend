@@ -3,11 +3,14 @@ import { useEffect, useState } from "react";
 import img1 from "../Assets/Images/curriculum.png";
 import img2 from "../Assets/Images/teacher.png";
 import img3 from "../Assets/Images/clock.png";
+import { useNavigate } from "react-router-dom";
 
 export default function HomePage() {
     const [currentTextIndex, setCurrentTextIndex] = useState(0);
     const [animate, setAnimate] = useState(true);
     const [typedText, setTypedText] = useState("");
+
+    const navigate = useNavigate();
 
     const sentences = ["17 Online courses", "Expert instruction", "Access anytime"];
     const images = [img1, img2, img3];

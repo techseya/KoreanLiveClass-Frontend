@@ -34,6 +34,10 @@ export default function Navbar({ children }: Readonly<Props>) {
         navigate("/")
     }
 
+    const handleLogin = () => {
+        navigate("/home");
+    }
+
     return (
         <div className="homepage">
             <nav className="navbar">
@@ -74,7 +78,7 @@ export default function Navbar({ children }: Readonly<Props>) {
                     </li>
 
                     <li className="auth-buttons">
-                        <button className="login">Login</button>
+                        <button className="login" onClick={handleLogin}>Login</button>
                         <button className="signup">Sign Up</button>
                     </li>
                 </ul>
