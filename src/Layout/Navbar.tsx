@@ -35,7 +35,7 @@ export default function Navbar({ children }: Readonly<Props>) {
     }
 
     const handleLogin = () => {
-        navigate("/home");
+        navigate("/dashboard");
     }
 
     return (
@@ -48,14 +48,6 @@ export default function Navbar({ children }: Readonly<Props>) {
                 </button>
 
                 <ul className={`nav-links ${isMenuOpen ? "active" : ""}`}>
-                    <li className="search-bar">
-                        <input
-                            type="text"
-                            placeholder="Search courses..."
-                            className="search-input"
-                        />
-                        <button className="search-button">Search</button>
-                    </li>
 
                     <li><a onClick={handleNavAllCourses}>Courses</a></li>
 
