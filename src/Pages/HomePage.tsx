@@ -178,6 +178,27 @@ export default function HomePage() {
         },
     ];
 
+    const instructors = [
+        {
+            name: 'Ven. Kalyanapura Mangala',
+            role: 'Korean Language Trainer at Korean Live Class',
+            about: 'Ven.Kalyanapura Managala holds a Masters Degree from the Uiduk University South Korea , having qualified in Korean Language Training and Korean Lanaguage Ability Test conducted by the National Institute for International Education in South Korea. He holds a Bachelor of Arts Degree from the Department Of Buddhist Cultural Studies. (B/A) (Uiduk University South Korea), Bachelor Of Arts Degree (B/A) (Kelaniya University Sri Lanka), Korean Language Training And Korean Culture Program (Uiduk University South Korea), Korean Language Ability Test (National Institute for international Education South Korea), Korean Language Training And Culture Experience (Koica Sri Lanka), Spoken English Course (Royal Institute International School Of Higher Education Colombo Sri Lanka) and a Certificate in Microsoft Office Course. (JGO SOCIAL TRAINING CENTRE Sri Lanka)',
+            image: '',
+            skills: ['Korean Language', 'Training', 'Korean Culture'],
+            socialMedia: [
+                {
+                    facebook: 'https://www.facebook.com/KoreanLiveClass/'
+                },
+                {
+                    twitter: 'https://x.com/KoreanLiveClass'
+                },
+                {
+                    linkedIn: 'https://www.linkedin.com/company/koreanlc'
+                }
+            ]
+        }
+    ]
+
 
     // Typing animation for title
     useEffect(() => {
@@ -347,15 +368,14 @@ export default function HomePage() {
                         className="category-card"
                         key={index}
                         onClick={() => {
-                            // Handle category click here
                             console.log(`Clicked on category: ${category.title}`);
                         }}
                         style={{ cursor: "pointer" }}
                     >
                         <div className="course-info1">
-                            <div style={{display: "flex", justifyContent: "center", alignItems: "center", padding: "10px", borderRadius: "50%", backgroundColor: "#3b82f6", width: "35px", height: "35px"}}>
+                            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", padding: "10px", borderRadius: "50%", backgroundColor: "#3b82f6", width: "35px", height: "35px" }}>
                                 <img className="chess" src={chess} alt="" />
-                            </div>                            
+                            </div>
                         </div>
                         <div className="course-info1">
                             <h3 className="course-title">{category.title}</h3>
@@ -367,9 +387,34 @@ export default function HomePage() {
                 ))}
             </div>
 
-            
+
             <div className="space"></div>
             <div className="space"></div>
+
+            <div className="top-courses-outer">
+                <span className="top-courses-title">INSTRUCTOR</span>
+            </div>
+            <div className="top-courses-outer2">
+                {instructors.map((instructor, index) => (
+                    <div className="instructor-card">
+                        <div className="instructor-card-inner">
+                            <img className="instructor-card-image" src={insImg} alt="" />
+                        </div>
+                        <div className="instructor-card-inner1">
+                            <div className="instructor-name">{instructor.name}</div>
+                            <div className="instructor-desc">{instructor.about}</div>
+                            <div className="skills">
+                                {instructor.skills.map((skill, idx) => (
+                                    <div className="skill" key={idx}>
+                                        {skill}
+                                    </div>
+                                ))}
+
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 }
