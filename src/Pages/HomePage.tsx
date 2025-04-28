@@ -15,8 +15,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import chess from "../Assets/Images/chess.png";
-import chess2 from "../Assets/Images/chess(blue).png";
-
+import fb from "../Assets/Images/facebook.png"
+import twitter from "../Assets/Images/twitter.png"
+import linkedin from "../Assets/Images/linkedin.png"
 
 // Modal transition animation
 const Transition = forwardRef(function Transition(props: any, ref) {
@@ -402,19 +403,39 @@ export default function HomePage() {
                         </div>
                         <div className="instructor-card-inner1">
                             <div className="instructor-name">{instructor.name}</div>
-                            <div className="instructor-desc">{instructor.about}</div>
+                            <div className="role">{instructor.role}</div>
                             <div className="skills">
                                 {instructor.skills.map((skill, idx) => (
                                     <div className="skill" key={idx}>
                                         {skill}
                                     </div>
                                 ))}
-
+                            </div>
+                            <div className="instructor-desc">{instructor.about}</div>
+                            <div className="skills right-align">
+                                <div>
+                                    <a className="sm" href={instructor.socialMedia[0].facebook} target="_blank" rel="noopener noreferrer">
+                                        <img className="sm-icon" src={fb} alt="" />
+                                    </a>
+                                </div>
+                                <div>
+                                <a className="sm" href={instructor.socialMedia[0].linkedIn} target="_blank" rel="noopener noreferrer">
+                                        <img className="sm-icon" src={linkedin} alt="" />
+                                    </a>
+                                </div>
+                                <div>
+                                <a className="sm" href={instructor.socialMedia[0].twitter} target="_blank" rel="noopener noreferrer">
+                                        <img className="sm-icon" src={twitter} alt="" />
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 ))}
             </div>
+
+            <div className="space"></div>
+            <div className="space"></div>
         </div>
     );
 }
