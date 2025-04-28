@@ -149,6 +149,9 @@
     font-size: 30px;
     font-weight: bold;
     color: #575757;
+    text-shadow: 2px 1px 0px rgba(175,164,3,0.37);
+    padding-bottom: 5px;
+    border-bottom: 2px solid #afa403;
 }
 
 .top-course-card {
@@ -296,11 +299,24 @@
     margin-left: 10px;
 }
 
+.lec-count{
+    display: flex;
+    align-items: center;
+}
+
 .clock-icon {
     width: 20px;
     height: auto;
     margin-right: 5px;
     color: #ef4444;
+    margin-bottom: 1px;
+}
+
+.doc-icon{
+    width: 20px;
+    height: auto;
+    margin-right: 5px;
+    color: #0251db;
     margin-bottom: 1px;
 }
 
@@ -327,10 +343,74 @@
     background: white;
     padding: 30px;
     border-radius: 12px;
-    width: 90%;
-    max-width: 600px;
+    width: 95%;
     position: relative;
     animation: fadeIn 0.3s ease;
+}
+
+.model-outer{
+    width: 100%;
+    height: auto;
+    display: flex;
+}
+
+.model-inner{
+    width: 30%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.model-inner1{
+    width: 70%;
+    height: auto;
+}
+
+.model-thumb{
+    width: 100%;
+    border-radius: 10px;
+    border: 1px solid #0251db;
+}
+
+.model-title{
+    font-size: 30px;
+    font-weight: bold;
+    margin: 15px 0 15px 35px;
+}
+
+.model-desc{
+    font-size: 14px;
+    margin: 0px 0 10px 35px;
+}
+
+.model-overview{
+    font-size: 15px;
+    margin: 10px 0 15px 35px;
+    text-align: justify;
+}
+
+.model-label{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.label-outer{
+    display: flex;
+    justify-content: center;
+    margin: 10px 0 15px 35px;
+    padding: 5px 10px;
+    background-color: #3b82f6;
+    color: white;
+    font-size: 12px;
+    border-radius: 5px;
+}
+
+.duration-outer{    
+    display: flex;
+    justify-content: center;
 }
 
 .modal-thumbnail {

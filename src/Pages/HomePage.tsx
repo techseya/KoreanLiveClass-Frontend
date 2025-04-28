@@ -19,6 +19,7 @@ import fb from "../Assets/Images/facebook.png"
 import twitter from "../Assets/Images/twitter.png"
 import linkedin from "../Assets/Images/linkedin.png"
 import Footer from "src/Layout/Footer";
+import { Description, DockOutlined } from "@mui/icons-material";
 
 // Modal transition animation
 const Transition = forwardRef(function Transition(props: any, ref) {
@@ -55,6 +56,7 @@ export default function HomePage() {
         {
             title: "TOPIK 1-2 제 93회 අප්‍රේල් විභාගය",
             description: "වීසා මාරු කර ගැනීම සහා ශිෂ්‍ය වීසා සදහා අයදුම්කරුවන් සමත්විය යුතු විභාගය...",
+            overview: 'කොරියාවේ ස්ථිර පදිංචිය ලබා ගැනීම සදහා කොරියානු භාශාව සහා සංස්කෘතිය පිළීබද පුළුල් අවබෝදයක් ලබා ගැනීම අනිවාර්ය වන අතර ඒ සදහා 사회통합프로그램 5 단계 සමත් විය යුතුය. පාඩම් සියල්ල  විවිධ මාතෘකා 50 යටතේ සාකච්ඡා වන අතර ඒ හරහා කොරියාව හා එහි සංස්කෘතිය සම්බන්දව ඉතා පුළුල් අවබෝදයක් ලබා ගත හැක. මෙම පාඩම් 50 සියල්ල කිසිදු අඩුපාඩුවක් නොමැති ආකාරයෙන් සිසුන්ට අවබෝද කර ගැනීමට පහසු වන ආකාරයට Video හරහා පාඩම් නැරඹිමේ හැකියාව ඔබට ලබා දී තිබේ. මෙම සියළු විෂය නිර්දේශයේ පාඩම් සියල්ල මාස හයක කාලයක් කැමති වාරයක් නැරඹිමට හැකි ආකාරයට නිර්මාණය කර තිබේ.',
             price: 1990.00,
             duration: "06:04:45 Hours",
             ratings: 5,
@@ -66,6 +68,7 @@ export default function HomePage() {
         {
             title: "Conversational Korean",
             description: "Master daily conversations and practical expressions in Korean.",
+            overview: 'කොරියාවේ ස්ථිර පදිංචිය ලබා ගැනීම සදහා කොරියානු භාශාව සහා සංස්කෘතිය පිළීබද පුළුල් අවබෝදයක් ලබා ගැනීම අනිවාර්ය වන අතර ඒ සදහා 사회통합프로그램 5 단계 සමත් විය යුතුය. පාඩම් සියල්ල  විවිධ මාතෘකා 50 යටතේ සාකච්ඡා වන අතර ඒ හරහා කොරියාව හා එහි සංස්කෘතිය සම්බන්දව ඉතා පුළුල් අවබෝදයක් ලබා ගත හැක. මෙම පාඩම් 50 සියල්ල කිසිදු අඩුපාඩුවක් නොමැති ආකාරයෙන් සිසුන්ට අවබෝද කර ගැනීමට පහසු වන ආකාරයට Video හරහා පාඩම් නැරඹිමේ හැකියාව ඔබට ලබා දී තිබේ. මෙම සියළු විෂය නිර්දේශයේ පාඩම් සියල්ල මාස හයක කාලයක් කැමති වාරයක් නැරඹිමට හැකි ආකාරයට නිර්මාණය කර තිබේ.',
             price: 24990,
             duration: "4 weeks",
             ratings: 4,
@@ -77,6 +80,7 @@ export default function HomePage() {
         {
             title: "Korean Culture and Language",
             description: "Explore Korean traditions while improving your language skills.",
+            overview: 'කොරියාවේ ස්ථිර පදිංචිය ලබා ගැනීම සදහා කොරියානු භාශාව සහා සංස්කෘතිය පිළීබද පුළුල් අවබෝදයක් ලබා ගැනීම අනිවාර්ය වන අතර ඒ සදහා 사회통합프로그램 5 단계 සමත් විය යුතුය. පාඩම් සියල්ල  විවිධ මාතෘකා 50 යටතේ සාකච්ඡා වන අතර ඒ හරහා කොරියාව හා එහි සංස්කෘතිය සම්බන්දව ඉතා පුළුල් අවබෝදයක් ලබා ගත හැක. මෙම පාඩම් 50 සියල්ල කිසිදු අඩුපාඩුවක් නොමැති ආකාරයෙන් සිසුන්ට අවබෝද කර ගැනීමට පහසු වන ආකාරයට Video හරහා පාඩම් නැරඹිමේ හැකියාව ඔබට ලබා දී තිබේ. මෙම සියළු විෂය නිර්දේශයේ පාඩම් සියල්ල මාස හයක කාලයක් කැමති වාරයක් නැරඹිමට හැකි ආකාරයට නිර්මාණය කර තිබේ.',
             price: 2199,
             duration: "5 weeks",
             ratings: 2,
@@ -88,6 +92,7 @@ export default function HomePage() {
         {
             title: "K-Drama Korean Language",
             description: "Learn Korean through popular K-Dramas and everyday dialogues.",
+            overview: 'කොරියාවේ ස්ථිර පදිංචිය ලබා ගැනීම සදහා කොරියානු භාශාව සහා සංස්කෘතිය පිළීබද පුළුල් අවබෝදයක් ලබා ගැනීම අනිවාර්ය වන අතර ඒ සදහා 사회통합프로그램 5 단계 සමත් විය යුතුය. පාඩම් සියල්ල  විවිධ මාතෘකා 50 යටතේ සාකච්ඡා වන අතර ඒ හරහා කොරියාව හා එහි සංස්කෘතිය සම්බන්දව ඉතා පුළුල් අවබෝදයක් ලබා ගත හැක. මෙම පාඩම් 50 සියල්ල කිසිදු අඩුපාඩුවක් නොමැති ආකාරයෙන් සිසුන්ට අවබෝද කර ගැනීමට පහසු වන ආකාරයට Video හරහා පාඩම් නැරඹිමේ හැකියාව ඔබට ලබා දී තිබේ. මෙම සියළු විෂය නිර්දේශයේ පාඩම් සියල්ල මාස හයක කාලයක් කැමති වාරයක් නැරඹිමට හැකි ආකාරයට නිර්මාණය කර තිබේ.',
             price: 1799,
             duration: "3 weeks",
             ratings: 4,
@@ -99,6 +104,7 @@ export default function HomePage() {
         {
             title: "Korean Culture and Language",
             description: "Explore Korean traditions while improving your language skills.",
+            overview: 'කොරියාවේ ස්ථිර පදිංචිය ලබා ගැනීම සදහා කොරියානු භාශාව සහා සංස්කෘතිය පිළීබද පුළුල් අවබෝදයක් ලබා ගැනීම අනිවාර්ය වන අතර ඒ සදහා 사회통합프로그램 5 단계 සමත් විය යුතුය. පාඩම් සියල්ල  විවිධ මාතෘකා 50 යටතේ සාකච්ඡා වන අතර ඒ හරහා කොරියාව හා එහි සංස්කෘතිය සම්බන්දව ඉතා පුළුල් අවබෝදයක් ලබා ගත හැක. මෙම පාඩම් 50 සියල්ල කිසිදු අඩුපාඩුවක් නොමැති ආකාරයෙන් සිසුන්ට අවබෝද කර ගැනීමට පහසු වන ආකාරයට Video හරහා පාඩම් නැරඹිමේ හැකියාව ඔබට ලබා දී තිබේ. මෙම සියළු විෂය නිර්දේශයේ පාඩම් සියල්ල මාස හයක කාලයක් කැමති වාරයක් නැරඹිමට හැකි ආකාරයට නිර්මාණය කර තිබේ.',
             price: 2199,
             duration: "5 weeks",
             ratings: 2,
@@ -110,6 +116,7 @@ export default function HomePage() {
         {
             title: "K-Drama Korean Language",
             description: "Learn Korean through popular K-Dramas and everyday dialogues.",
+            overview: 'කොරියාවේ ස්ථිර පදිංචිය ලබා ගැනීම සදහා කොරියානු භාශාව සහා සංස්කෘතිය පිළීබද පුළුල් අවබෝදයක් ලබා ගැනීම අනිවාර්ය වන අතර ඒ සදහා 사회통합프로그램 5 단계 සමත් විය යුතුය. පාඩම් සියල්ල  විවිධ මාතෘකා 50 යටතේ සාකච්ඡා වන අතර ඒ හරහා කොරියාව හා එහි සංස්කෘතිය සම්බන්දව ඉතා පුළුල් අවබෝදයක් ලබා ගත හැක. මෙම පාඩම් 50 සියල්ල කිසිදු අඩුපාඩුවක් නොමැති ආකාරයෙන් සිසුන්ට අවබෝද කර ගැනීමට පහසු වන ආකාරයට Video හරහා පාඩම් නැරඹිමේ හැකියාව ඔබට ලබා දී තිබේ. මෙම සියළු විෂය නිර්දේශයේ පාඩම් සියල්ල මාස හයක කාලයක් කැමති වාරයක් නැරඹිමට හැකි ආකාරයට නිර්මාණය කර තිබේ.',
             price: 1799,
             duration: "3 weeks",
             ratings: 4,
@@ -121,6 +128,7 @@ export default function HomePage() {
         {
             title: "K-Drama Korean Language",
             description: "Learn Korean through popular K-Dramas and everyday dialogues.",
+            overview: 'කොරියාවේ ස්ථිර පදිංචිය ලබා ගැනීම සදහා කොරියානු භාශාව සහා සංස්කෘතිය පිළීබද පුළුල් අවබෝදයක් ලබා ගැනීම අනිවාර්ය වන අතර ඒ සදහා 사회통합프로그램 5 단계 සමත් විය යුතුය. පාඩම් සියල්ල  විවිධ මාතෘකා 50 යටතේ සාකච්ඡා වන අතර ඒ හරහා කොරියාව හා එහි සංස්කෘතිය සම්බන්දව ඉතා පුළුල් අවබෝදයක් ලබා ගත හැක. මෙම පාඩම් 50 සියල්ල කිසිදු අඩුපාඩුවක් නොමැති ආකාරයෙන් සිසුන්ට අවබෝද කර ගැනීමට පහසු වන ආකාරයට Video හරහා පාඩම් නැරඹිමේ හැකියාව ඔබට ලබා දී තිබේ. මෙම සියළු විෂය නිර්දේශයේ පාඩම් සියල්ල මාස හයක කාලයක් කැමති වාරයක් නැරඹිමට හැකි ආකාරයට නිර්මාණය කර තිබේ.',
             price: 1799,
             duration: "3 weeks",
             ratings: 4,
@@ -132,23 +140,13 @@ export default function HomePage() {
         {
             title: "Korean Culture and Language",
             description: "Explore Korean traditions while improving your language skills.",
+            overview: 'කොරියාවේ ස්ථිර පදිංචිය ලබා ගැනීම සදහා කොරියානු භාශාව සහා සංස්කෘතිය පිළීබද පුළුල් අවබෝදයක් ලබා ගැනීම අනිවාර්ය වන අතර ඒ සදහා 사회통합프로그램 5 단계 සමත් විය යුතුය. පාඩම් සියල්ල  විවිධ මාතෘකා 50 යටතේ සාකච්ඡා වන අතර ඒ හරහා කොරියාව හා එහි සංස්කෘතිය සම්බන්දව ඉතා පුළුල් අවබෝදයක් ලබා ගත හැක. මෙම පාඩම් 50 සියල්ල කිසිදු අඩුපාඩුවක් නොමැති ආකාරයෙන් සිසුන්ට අවබෝද කර ගැනීමට පහසු වන ආකාරයට Video හරහා පාඩම් නැරඹිමේ හැකියාව ඔබට ලබා දී තිබේ. මෙම සියළු විෂය නිර්දේශයේ පාඩම් සියල්ල මාස හයක කාලයක් කැමති වාරයක් නැරඹිමට හැකි ආකාරයට නිර්මාණය කර තිබේ.',
             price: 2199,
             duration: "5 weeks",
             ratings: 2,
             label: "Intermediate",
             lectureCount: 22,
             image: "https://source.unsplash.com/featured/?culture,korea",
-            instructor: "Ven. Kalyanapura Mangala"
-        },
-        {
-            title: "K-Drama Korean Language",
-            description: "Learn Korean through popular K-Dramas and everyday dialogues.",
-            price: 1799,
-            duration: "3 weeks",
-            ratings: 4,
-            label: "Beginner",
-            lectureCount: 15,
-            image: "https://source.unsplash.com/featured/?kdrama,korean",
             instructor: "Ven. Kalyanapura Mangala"
         }
     ];
@@ -184,7 +182,7 @@ export default function HomePage() {
         {
             name: 'Ven. Kalyanapura Mangala',
             role: 'Korean Language Trainer at Korean Live Class',
-            about:[
+            about: [
                 {
                     para: 'Ven.Kalyanapura Managala holds a Masters Degree from the Uiduk University South Korea , having qualified in Korean Language Training and Korean Lanaguage Ability Test conducted by the National Institute for International Education in South Korea.'
                 },
@@ -323,7 +321,7 @@ export default function HomePage() {
                 onClose={() => setIsModalOpen(false)}
                 TransitionComponent={Transition}
             >
-                <AppBar sx={{ position: 'relative', backgroundColor: '#3b82f6' }}>
+                <AppBar sx={{ position: 'relative', backgroundColor: '#105a9d' }}>
                     <Toolbar>
                         <IconButton
                             edge="start"
@@ -340,7 +338,31 @@ export default function HomePage() {
                 </AppBar>
 
                 <div className="modal-content">
-                    <img
+                    <div className="model-outer">
+                        <div className="model-inner">
+                            <img className="model-thumb" src={thumb2} alt="" />
+                        </div>
+                        <div className="model-inner1">
+                            <div className="model-title">{selectedCourse?.title}</div>
+                            <div className="model-desc">{selectedCourse?.description}</div>
+                            <div className="model-label">
+                                <div className="label-outer">
+                                    {selectedCourse?.label}
+                                </div>
+                                <div className="duration-outer">
+                                    <ClockCircleOutlined className="clock-icon" />
+                                    {selectedCourse?.duration}
+                                </div>
+                                <div className="lec-count">
+                                <Description className="doc-icon" />
+                                    {selectedCourse?.lectureCount} Lessons
+                                    </div>
+                            </div>
+                            <div className="space"></div>
+                            <div className="model-overview">{selectedCourse?.overview}</div>
+                        </div>
+                    </div>
+                    {/*<img
                         src={thumb2}
                         alt="Course"
                         style={{ width: "100%", maxHeight: "300px", objectFit: "cover" }}
@@ -350,7 +372,7 @@ export default function HomePage() {
                             {selectedCourse?.title}
                         </Typography>
                         <Typography variant="body1" sx={{ mb: 2 }}>
-                            {selectedCourse?.description}
+                            
                         </Typography>
                         <Typography variant="h6">
                             Price: Rs.{(selectedCourse?.price)}
@@ -361,7 +383,7 @@ export default function HomePage() {
                         <div style={{ marginTop: "20px" }}>
                             <button className="enroll-btn">Enroll Now</button>
                         </div>
-                    </div>
+                    </div>*/}
                 </div>
             </Dialog>
 
@@ -433,12 +455,12 @@ export default function HomePage() {
                                     </a>
                                 </div>
                                 <div>
-                                <a className="sm" href={instructor.socialMedia[0].linkedIn} target="_blank" rel="noopener noreferrer">
+                                    <a className="sm" href={instructor.socialMedia[0].linkedIn} target="_blank" rel="noopener noreferrer">
                                         <img className="sm-icon" src={linkedin} alt="" />
                                     </a>
                                 </div>
                                 <div>
-                                <a className="sm" href={instructor.socialMedia[0].twitter} target="_blank" rel="noopener noreferrer">
+                                    <a className="sm" href={instructor.socialMedia[0].twitter} target="_blank" rel="noopener noreferrer">
                                         <img className="sm-icon" src={twitter} alt="" />
                                     </a>
                                 </div>
@@ -451,7 +473,7 @@ export default function HomePage() {
             <div className="space"></div>
             <div className="space"></div>
 
-            <Footer/>
+            <Footer />
         </div>
     );
 }

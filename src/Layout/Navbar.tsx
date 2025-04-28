@@ -13,7 +13,7 @@ export default function Navbar({ children }: Readonly<Props>) {
 
     const navigate = useNavigate();
 
-    const cartCount = 3;
+    const cartCount = 0;
 
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
     const toggleDropdown = (menu: string) =>
