@@ -18,6 +18,7 @@ import chess from "../Assets/Images/chess.png";
 import fb from "../Assets/Images/facebook.png"
 import twitter from "../Assets/Images/twitter.png"
 import linkedin from "../Assets/Images/linkedin.png"
+import Footer from "src/Layout/Footer";
 
 // Modal transition animation
 const Transition = forwardRef(function Transition(props: any, ref) {
@@ -183,7 +184,14 @@ export default function HomePage() {
         {
             name: 'Ven. Kalyanapura Mangala',
             role: 'Korean Language Trainer at Korean Live Class',
-            about: 'Ven.Kalyanapura Managala holds a Masters Degree from the Uiduk University South Korea , having qualified in Korean Language Training and Korean Lanaguage Ability Test conducted by the National Institute for International Education in South Korea. He holds a Bachelor of Arts Degree from the Department Of Buddhist Cultural Studies. (B/A) (Uiduk University South Korea), Bachelor Of Arts Degree (B/A) (Kelaniya University Sri Lanka), Korean Language Training And Korean Culture Program (Uiduk University South Korea), Korean Language Ability Test (National Institute for international Education South Korea), Korean Language Training And Culture Experience (Koica Sri Lanka), Spoken English Course (Royal Institute International School Of Higher Education Colombo Sri Lanka) and a Certificate in Microsoft Office Course. (JGO SOCIAL TRAINING CENTRE Sri Lanka)',
+            about:[
+                {
+                    para: 'Ven.Kalyanapura Managala holds a Masters Degree from the Uiduk University South Korea , having qualified in Korean Language Training and Korean Lanaguage Ability Test conducted by the National Institute for International Education in South Korea.'
+                },
+                {
+                    para: 'He holds a Bachelor of Arts Degree from the Department Of Buddhist Cultural Studies. (B/A) (Uiduk University South Korea), Bachelor Of Arts Degree (B/A) (Kelaniya University Sri Lanka), Korean Language Training And Korean Culture Program (Uiduk University South Korea), Korean Language Ability Test (National Institute for international Education South Korea), Korean Language Training And Culture Experience (Koica Sri Lanka), Spoken English Course (Royal Institute International School Of Higher Education Colombo Sri Lanka) and a Certificate in Microsoft Office Course. (JGO SOCIAL TRAINING CENTRE Sri Lanka)'
+                }
+            ],
             image: '',
             skills: ['Korean Language', 'Training', 'Korean Culture'],
             socialMedia: [
@@ -411,7 +419,13 @@ export default function HomePage() {
                                     </div>
                                 ))}
                             </div>
-                            <div className="instructor-desc">{instructor.about}</div>
+                            <div className="instructor-desc">
+                                {instructor.about.map((item, idx) => (
+                                    <div className="para" key={idx}>
+                                        {item.para}
+                                    </div>
+                                ))}
+                            </div>
                             <div className="skills right-align">
                                 <div>
                                     <a className="sm" href={instructor.socialMedia[0].facebook} target="_blank" rel="noopener noreferrer">
@@ -436,6 +450,8 @@ export default function HomePage() {
 
             <div className="space"></div>
             <div className="space"></div>
+
+            <Footer/>
         </div>
     );
 }

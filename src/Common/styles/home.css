@@ -413,7 +413,8 @@
 }
 
 .instructor-card-image{
-    width: 100%;
+    width: 90%;
+    border-radius: 50%;
 }
 
 .instructor-name{
@@ -433,6 +434,10 @@
     font-size: 13px;
     text-align: justify;
     color: #646464;
+}
+
+.para{
+    margin: 5px 0;
 }
 
 .skills{
