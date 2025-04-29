@@ -1,75 +1,72 @@
-import "../Common/styles/navbar.css";
 import { useState } from "react";
-import lms_logo from "../Assets/Images/lms_logo.png"
-import { useNavigate } from "react-router-dom";
+import "../Common/styles/navbar.css";
 
 interface Props {
-    children: React.ReactElement;
-  }
+  children?: React.ReactElement;
+}
 
 export default function Navbar({ children }: Readonly<Props>) {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState<string | null>(null);
 
-    const navigate = useNavigate();
+  const toggleDropdown = (label: string) => {
+    setDropdownOpen((prev) => (prev === label ? null : label));
+  };
 
-    const cartCount = 0;
+  return (
+    <>
+      <nav className="navbar">
+        <div className="navbar-logo">MyLogo</div>
 
-    const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-    const toggleDropdown = (menu: string) =>
-        setOpenDropdown(openDropdown === menu ? null : menu);
+        <div className={`navbar-links ${menuOpen ? "open" : ""}`}>
+          <ul>
+            <li><a href="#">Home</a></li>
 
-    const handleNavAllCourses = () =>{
-        setOpenDropdown(null)
-        //navigate("/all-courses")
-    }
-
-    const handleNavMyCourses = () =>{
-        setOpenDropdown(null)
-        navigate("/my-courses")
-    }
-
-    const handleNavHome = () =>{
-        setOpenDropdown(null)
-        navigate("/")
-    }
-
-    const handleLogin = () => {
-        navigate("/dashboard");
-    }
-
-    return (
-        <div className="homepage">
-            <nav className="navbar">
-                <img className="logo" src={lms_logo} alt="" onClick={handleNavHome} style={{cursor: 'pointer'}}/>
-
-                <button className="menu-toggle" onClick={toggleMenu}>
-                    ☰
-                </button>
-
-                <ul className={`nav-links ${isMenuOpen ? "active" : ""}`}>
-
-                    <li><a onClick={handleNavAllCourses}>Courses</a></li>
-
-
-                    <li className="cart-icon">
-                        <a href="#">
-                            🛒
-                            {cartCount > 0 && (
-                                <span className="cart-count">{cartCount}</span>
-                            )}
-                        </a>
-                    </li>
-
-                    <li className="auth-buttons">
-                        <button className="login" onClick={handleLogin}>Login</button>
-                        <button className="signup">Sign Up</button>
-                    </li>
+            <li className="dropdown" onClick={() => toggleDropdown("company")}>
+              <span>Our Company ▾</span>
+              {dropdownOpen === "company" && (
+                <ul className="dropdown-menu">
+                  <li><a href="#">Our Services</a></li>
+                  <li><a href="#">Our Products</a></li>
+                  <li><a href="#">Our Book Store</a></li>
                 </ul>
-            </nav>
-            <main className="main-content">
-                {children}
-            </main>
+              )}
+            </li>
+
+            <li><a href="#">Gallery</a></li>
+            <li><a href="#">Partners and Reviews</a></li>
+            <li><a href="#">Latest News</a></li>
+
+            <li className="dropdown" onClick={() => toggleDropdown("links")}>
+              <span>Useful Links ▾</span>
+              {dropdownOpen === "links" && (
+                <ul className="dropdown-menu">
+                  <li><a href="#">Example 1</a></li>
+                  <li><a href="#">Example 2</a></li>
+                  <li><a href="#">Example 3</a></li>
+                </ul>
+              )}
+            </li>
+
+            <li><a href="#">Contact</a></li>
+            <li><a href="#">My Account</a></li>
+          </ul>
+
+          <div className="navbar-auth">
+            <a href="#" className="login-btn">Login</a>
+            <a href="#" className="signup-btn">Sign Up</a>
+          </div>
         </div>
-    );
+
+        <div
+          className={`hamburger ${menuOpen ? "active" : ""}`}
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          <span></span><span></span><span></span>
+        </div>
+      </nav>
+
+      {children}
+    </>
+  );
 }
