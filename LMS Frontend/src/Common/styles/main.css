@@ -21,3 +21,81 @@ body {
   inset: 0;
   z-index: 1;
 }
+
+.banner-strip {
+  width: 30%;
+  position: absolute;
+  display: flex;
+  justify-content: right;
+  top: 30%;
+  left: -2000px;
+  height: 60px;
+  padding: 0 80px 0 30px;
+  background-color: #0072dc;
+  text-shadow: 1px 1px 0px #000000;
+  clip-path: polygon(0 0, 5% 100%, 100% 100%, 95% 0);
+  display: flex;
+  align-items: center;
+  animation: moveBanner 5s linear infinite;
+  z-index: 2;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.main-banner-strip {
+  width: 40%;
+  position: absolute;
+  display: block;
+  text-align: center;
+  top: 45%;
+  left: -2000px;
+  height: 200px;
+  padding: 0 80px 0 30px;
+  background-color: #ca3706;
+  text-shadow: 1px 1px 0px #000000;
+  clip-path: polygon(0 0, 5% 100%, 100% 100%, 85% 0);
+  align-items: center;
+  animation: moveMainBanner 5s linear infinite;
+  z-index: 2;
+  color: white;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.banner-text{  
+  font-size: 25px !important;
+}
+
+.main-banner-text{  
+  font-size: 45px !important;
+}
+
+.main-banner-desc{  
+  font-size: 25px !important;
+}
+
+
+@keyframes moveBanner {
+  0% {
+    left: -2000px;
+  }
+  50% {
+    left: -50px;
+  }
+  100% {
+    left: -50px;
+  }
+}
+
+@keyframes moveMainBanner {
+  0% {
+    left: -5000px;
+  }
+  50% {
+    left: -50px;
+  }
+  100% {
+    left: -50px;
+  }
+}

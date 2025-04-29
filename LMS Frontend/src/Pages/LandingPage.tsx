@@ -29,6 +29,13 @@ export default function Landing() {
       style={{ backgroundImage: `url(${images[bgIndex]})` }}
     >
       <div className="bg-overlay"></div>
+      <div className="banner-strip">
+        <span className="banner-text">{t('Korean Live Class Student Portal')}</span>
+      </div>
+      <div className="main-banner-strip">
+        <div className="main-banner-desc">{t('Learn Korean Language Online')}</div>
+        <div className="main-banner-text">අපේ කොරියන් හාමුදුරුවෝ</div>
+      </div>
     </div>
   );
 }
