@@ -2,74 +2,56 @@ import "../Common/styles/navbar.css";
 import { useState } from "react";
 import lms_logo from "../Assets/Images/lms_logo.png"
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
+
 
 interface Props {
     children: React.ReactElement;
-  }
+}
 
 export default function Navbar({ children }: Readonly<Props>) {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+    const { i18n, t } = useTranslation();
+    const [menuOpen, setMenuOpen] = useState(false);
 
-    const navigate = useNavigate();
-
-    const cartCount = 3;
-
-    const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-    const toggleDropdown = (menu: string) =>
-        setOpenDropdown(openDropdown === menu ? null : menu);
-
-    const handleNavAllCourses = () =>{
-        setOpenDropdown(null)
-        //navigate("/all-courses")
-    }
-
-    const handleNavMyCourses = () =>{
-        setOpenDropdown(null)
-        navigate("/my-courses")
-    }
-
-    const handleNavHome = () =>{
-        setOpenDropdown(null)
-        navigate("/")
-    }
-
-    const handleLogin = () => {
-        navigate("/dashboard");
-    }
+    const changeLanguage = (lng: string) => {
+        i18n.changeLanguage(lng);
+    };
 
     return (
-        <div className="homepage">
+        <>
             <nav className="navbar">
-                <img className="logo" src={lms_logo} alt="" onClick={handleNavHome} style={{cursor: 'pointer'}}/>
+                <div className="navbar-container">
+                    <div className="logo">
+                        <img className="lms_logo" src={lms_logo} alt="" />
+                    </div>
 
-                <button className="menu-toggle" onClick={toggleMenu}>
-                    ☰
-                </button>
+                    <button className="menu-toggle" onClick={() => setMenuOpen(!menuOpen)}>
+                        ☰
+                    </button>
 
-                <ul className={`nav-links ${isMenuOpen ? "active" : ""}`}>
+                    <div className={`nav-links ${menuOpen ? 'active' : ''}`}>
+                        <a href="#courses">{t('Courses')}</a>
+                        <a href="#categories">{t('Categories')}</a>
+                        <a href="#contact">{t('Contact Us')}</a>
+                        <a href="#about">{t('About Us')}</a>
 
-                    <li><a onClick={handleNavAllCourses}>Courses</a></li>
+                        <select
+                            onChange={(e) => changeLanguage(e.target.value)}
+                            defaultValue={i18n.language}
+                        >
+                            <option value="si">සිංහල</option>
+                            <option value="en">English</option>
+                        </select>
 
-
-                    <li className="cart-icon">
-                        <a href="#">
-                            🛒
-                            {cartCount > 0 && (
-                                <span className="cart-count">{cartCount}</span>
-                            )}
-                        </a>
-                    </li>
-
-                    <li className="auth-buttons">
-                        <button className="login" onClick={handleLogin}>Login</button>
-                        <button className="signup">Sign Up</button>
-                    </li>
-                </ul>
+                        <button className="btn login">{t('SignIn')}</button>
+                        <button className="btn signup">{t('SignUp')}</button>
+                    </div>
+                </div>
             </nav>
-            <main className="main-content">
+            <>
                 {children}
-            </main>
-        </div>
+            </>
+        </>
+
     );
 }

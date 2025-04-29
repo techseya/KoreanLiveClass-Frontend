@@ -1,0 +1,23 @@
+body {
+  font-family: 'Abhaya Libre', serif;
+  padding: 0%;
+  margin: 0%;
+}
+
+.main-outer {
+  height: 85vh;
+  width: 100%;
+  margin-top: 80px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: background-image 2s ease-in-out;
+  position: relative;
+}
+
+.bg-overlay{
+  position: absolute;
+  background-color: #2b2b2b3e;
+  inset: 0;
+  z-index: 1;
+}
