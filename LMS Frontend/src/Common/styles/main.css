@@ -31,7 +31,7 @@ body {
   left: -2000px;
   height: 60px;
   padding: 0 80px 0 30px;
-  background-color: #0072dc;
+  background-color: #000000a4;
   text-shadow: 1px 1px 0px #000000;
   clip-path: polygon(0 0, 5% 100%, 100% 100%, 95% 0);
   display: flex;
@@ -46,21 +46,27 @@ body {
 .main-banner-strip {
   width: 40%;
   position: absolute;
-  display: block;
-  text-align: center;
+  display: flex;
+  justify-content: right;
+  align-items: center;
   top: 45%;
   left: -2000px;
-  height: 200px;
-  padding: 0 80px 0 30px;
-  background-color: #ca3706;
+  height: auto;
+  padding: 0 80px 30px 30px;
+  background-color: #000000a4;
   text-shadow: 1px 1px 0px #000000;
-  clip-path: polygon(0 0, 5% 100%, 100% 100%, 85% 0);
-  align-items: center;
+  clip-path: polygon(0 0, 5% 100%, 100% 100%, 87% 0);
   animation: moveMainBanner 5s linear infinite;
   z-index: 2;
   color: white;
   font-size: 1.2rem;
   font-weight: bold;
+}
+
+.mbs{
+  width: 100%;
+  height: 100%;
+  text-align: center;
 }
 
 .banner-text{  
@@ -72,7 +78,8 @@ body {
 }
 
 .main-banner-desc{  
-  font-size: 25px !important;
+  font-size: 20px !important;
+  padding: 25px;
 }
 
 

@@ -33,8 +33,10 @@ export default function Landing() {
         <span className="banner-text">{t('Korean Live Class Student Portal')}</span>
       </div>
       <div className="main-banner-strip">
-        <div className="main-banner-desc">{t('Learn Korean Language Online')}</div>
-        <div className="main-banner-text">අපේ කොරියන් හාමුදුරුවෝ</div>
+        <div className="mbs">
+          <div className="main-banner-desc">{t('Best Teacher For Learn Korean Language Online')}</div>
+          <div className="main-banner-text">අපේ කොරියන් හාමුදුරුවෝ</div>
+        </div>
       </div>
     </div>
   );
