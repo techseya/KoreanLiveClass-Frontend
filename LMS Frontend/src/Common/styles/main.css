@@ -1,5 +1,6 @@
 body {
   font-family: 'Abhaya Libre', serif;
+  font-family: sans-serif;
   padding: 0%;
   margin: 0%;
 }
@@ -17,7 +18,7 @@ body {
 
 .bg-overlay{
   position: absolute;
-  background-color: #2b2b2b3e;
+  background-color: #2b2b2b5b;
   inset: 0;
   z-index: 1;
 }
@@ -27,12 +28,13 @@ body {
   position: absolute;
   display: flex;
   justify-content: right;
-  top: 30%;
+  top: 40%;
   left: -2000px;
   height: 60px;
   padding: 0 80px 0 30px;
   background-color: #000000a4;
   text-shadow: 1px 1px 0px #000000;
+  border-bottom: 4px solid rgba(255, 0, 0, 0.425);
   clip-path: polygon(0 0, 5% 100%, 100% 100%, 95% 0);
   display: flex;
   align-items: center;
@@ -49,12 +51,13 @@ body {
   display: flex;
   justify-content: right;
   align-items: center;
-  top: 45%;
+  top: 55%;
   left: -2000px;
   height: auto;
-  padding: 0 80px 30px 30px;
+  padding: 0 80px 10px 30px;
   background-color: #000000a4;
   text-shadow: 1px 1px 0px #000000;
+  border-bottom: 4px solid rgba(255, 0, 0, 0.425);
   clip-path: polygon(0 0, 5% 100%, 100% 100%, 87% 0);
   animation: moveMainBanner 5s linear infinite;
   z-index: 2;
@@ -80,6 +83,147 @@ body {
 .main-banner-desc{  
   font-size: 20px !important;
   padding: 25px;
+}
+
+.floating-letters {
+  position: absolute;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.floating-letter {
+  position: absolute;
+  font-size: 6rem;
+  font-weight: bold;
+  color: rgba(215, 238, 6, 0.966);
+  animation: floatLetter 10s linear infinite;
+}
+
+.letter-0 { top: 10%; left: 20%; animation-delay: 0s; }
+.letter-1 { top: 30%; left: 50%; animation-delay: 2s; }
+.letter-2 { top: 60%; left: 10%; animation-delay: 4s; }
+.letter-3 { top: 40%; left: 70%; animation-delay: 6s; }
+.letter-4 { top: 20%; left: 80%; animation-delay: 1s; }
+.letter-5 { top: 50%; left: 30%; animation-delay: 3s; }
+
+.fab-container {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 20;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  gap: 12px;
+}
+
+.fab {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: #111;
+  color: white;
+  text-align: center;
+  line-height: 50px;
+  font-size: 22px;
+  text-decoration: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.main-fab {
+  font-size: 28px;
+  font-weight: bold;
+  background-color: #d40000;
+}
+
+.fab-icon {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(20px);
+}
+
+.fab-container.open .fab-icon {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+/* Optional custom colors */
+.facebook { background-color: #3b5998; }
+.twitter { background-color: #1da1f2; }
+.instagram { background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fd5949 45%, #d6249f 60%, #285AEB 90%); }
+.youtube { background-color: #ff0000; }
+
+.second-outer{
+  padding-top: 90vh;
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.second-inner{
+  width: 50%;
+}
+
+.second-inner1{
+  width: 50%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.phone-outer{
+  position: absolute;
+  width: 60%;
+  top: -350px;
+  height: 870px;
+  background-image: url("../../Assets/Images/phone-template.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 998;
+}
+
+.phone-inner{
+  width: 100%;
+  height: auto;
+  text-align: center;
+}
+
+.phone-logo{
+  width: 30%;
+}
+
+.phone-title{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 40px;
+  padding: 25px 15px 0 15px;
+}
+
+@keyframes floatLetter {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+    transform: translateY(-50px) rotate(20deg);
+  }
+  100% {
+    transform: translateY(-100px) rotate(0deg);
+    opacity: 0;
+  }
 }
 
 
