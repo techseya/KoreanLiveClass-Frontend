@@ -1,8 +1,12 @@
 body {
-  font-family: 'Yaldevi', sans-serif;
+  font-family: 'Abhaya Libre', serif;
   font-family: sans-serif;
   padding: 0%;
   margin: 0%;
+}
+
+*{
+  /*border: 1px solid red;*/
 }
 
 .space{
@@ -46,7 +50,6 @@ body {
   z-index: 2;
   color: white;
   font-size: 1.2rem;
-  font-weight: bold;
 }
 
 .main-banner-strip {
@@ -67,7 +70,6 @@ body {
   z-index: 2;
   color: white;
   font-size: 1.2rem;
-  font-weight: bold;
 }
 
 .mbs{
@@ -136,19 +138,20 @@ body {
 
 .fab-container {
   position: fixed;
-  bottom: 120px;
-  right: 40px;
+  bottom: 160px;
+  right: 0px;
   z-index: 20;
   display: flex;
   flex-direction: column-reverse;
   align-items: center;
-  gap: 12px;
+  gap: 5px;
 }
 
 .fab {
   width: 60px;
   height: 60px;
-  border-radius: 50%;
+  border-top-left-radius: 50%;
+  border-bottom-left-radius: 50%;
   background-color: #111;
   color: white;
   text-align: center;
@@ -167,19 +170,13 @@ body {
 }
 
 .fab-icon {
-  opacity: 0;
+  opacity: 1;
   pointer-events: none;
   display: flex;
   justify-content: center;
   align-items: center;
   border: 3px solid #00000088;
   transform: translateY(20px);
-}
-
-.fab-container.open .fab-icon {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translateY(0);
 }
 
 
@@ -336,7 +333,7 @@ body {
 
 .second-inner1{
   width: 50%;
-  height: auto;
+  height: 300px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -365,7 +362,7 @@ body {
   position: absolute;
   animation: floatUpDown 3s ease-in-out infinite;
   width: 60%;
-  top: -350px;
+  top: -50px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -450,10 +447,75 @@ body {
 .third-outer{
   width: 100%;
   height: auto;
+  padding: 15px 0;
+}
+
+.third-inner{
+  width: 100%;
+  height: auto;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 50px 0;
+}
+
+.third-inner1{
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #d1cfcf59;
+  margin-top: 35px;
+}
+
+.ti{
+  width: 80%;
+  height: auto;
+}
+
+.ti1{
+  width: 90%;
+  height: auto;
+  padding: 25px 0;
+}
+
+.third-inner-title{
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  font-size: 50px;
+}
+
+.third-inner-content{
+  padding: 45px 0;
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.third-inner-card{
+  padding: 15px;
+  width: 280px;
+  height: auto;
+  background-color: #ffffff;
+  text-align: center;
+  border-radius: 10px;
+}
+
+.tic-img{
+  width: 25%;
+}
+
+.tic-title{
+  font-size: 20px;
+  padding: 15px 20px;
+  text-align: justify;
 }
 
 @keyframes typingLoop {

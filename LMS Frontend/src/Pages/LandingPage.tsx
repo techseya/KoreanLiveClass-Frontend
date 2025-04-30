@@ -9,7 +9,17 @@ import { AccessTime, Adjust, CheckCircleOutline, Facebook, Instagram, Verified, 
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import phoneTemp from "../Assets/Images/phone-template.png"
-
+import b1 from "../Assets/Images/b1.png"
+import b2 from "../Assets/Images/b2.png"
+import b3 from "../Assets/Images/b3.png"
+import b4 from "../Assets/Images/b4.png"
+import b5 from "../Assets/Images/b5.png"
+import b6 from "../Assets/Images/b6.png"
+import b7 from "../Assets/Images/b7.png"
+import b8 from "../Assets/Images/b8.png"
+import b9 from "../Assets/Images/b9.png"
+import b10 from "../Assets/Images/b10.png"
+import b11 from "../Assets/Images/b11.png"
 
 
 export default function Landing() {
@@ -83,7 +93,7 @@ export default function Landing() {
         </div>
         <div className="second-inner-wrapper">
           <div className="second-inner" data-aos="fade-up">
-            <div className="second-title">
+            <div className="second-title" data-aos="fade-up" data-aos-delay="100">
               {t("who")}
             </div>
             <div className="second-desc">
@@ -91,73 +101,145 @@ export default function Landing() {
             </div>
             <div className="space"></div>
             <div className="space"></div>
-            <div className="second-content">
+            <div className="second-content" data-aos="fade-up" data-aos-delay="200">
               <Verified style={{ color: "#4caf50", marginRight: '10px' }} />{t("who-content1")}
             </div>
-            <div className="second-content">
+            <div className="second-content" data-aos="fade-up" data-aos-delay="200">
               <Verified style={{ color: "#4caf50", marginRight: '10px' }} />{t("who-content2")}
             </div>
-            <div className="second-content">
+            <div className="second-content" data-aos="fade-up" data-aos-delay="200">
               <Verified style={{ color: "#4caf50", marginRight: '10px' }} />{t("who-content3")}
             </div>
-            <div className="second-content">
+            <div className="second-content" data-aos="fade-up" data-aos-delay="200">
               <Verified style={{ color: "#4caf50", marginRight: '10px' }} />{t("who-content4")}
             </div>
-            <div className="second-content">
+            <div className="second-content" data-aos="fade-up" data-aos-delay="200">
               <Verified style={{ color: "#4caf50", marginRight: '10px' }} />{t("who-content5")}
             </div>
-            <div className="second-content">
+            <div className="second-content" data-aos="fade-up" data-aos-delay="200">
               <Verified style={{ color: "#4caf50", marginRight: '10px' }} />{t("who-content6")}
             </div>
           </div>
         </div>
         <div className="second-inner1">
-  <div className="phone-outer">
-    <img src={phoneTemp} alt="Phone" className="phone-bg" />
-    <div className="phone-inner">
-      <img className="phone-logo" src={logo} alt="Logo" />
-      <div className="phone-title">Korean Live Class</div>
-      <div className="space"></div>
-      <div className="space"></div>
-      <div className="space"></div>
-      <div className="pcard-inner">
-        <div className="pcard">
-          <Adjust className="picon" />
-          <div className="ptext">17 {t('ptext1')}</div>
+          <div className="phone-outer">
+            <img src={phoneTemp} alt="Phone" className="phone-bg" />
+            <div className="phone-inner">
+              <img className="phone-logo" src={logo} alt="Logo" />
+              <div className="phone-title">Korean Live Class</div>
+              <div className="space"></div>
+              <div className="space"></div>
+              <div className="space"></div>
+              <div className="pcard-inner">
+                <div className="pcard">
+                  <Adjust className="picon" />
+                  <div className="ptext">17 {t('ptext1')}</div>
+                </div>
+              </div>
+              <div className="pcard-inner">
+                <div className="pcard">
+                  <CheckCircleOutline className="picon" />
+                  <div className="ptext">{t('ptext2')}</div>
+                </div>
+              </div>
+              <div className="pcard-inner">
+                <div className="pcard">
+                  <AccessTime className="picon" />
+                  <div className="ptext">{t('ptext3')}</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <div className="pcard-inner">
-        <div className="pcard">
-          <CheckCircleOutline className="picon" />
-          <div className="ptext">{t('ptext2')}</div>
-        </div>
-      </div>
-      <div className="pcard-inner">
-        <div className="pcard">
-          <AccessTime className="picon" />
-          <div className="ptext">{t('ptext3')}</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
-      </div>
+      <div className="space"></div>
+      <div className="space"></div>
+      <div className="space"></div>
 
       <div className="third-outer">
+        <div className="third-inner">
+          <div className="ti">
+            <div className="third-inner-title">
+              {t("benefits")}
+            </div>
+          </div>
+        </div>
+        
+      <div className="space"></div>
+      <div className="space"></div>
+        <div className="third-inner1" data-aos="fade-up">
+          <div className="ti1">
+            <div className="third-inner-content" data-aos="fade-up">
 
+              <div className="third-inner-card" data-aos="fade-up" data-aos-delay="100">
+                <img className="tic-img" src={b1} alt="" />
+                <div className="tic-title">{t("benefits-content1")}</div>
+              </div>
+              
+              <div className="third-inner-card" data-aos="fade-up" data-aos-delay="120">
+                <img className="tic-img" src={b2} alt="" />
+                <div className="tic-title">{t("benefits-content1")}</div>
+              </div>
+              
+              <div className="third-inner-card" data-aos="fade-up" data-aos-delay="140">
+                <img className="tic-img" src={b3} alt="" />
+                <div className="tic-title">{t("benefits-content1")}</div>
+              </div>
+              
+              <div className="third-inner-card" data-aos="fade-up" data-aos-delay="160">
+                <img className="tic-img" src={b4} alt="" />
+                <div className="tic-title">{t("benefits-content1")}</div>
+              </div>
+              
+              <div className="third-inner-card" data-aos="fade-up" data-aos-delay="100">
+                <img className="tic-img" src={b5} alt="" />
+                <div className="tic-title">{t("benefits-content1")}</div>
+              </div>
+              
+              <div className="third-inner-card" data-aos="fade-up" data-aos-delay="120">
+                <img className="tic-img" src={b6} alt="" />
+                <div className="tic-title">{t("benefits-content1")}</div>
+              </div>
+              
+              <div className="third-inner-card" data-aos="fade-up" data-aos-delay="140">
+                <img className="tic-img" src={b7} alt="" />
+                <div className="tic-title">{t("benefits-content1")}</div>
+              </div>
+              
+              <div className="third-inner-card" data-aos="fade-up" data-aos-delay="160">
+                <img className="tic-img" src={b8} alt="" />
+                <div className="tic-title">{t("benefits-content1")}</div>
+              </div>
+              
+              <div className="third-inner-card" data-aos="fade-up" data-aos-delay="100">
+                <img className="tic-img" src={b9} alt="" />
+                <div className="tic-title">{t("benefits-content1")}</div>
+              </div>
+              
+              <div className="third-inner-card" data-aos="fade-up" data-aos-delay="120">
+                <img className="tic-img" src={b10} alt="" />
+                <div className="tic-title">{t("benefits-content1")}</div>
+              </div>
+              
+              <div className="third-inner-card" data-aos="fade-up" data-aos-delay="140">
+                <img className="tic-img" src={b11} alt="" />
+                <div className="tic-title">{t("benefits-content1")}</div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
       </div>
 
 
-      <div className={`fab-container ${fabOpen ? "open" : ""}`}>
-        <button className="fab main-fab" onClick={toggleFab}>+</button>
+      <div className="fab-container">
         <a href="https://facebook.com" target="_blank" className="fab fab-icon facebook"><Facebook /></a>
         <a href="https://twitter.com" target="_blank" className="fab fab-icon twitter"><X /></a>
         <a href="https://instagram.com" target="_blank" className="fab fab-icon instagram"><Instagram /></a>
         <a href="https://youtube.com" target="_blank" className="fab fab-icon youtube"><YouTube /></a>
       </div>
-
-
     </div>
   );
 }
