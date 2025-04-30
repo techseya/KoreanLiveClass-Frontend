@@ -15,6 +15,7 @@
 
 .navbar {
   background-color: rgb(251, 253, 255);
+  /*background: linear-gradient(90deg, rgba(247, 185, 185, 1) 0%, rgba(252, 214, 184, 1) 50%, rgba(174, 230, 240, 1) 100%);*/
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: fixed;
   top: 0;

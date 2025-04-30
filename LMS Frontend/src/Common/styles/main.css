@@ -5,6 +5,10 @@ body {
   margin: 0%;
 }
 
+.space{
+  height: 15px;
+}
+
 .main-outer {
   height: 85vh;
   width: 100%;
@@ -29,7 +33,7 @@ body {
   display: flex;
   justify-content: right;
   top: 40%;
-  left: -2000px;
+  left: -200000px;
   height: 60px;
   padding: 0 80px 0 30px;
   background-color: #000000a4;
@@ -52,7 +56,7 @@ body {
   justify-content: right;
   align-items: center;
   top: 55%;
-  left: -2000px;
+  left: -100000px;
   height: auto;
   padding: 0 80px 10px 30px;
   background-color: #000000a4;
@@ -110,8 +114,8 @@ body {
 
 .fab-container {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  bottom: 40px;
+  right: 40px;
   z-index: 20;
   display: flex;
   flex-direction: column-reverse;
@@ -120,8 +124,8 @@ body {
 }
 
 .fab {
-  width: 50px;
-  height: 50px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   background-color: #111;
   color: white;
@@ -142,6 +146,10 @@ body {
 .fab-icon {
   opacity: 0;
   pointer-events: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 3px solid #00000088;
   transform: translateY(20px);
 }
 
@@ -150,6 +158,7 @@ body {
   pointer-events: auto;
   transform: translateY(0);
 }
+
 
 /* Optional custom colors */
 .facebook { background-color: #3b5998; }
@@ -181,6 +190,7 @@ body {
 
 .phone-outer{
   position: absolute;
+  animation: floatUpDown 3s ease-in-out infinite;
   width: 60%;
   top: -350px;
   height: 870px;
@@ -211,6 +221,78 @@ body {
   padding: 25px 15px 0 15px;
 }
 
+.pcard-inner{
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 0;
+}
+
+.pcard{
+  width: 58%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  background-color: #158ddd;
+  gap: 20px;
+  padding: 10px 0;
+  border-radius: 8px;
+}
+
+.picon{
+  font-size: 34px !important;
+  height: auto;
+  color: white;
+  margin-left: 15px;
+}
+
+.ptext{
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: left;
+  display: inline-block;
+  font-size: 18px;
+  color: white;
+  animation: typingLoop 5s steps(30, end) infinite, blink 0.7s step-end infinite;
+}
+
+.third-outer{
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 50px 0;
+  margin-top: 80vh;
+}
+
+@keyframes typingLoop {
+  0% {
+    width: 0;
+  }
+  40% {
+    width: 100%;
+  }
+  60% {
+    width: 100%;
+  }
+  100% {
+    width: 0;
+  }
+}
+
+/* Blinking cursor */
+@keyframes blink {
+  from, to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: white;
+  }
+}
+
 @keyframes floatLetter {
   0% {
     transform: translateY(0) rotate(0deg);
@@ -226,6 +308,17 @@ body {
   }
 }
 
+@keyframes floatUpDown {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
 
 @keyframes moveBanner {
   0% {

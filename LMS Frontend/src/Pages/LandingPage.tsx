@@ -5,6 +5,7 @@ import k1 from "../Assets/Images/k1.jpg";
 import k2 from "../Assets/Images/k2.jpg";
 import k3 from "../Assets/Images/k3.jpg";
 import logo from "../Assets/Images/logo.jpeg"
+import { AccessTime, Adjust, CheckCircleOutline, Facebook, Instagram, X, YouTube } from "@mui/icons-material";
 
 export default function Landing() {
   const { t, i18n } = useTranslation();
@@ -16,7 +17,7 @@ export default function Landing() {
 
 
   const images = [k1, k2, k3];
-  const koreanLetters = ["한", "글", "학", "습", "문", "자"];
+  const koreanLetters = [""];
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -62,17 +63,43 @@ export default function Landing() {
               <div className="phone-title">
                 Korean Live Class 
               </div>
+              <div className="space"></div>
+              <div className="space"></div>
+              <div className="space"></div>
+              <div className="pcard-inner">
+                <div className="pcard">
+                  <Adjust className="picon"/>
+                  <div className="ptext">17 {t('ptext1')}</div>
+                </div>
+              </div>
+              <div className="pcard-inner">
+                <div className="pcard">
+                  <CheckCircleOutline className="picon"/>
+                  <div className="ptext">{t('ptext2')}</div>
+                </div>
+              </div>
+              <div className="pcard-inner">
+                <div className="pcard">
+                  <AccessTime className="picon"/>
+                  <div className="ptext">{t('ptext3')}</div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
+      <div className="third-outer">
+        
+      </div>
+
+
       <div className={`fab-container ${fabOpen ? "open" : ""}`}>
         <button className="fab main-fab" onClick={toggleFab}>+</button>
-        <a href="https://facebook.com" target="_blank" className="fab fab-icon facebook">F</a>
-        <a href="https://twitter.com" target="_blank" className="fab fab-icon twitter">T</a>
-        <a href="https://instagram.com" target="_blank" className="fab fab-icon instagram">I</a>
-        <a href="https://youtube.com" target="_blank" className="fab fab-icon youtube">Y</a>
+        <a href="https://facebook.com" target="_blank" className="fab fab-icon facebook"><Facebook/></a>
+        <a href="https://twitter.com" target="_blank" className="fab fab-icon twitter"><X/></a>
+        <a href="https://instagram.com" target="_blank" className="fab fab-icon instagram"><Instagram/></a>
+        <a href="https://youtube.com" target="_blank" className="fab fab-icon youtube"><YouTube/></a>
       </div>
 
 
