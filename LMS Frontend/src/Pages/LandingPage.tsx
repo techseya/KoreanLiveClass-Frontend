@@ -20,6 +20,7 @@ import b8 from "../Assets/Images/b8.png"
 import b9 from "../Assets/Images/b9.png"
 import b10 from "../Assets/Images/b10.png"
 import b11 from "../Assets/Images/b11.png"
+import monkImage from "../Assets/Images/monk.png"
 
 
 export default function Landing() {
@@ -165,9 +166,9 @@ export default function Landing() {
             </div>
           </div>
         </div>
-        
-      <div className="space"></div>
-      <div className="space"></div>
+
+        <div className="space"></div>
+        <div className="space"></div>
         <div className="third-inner1" data-aos="fade-up">
           <div className="ti1">
             <div className="third-inner-content" data-aos="fade-up">
@@ -176,52 +177,52 @@ export default function Landing() {
                 <img className="tic-img" src={b1} alt="" />
                 <div className="tic-title">{t("benefits-content1")}</div>
               </div>
-              
+
               <div className="third-inner-card" data-aos="fade-up" data-aos-delay="120">
                 <img className="tic-img" src={b2} alt="" />
                 <div className="tic-title">{t("benefits-content1")}</div>
               </div>
-              
+
               <div className="third-inner-card" data-aos="fade-up" data-aos-delay="140">
                 <img className="tic-img" src={b3} alt="" />
                 <div className="tic-title">{t("benefits-content1")}</div>
               </div>
-              
+
               <div className="third-inner-card" data-aos="fade-up" data-aos-delay="160">
                 <img className="tic-img" src={b4} alt="" />
                 <div className="tic-title">{t("benefits-content1")}</div>
               </div>
-              
+
               <div className="third-inner-card" data-aos="fade-up" data-aos-delay="100">
                 <img className="tic-img" src={b5} alt="" />
                 <div className="tic-title">{t("benefits-content1")}</div>
               </div>
-              
+
               <div className="third-inner-card" data-aos="fade-up" data-aos-delay="120">
                 <img className="tic-img" src={b6} alt="" />
                 <div className="tic-title">{t("benefits-content1")}</div>
               </div>
-              
+
               <div className="third-inner-card" data-aos="fade-up" data-aos-delay="140">
                 <img className="tic-img" src={b7} alt="" />
                 <div className="tic-title">{t("benefits-content1")}</div>
               </div>
-              
+
               <div className="third-inner-card" data-aos="fade-up" data-aos-delay="160">
                 <img className="tic-img" src={b8} alt="" />
                 <div className="tic-title">{t("benefits-content1")}</div>
               </div>
-              
+
               <div className="third-inner-card" data-aos="fade-up" data-aos-delay="100">
                 <img className="tic-img" src={b9} alt="" />
                 <div className="tic-title">{t("benefits-content1")}</div>
               </div>
-              
+
               <div className="third-inner-card" data-aos="fade-up" data-aos-delay="120">
                 <img className="tic-img" src={b10} alt="" />
                 <div className="tic-title">{t("benefits-content1")}</div>
               </div>
-              
+
               <div className="third-inner-card" data-aos="fade-up" data-aos-delay="140">
                 <img className="tic-img" src={b11} alt="" />
                 <div className="tic-title">{t("benefits-content1")}</div>
@@ -229,7 +230,36 @@ export default function Landing() {
 
             </div>
           </div>
+        </div>
+      </div>
 
+      <div className="space"></div>
+      <div className="space"></div>
+      <div className="space"></div>
+
+      <div className="third-outer">
+        <div className="third-inner">
+          <div className="ti">
+            <div className="third-inner-title">
+              {t("services")}
+            </div>
+          </div>
+        </div>
+
+        <div className="space"></div>
+        <div className="space"></div>
+
+        <div className="fourth-inner">
+          <div className="fourth-inner1">
+          <div className="monk-wrapper">
+      <img src={monkImage} alt="Monk" className="monk-img" />
+    </div>
+
+            <div className="corner-box top-left">Service 1</div>
+            <div className="corner-box top-right">Service 2</div>
+            <div className="corner-box bottom-left">Service 3</div>
+            <div className="corner-box bottom-right">Service 4</div>
+          </div>
         </div>
       </div>
 
