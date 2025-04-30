@@ -8,6 +8,7 @@ import logo from "../Assets/Images/logo.jpeg"
 import { AccessTime, Adjust, CheckCircleOutline, Facebook, Instagram, Verified, X, YouTube } from "@mui/icons-material";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import phoneTemp from "../Assets/Images/phone-template.png"
 
 
 
@@ -111,36 +112,36 @@ export default function Landing() {
           </div>
         </div>
         <div className="second-inner1">
-          <div className="phone-outer">
-            <div className="phone-inner">
-              <img className="phone-logo" src={logo} alt="" />
-              <div className="phone-title">
-                Korean Live Class
-              </div>
-              <div className="space"></div>
-              <div className="space"></div>
-              <div className="space"></div>
-              <div className="pcard-inner">
-                <div className="pcard">
-                  <Adjust className="picon" />
-                  <div className="ptext">17 {t('ptext1')}</div>
-                </div>
-              </div>
-              <div className="pcard-inner">
-                <div className="pcard">
-                  <CheckCircleOutline className="picon" />
-                  <div className="ptext">{t('ptext2')}</div>
-                </div>
-              </div>
-              <div className="pcard-inner">
-                <div className="pcard">
-                  <AccessTime className="picon" />
-                  <div className="ptext">{t('ptext3')}</div>
-                </div>
-              </div>
-            </div>
-          </div>
+  <div className="phone-outer">
+    <img src={phoneTemp} alt="Phone" className="phone-bg" />
+    <div className="phone-inner">
+      <img className="phone-logo" src={logo} alt="Logo" />
+      <div className="phone-title">Korean Live Class</div>
+      <div className="space"></div>
+      <div className="space"></div>
+      <div className="space"></div>
+      <div className="pcard-inner">
+        <div className="pcard">
+          <Adjust className="picon" />
+          <div className="ptext">17 {t('ptext1')}</div>
         </div>
+      </div>
+      <div className="pcard-inner">
+        <div className="pcard">
+          <CheckCircleOutline className="picon" />
+          <div className="ptext">{t('ptext2')}</div>
+        </div>
+      </div>
+      <div className="pcard-inner">
+        <div className="pcard">
+          <AccessTime className="picon" />
+          <div className="ptext">{t('ptext3')}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
       </div>
 
       <div className="third-outer">

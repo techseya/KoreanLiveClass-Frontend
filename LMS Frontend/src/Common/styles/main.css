@@ -136,7 +136,7 @@ body {
 
 .fab-container {
   position: fixed;
-  bottom: 220px;
+  bottom: 180px;
   right: 40px;
   z-index: 20;
   display: flex;
@@ -191,14 +191,12 @@ body {
 
 .second-outer{
   padding-top: 90vh;
-  padding-bottom: 30px;
   width: 100%;
   height: auto;
   position: relative;
   overflow: hidden;
   display: flex;
   justify-content: right;
-  align-items: center;
 }
 
 .second-inner{
@@ -363,25 +361,37 @@ body {
   align-items: center;
 }
 
-.phone-outer{
+.phone-outer {
   position: absolute;
   animation: floatUpDown 3s ease-in-out infinite;
   width: 60%;
-  top: -600px;
-  height: 880px;
-  background-image: url("../../Assets/Images/phone-template.png");
-  background-size: cover;
-  background-repeat: no-repeat;
+  top: -350px;
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 998;
+  flex-direction: column;
+  position: relative;
 }
 
-.phone-inner{
+.phone-bg {
   width: 100%;
   height: auto;
-  text-align: center;
+  display: block;
+  position: relative;
+  z-index: 1;
+}
+
+.phone-inner {
+  position: absolute;
+  top: 150px;
+  left: 0;
+  width: 100%;
+  height: auto;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .phone-logo{
