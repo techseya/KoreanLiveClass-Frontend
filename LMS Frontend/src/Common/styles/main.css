@@ -193,13 +193,70 @@ body {
   width: 100%;
   height: auto;
   display: flex;
-  justify-content: center;
+  justify-content: right;
   align-items: center;
 }
 
 .second-inner{
-  width: 50%;
+  width: 100%;
 }
+
+.second-inner-wrapper {
+  position: relative;
+  width: 40%;
+  padding-bottom: 150px;
+  overflow: hidden;
+}
+
+.animated-shapes {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.shape {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.3;
+  animation: floatShape 10s ease-in-out infinite alternate;
+}
+
+.shape1 {
+  width: 150px;
+  height: 150px;
+  background-color: #f48fb1;
+  top: 10%;
+  left: 20%;
+  animation-delay: 0s;
+}
+
+.shape2 {
+  width: 200px;
+  height: 200px;
+  background-color: #81d4fa;
+  top: 50%;
+  left: 60%;
+  animation-delay: 2s;
+}
+
+.shape3 {
+  width: 100px;
+  height: 100px;
+  background-color: #a5d6a7;
+  top: 80%;
+  left: 30%;
+  animation-delay: 4s;
+}
+
+@keyframes floatShape {
+  0% {
+    transform: translateY(0) scale(1);
+  }
+  100% {
+    transform: translateY(-30px) scale(1.1);
+  }
+}
+
 
 .second-inner1{
   width: 50%;
@@ -210,11 +267,29 @@ body {
   position: relative;
 }
 
+.second-title{
+  font-size: 40px;
+  padding: 25px 5px 0 0px;
+}
+
+.second-desc{
+  font-size: 20px;
+  padding: 15px 5px 0 0px;
+}
+
+.second-content{
+  font-size: 20px;
+  padding: 15px 5px 0 0px;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+
 .phone-outer{
   position: absolute;
   animation: floatUpDown 3s ease-in-out infinite;
   width: 60%;
-  top: -350px;
+  top: -500px;
   height: 870px;
   background-image: url("../../Assets/Images/phone-template.png");
   background-size: cover;

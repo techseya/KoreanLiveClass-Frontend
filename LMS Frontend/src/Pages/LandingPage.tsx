@@ -5,7 +5,7 @@ import k1 from "../Assets/Images/k1.jpg";
 import k2 from "../Assets/Images/k2.jpg";
 import k3 from "../Assets/Images/k3.jpg";
 import logo from "../Assets/Images/logo.jpeg"
-import { AccessTime, Adjust, CheckCircleOutline, Facebook, Instagram, X, YouTube } from "@mui/icons-material";
+import { AccessTime, Adjust, CheckCircleOutline, Facebook, Instagram, Verified, X, YouTube } from "@mui/icons-material";
 
 export default function Landing() {
   const { t, i18n } = useTranslation();
@@ -59,12 +59,40 @@ export default function Landing() {
           <div className="red-text">
             {t("red-text")}
           </div>
-          <button style={{zIndex:10}} className="btn signup">{t('SignUp')}</button>
+          <button style={{ zIndex: 10 }} className="btn signup">{t('SignUp')}</button>
         </div>
       </div>
 
       <div className="second-outer">
-        <div className="second-inner"></div>
+        <div className="second-inner-wrapper">
+          <div className="animated-shapes">
+            <span className="shape shape1"></span>
+            <span className="shape shape2"></span>
+            <span className="shape shape3"></span>
+          </div>
+          <div className="second-inner">
+            <div className="second-title">
+              {t("who")}
+            </div>
+            <div className="second-desc">
+              {t("who-desc")}
+            </div>
+            <div className="space"></div>
+            <div className="space"></div>
+            <div className="second-content">
+              <Verified style={{ color: "#4caf50", marginRight: '5px' }} />{t("who-content1")}
+            </div>
+            <div className="second-content">
+              <Verified style={{ color: "#4caf50", marginRight: '5px' }} />{t("who-content2")}
+            </div>
+            <div className="second-content">
+              <Verified style={{ color: "#4caf50", marginRight: '5px' }} />{t("who-content3")}
+            </div>
+            <div className="second-content">
+              <Verified style={{ color: "#4caf50", marginRight: '5px' }} />{t("who-content4")}
+            </div>
+          </div>
+        </div>
         <div className="second-inner1">
           <div className="phone-outer">
             <div className="phone-inner">
