@@ -72,12 +72,15 @@ export default function Landing() {
       </div>
 
       <div className="second-outer">
+        <div className="animated-shapes">
+          <span className="shape shape1"></span>
+          <span className="shape shape2"></span>
+          <span className="shape shape3"></span>
+          <span className="shape shape4"></span>
+          <span className="shape shape5"></span>
+          <span className="shape shape6"></span>
+        </div>
         <div className="second-inner-wrapper">
-          <div className="animated-shapes">
-            <span className="shape shape1"></span>
-            <span className="shape shape2"></span>
-            <span className="shape shape3"></span>
-          </div>
           <div className="second-inner" data-aos="fade-up">
             <div className="second-title">
               {t("who")}
@@ -88,22 +91,22 @@ export default function Landing() {
             <div className="space"></div>
             <div className="space"></div>
             <div className="second-content">
-              <Verified style={{ color: "#4caf50", marginRight: '5px' }} />{t("who-content1")}
+              <Verified style={{ color: "#4caf50", marginRight: '10px' }} />{t("who-content1")}
             </div>
             <div className="second-content">
-              <Verified style={{ color: "#4caf50", marginRight: '5px' }} />{t("who-content2")}
+              <Verified style={{ color: "#4caf50", marginRight: '10px' }} />{t("who-content2")}
             </div>
             <div className="second-content">
-              <Verified style={{ color: "#4caf50", marginRight: '5px' }} />{t("who-content3")}
+              <Verified style={{ color: "#4caf50", marginRight: '10px' }} />{t("who-content3")}
             </div>
             <div className="second-content">
-              <Verified style={{ color: "#4caf50", marginRight: '5px' }} />{t("who-content4")}
+              <Verified style={{ color: "#4caf50", marginRight: '10px' }} />{t("who-content4")}
             </div>
             <div className="second-content">
-              <Verified style={{ color: "#4caf50", marginRight: '5px' }} />{t("who-content5")}
+              <Verified style={{ color: "#4caf50", marginRight: '10px' }} />{t("who-content5")}
             </div>
             <div className="second-content">
-              <Verified style={{ color: "#4caf50", marginRight: '5px' }} />{t("who-content6")}
+              <Verified style={{ color: "#4caf50", marginRight: '10px' }} />{t("who-content6")}
             </div>
           </div>
         </div>
