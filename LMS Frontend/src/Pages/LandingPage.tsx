@@ -6,6 +6,10 @@ import k2 from "../Assets/Images/k2.jpg";
 import k3 from "../Assets/Images/k3.jpg";
 import logo from "../Assets/Images/logo.jpeg"
 import { AccessTime, Adjust, CheckCircleOutline, Facebook, Instagram, Verified, X, YouTube } from "@mui/icons-material";
+import AOS from 'aos';
+import 'aos/dist/aos.css';
+
+
 
 export default function Landing() {
   const { t, i18n } = useTranslation();
@@ -20,6 +24,10 @@ export default function Landing() {
   const koreanLetters = [""];
 
   useEffect(() => {
+    AOS.init({
+      duration: 1000,
+      once: true
+    });
     const interval = setInterval(() => {
       setBgIndex((prevIndex) => (prevIndex + 1) % images.length);
     }, 5000);
@@ -70,7 +78,7 @@ export default function Landing() {
             <span className="shape shape2"></span>
             <span className="shape shape3"></span>
           </div>
-          <div className="second-inner">
+          <div className="second-inner" data-aos="fade-up">
             <div className="second-title">
               {t("who")}
             </div>
@@ -90,6 +98,12 @@ export default function Landing() {
             </div>
             <div className="second-content">
               <Verified style={{ color: "#4caf50", marginRight: '5px' }} />{t("who-content4")}
+            </div>
+            <div className="second-content">
+              <Verified style={{ color: "#4caf50", marginRight: '5px' }} />{t("who-content5")}
+            </div>
+            <div className="second-content">
+              <Verified style={{ color: "#4caf50", marginRight: '5px' }} />{t("who-content6")}
             </div>
           </div>
         </div>

@@ -20,6 +20,7 @@
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.5.2",
     "@types/node": "^16.18.106",
+    "aos": "^2.3.4",
     "framer-motion": "^12.6.2",
     "i18next": "^25.0.2",
     "i18next-browser-languagedetector": "^8.0.5",
@@ -59,6 +60,7 @@
     ]
   },
   "devDependencies": {
+    "@types/aos": "^3.0.7",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
     "@types/react-transition-group": "^4.4.11"
