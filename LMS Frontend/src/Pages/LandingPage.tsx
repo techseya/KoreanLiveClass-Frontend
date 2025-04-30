@@ -54,6 +54,15 @@ export default function Landing() {
         </div>
       </div>
 
+      <div className="red-outer">
+        <div className="red-inner">
+          <div className="red-text">
+            {t("red-text")}
+          </div>
+          <button style={{zIndex:10}} className="btn signup">{t('SignUp')}</button>
+        </div>
+      </div>
+
       <div className="second-outer">
         <div className="second-inner"></div>
         <div className="second-inner1">
@@ -61,26 +70,26 @@ export default function Landing() {
             <div className="phone-inner">
               <img className="phone-logo" src={logo} alt="" />
               <div className="phone-title">
-                Korean Live Class 
+                Korean Live Class
               </div>
               <div className="space"></div>
               <div className="space"></div>
               <div className="space"></div>
               <div className="pcard-inner">
                 <div className="pcard">
-                  <Adjust className="picon"/>
+                  <Adjust className="picon" />
                   <div className="ptext">17 {t('ptext1')}</div>
                 </div>
               </div>
               <div className="pcard-inner">
                 <div className="pcard">
-                  <CheckCircleOutline className="picon"/>
+                  <CheckCircleOutline className="picon" />
                   <div className="ptext">{t('ptext2')}</div>
                 </div>
               </div>
               <div className="pcard-inner">
                 <div className="pcard">
-                  <AccessTime className="picon"/>
+                  <AccessTime className="picon" />
                   <div className="ptext">{t('ptext3')}</div>
                 </div>
               </div>
@@ -90,16 +99,16 @@ export default function Landing() {
       </div>
 
       <div className="third-outer">
-        
+
       </div>
 
 
       <div className={`fab-container ${fabOpen ? "open" : ""}`}>
         <button className="fab main-fab" onClick={toggleFab}>+</button>
-        <a href="https://facebook.com" target="_blank" className="fab fab-icon facebook"><Facebook/></a>
-        <a href="https://twitter.com" target="_blank" className="fab fab-icon twitter"><X/></a>
-        <a href="https://instagram.com" target="_blank" className="fab fab-icon instagram"><Instagram/></a>
-        <a href="https://youtube.com" target="_blank" className="fab fab-icon youtube"><YouTube/></a>
+        <a href="https://facebook.com" target="_blank" className="fab fab-icon facebook"><Facebook /></a>
+        <a href="https://twitter.com" target="_blank" className="fab fab-icon twitter"><X /></a>
+        <a href="https://instagram.com" target="_blank" className="fab fab-icon instagram"><Instagram /></a>
+        <a href="https://youtube.com" target="_blank" className="fab fab-icon youtube"><YouTube /></a>
       </div>
 
 
