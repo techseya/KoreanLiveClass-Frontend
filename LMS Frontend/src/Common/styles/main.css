@@ -599,10 +599,51 @@ backdrop-filter: blur(10px);
 }
 
 .monk-img {
-  width: 110px;
+  width: 80px;
   height: auto;
   z-index: 2;
+  cursor: pointer;
 }
+
+.video-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.video-modal-content {
+  position: relative;
+  width: 90%;
+  max-width: 800px;
+  aspect-ratio: 16 / 9;
+  background: black;
+}
+
+.video-modal-content iframe {
+  width: 100%;
+  height: 100%;
+}
+
+.close-btn {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  background: white;
+  border: none;
+  font-size: 24px;
+  border-radius: 50%;
+  width: 35px;
+  height: 35px;
+  cursor: pointer;
+}
+
 
 .corner-box {
   position: absolute;
@@ -828,7 +869,7 @@ backdrop-filter: blur(10px);
   width: 100%;
   height: auto;
   display: flex;
-  justify-content: right;
+  justify-content: left;
   align-items: center;
   position: relative;
 }
@@ -836,37 +877,33 @@ backdrop-filter: blur(10px);
 .img22{
   width: 30%;
   border-radius: 50%;
-  top: -150px;
+  top: -100px;
+  left: 90px;
   position: absolute;
+  z-index: 10;
 }
 
 .img3{
   width: 100%;
   height: auto;
   display: flex;
-  justify-content: left;
+  justify-content: center;
   align-items: center;
   position: relative;
   padding-bottom: 250px;
   gap: 40px;
 }
 
-.img33{
-  width: 40%;
-  margin-left: 50px;
-  position: absolute;
-  top: -120px;
-}
-
 .ins-text-title{
   font-size: 18px;
   left: 270px;
   position: absolute;
-  top: 70px;
+  top: 80px;
   padding: 10px 25px 10px 10px;
   background-color: #bbc2c47f;
   border-radius: 8px;
 }
+
 
 .ins-main-title{
   font-size: 50px;
@@ -884,6 +921,9 @@ backdrop-filter: blur(10px);
   background-image: url("../../Assets/Images/category-bg.jpg");
   position: relative;
   overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   height: 90vh;
 }
 

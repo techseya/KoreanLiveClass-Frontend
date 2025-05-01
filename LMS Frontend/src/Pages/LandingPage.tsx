@@ -21,7 +21,7 @@ import b8 from "../Assets/Images/b8.png"
 import b9 from "../Assets/Images/b9.png"
 import b10 from "../Assets/Images/b10.png"
 import b11 from "../Assets/Images/b11.png"
-import monkImage from "../Assets/Images/monk.png"
+import monkImage from "../Assets/Images/play-button.png"
 import s1 from "../Assets/Images/language.png"
 import s2 from "../Assets/Images/guidance.png"
 import s3 from "../Assets/Images/access-control.png"
@@ -37,11 +37,9 @@ import CloseIcon from '@mui/icons-material/Close';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import chess from "../Assets/Images/chess.png";
-import fb from "../Assets/Images/facebook.png"
-import twitter from "../Assets/Images/twitter.png"
-import linkedin from "../Assets/Images/linkedin.png"
 import insMain from "../Assets/Images/ins1.jpg";
-import monk2 from "../Assets/Images/monk2.png";
+import Footer from "../Layout/Footer";
+import LoginDialogbox from "src/Common/Components/LoginDialog";
 
 const Transition = forwardRef(function Transition(props: any, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -51,13 +49,23 @@ export default function Landing() {
   const { t, i18n } = useTranslation();
   const [bgIndex, setBgIndex] = useState(0);
 
-  const [fabOpen, setFabOpen] = useState(false);
-  const [currentTextIndex, setCurrentTextIndex] = useState(0);
-  const [animate, setAnimate] = useState(true);
-  const [typedText, setTypedText] = useState("");
   const [selectedCourse, setSelectedCourse] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [visibleStartIndex, setVisibleStartIndex] = useState(0);
+  const [showModal, setShowModal] = useState(false);
+  const [loginOpen, setLoginOpen] = useState(false);
+
+  const handleLogin = () => {
+    setLoginOpen(false);
+  };
+
+  const handleLoginOpen = () => {
+    setLoginOpen(true);
+  };
+
+  const handleClose = () => {
+    setLoginOpen(false);
+  };
 
   const handleNext = () => {
     if (visibleStartIndex + 4 < topCourses.length) {
@@ -70,8 +78,6 @@ export default function Landing() {
       setVisibleStartIndex(visibleStartIndex - 4);
     }
   };
-
-  const toggleFab = () => setFabOpen(!fabOpen);
 
   const topCourses = [
     {
@@ -202,28 +208,6 @@ export default function Landing() {
     },
   ];
 
-  const instructors = [
-    {
-      name: 'Ven. Kalyanapura Mangala',
-      role: 'Korean Language Trainer at Korean Live Class',
-      about: 'Ven.Kalyanapura Managala holds a Masters Degree from the Uiduk University South Korea , having qualified in Korean Language Training and Korean Lanaguage Ability Test conducted by the National Institute for International Education in South Korea. He holds a Bachelor of Arts Degree from the Department Of Buddhist Cultural Studies. (B/A) (Uiduk University South Korea), Bachelor Of Arts Degree (B/A) (Kelaniya University Sri Lanka), Korean Language Training And Korean Culture Program (Uiduk University South Korea), Korean Language Ability Test (National Institute for international Education South Korea), Korean Language Training And Culture Experience (Koica Sri Lanka), Spoken English Course (Royal Institute International School Of Higher Education Colombo Sri Lanka) and a Certificate in Microsoft Office Course. (JGO SOCIAL TRAINING CENTRE Sri Lanka)',
-      image: '',
-      skills: ['Korean Language', 'Training', 'Korean Culture'],
-      socialMedia: [
-        {
-          facebook: 'https://www.facebook.com/KoreanLiveClass/'
-        },
-        {
-          twitter: 'https://x.com/KoreanLiveClass'
-        },
-        {
-          linkedIn: 'https://www.linkedin.com/company/koreanlc'
-        }
-      ]
-    }
-  ]
-
-
   const images = [k1, k2, k3];
   const koreanLetters = [""];
 
@@ -244,6 +228,11 @@ export default function Landing() {
       className="main-outer"
       style={{ backgroundImage: `url(${images[bgIndex]})` }}
     >
+      <LoginDialogbox
+        open={loginOpen}
+        onAgree={handleLogin}
+        onClose={handleClose}
+      />
       <div className="bg-overlay"></div>
 
       <div className="floating-letters">
@@ -271,7 +260,7 @@ export default function Landing() {
           <div className="red-text">
             {t("red-text")}
           </div>
-          <button style={{ zIndex: 10 }} className="btn signup">{t('SignUp')}</button>
+          <button onClick={handleLoginOpen} style={{ zIndex: 10 }} className="btn signup">{t('SignIn')}</button>
         </div>
       </div>
 
@@ -358,12 +347,12 @@ export default function Landing() {
                 <img className="img11" src={insMain} alt="" data-aos="fade-up" data-aos-delay="500" />
               </div>
               <div className="img2">
-                <img className="img22" src={insImg} alt=""  data-aos="fade-left" data-aos-delay="700"/>
+                <img className="img22" src={insImg} alt="" data-aos="fade-left" data-aos-delay="700" />
               </div>
               <div className="img3">
-                <img className="img33" src={monk2} alt=""  data-aos="fade-right" data-aos-delay="900"/>
-                <div className="ins-text-title"  data-aos="fade-down" data-aos-delay="900">
-                B/A Kelaniya University <br /> BA/MA (Uiduk University South Korea) <br /> Legal Interpreter <br /> KiiP 6 <br />
+                <div className="line" data-aos="fade-left" data-aos-delay="700" ></div>
+                <div className="ins-text-title" data-aos="fade-down" data-aos-delay="900">
+                  B/A Kelaniya University <br /> BA/MA (Uiduk University South Korea) <br /> Legal Interpreter <br /> KiiP 6 <br />
                   Topik 6 <br /> Sri lanka international Affairs Committee
                 </div>
               </div>
@@ -382,7 +371,7 @@ export default function Landing() {
           </div>
         </div>
       </div>
-      
+
       <div className="space"></div>
       <div className="space"></div>
 
@@ -477,13 +466,28 @@ export default function Landing() {
         <div className="space"></div>
         <div className="space"></div>
 
+        {showModal && (
+          <div className="video-modal" onClick={() => setShowModal(false)}>
+            <div className="video-modal-content" onClick={(e) => e.stopPropagation()}>
+              <iframe
+                src="https://www.youtube.com/embed/fAjqo3VbHSc?autoplay=1&rel=0"
+                title="YouTube Video"
+                frameBorder="0"
+                allow="autoplay; encrypted-media"
+                allowFullScreen
+              ></iframe>
+              <button className="close-btn" onClick={() => setShowModal(false)}>×</button>
+            </div>
+          </div>
+        )}
+
         <div className="fourth-inner">
           <div className="bg-overlay1"></div>
           <div className="wave-lines-bg" />
           <div className="wave-lines-bg1" />
           <div className="fourth-inner1">
             <div className="monk-wrapper" data-aos="fade-up" data-aos-delay="100">
-              <img src={monkImage} alt="Monk" className="monk-img" />
+              <img src={monkImage} alt="Monk" className="monk-img" onClick={() => setShowModal(true)} />
             </div>
 
             <div className="corner-box top-left" data-aos="fade-up-right" data-aos-delay="100">
@@ -647,7 +651,6 @@ export default function Landing() {
         <div className="space"></div>
       </div>
 
-
       <div className="third-outer black">
         <div className="bg-overlay3"></div>
         <div className="space"></div>
@@ -693,60 +696,7 @@ export default function Landing() {
         <div className="space"></div>
       </div>
 
-      {/*<div className="third-outer">
-        <div className="third-inner">
-          <div className="ti">
-            <div className="third-inner-title" data-aos="fade-up" data-aos-delay="100">
-              {t("top-categories")}
-            </div>
-          </div>
-        </div>
-        </div>*/}
-
-      {/*<><div className="top-courses-outer">
-        <span className="top-courses-title">INSTRUCTOR</span>
-      </div>
-      <div className="top-courses-outer2">
-        {instructors.map((instructor, index) => (
-          <div className="instructor-card">
-            <div className="instructor-card-inner">
-              <img className="instructor-card-image" src={insImg} alt="" />
-            </div>
-            <div className="instructor-card-inner1">
-              <div className="instructor-name">{instructor.name}</div>
-              <div className="role">{instructor.role}</div>
-              <div className="skills">
-                {instructor.skills.map((skill, idx) => (
-                  <div className="skill" key={idx}>
-                    {skill}
-                  </div>
-                ))}
-              </div>
-              <div className="instructor-desc">{instructor.about}</div>
-              <div className="skills right-align">
-                <div>
-                  <a className="sm" href={instructor.socialMedia[0].facebook} target="_blank" rel="noopener noreferrer">
-                    <img className="sm-icon" src={fb} alt="" />
-                  </a>
-                </div>
-                <div>
-                  <a className="sm" href={instructor.socialMedia[0].linkedIn} target="_blank" rel="noopener noreferrer">
-                    <img className="sm-icon" src={linkedin} alt="" />
-                  </a>
-                </div>
-                <div>
-                  <a className="sm" href={instructor.socialMedia[0].twitter} target="_blank" rel="noopener noreferrer">
-                    <img className="sm-icon" src={twitter} alt="" />
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-      </>*/}
-
-
+      <Footer />
 
       <div className="fab-container">
         <a href="https://facebook.com" target="_blank" className="fab fab-icon facebook"><Facebook /></a>

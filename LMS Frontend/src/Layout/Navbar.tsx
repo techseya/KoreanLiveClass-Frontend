@@ -3,6 +3,7 @@ import { useState } from "react";
 import lms_logo from "../Assets/Images/lms_logo.png"
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
+import LoginDialogbox from "src/Common/Components/LoginDialog";
 
 
 interface Props {
@@ -12,6 +13,19 @@ interface Props {
 export default function Navbar({ children }: Readonly<Props>) {
     const { i18n, t } = useTranslation();
     const [menuOpen, setMenuOpen] = useState(false);
+    const [loginOpen, setLoginOpen] = useState(false);
+
+    const handleLogin = () => {
+        setLoginOpen(false);
+    };
+
+    const handleLoginOpen = () => {
+        setLoginOpen(true);
+    };
+
+    const handleClose = () => {
+        setLoginOpen(false);
+    };
 
     const changeLanguage = (lng: string) => {
         i18n.changeLanguage(lng);
@@ -19,6 +33,11 @@ export default function Navbar({ children }: Readonly<Props>) {
 
     return (
         <>
+            <LoginDialogbox
+                open={loginOpen}
+                onAgree={handleLogin}
+                onClose={handleClose}
+            />
             <nav className="navbar">
                 <div className="navbar-container">
                     <div className="logo">
@@ -43,8 +62,7 @@ export default function Navbar({ children }: Readonly<Props>) {
                             <option value="en">English</option>
                         </select>
 
-                        <button className="btn login">{t('SignIn')}</button>
-                        <button className="btn signup">{t('SignUp')}</button>
+                        <button onClick={handleLoginOpen} className="btn signup">{t('SignIn')}</button>
                     </div>
                 </div>
             </nav>
