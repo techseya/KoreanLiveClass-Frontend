@@ -141,7 +141,7 @@
     margin-top: 55px;
     display: flex;
     flex-wrap: wrap;
-    gap: 0px;
+    gap: 10px;
     justify-content: center;
 }
 
@@ -171,10 +171,15 @@
     flex-direction: column;
     justify-content: space-between;
     height: auto;
-    background: #fff;
-    border: 1px solid #e5e7eb;
+    background: #d1cece1f;
+    border: 1px solid #4d0303;
     padding: 12px;
     transition: 0.3s;
+}
+
+.category-card:hover {
+    background-color: #a51d1d;
+    color: rgb(255, 255, 255) !important;
 }
 
 .instructor-card{
@@ -230,14 +235,15 @@
 }
 
 .course-title {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: bold;
     margin: 10px 0;
+    color: rgb(209, 207, 207);
 }
 
 .course-description {
     font-size: 14px;
-    color: #666;
+    color: #dfdada;
     margin-bottom: 10px;
 }
 
@@ -399,6 +405,7 @@
 .chess{
     display: flex;
     width: 30px;
+    opacity: 1 !important;
 }
 
 .instructor-card-inner{

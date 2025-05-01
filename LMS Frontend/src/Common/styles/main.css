@@ -175,7 +175,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 3px solid #00000088;
+  border: 1px solid #00000088;
   transform: translateY(20px);
 }
 
@@ -464,7 +464,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(206, 203, 203, 0.684);
+  background: linear-gradient(180deg, rgb(255, 255, 255) 0%, rgba(7, 173, 250, 0.699) 50%, rgba(255, 255, 255, 0.84) 100%);
 backdrop-filter: blur(10px);
 -webkit-backdrop-filter: blur(10px);
   margin-top: 35px;
@@ -505,7 +505,7 @@ backdrop-filter: blur(10px);
   padding: 15px;
   width: 280px;
   height: auto;
-  background-color: #ffffffed;
+  background-color: #dedbdb70;
   text-align: center;
   border-radius: 10px;
 }
@@ -517,7 +517,7 @@ backdrop-filter: blur(10px);
 .tic-title{
   font-size: 20px;
   padding: 15px 20px;
-  text-align: justify;
+  text-align: center;
 }
 
 .fourth-inner {
@@ -549,7 +549,7 @@ backdrop-filter: blur(10px);
   left: 0;
   width: 200%;
   height: 100%;
-  background: url("data:image/svg+xml;utf8,<svg viewBox='0 0 1000 320' xmlns='http://www.w3.org/2000/svg'><path fill='yellow' fill-opacity='0.5' d='M0,160 C 360,280 1080,40 1440,160 L1440,320 L0,320 Z'></path></svg>") repeat-x;
+  background: url("data:image/svg+xml;utf8,<svg viewBox='0 0 1000 320' xmlns='http://www.w3.org/2000/svg'><path fill='yellow' fill-opacity='0.8' d='M0,160 C 360,280 1080,40 1440,160 L1440,320 L0,320 Z'></path></svg>") repeat-x;
   background-size: cover;
   animation: moveWave 20s linear infinite;
   z-index: 0;
@@ -562,7 +562,7 @@ backdrop-filter: blur(10px);
   left: 0;
   width: 200%;
   height: 100%;
-  background: url("data:image/svg+xml;utf8,<svg viewBox='0 0 1000 320' xmlns='http://www.w3.org/2000/svg'><path fill='orange' fill-opacity='0.3' d='M0,160 C 360,120 1080,240 1440,160 L1440,320 L0,320 Z'></path></svg>") repeat-x;
+  background: url("data:image/svg+xml;utf8,<svg viewBox='0 0 1000 320' xmlns='http://www.w3.org/2000/svg'><path fill='orange' fill-opacity='0.6' d='M0,160 C 360,120 1080,240 1440,160 L1440,320 L0,320 Z'></path></svg>") repeat-x;
   background-size: cover;
   animation: moveWave1 10s linear infinite;
   z-index: 0;
@@ -695,7 +695,7 @@ backdrop-filter: blur(10px);
   border-right: 4px solid rgba(255, 69, 0, 0.7); 
   border-bottom: 4px solid rgba(255, 215, 0, 0.7);
   animation: spin 2s linear infinite;
-  box-shadow: 0 0 10px rgba(255, 165, 0, 0.6), 0 0 20px rgba(255, 69, 0, 0.4);
+  box-shadow: 0 0 100px rgba(255, 234, 0, 0.6), 0 0 20px rgba(255, 69, 0, 0.4);
 }
 
 @keyframes spin {
@@ -782,4 +782,118 @@ backdrop-filter: blur(10px);
   100% {
     left: -50px;
   }
+}
+
+.ins-outer{
+  width: 100%;
+  height: auto;
+  padding: 15px 0;
+}
+
+.ins-inner{
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ins-inner1{
+  width: 90%;  
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ins-in{
+  width: 50%;
+  height: 600px;
+}
+
+.img1{
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.img11{
+  width: 80%;
+  border-radius: 8px;
+}
+
+.img2{
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  position: relative;
+}
+
+.img22{
+  width: 30%;
+  border-radius: 50%;
+  top: -150px;
+  position: absolute;
+}
+
+.img3{
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  position: relative;
+  padding-bottom: 250px;
+  gap: 40px;
+}
+
+.img33{
+  width: 40%;
+  margin-left: 50px;
+  position: absolute;
+  top: -120px;
+}
+
+.ins-text-title{
+  font-size: 18px;
+  left: 270px;
+  position: absolute;
+  top: 70px;
+  padding: 10px 25px 10px 10px;
+  background-color: #bbc2c47f;
+  border-radius: 8px;
+}
+
+.ins-main-title{
+  font-size: 50px;
+  padding: 10px 25px;
+}
+
+.ins-main-desc{
+  font-size: 20px;
+  padding: 10px 25px;
+  text-align: justify;
+}
+
+.black{
+  background-color: black;
+  background-image: url("../../Assets/Images/category-bg.jpg");
+  position: relative;
+  overflow: hidden;
+  height: 90vh;
+}
+
+.bg-overlay3{
+  position: absolute;
+  background-color: #000000a4;
+  inset: 0;
+  z-index: 0;
+}
+
+.white-txt{
+  color: white;
 }

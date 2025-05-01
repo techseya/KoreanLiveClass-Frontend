@@ -40,6 +40,8 @@ import chess from "../Assets/Images/chess.png";
 import fb from "../Assets/Images/facebook.png"
 import twitter from "../Assets/Images/twitter.png"
 import linkedin from "../Assets/Images/linkedin.png"
+import insMain from "../Assets/Images/ins1.jpg";
+import monk2 from "../Assets/Images/monk2.png";
 
 const Transition = forwardRef(function Transition(props: any, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -348,6 +350,42 @@ export default function Landing() {
       <div className="space"></div>
       <div className="space"></div>
 
+      <div className="ins-outer">
+        <div className="ins-inner">
+          <div className="ins-inner1">
+            <div className="ins-in">
+              <div className="img1">
+                <img className="img11" src={insMain} alt="" data-aos="fade-up" data-aos-delay="500" />
+              </div>
+              <div className="img2">
+                <img className="img22" src={insImg} alt=""  data-aos="fade-left" data-aos-delay="700"/>
+              </div>
+              <div className="img3">
+                <img className="img33" src={monk2} alt=""  data-aos="fade-right" data-aos-delay="900"/>
+                <div className="ins-text-title"  data-aos="fade-down" data-aos-delay="900">
+                B/A Kelaniya University <br /> BA/MA (Uiduk University South Korea) <br /> Legal Interpreter <br /> KiiP 6 <br />
+                  Topik 6 <br /> Sri lanka international Affairs Committee
+                </div>
+              </div>
+            </div>
+            <div className="ins-in">
+              <div className="ins-main-title" data-aos="fade-up" data-aos-delay="100">
+                {t("our-monk")}
+              </div>
+              <div className="ins-main-desc" data-aos="fade-up" data-aos-delay="200">
+                {t("our-monk-desc")}
+              </div>
+              <div className="ins-main-desc" data-aos="fade-up" data-aos-delay="300">
+                {t("our-monk-desc2")}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div className="space"></div>
+      <div className="space"></div>
+
       <div className="third-outer">
         <div className="third-inner">
           <div className="ti">
@@ -370,52 +408,52 @@ export default function Landing() {
 
               <div className="third-inner-card" data-aos="fade-up" data-aos-delay="120">
                 <img className="tic-img" src={b2} alt="" />
-                <div className="tic-title">{t("benefits-content1")}</div>
+                <div className="tic-title">{t("benefits-content2")}</div>
               </div>
 
               <div className="third-inner-card" data-aos="fade-up" data-aos-delay="140">
                 <img className="tic-img" src={b3} alt="" />
-                <div className="tic-title">{t("benefits-content1")}</div>
+                <div className="tic-title">{t("benefits-content3")}</div>
               </div>
 
               <div className="third-inner-card" data-aos="fade-up" data-aos-delay="160">
                 <img className="tic-img" src={b4} alt="" />
-                <div className="tic-title">{t("benefits-content1")}</div>
+                <div className="tic-title">{t("benefits-content4")}</div>
               </div>
 
               <div className="third-inner-card" data-aos="fade-up" data-aos-delay="100">
                 <img className="tic-img" src={b5} alt="" />
-                <div className="tic-title">{t("benefits-content1")}</div>
+                <div className="tic-title">{t("benefits-content5")}</div>
               </div>
 
               <div className="third-inner-card" data-aos="fade-up" data-aos-delay="120">
                 <img className="tic-img" src={b6} alt="" />
-                <div className="tic-title">{t("benefits-content1")}</div>
+                <div className="tic-title">{t("benefits-content6")}</div>
               </div>
 
               <div className="third-inner-card" data-aos="fade-up" data-aos-delay="140">
                 <img className="tic-img" src={b7} alt="" />
-                <div className="tic-title">{t("benefits-content1")}</div>
+                <div className="tic-title">{t("benefits-content7")}</div>
               </div>
 
               <div className="third-inner-card" data-aos="fade-up" data-aos-delay="160">
                 <img className="tic-img" src={b8} alt="" />
-                <div className="tic-title">{t("benefits-content1")}</div>
+                <div className="tic-title">{t("benefits-content8")}</div>
               </div>
 
               <div className="third-inner-card" data-aos="fade-up" data-aos-delay="100">
                 <img className="tic-img" src={b9} alt="" />
-                <div className="tic-title">{t("benefits-content1")}</div>
+                <div className="tic-title">{t("benefits-content9")}</div>
               </div>
 
               <div className="third-inner-card" data-aos="fade-up" data-aos-delay="120">
                 <img className="tic-img" src={b10} alt="" />
-                <div className="tic-title">{t("benefits-content1")}</div>
+                <div className="tic-title">{t("benefits-content10")}</div>
               </div>
 
               <div className="third-inner-card" data-aos="fade-up" data-aos-delay="140">
                 <img className="tic-img" src={b11} alt="" />
-                <div className="tic-title">{t("benefits-content1")}</div>
+                <div className="tic-title">{t("benefits-content11")}</div>
               </div>
 
             </div>
@@ -606,13 +644,17 @@ export default function Landing() {
         </Dialog>
         <div className="space"></div>
         <div className="space"></div>
+        <div className="space"></div>
       </div>
 
 
-      {/*<div className="third-outer">
+      <div className="third-outer black">
+        <div className="bg-overlay3"></div>
+        <div className="space"></div>
+        <div className="space"></div>
         <div className="third-inner">
           <div className="ti">
-            <div className="third-inner-title" data-aos="fade-up" data-aos-delay="100">
+            <div className="third-inner-title white-txt" data-aos="fade-up" data-aos-delay="100">
               {t("top-categories")}
             </div>
           </div>
@@ -633,7 +675,7 @@ export default function Landing() {
               style={{ cursor: "pointer" }}
             >
               <div className="course-info1">
-                <div style={{ display: "flex", justifyContent: "center", alignItems: "center", padding: "10px", borderRadius: "50%", backgroundColor: "#3b82f6", width: "35px", height: "35px" }}>
+                <div style={{ display: "flex", justifyContent: "center", alignItems: "center", padding: "10px", borderRadius: "50%", backgroundColor: "#a51d1d", width: "35px", height: "35px" }}>
                   <img className="chess" src={chess} alt="" />
                 </div>
               </div>
@@ -651,7 +693,7 @@ export default function Landing() {
         <div className="space"></div>
       </div>
 
-      <div className="third-outer">
+      {/*<div className="third-outer">
         <div className="third-inner">
           <div className="ti">
             <div className="third-inner-title" data-aos="fade-up" data-aos-delay="100">
