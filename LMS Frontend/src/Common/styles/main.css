@@ -441,7 +441,7 @@ body {
   display: inline-block;
   font-size: 18px;
   color: white;
-  animation: typingLoop 5s steps(30, end) infinite, blink 0.7s step-end infinite;
+  animation: typingLoop1 5s steps(30, end) infinite, blink1 1s step-end infinite;
 }
 
 .third-outer{
@@ -708,7 +708,7 @@ backdrop-filter: blur(10px);
 }
 
 
-@keyframes typingLoop {
+@keyframes typingLoop1 {
   0% {
     width: 0;
   }
@@ -724,7 +724,7 @@ backdrop-filter: blur(10px);
 }
 
 /* Blinking cursor */
-@keyframes blink {
+@keyframes blink1 {
   from, to {
     border-color: transparent;
   }
