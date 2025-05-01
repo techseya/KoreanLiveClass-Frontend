@@ -464,13 +464,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(
-  135deg,
-  rgba(2, 118, 185, 0.678) 0%,
-  rgba(255, 255, 255, 0.678) 25%,
-  rgba(168, 53, 53, 0.434) 50%,
-  rgba(0, 123, 255, 0.603) 100%
-);
+  background-color: rgba(206, 203, 203, 0.684);
 backdrop-filter: blur(10px);
 -webkit-backdrop-filter: blur(10px);
   margin-top: 35px;
@@ -511,7 +505,7 @@ backdrop-filter: blur(10px);
   padding: 15px;
   width: 280px;
   height: auto;
-  background-color: #ffffff38;
+  background-color: #ffffffed;
   text-align: center;
   border-radius: 10px;
 }
@@ -528,9 +522,70 @@ backdrop-filter: blur(10px);
 
 .fourth-inner {
   width: 100%;
+  height: 90vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: #000;
+  margin-top: 30px;
+  background-image: url("../../Assets/Images/service-bg.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;  
+  overflow-x: hidden;
+}
+
+.bg-overlay1{
+  position: absolute;
+  background-color: #00000071;
+  inset: 0;
+  z-index: 1;
+}
+
+.wave-lines-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  background: url("data:image/svg+xml;utf8,<svg viewBox='0 0 1000 320' xmlns='http://www.w3.org/2000/svg'><path fill='yellow' fill-opacity='0.5' d='M0,160 C 360,280 1080,40 1440,160 L1440,320 L0,320 Z'></path></svg>") repeat-x;
+  background-size: cover;
+  animation: moveWave 20s linear infinite;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.wave-lines-bg1 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 100%;
+  background: url("data:image/svg+xml;utf8,<svg viewBox='0 0 1000 320' xmlns='http://www.w3.org/2000/svg'><path fill='orange' fill-opacity='0.3' d='M0,160 C 360,120 1080,240 1440,160 L1440,320 L0,320 Z'></path></svg>") repeat-x;
+  background-size: cover;
+  animation: moveWave1 10s linear infinite;
+  z-index: 0;
+  pointer-events: none;
+}
+
+@keyframes moveWave1 {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+
+@keyframes moveWave {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
 
 .fourth-inner1 {
@@ -540,6 +595,7 @@ backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 10;
 }
 
 .monk-img {
@@ -550,16 +606,53 @@ backdrop-filter: blur(10px);
 
 .corner-box {
   position: absolute;
-  width: 120px;
-  height: 120px;
+  width: 350px;
+  height: auto;
   background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(10px);
   border-radius: 12px;
   display: flex;
-  align-items: center;
   justify-content: center;
   color: #000;
   font-weight: bold;
+  border: 2px solid #FFD700;
+  padding-bottom: 20px;
+  background: linear-gradient(90deg, rgb(255, 255, 255) 0%,  rgba(237, 233, 10, 0.84) 100%);
+}
+
+.corner-box:hover{
+  cursor: pointer;
+  background: linear-gradient(90deg, rgb(0, 0, 0) 0%,  rgba(237, 173, 10, 0.84) 100%);
+  color: white;
+}
+
+.corner-inner{
+  width: 25%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.corner-inner1{
+  width: 75%;
+  height: auto;
+}
+
+.corner-img{
+  width: 70%;
+}
+
+.corner-title{
+  font-size: 20px;
+  padding: 15px 20px 10px 20px;
+  text-align: justify;
+}
+
+.corner-desc{
+  font-size: 15px;
+  padding: 5px 20px;
+  text-align: justify;
 }
 
 .top-left {
