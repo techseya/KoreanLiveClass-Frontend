@@ -53,8 +53,12 @@
     "Terms of Service": "Terms of Service",
     "Refund Policy": "Refund Policy",
     "login": "Login Page",
+    "reset": "Password Reset Page",
+    "resetBtn": "Reset",
     "register": "Don't have an account? Call Us For Registraion.",
     "username": "Username",
-    "password": "Password"
+    "password": "Password",
+    "newPw": "New Password",
+    "confirmPw": "Confirm Password"
   }
   
