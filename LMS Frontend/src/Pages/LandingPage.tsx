@@ -233,7 +233,7 @@ export default function Landing() {
         onAgree={handleLogin}
         onClose={handleClose}
       />
-      <div className="bg-overlay"></div>
+      <div className="bg-overlay0"></div>
 
       <div className="floating-letters">
         {koreanLetters.map((letter, index) => (
@@ -378,7 +378,7 @@ export default function Landing() {
       <div className="third-outer">
         <div className="third-inner">
           <div className="ti">
-            <div className="third-inner-title">
+            <div className="third-inner-title" data-aos="fade-up" data-aos-delay="100">
               {t("benefits")}
             </div>
           </div>
@@ -545,10 +545,6 @@ export default function Landing() {
         <div className="space"></div>
         <div className="space"></div>
         <div className="top-courses-outer1" data-aos="fade-up" data-aos-delay="100">
-          <div className="arrow-button" onClick={handlePrev} style={{ visibility: visibleStartIndex === 0 ? 'hidden' : 'visible' }}>
-            <ArrowBackIosIcon />
-          </div>
-
           {topCourses.slice(visibleStartIndex, visibleStartIndex + 4).map((course, index) => (
             <div
               className="top-course-card"
@@ -591,12 +587,28 @@ export default function Landing() {
               </div>
             </div>
           ))}
+        </div>
 
-          <div className="arrow-button" onClick={handleNext} style={{ visibility: visibleStartIndex + 4 >= topCourses.length ? 'hidden' : 'visible' }}>
+        {/* Arrow Button Row */}
+        <div className="arrow-buttons-row">
+          <div
+            className="arrow-button"
+            onClick={handlePrev}
+            style={{ visibility: visibleStartIndex === 0 ? "hidden" : "visible" }}
+          >
+            <ArrowBackIosIcon />
+          </div>
+
+          <div
+            className="arrow-button"
+            onClick={handleNext}
+            style={{
+              visibility: visibleStartIndex + 4 >= topCourses.length ? "hidden" : "visible",
+            }}
+          >
             <ArrowForwardIosIcon />
           </div>
         </div>
-
 
         {/* Fullscreen Dialog Modal */}
         <Dialog

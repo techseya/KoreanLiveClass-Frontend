@@ -82,7 +82,7 @@ export default function LoginDialogbox({ open, onAgree, onClose }: LoginDialogbo
                         sx={{ mt: 2 }}
                         onClick={() =>
                             window.open(
-                              "https://wa.me/94715675588?text=Hello%2C%20I%20would%20like%20to%20signup%20for%20KoreanLC%20student%20portal",
+                              "https://wa.me/821090736674?text=Hello%2C%20I%20would%20like%20to%20signup%20for%20KoreanLC%20student%20portal",
                               "_blank"
                             )
                           }

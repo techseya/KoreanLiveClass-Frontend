@@ -29,6 +29,7 @@ export default function Navbar({ children }: Readonly<Props>) {
 
     const changeLanguage = (lng: string) => {
         i18n.changeLanguage(lng);
+        setMenuOpen(false);
     };
 
     return (
