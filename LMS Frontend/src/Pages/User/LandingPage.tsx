@@ -1,44 +1,44 @@
 import React, { forwardRef, useEffect, useState } from "react";
-import "../Common/styles/main.css";
-import "../Common/styles/home.css";
+import "../../Common/styles/main.css";
+import "../../Common/styles/home.css";
 import { useTranslation } from "react-i18next";
-import k1 from "../Assets/Images/k1.jpg";
-import k2 from "../Assets/Images/k2.jpg";
-import k3 from "../Assets/Images/k3.jpg";
-import logo from "../Assets/Images/logo.jpeg"
+import k1 from "../../Assets/Images/k1.jpg";
+import k2 from "../../Assets/Images/k2.jpg";
+import k3 from "../../Assets/Images/k3.jpg";
+import logo from "../../Assets/Images/logo.jpeg"
 import { AccessTime, Adjust, CheckCircleOutline, Facebook, Instagram, Verified, X, YouTube } from "@mui/icons-material";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import phoneTemp from "../Assets/Images/phone-template.png"
-import b1 from "../Assets/Images/b1.png"
-import b2 from "../Assets/Images/b2.png"
-import b3 from "../Assets/Images/b3.png"
-import b4 from "../Assets/Images/b4.png"
-import b5 from "../Assets/Images/b5.png"
-import b6 from "../Assets/Images/b6.png"
-import b7 from "../Assets/Images/b7.png"
-import b8 from "../Assets/Images/b8.png"
-import b9 from "../Assets/Images/b9.png"
-import b10 from "../Assets/Images/b10.png"
-import b11 from "../Assets/Images/b11.png"
-import monkImage from "../Assets/Images/play-button.png"
-import s1 from "../Assets/Images/language.png"
-import s2 from "../Assets/Images/guidance.png"
-import s3 from "../Assets/Images/access-control.png"
-import s4 from "../Assets/Images/hints.png"
-import thumb1 from "../Assets/Images/thumb1.jpg";
-import thumb2 from "../Assets/Images/thumb2.jpg";
+import phoneTemp from "../../Assets/Images/phone-template.png"
+import b1 from "../../Assets/Images/b1.png"
+import b2 from "../../Assets/Images/b2.png"
+import b3 from "../../Assets/Images/b3.png"
+import b4 from "../../Assets/Images/b4.png"
+import b5 from "../../Assets/Images/b5.png"
+import b6 from "../../Assets/Images/b6.png"
+import b7 from "../../Assets/Images/b7.png"
+import b8 from "../../Assets/Images/b8.png"
+import b9 from "../../Assets/Images/b9.png"
+import b10 from "../../Assets/Images/b10.png"
+import b11 from "../../Assets/Images/b11.png"
+import monkImage from "../../Assets/Images/play-button.png"
+import s1 from "../../Assets/Images/language.png"
+import s2 from "../../Assets/Images/guidance.png"
+import s3 from "../../Assets/Images/access-control.png"
+import s4 from "../../Assets/Images/hints.png"
+import thumb1 from "../../Assets/Images/thumb1.jpg";
+import thumb2 from "../../Assets/Images/thumb2.jpg";
 import StarIcon from '@mui/icons-material/Star';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
-import insImg from "../Assets/Images/ins.jpg";
+import insImg from "../../Assets/Images/ins.jpg";
 import { ClockCircleOutlined } from "@ant-design/icons";
 import { Tooltip, Dialog, AppBar, Toolbar, IconButton, Typography, Slide } from "@mui/material";
 import CloseIcon from '@mui/icons-material/Close';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import chess from "../Assets/Images/chess.png";
-import insMain from "../Assets/Images/ins1.jpg";
-import Footer from "../Layout/Footer";
+import chess from "../../Assets/Images/chess.png";
+import insMain from "../../Assets/Images/ins1.jpg";
+import Footer from "../../Layout/Footer";
 import LoginDialogbox from "src/Common/Components/LoginDialog";
 import { useNavigate } from "react-router-dom";
 

@@ -1,9 +1,10 @@
 import React from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
-import HomePage from "./Pages/HomePage";
 import Navbar from "./Layout/Navbar";
 import AdvancedNavbar from "./Layout/AdvancedNavbar";
-import Landing from "./Pages/LandingPage";
+import Landing from "./Pages/User/LandingPage";
+import Dashboard from "./Pages/Admin/Dashboard";
+import UserMaintenance from "./Pages/Admin/UserMaintenance";
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -14,7 +15,8 @@ const App: React.FC = () => {
       {!isHomePage ? (
         <AdvancedNavbar>
           <Routes>
-            <Route path="/dashboard" element={<HomePage />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/user-maintenance" element={<UserMaintenance />} />
           </Routes>
         </AdvancedNavbar>
       ) : (

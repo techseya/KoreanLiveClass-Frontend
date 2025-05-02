@@ -23,6 +23,7 @@ import lms_logo from "../Assets/Images/lms_logo.png"
 import Dialogbox from "../Common/Components/DialogBox";
 import {
   DashboardOutlined,
+  UserAddOutlined,
 } from "@ant-design/icons";
 
 const drawerWidth = 200;
@@ -178,8 +179,8 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
 
     const location = window.location.pathname;
 
-    if (location === "/courses") {
-      setTitle("Courses");
+    if (location === "/user-maintenance") {
+      setTitle("User Maintenance");
     } else if (location === "/dashboard") {
       setTitle("Dashboard");
     } else {
@@ -223,32 +224,32 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
     const path = location.pathname;
     if (path === "/dashboard") {
       setActive(1);
-    } else if (path === "/courses") {
+    } else if (path === "/user-maintenance") {
       setActive(2);
     } else {
       setActive(0);
     }
   }, [location.pathname]);
 
-  const handleClickManagerDashboard = () => navigate("/dashboard");
-  const handleClickCourses = () => navigate("/courses");
+  const handleClickDashboard = () => navigate("/dashboard");
+  const handleClickUserMaintenance = () => navigate("/user-maintenance");
 
   const drawerItems = [
     {
       name: "Dashboard",
       icon: <DashboardOutlined style={{ fontSize: "20px" }} />,
-      onClick: handleClickManagerDashboard,
+      onClick: handleClickDashboard,
     },
     {
-      name: "Courses",
-      icon: <BookOutlined style={{ fontSize: "20px" }} />,
-      onClick: handleClickCourses,
+      name: "User Maintenance",
+      icon: <UserAddOutlined style={{ fontSize: "20px" }} />,
+      onClick: handleClickUserMaintenance,
     },
   ];
 
   return (
     <Box
-      sx={{ display: "flex", minHeight: "100vh", backgroundColor: "rgb(239, 239, 239)" }}
+      sx={{ display: "flex", minHeight: "100vh" }}
     >
       <Dialogbox
         open={isOpen}
@@ -294,7 +295,7 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
       <Drawer variant="permanent" open={open}>
         <div className="drawer-header">
           <img className="drawer-logo" src={logo} alt="" />
-          <span className="drawer-logo-txt">KLC LMS</span>
+          <span className="drawer-logo-txt">KLC ADMIN</span>
         </div>
         <List>
           <List>
@@ -356,6 +357,7 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
       {!(isVerySmallScreen && open) && (
         <Box
           component="main"
+          bgcolor={"rgba(207, 205, 205, 0.38)"}
           sx={{
             flexGrow: 1,
             p: 0,

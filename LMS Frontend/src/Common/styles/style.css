@@ -1,8 +1,31 @@
 *{
     /*border: 1px solid red;*/
-    font-family: 'Abhaya Libre', serif;
+    font-family: 'Abhaya Libre', serif;    
     padding: 0;
     margin: 0;
+}
+
+.comman-layout{
+    margin: 20px 20px 0px 20px;
+    width: auto;
+    background-color: white !important;
+    border-radius: 8px;
+    border: 1px solid grey;
+    padding: 15px;    
+}
+
+.css-1s0owa1{
+    background-color: rgba(255, 255, 255, 0) !important;
+}
+
+.path{
+    font-family: Public Sans, sans-serif;
+}
+
+.comman-title{
+    font-size: 30px;
+    font-weight: 600;
+    font-family: public sans, sans-serif;
 }
 
 .css-1r9jet7 {
@@ -135,6 +158,7 @@
     color: rgb(0, 0, 0);
     margin: 0 20px 0 8px;
     font-weight: 400;
+    font-family: public sans, sans-serif;
 }
 
 .drawer-user1{
