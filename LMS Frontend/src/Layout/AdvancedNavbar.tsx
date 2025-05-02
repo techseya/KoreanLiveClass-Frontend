@@ -282,15 +282,6 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
           
           <div className="toolbar-inner">
           <nav className="navbar" style={{height: "60px !important" , padding: "0 25px"}}>
-
-                <li className="cart-icon invisible">
-                  <a href="#">
-                    🛒
-                    {cartCount > 0 && (
-                      <span className="cart-count">{cartCount}</span>
-                    )}
-                  </a>
-                </li>
             </nav>
             <img
               className="man-icon"

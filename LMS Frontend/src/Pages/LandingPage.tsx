@@ -40,12 +40,14 @@ import chess from "../Assets/Images/chess.png";
 import insMain from "../Assets/Images/ins1.jpg";
 import Footer from "../Layout/Footer";
 import LoginDialogbox from "src/Common/Components/LoginDialog";
+import { useNavigate } from "react-router-dom";
 
 const Transition = forwardRef(function Transition(props: any, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
 export default function Landing() {
+  const navigate = useNavigate()
   const { t, i18n } = useTranslation();
   const [bgIndex, setBgIndex] = useState(0);
 
@@ -56,6 +58,7 @@ export default function Landing() {
   const [loginOpen, setLoginOpen] = useState(false);
 
   const handleLogin = () => {
+    navigate("/dashboard")
     setLoginOpen(false);
   };
 

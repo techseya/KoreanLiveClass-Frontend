@@ -11,11 +11,13 @@ interface Props {
 }
 
 export default function Navbar({ children }: Readonly<Props>) {
+    const navigate = useNavigate()
     const { i18n, t } = useTranslation();
     const [menuOpen, setMenuOpen] = useState(false);
     const [loginOpen, setLoginOpen] = useState(false);
 
     const handleLogin = () => {
+        navigate("/dashboard")
         setLoginOpen(false);
     };
 

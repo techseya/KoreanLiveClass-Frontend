@@ -11,11 +11,19 @@ const App: React.FC = () => {
 
   return (
     <>
-      <Navbar>
-        <Routes>
-          <Route path="/" element={<Landing />} />
-        </Routes>
-      </Navbar>
+      {!isHomePage ? (
+        <AdvancedNavbar>
+          <Routes>
+            <Route path="/dashboard" element={<HomePage />} />
+          </Routes>
+        </AdvancedNavbar>
+      ) : (
+        <Navbar>
+          <Routes>
+            <Route path="/" element={<Landing />} />
+          </Routes>
+        </Navbar>
+      )}
     </>
   );
 };
