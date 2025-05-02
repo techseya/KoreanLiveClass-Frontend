@@ -4,7 +4,8 @@ import Navbar from "./Layout/Navbar";
 import AdvancedNavbar from "./Layout/AdvancedNavbar";
 import Landing from "./Pages/User/LandingPage";
 import Dashboard from "./Pages/Admin/Dashboard";
-import UserMaintenance from "./Pages/Admin/UserMaintenance";
+import UserMaintenance from "./Pages/Admin/UserMaintenance/UserMaintenance";
+import Users from "./Pages/Admin/UserMaintenance";
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -16,7 +17,7 @@ const App: React.FC = () => {
         <AdvancedNavbar>
           <Routes>
             <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/user-maintenance" element={<UserMaintenance />} />
+            <Route path="/user-maintenance" element={<Users />} />
           </Routes>
         </AdvancedNavbar>
       ) : (

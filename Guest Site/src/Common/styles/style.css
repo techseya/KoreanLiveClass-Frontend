@@ -1,12 +1,15 @@
 *{
     /*border: 1px solid red;*/
-    font-family: 'Public Sans', sans-serif;
     padding: 0;
     margin: 0;
 }
 
 .css-1r9jet7 {
     min-height: 30px !important;
+}
+
+.path{
+    font-family: publicsans, sans-serif !important;
 }
 
 .drawer-logo{

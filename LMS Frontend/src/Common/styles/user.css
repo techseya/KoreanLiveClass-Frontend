@@ -1,3 +1,18 @@
-.css-yrdy0g-MuiDataGrid-columnHeaderRow{
+.css-yrdy0g-MuiDataGrid-columnHeaderRow {
     background-color: rgba(122, 122, 125, 0.932) !important;
+}
+
+.user-form-outer {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.user-form-outer form {
+    width: 100%;
+}
+
+.update-btn{
+    background-color: gray !important;
+    margin-right: 10px !important;
 }

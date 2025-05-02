@@ -241,7 +241,7 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
       onClick: handleClickDashboard,
     },
     {
-      name: "User Maintenance",
+      name: "Users",
       icon: <UserAddOutlined style={{ fontSize: "20px" }} />,
       onClick: handleClickUserMaintenance,
     },
@@ -278,8 +278,6 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
             <MenuOutlined />
             
           </IconButton>
-          
-          <span className="title">{title}</span>
           
           <div className="toolbar-inner">
           <nav className="navbar" style={{height: "60px !important" , padding: "0 25px"}}>

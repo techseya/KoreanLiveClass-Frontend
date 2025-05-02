@@ -19,13 +19,14 @@
 }
 
 .path{
-    font-family: Public Sans, sans-serif;
+    font-family: publicsans, sans-serif !important;
+    color: rgb(96, 96, 96);
 }
 
 .comman-title{
     font-size: 30px;
     font-weight: 600;
-    font-family: public sans, sans-serif;
+    font-family: publicsans, sans-serif !important;
 }
 
 .css-1r9jet7 {
@@ -150,6 +151,7 @@
 
 .drawer-username{
     color: rgb(0, 0, 0);
+    font-family: publicsans, sans-serif !important;
 }
 
 .title{
@@ -158,7 +160,6 @@
     color: rgb(0, 0, 0);
     margin: 0 20px 0 8px;
     font-weight: 400;
-    font-family: public sans, sans-serif;
 }
 
 .drawer-user1{
