@@ -1,0 +1,45 @@
+.courses-main-outer{
+    width: 100%;
+    height: auto;
+}
+
+.courses-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem;
+    margin-top: 80px;
+    background-color: rgb(2, 104, 199);
+    color: white;
+}
+
+.courses-main-inner{
+    width: 95%;
+    height: auto;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 15px;
+}
+
+.cmi{
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.course-card{
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    /* Full height */
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 12px;
+    transition: 0.3s;
+}

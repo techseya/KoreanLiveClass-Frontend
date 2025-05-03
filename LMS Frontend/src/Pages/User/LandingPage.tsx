@@ -41,6 +41,9 @@ import insMain from "../../Assets/Images/ins1.jpg";
 import Footer from "../../Layout/Footer";
 import LoginDialogbox from "src/Common/Components/LoginDialog";
 import { useNavigate } from "react-router-dom";
+import { getCategories } from "src/Services/category_api";
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
+import { getTopCourses } from "src/Services/course_api";
 
 const Transition = forwardRef(function Transition(props: any, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -57,12 +60,16 @@ export default function Landing() {
   const [showModal, setShowModal] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
 
+  const [categories, setCategories] = useState<any[]>([])
+  const [topCourses, setTopCourses] = useState<any[]>([])
+
   const handleLogin = () => {
     navigate("/dashboard")
     setLoginOpen(false);
   };
 
   const handleLoginOpen = () => {
+    getDeviceId();
     setLoginOpen(true);
   };
 
@@ -82,7 +89,7 @@ export default function Landing() {
     }
   };
 
-  const topCourses = [
+  /*const topCourses = [
     {
       title: "TOPIK 1-2 제 93회 අප්‍රේල් විභාගය",
       description: "වීසා මාරු කර ගැනීම සහා ශිෂ්‍ය වීසා සදහා අයදුම්කරුවන් සමත්විය යුතු විභාගය...",
@@ -182,9 +189,9 @@ export default function Landing() {
       image: "https://source.unsplash.com/featured/?kdrama,korean",
       instructor: "Ven. Kalyanapura Mangala"
     }
-  ];
+  ];*/
 
-  const categories = [
+  /*const categories = [
     {
       title: "TOPIK 1-2 제 93회 අප්‍රේල් විභාගය",
       count: 2,
@@ -209,22 +216,82 @@ export default function Landing() {
       title: "Korean Culture and Society",
       count: 2,
     },
-  ];
+  ];*/
 
   const images = [k1, k2, k3];
   const koreanLetters = [""];
 
   useEffect(() => {
+    const hasRefreshed = sessionStorage.getItem("hasRefreshed");
+
+    if (!hasRefreshed) {
+      sessionStorage.setItem("hasRefreshed", "true");
+      window.location.reload(); // Only once per session
+      return;
+    }
+
+    handleGetCategories();
+    handleGetTopCourses()
+
     AOS.init({
       duration: 1000,
       once: true
     });
+
     const interval = setInterval(() => {
       setBgIndex((prevIndex) => (prevIndex + 1) % images.length);
     }, 5000);
 
-    return () => clearInterval(interval); // cleanup
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
+
+  const getDeviceId = async () => {
+    const fp = await FingerprintJS.load();
+
+    let attempts = 0;
+    let stableId = '';
+
+    while (attempts < 3) {
+      const result = await fp.get();
+      const id = result.visitorId;
+
+      console.log(`Attempt ${attempts + 1}: ${id}`);
+
+      // If this is not the first attempt and ID matches previous, consider it stable
+      if (stableId && id === stableId) {
+        break;
+      }
+
+      stableId = id;
+      attempts++;
+      await new Promise(resolve => setTimeout(resolve, 300)); // wait a bit between attempts
+    }
+
+    alert(stableId);
+
+  };
+
+const handleGetTopCourses = async () => {
+  try {
+    const response = await getTopCourses()
+    const activeCourses = response.data.filter((course: any) => course.activeStatus === 1);
+    setTopCourses(activeCourses)
+  } catch (error) {
+    console.error(error);    
+  }
+}
+
+  const handleGetCategories = async () => {
+    try {
+      const response = await getCategories();
+      const activeCategories = response.data.filter((category: any) => category.activeStatus === 1);
+      setCategories(activeCategories);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <div
@@ -548,7 +615,7 @@ export default function Landing() {
         <div className="space"></div>
         <div className="space"></div>
         <div className="top-courses-outer1" data-aos="fade-up" data-aos-delay="100">
-          {topCourses.slice(visibleStartIndex, visibleStartIndex + 4).map((course, index) => (
+          {Array.isArray(topCourses) && topCourses.slice(visibleStartIndex, visibleStartIndex + 4).map((course, index) => (
             <div
               className="top-course-card"
               data-aos="fade-up" data-aos-delay="100"
@@ -561,14 +628,14 @@ export default function Landing() {
             >
               {/* your card code here */}
               <div className="course-thumbnail">
-                <img src={thumb1} alt="Course Thumbnail" />
+                <img src={course.thumbnail} alt="Course Thumbnail" />
                 <div className="price">Rs.{(course.price).toFixed(2)}</div>
               </div>
 
               <div className="course-info">
-                <span className="course-level">{course.label}</span>
-                <h3 className="course-title">{course.title}</h3>
-                <div className="course-rating">
+                {<span className="course-level">{course.level}</span>}
+                <h3 className="course-title">{course.name}</h3>
+                {/*<div className="course-rating">
                   {Array.from({ length: 5 }).map((_, i) =>
                     i < course.ratings ? (
                       <StarIcon key={i} sx={{ color: "#ffc107", fontSize: 20 }} />
@@ -576,16 +643,16 @@ export default function Landing() {
                       <StarBorderIcon key={i} sx={{ color: "#d1d5db", fontSize: 20 }} />
                     )
                   )}
-                </div>
+                </div>*/}
               </div>
 
               <div className="course-info2">
-                <Tooltip title={course.instructor} arrow placement="top">
+                <Tooltip title="Ven. Kalyanapura Mangala" arrow placement="top">
                   <img className="ins-img" src={insImg} alt="Instructor" style={{ cursor: "pointer" }} />
                 </Tooltip>
                 <div className="course-duration">
                   <ClockCircleOutlined className="clock-icon" />
-                  {course.duration}
+                  {course.totalDuration} Hours
                 </div>
               </div>
             </div>
@@ -666,50 +733,52 @@ export default function Landing() {
         <div className="space"></div>
       </div>
 
-      <div className="third-outer black">
-        <div className="bg-overlay3"></div>
-        <div className="space"></div>
-        <div className="space"></div>
-        <div className="third-inner">
-          <div className="ti">
-            <div className="third-inner-title white-txt" data-aos="fade-up" data-aos-delay="100">
-              {t("top-categories")}
+      <section id="categories">
+        <div className="third-outer black">
+          <div className="bg-overlay3"></div>
+          <div className="space"></div>
+          <div className="space"></div>
+          <div className="third-inner">
+            <div className="ti">
+              <div className="third-inner-title white-txt" data-aos="fade-up" data-aos-delay="100">
+                {t("top-categories")}
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="space"></div>
-        <div className="space"></div>
+          <div className="space"></div>
+          <div className="space"></div>
 
-        <div className="top-courses-outer2">
-          {categories.map((category, index) => (
-            <div
-              className="category-card"
-              data-aos="fade-up" data-aos-delay="100"
-              key={index}
-              onClick={() => {
-                console.log(`Clicked on category: ${category.title}`);
-              }}
-              style={{ cursor: "pointer" }}
-            >
-              <div className="course-info1">
-                <div style={{ display: "flex", justifyContent: "center", alignItems: "center", padding: "10px", borderRadius: "50%", backgroundColor: "#a51d1d", width: "35px", height: "35px" }}>
-                  <img className="chess" src={chess} alt="" />
+          <div className="top-courses-outer2">
+            {Array.isArray(categories) && categories.map((category, index) => (
+              <div
+                className="category-card"
+                data-aos="fade-up" data-aos-delay="100"
+                key={index}
+                onClick={() => {
+                  console.log(`Clicked on category: ${category.name}`);
+                }}
+                style={{ cursor: "pointer" }}
+              >
+                <div className="course-info1">
+                  <div style={{ display: "flex", justifyContent: "center", alignItems: "center", padding: "10px", borderRadius: "50%", backgroundColor: "#a51d1d", width: "35px", height: "35px" }}>
+                    <img className="chess" src={chess} alt="" />
+                  </div>
+                </div>
+                <div className="course-info1">
+                  <h3 className="course-title">{category.name}</h3>
+                </div>
+                <div className="course-info1">
+                  <span className="course-description">{category.courseCount} Courses</span>
                 </div>
               </div>
-              <div className="course-info1">
-                <h3 className="course-title">{category.title}</h3>
-              </div>
-              <div className="course-info1">
-                <span className="course-description">{category.count} Courses</span>
-              </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
 
-        <div className="space"></div>
-        <div className="space"></div>
-      </div>
+          <div className="space"></div>
+          <div className="space"></div>
+        </div>
+      </section>
 
       <Footer />
 

@@ -8,6 +8,8 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useState } from "react";
+import { LockReset, PhonelinkErase } from "@mui/icons-material";
+import Dialogbox from "src/Common/Components/DialogBox";
 
 function CustomNoRowsOverlay() {
     return (
@@ -21,6 +23,8 @@ export default function UserMaintenance() {
     const [visible, setVisible] = useState(false);
     const [courseModalOpen, setCourseModalOpen] = useState(false);
     const [editingUser, setEditingUser] = useState<any | null>(null);
+    const [changePwDialog, setChangePwDialog] = useState(false)
+    const [changeDeviceDialog, setChangeDeviceDialog] = useState(false)
 
     const [userName, setUserName] = useState("")
     const [location, setLocation] = useState("Sri Lanka")
@@ -55,6 +59,24 @@ export default function UserMaintenance() {
             courses: []
         }
     ]);
+
+    const handleCancelChangePwDialog = () => {
+        setChangePwDialog(false)
+    }
+    
+    const handleChangePwDialog = () => {
+        setChangePwDialog(true)
+    }
+
+    
+    const handleCancelChangeDeviceDialog = () => {
+        setChangeDeviceDialog(false)
+    }
+    
+    const handleChangeDeviceDialog = () => {
+        setChangeDeviceDialog(true)
+    }
+
 
     const handleEditClick = (user: any) => {
         setEditingUser(user);
@@ -127,7 +149,7 @@ export default function UserMaintenance() {
         {
             field: 'actions',
             headerName: 'Actions',
-            width: 150,
+            width: 220,
             sortable: false,
             filterable: false,
             renderCell: (params) => (
@@ -138,6 +160,12 @@ export default function UserMaintenance() {
                     <IconButton sx={{ color: 'error.main' }} aria-label="delete">
                         <DeleteIcon />
                     </IconButton>
+                    <IconButton sx={{ color: 'grey' }} aria-label="reset password" onClick={handleChangePwDialog}>
+                        <LockReset />
+                    </IconButton>
+                    <IconButton sx={{ color: 'grey' }} aria-label="reset device" onClick={handleChangeDeviceDialog}>
+                        <PhonelinkErase />
+                    </IconButton>
                 </Box>
             ),
         },
@@ -145,6 +173,27 @@ export default function UserMaintenance() {
 
     return (
         <>
+            <Dialogbox
+                open={changePwDialog}
+                title="Password Reset Confirmation"
+                content="Are you sure? Resetting the password will require the user to set a new one, and they may temporarily lose access until it’s updated."
+                agreeButtonText="Yes, Reset"
+                disagreeButtonText="No"
+                onAgree={handleCancelChangePwDialog}
+                onDisagree={handleCancelChangePwDialog}
+                onClose={handleCancelChangePwDialog}
+            />
+            
+            <Dialogbox
+                open={changeDeviceDialog}
+                title="Device Reset Confirmation"
+                content="Are you sure? Resetting the device will remove its current authentication, and the user will need to re-authenticate the device before accessing their account."
+                agreeButtonText="Yes, Reset"
+                disagreeButtonText="No"
+                onAgree={handleCancelChangeDeviceDialog}
+                onDisagree={handleCancelChangeDeviceDialog}
+                onClose={handleCancelChangeDeviceDialog}
+            />
             {!visible && (
                 <Paper sx={{ height: 'auto', width: '100%', marginTop: 2, overflowX: 'auto' }}>
                     <DataGrid

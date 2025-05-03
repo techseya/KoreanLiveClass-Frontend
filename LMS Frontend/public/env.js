@@ -1,5 +1,5 @@
 window.env = {
-    BASE_URL: "",
-    VERSION: "2025.03.31.1",
-    COMPANY: "2025 DMS Software Engineering. All rights reserved"
-  };
+    BASE_URL: "https://localhost:7165/api/",
+    VERSION: "2025.05.04.1",
+    COMPANY: "2025 TechSeya pvt LTD. All rights reserved"
+};
