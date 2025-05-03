@@ -8,11 +8,32 @@ import insImg from "../../Assets/Images/ins.jpg";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import Footer from "src/Layout/Footer";
 
 export default function Courses() {
     const [courses, setCourses] = useState<any[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>("");
     const { t, i18n } = useTranslation();
+
+    const navigate = useNavigate();
+
+    const handleCourseClick = (course: any) => {
+        
+        navigate(`/course`, {
+            state: {
+              id: course.id,
+              name: course.name,
+              description : course.description,
+              thumbnail: course.thumbnail,
+              level: course.level,
+              totalDuration: course.totalDuration,
+              price: course.price,
+              sectionCount: course.sectionCount,
+            }
+          });
+    };
+
 
     useEffect(() => {
         handleGetTopCourses();
@@ -65,6 +86,7 @@ export default function Courses() {
                             className="course-card"
                             data-aos="fade-up"
                             data-aos-delay="100"
+                            onClick={() => handleCourseClick(course)}
                             key={index}
                             style={{ cursor: "pointer" }}
                         >
@@ -93,7 +115,12 @@ export default function Courses() {
                     )}
                 </div>
             </div>
+            
+            <div className="space1"></div>
+            <div className="space1"></div>
+            <div className="space1"></div>
 
+            <Footer/>
         </div>
     );
 }

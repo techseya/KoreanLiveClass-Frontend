@@ -43,3 +43,116 @@
     padding: 12px;
     transition: 0.3s;
 }
+
+.c-thumb-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 600px;
+    aspect-ratio: 16 / 9;
+    margin-bottom: 1rem;
+    margin-top: 2rem;
+    left: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+.space1{
+    height: 20px;
+}
+
+.c-inner{
+    width: 100%;
+    height: auto;
+    padding-top: 80px;
+    display: flex;
+    justify-content: center;
+}
+
+.c-inner1{
+    width: 90%;
+    height: auto;
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+}
+
+.c-in{
+    width: 40%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.c-in1{
+    width: 60%;
+    height: auto;
+}
+
+.c-thumb{
+    width: 80%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.c-title{
+    padding-top: 25px;
+    font-size: 40px;
+    font-family: publicsans, sans-serif;
+}
+
+.c-desc{
+    padding-top: 20px;
+    font-size: 18px;
+    padding-right: 10px;
+    text-align: justify;
+}
+
+.c-items-outer{
+    padding-top: 20px;
+    width: 97%;
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+}
+
+.c-label{
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+    background-color: #3b82f6;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    font-family: publicsans, sans-serif;
+}
+
+.c-section-count{
+    font-size: 14px;   
+    font-family: publicsans, sans-serif;
+    color: green;
+}
+
+.c-price{
+    font-size: 30px;
+}
+
+.buy-course-button {
+    position: fixed;
+    top: 120px;
+    right: 20px;
+    background-color: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    transition: background-color 0.3s ease;
+}
+
+.buy-course-button:hover {
+    background-color: #115293;
+}

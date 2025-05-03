@@ -20,3 +20,21 @@ export const getAllCourses = async () => {
         throw error;
     }
 }
+
+export const getSectionByCourseId = async (courseId:any) => {
+    try {
+        const response = await axios.get(api+`section?courseId=${courseId}`)
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const getRecordingsBySectionId = async (sectionId:any) => {
+    try {
+        const response = await axios.get(api+`recording?sectionId=${sectionId}`)
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}

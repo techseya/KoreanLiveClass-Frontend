@@ -59,6 +59,7 @@
     "username": "Username",
     "password": "Password",
     "newPw": "New Password",
-    "confirmPw": "Confirm Password"
+    "confirmPw": "Confirm Password",
+    "buyCourse": "Purchase Course"
   }
   

@@ -18,6 +18,7 @@ export default function Navbar({ children }: Readonly<Props>) {
 
     const location = useLocation();
     const isCourse = location.pathname === "/courses";
+    const isCourse1 = location.pathname === "/course";
 
     const handleNavHome = () => {
         navigate("/")
@@ -64,7 +65,7 @@ export default function Navbar({ children }: Readonly<Props>) {
 
                     <div className={`nav-links ${menuOpen ? 'active' : ''}`}>
                         <a href="" onClick={handleNavCourses}>{t('Courses')}</a>
-                        {!isCourse && (<a href="#categories">{t('Categories')}</a>)}
+                        {!(isCourse || isCourse1) && <a href="#categories">{t('Categories')}</a>}
                         <a href="#contact">{t('Contact Us')}</a>
                         <a href="#about">{t('About Us')}</a>
 

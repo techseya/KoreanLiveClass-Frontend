@@ -89,134 +89,21 @@ export default function Landing() {
     }
   };
 
-  /*const topCourses = [
-    {
-      title: "TOPIK 1-2 제 93회 අප්‍රේල් විභාගය",
-      description: "වීසා මාරු කර ගැනීම සහා ශිෂ්‍ය වීසා සදහා අයදුම්කරුවන් සමත්විය යුතු විභාගය...",
-      price: 1990.00,
-      duration: "06:04:45 Hours",
-      ratings: 5,
-      label: "Beginner",
-      lectureCount: 24,
-      image: "https://source.unsplash.com/featured/?korean,language",
-      instructor: "Ven. Kalyanapura Mangala"
-    },
-    {
-      title: "Conversational Korean",
-      description: "Master daily conversations and practical expressions in Korean.",
-      price: 24990,
-      duration: "4 weeks",
-      ratings: 4,
-      label: "Beginner",
-      lectureCount: 18,
-      image: "https://source.unsplash.com/featured/?conversation,korean",
-      instructor: "Ven. Kalyanapura Mangala"
-    },
-    {
-      title: "Korean Culture and Language",
-      description: "Explore Korean traditions while improving your language skills.",
-      price: 2199,
-      duration: "5 weeks",
-      ratings: 2,
-      label: "Intermediate",
-      lectureCount: 22,
-      image: "https://source.unsplash.com/featured/?culture,korea",
-      instructor: "Ven. Kalyanapura Mangala"
-    },
-    {
-      title: "K-Drama Korean Language",
-      description: "Learn Korean through popular K-Dramas and everyday dialogues.",
-      price: 1799,
-      duration: "3 weeks",
-      ratings: 4,
-      label: "Beginner",
-      lectureCount: 15,
-      image: "https://source.unsplash.com/featured/?kdrama,korean",
-      instructor: "Ven. Kalyanapura Mangala"
-    },
-    {
-      title: "Korean Culture and Language",
-      description: "Explore Korean traditions while improving your language skills.",
-      price: 2199,
-      duration: "5 weeks",
-      ratings: 2,
-      label: "Intermediate",
-      lectureCount: 22,
-      image: "https://source.unsplash.com/featured/?culture,korea",
-      instructor: "Ven. Kalyanapura Mangala"
-    },
-    {
-      title: "K-Drama Korean Language",
-      description: "Learn Korean through popular K-Dramas and everyday dialogues.",
-      price: 1799,
-      duration: "3 weeks",
-      ratings: 4,
-      label: "Beginner",
-      lectureCount: 15,
-      image: "https://source.unsplash.com/featured/?kdrama,korean",
-      instructor: "Ven. Kalyanapura Mangala"
-    },
-    {
-      title: "K-Drama Korean Language",
-      description: "Learn Korean through popular K-Dramas and everyday dialogues.",
-      price: 1799,
-      duration: "3 weeks",
-      ratings: 4,
-      label: "Beginner",
-      lectureCount: 15,
-      image: "https://source.unsplash.com/featured/?kdrama,korean",
-      instructor: "Ven. Kalyanapura Mangala"
-    },
-    {
-      title: "Korean Culture and Language",
-      description: "Explore Korean traditions while improving your language skills.",
-      price: 2199,
-      duration: "5 weeks",
-      ratings: 2,
-      label: "Intermediate",
-      lectureCount: 22,
-      image: "https://source.unsplash.com/featured/?culture,korea",
-      instructor: "Ven. Kalyanapura Mangala"
-    },
-    {
-      title: "K-Drama Korean Language",
-      description: "Learn Korean through popular K-Dramas and everyday dialogues.",
-      price: 1799,
-      duration: "3 weeks",
-      ratings: 4,
-      label: "Beginner",
-      lectureCount: 15,
-      image: "https://source.unsplash.com/featured/?kdrama,korean",
-      instructor: "Ven. Kalyanapura Mangala"
-    }
-  ];*/
-
-  /*const categories = [
-    {
-      title: "TOPIK 1-2 제 93회 අප්‍රේල් විභාගය",
-      count: 2,
-    },
-    {
-      title: "Conversational Korean Basics",
-      count: 5,
-    },
-    {
-      title: "Korean Grammar and Writing",
-      count: 3,
-    },
-    {
-      title: "Korean Vocabulary Builder",
-      count: 4,
-    },
-    {
-      title: "K-Drama & K-Pop Language",
-      count: 6,
-    },
-    {
-      title: "Korean Culture and Society",
-      count: 2,
-    },
-  ];*/
+  const handleCourseClick = (course: any) => {
+        
+    navigate(`/course`, {
+        state: {
+          id: course.id,
+          name: course.name,
+          description : course.description,
+          thumbnail: course.thumbnail,
+          level: course.level,
+          totalDuration: course.totalDuration,
+          price: course.price,
+          sectionCount: course.sectionCount,
+        }
+      });
+};
 
   const images = [k1, k2, k3];
   const koreanLetters = [""];
@@ -620,10 +507,7 @@ const handleGetTopCourses = async () => {
               className="top-course-card"
               data-aos="fade-up" data-aos-delay="100"
               key={index}
-              onClick={() => {
-                setSelectedCourse(course);
-                setIsModalOpen(true);
-              }}
+              onClick={() => handleCourseClick(course)}
               style={{ cursor: "pointer" }}
             >
               {/* your card code here */}
