@@ -145,6 +145,14 @@
     justify-content: center;
 }
 
+.top-courses-outer3 {
+    margin-top: 15px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 25px;
+    justify-content: center;
+}
+
 .top-courses-title {
     font-size: 30px;
     font-weight: bold;

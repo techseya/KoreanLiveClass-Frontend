@@ -57,6 +57,7 @@ export default function Landing() {
   const [selectedCourse, setSelectedCourse] = useState<any>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [visibleStartIndex, setVisibleStartIndex] = useState(0);
+  const [visibleIndex, setVisibleIndex] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
 
@@ -90,6 +91,18 @@ export default function Landing() {
   const handlePrev = () => {
     if (visibleStartIndex - 4 >= 0) {
       setVisibleStartIndex(visibleStartIndex - 4);
+    }
+  };
+
+  const handleNext1 = () => {
+    if (visibleIndex + 4 < url.length) {
+      setVisibleIndex(visibleIndex + 4);
+    }
+  };
+
+  const handlePrev1 = () => {
+    if (visibleIndex - 4 >= 0) {
+      setVisibleIndex(visibleIndex - 4);
     }
   };
 
@@ -184,6 +197,15 @@ export default function Landing() {
     }
   };
 
+  const url = [
+    { url: "https://www.youtube.com/embed/fth6vweRyFA?&modestbranding=1&rel=0&playsinline=1" },
+    { url: "https://www.youtube.com/embed/fth6vweRyFA?&modestbranding=1&rel=0&playsinline=1" },
+    { url: "https://www.youtube.com/embed/fth6vweRyFA?&modestbranding=1&rel=0&playsinline=1" },
+    { url: "https://www.youtube.com/embed/fth6vweRyFA?&modestbranding=1&rel=0&playsinline=1" },
+    { url: "https://www.youtube.com/embed/fth6vweRyFA?&modestbranding=1&rel=0&playsinline=1" }
+  ];
+
+
   return (
     <div
       className="main-outer"
@@ -266,7 +288,7 @@ export default function Landing() {
             </div>
           </div>
         </div>
-        <div className="second-inner1">
+        {/* {<div className="second-inner1">
           <div className="phone-outer">
             <img src={phoneTemp} alt="Phone" className="phone-bg" />
             <div className="phone-inner">
@@ -291,6 +313,58 @@ export default function Landing() {
                 <div className="pcard">
                   <AccessTime className="picon" />
                   <div className="ptext">{t('ptext3')}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>} */}
+        <div className="second-inner1">
+          <div className="phone-outer">
+            <img src={phoneTemp} alt="Phone" className="phone-bg" />
+            <div className="phone-inner">
+              <img className="phone-logo" src={logo} alt="Logo" />
+              <div className="phone-title">{t("phoneT")}</div>
+              <div className="space"></div>
+              <div className="pcard-inner">
+                <div className="pcard1">
+                  <div className="pc hover-hide-controls">
+                    <iframe
+                      className="video-embed"
+                      src="https://www.youtube.com/embed/fAjqo3VbHSc?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0"
+                      title="YouTube video"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; autoplay"
+                      allowFullScreen
+                    ></iframe>
+                  </div>
+                </div>
+              </div>
+              <div className="pcard-inner">
+                <div className="pcard1">
+                  <div className="pc hover-hide-controls">
+                    <iframe
+                      className="video-embed"
+                      src="https://www.youtube.com/embed/4CVXqep4eiM?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0&playsinline=1"
+                      title="YouTube video"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; autoplay"
+                      allowFullScreen
+                    ></iframe>
+                  </div>
+                </div>
+              </div>
+              <div className="pcard-inner">
+                <div className="pcard1">
+                  <div className="pc hover-hide-controls">
+                    <iframe
+                      className="video-embed"
+                      src="https://www.youtube.com/embed/fth6vweRyFA?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0&playsinline=1"
+                      title="YouTube video"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; autoplay"
+                      allowFullScreen
+                    ></iframe>
+                  </div>
                 </div>
               </div>
             </div>
@@ -424,6 +498,48 @@ export default function Landing() {
             </div>
           </div>
         </Dialog>
+        <div className="space"></div>
+        <div className="space"></div>
+        <div className="space"></div>
+      </div>
+
+      <div className="third-outer">
+        <div className="top-courses-outer3" data-aos="fade-up" data-aos-delay="100">
+          {url.slice(visibleIndex, visibleIndex + 4).map((u, index) => (
+            <div className="i1">
+              <iframe
+                className="video-embed1"
+                src={u.url}
+                title="YouTube video"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                data-aos="fade-up"
+                data-aos-delay="500"
+              ></iframe>
+            </div>
+          ))}
+        </div>
+          <div className="arrow-buttons-row">
+            <div
+              className="arrow-button"
+              onClick={handlePrev1}
+              style={{ visibility: visibleIndex === 0 ? "hidden" : "visible" }}
+            >
+              <ArrowBackIosIcon />
+            </div>
+
+            <div
+              className="arrow-button"
+              onClick={handleNext1}
+              style={{
+                visibility: visibleIndex + 4 >= url.length ? "hidden" : "visible",
+              }}
+            >
+              <ArrowForwardIosIcon />
+            </div>
+          </div>
+
         <div className="space"></div>
         <div className="space"></div>
         <div className="space"></div>
@@ -657,13 +773,13 @@ export default function Landing() {
             <a style={{ textDecoration: "none" }} href="https://www.slbfe.lk/" target="_blank" rel="noopener noreferrer" className="ul">
               Sri Lanka Bureau of Foreign Employment
             </a>
-            <a style={{ textDecoration: "none" }} href="http://srilankaembassy.or.kr/" target="_blank" rel="noopener noreferrer" className="ul">
+            <a style={{ textDecoration: "none" }} href="http://www.slembassykorea.com/eng/" target="_blank" rel="noopener noreferrer" className="ul">
               Sri Lankan Embassy in South Korea
             </a>
-            <a style={{ textDecoration: "none" }} href="https://overseas.mofa.go.kr/lk-en/index.do" target="_blank" rel="noopener noreferrer" className="ul">
+            <a style={{ textDecoration: "none" }} href="https://overseas.mofa.go.kr/lk-ko/index.do" target="_blank" rel="noopener noreferrer" className="ul">
               Korean Embassy in Sri Lanka
             </a>
-            <a style={{ textDecoration: "none" }} href="https://www.topik.go.kr/" target="_blank" rel="noopener noreferrer" className="ul">
+            <a style={{ textDecoration: "none" }} href="https://www.topik.go.kr/usr/cmm/subLocation.do?menuSeq=2110601" target="_blank" rel="noopener noreferrer" className="ul">
               Topic Exam Korea
             </a>
           </div>

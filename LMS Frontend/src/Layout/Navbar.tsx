@@ -111,7 +111,7 @@ export default function Navbar({ children }: Readonly<Props>) {
                     <div className={`nav-links ${menuOpen ? 'active' : ''}`}>
                         <a href="" onClick={handleNavCourses}>{t('Courses')}</a>
                         <a href="">{t('kWords')}</a>
-                        {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse) && <a href="#categories">{t('Categories')}</a>}
+                        {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse) && <a href="#categories">{t('kbooks')}</a>}
                         {visible && ( <a href="" onClick={handleNavMyCourses}>{t('myCourses')}</a>)}                       
                         <a href="#contact">{t('Contact Us')}</a>
                         <a href="#about">{t('About Us')}</a>
