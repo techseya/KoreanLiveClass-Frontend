@@ -1,12 +1,16 @@
 {
     "Courses": "Courses",
+    "kWords" : "Korean Words",
     "Categories": "Categories",
     "Contact Us": "Contact Us",
     "About Us": "About Us",
+    "ins": "Ven Kalyanapura Mangala",
     "SignIn": "Sign In",
+    "SignIn1": "SignIn",
     "SignUp": "Sign Up",
     "Korean Live Class Student Portal": "Korean Live Class Student Portal",
     "HeroDesc": "All courses for students, from beginners who are learning Korean to those who wish to learn the Korean language to the fullest, can be viewed on this website.",
+    "phoneT": "Korean Language Online Platform",
     "ptext1": "Online courses",
     "ptext2": "Expert instruction",
     "ptext3": "Access anytime",
@@ -61,6 +65,7 @@
     "newPw": "New Password",
     "confirmPw": "Confirm Password",
     "buyCourse": "Purchase Course",
-    "myCourses": "My Courses"
+    "myCourses": "My Courses",
+    "ul": "Useful Links"
   }
   
