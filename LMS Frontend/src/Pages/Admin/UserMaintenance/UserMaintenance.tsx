@@ -7,9 +7,11 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LockReset, PhonelinkErase } from "@mui/icons-material";
 import Dialogbox from "src/Common/Components/DialogBox";
+import { getUsers, resetDevice, resetPassword, updateUser } from "src/Services/user_api";
+import { getAllCourses } from "src/Services/course_api";
 
 function CustomNoRowsOverlay() {
     return (
@@ -25,54 +27,50 @@ export default function UserMaintenance() {
     const [editingUser, setEditingUser] = useState<any | null>(null);
     const [changePwDialog, setChangePwDialog] = useState(false)
     const [changeDeviceDialog, setChangeDeviceDialog] = useState(false)
+    const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
 
-    const [userName, setUserName] = useState("")
-    const [location, setLocation] = useState("Sri Lanka")
-    const [phoneNo, setPhoneNo] = useState<any>("")
-    const [email, setEmail] = useState("")
-    const [duration, setDuration] = useState<any>("")
-    const [status, setStatus] = useState("Active")
+    const [allCourses, setAllCourses] = useState<any[]>([]);
 
-    const [rows, setRows] = useState([
-        {
-            id: 1,
-            userName: 'JonSnow',
-            phoneNo: '94345678901',
-            location: 'Sri Lanka',
-            status: 'Active',
-            email: 'abcd@gmail.com',
-            duration: '10',
-            courses: [
-                { name: 'abcd' },
-                { name: 'abcd1' },
-                { name: 'abcd2' }
-            ]
-        },
-        {
-            id: 2,
-            userName: 'AryaStark',
-            phoneNo: '987654321125',
-            location: 'South Korea',
-            status: 'Inactive',
-            email: 'arya@gmail.com',
-            duration: '8',
-            courses: []
+    const token = sessionStorage.getItem("token")
+
+    const handleGetUsers = async () => {
+        try {
+            const response = await getUsers(token)
+            setRows(response.data)
+        } catch (error) {
+            console.error(error);
         }
-    ]);
+    }
+
+    useEffect(() => {
+        handleGetUsers()
+        handleGetCourses()
+    }, [])
+
+    const handleGetCourses = async () => {
+        try {
+            const res = await getAllCourses()
+            setAllCourses(res.data)
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const [rows, setRows] = useState<any[]>([]);
 
     const handleCancelChangePwDialog = () => {
         setChangePwDialog(false)
     }
-    
+
     const handleChangePwDialog = () => {
         setChangePwDialog(true)
     }
 
-    
+
     const handleCancelChangeDeviceDialog = () => {
         setChangeDeviceDialog(false)
     }
-    
+
     const handleChangeDeviceDialog = () => {
         setChangeDeviceDialog(true)
     }
@@ -87,12 +85,13 @@ export default function UserMaintenance() {
         setVisible(false);
     };
 
+    const [status, setStatus] = useState(1)
+
     const handleFormChange = (field: string, value: string) => {
         setEditingUser((prev: any) => ({ ...prev, [field]: value }));
     };
 
-    const handleUpdate = () => {
-
+    const handleUpdate = async () => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (!emailRegex.test(editingUser?.email)) {
@@ -105,28 +104,81 @@ export default function UserMaintenance() {
             return;
         }
 
+        const payload = {
+            id: editingUser.id,
+            userName: editingUser.userName,
+            email: editingUser.email,
+            location: editingUser.location,
+            phoneNo: editingUser.phoneNo,
+            duration: editingUser.duration || 0, // default if not provided
+            activeStatus: editingUser.status,
+            userCourses: editingUser.courses.map((c: any) => ({
+                courseId: c.id,
+                courseName: c.name
+            }))
+        };
+
+        try {
+            const response = await updateUser(payload, token)
+            alert(response.data.message)
+        } catch (error: any) {
+            alert(error.response.message)
+        }
         setRows((prevRows) =>
             prevRows.map((row) => (row.id === editingUser.id ? editingUser : row))
         );
+
         setEditingUser(null);
-        setVisible(false)
+        setVisible(false);
     };
 
-    const handleCourseChange = (course: string, checked: boolean) => {
-        if (!editingUser) return; // Add null check here
+    const handleChangePassword = async () => {
+        
+        if (!selectedUserId) return;
+    
+        const body = {
+            userId: selectedUserId,
+            newPassword: "abcd"
+        };
+    
+        try {
+            const res = await resetPassword(body,token)
+            alert(res.data.message)
+        } catch (error:any) {
+            alert(error.response.message)
+        }
+    
+        setChangePwDialog(false);
+    };
+
+    const handleResetDevice = async () => {
+        
+        if (!selectedUserId) return;
+    
+        const body = {
+            userId: selectedUserId
+        };
+    
+        try {
+            const res = await resetDevice(body,token)
+            alert(res.data.message)
+        } catch (error:any) {
+            alert(error.response.message)
+        }
+    
+        setChangeDeviceDialog(false);
+    };
+
+
+    const handleCourseChange = (course: any, checked: boolean) => {
+        if (!editingUser) return;
         setEditingUser((prev: any) => {
             const updatedCourses = checked
-                ? [...prev.courses, { name: course }]
-                : prev.courses.filter((c: any) => c.name !== course);
+                ? [...prev.courses, { id: course.id, name: course.name }]
+                : prev.courses.filter((c: any) => c.id !== course.id);
             return { ...prev, courses: updatedCourses };
         });
     };
-
-    const allCourses = [
-        'abcd', 'abcd1', 'abcd2', 'abcd3', 'abcd4', 'abcd5',
-        'abcd6', 'abcd7', 'abcd8', 'abcd9', 'abcd10', 'abcd11', 'abcd12',
-        'abcd13', 'abcd14', 'abcd15', 'abcd16'
-    ];
 
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', width: 70 },
@@ -141,9 +193,9 @@ export default function UserMaintenance() {
             renderCell: (params) => {
                 const value = params.value;
                 let color: 'success' | 'error' | 'info' = 'info';
-                if (value === 'Active') color = 'success';
-                else if (value === 'Inactive') color = 'error';
-                return <Chip label={value} color={color} size="small" style={{ width: '70px', opacity: '0.8' }} />;
+                if (value === 1) color = 'success';
+                else if (value === 2) color = 'error';
+                return <Chip label={value === 1 ? "Active" : "Inactive"} color={color} size="small" style={{ width: '70px', opacity: '0.8' }} />;
             }
         },
         {
@@ -157,13 +209,24 @@ export default function UserMaintenance() {
                     <IconButton sx={{ color: 'black' }} aria-label="edit" onClick={() => handleEditClick(params.row)}>
                         <EditIcon />
                     </IconButton>
-                    <IconButton sx={{ color: 'error.main' }} aria-label="delete">
-                        <DeleteIcon />
-                    </IconButton>
-                    <IconButton sx={{ color: 'grey' }} aria-label="reset password" onClick={handleChangePwDialog}>
+                    <IconButton
+                        sx={{ color: 'grey' }}
+                        aria-label="reset password"
+                        onClick={() => {
+                            setSelectedUserId(params.row.id);
+                            setChangePwDialog(true);
+                        }}
+                    >
                         <LockReset />
                     </IconButton>
-                    <IconButton sx={{ color: 'grey' }} aria-label="reset device" onClick={handleChangeDeviceDialog}>
+                    <IconButton
+                        sx={{ color: 'grey' }}
+                        aria-label="reset device"
+                        onClick={() => {
+                            setSelectedUserId(params.row.id);
+                            setChangeDeviceDialog(true);
+                        }}
+                    >
                         <PhonelinkErase />
                     </IconButton>
                 </Box>
@@ -179,18 +242,18 @@ export default function UserMaintenance() {
                 content="Are you sure? Resetting the password will require the user to set a new one, and they may temporarily lose access until it’s updated."
                 agreeButtonText="Yes, Reset"
                 disagreeButtonText="No"
-                onAgree={handleCancelChangePwDialog}
+                onAgree={handleChangePassword}
                 onDisagree={handleCancelChangePwDialog}
                 onClose={handleCancelChangePwDialog}
             />
-            
+
             <Dialogbox
                 open={changeDeviceDialog}
                 title="Device Reset Confirmation"
                 content="Are you sure? Resetting the device will remove its current authentication, and the user will need to re-authenticate the device before accessing their account."
                 agreeButtonText="Yes, Reset"
                 disagreeButtonText="No"
-                onAgree={handleCancelChangeDeviceDialog}
+                onAgree={handleResetDevice}
                 onDisagree={handleCancelChangeDeviceDialog}
                 onClose={handleCancelChangeDeviceDialog}
             />
@@ -205,8 +268,7 @@ export default function UserMaintenance() {
                         sx={{
                             border: 0,
                             minWidth: 600,
-                            '& .MuiDataGrid-columnHeaders': { backgroundColor: '#000' },
-                            '& .MuiDataGrid-columnHeaderTitle': { color: '#fff', fontWeight: 'bold', fontSize: '15px', fontFamily: 'Public Sans, sans-serif' },
+                            '& .MuiDataGrid-columnHeaderTitle': {fontWeight: 'bold', fontSize: '15px', fontFamily: 'Public Sans, sans-serif' },
                             '& .MuiDataGrid-cell': { fontSize: '14px', fontFamily: 'Public Sans, sans-serif' }
                         }}
                         slots={{ noRowsOverlay: CustomNoRowsOverlay }}
@@ -268,24 +330,6 @@ export default function UserMaintenance() {
                         </Grid>
 
                         <Grid item xs={12} sm={6}>
-                            <TextField
-                                label="Duration"
-                                fullWidth
-                                value={editingUser?.duration || ''}
-                                onChange={(e) => {
-                                    const value = e.target.value;
-                                    // Allow only digits and disallow leading zero
-                                    if (/^\d*$/.test(value)) {
-                                        if (value === '' || value[0] !== '0') {
-                                            handleFormChange("duration", e.target.value)
-                                        }
-                                    }
-                                }}
-                                inputProps={{ inputMode: 'numeric' }}
-                            />
-                        </Grid>
-
-                        <Grid item xs={12} sm={6}>
                             <FormControl fullWidth>
                                 <InputLabel>Status</InputLabel>
                                 <Select
@@ -293,8 +337,8 @@ export default function UserMaintenance() {
                                     label="Status"
                                     onChange={(e) => handleFormChange("status", e.target.value)}
                                 >
-                                    <MenuItem value="Active">Active</MenuItem>
-                                    <MenuItem value="Inactive">Inactive</MenuItem>
+                                    <MenuItem value={1}>Active</MenuItem>
+                                    <MenuItem value={2}>Inactive</MenuItem>
                                 </Select>
                             </FormControl>
                         </Grid>
@@ -308,7 +352,7 @@ export default function UserMaintenance() {
                         <Grid item xs={12} display="flex" justifyContent="flex-end">
                             <Button className="update-btn" variant="contained" onClick={handleCancel}>Cancel</Button>
                             <Button
-                                disabled={!editingUser?.userName || !editingUser?.email || !editingUser?.phoneNo || !editingUser?.duration || !editingUser?.location || !editingUser?.status}
+                                disabled={!editingUser?.userName || !editingUser?.email || !editingUser?.phoneNo || !editingUser?.location || !editingUser?.status}
                                 variant="contained" onClick={handleUpdate}>Update</Button>
                         </Grid>
                     </Grid>
@@ -338,19 +382,20 @@ export default function UserMaintenance() {
                     <Typography variant="h6" mb={2}>Assign Courses : {editingUser?.userName}</Typography>
                     <Grid container spacing={1}>
                         {allCourses.map((course) => (
-                            <Grid item xs={12} sm={4} key={course}>
+                            <Grid item xs={12} sm={4} key={course.id}>
                                 <FormControlLabel
                                     control={
                                         <Checkbox
-                                            checked={editingUser?.courses?.some((c: any) => c.name === course) || false}
+                                            checked={editingUser?.courses?.some((c: any) => c.id === course.id) || false}
                                             onChange={(e) => handleCourseChange(course, e.target.checked)}
                                         />
                                     }
-                                    label={course}
+                                    label={course.name}
                                 />
                             </Grid>
                         ))}
                     </Grid>
+
                     <Box mt={2} display="flex" justifyContent="flex-end">
                         <Button variant="contained" onClick={() => setCourseModalOpen(false)}>Done</Button>
                     </Box>

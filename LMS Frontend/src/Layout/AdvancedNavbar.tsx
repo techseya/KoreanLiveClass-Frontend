@@ -156,8 +156,6 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
   const [title, setTitle] = React.useState("");
 
   const isMobile = useMediaQuery("(max-width:800px)");
-
-  const token = localStorage.getItem("token");
   const subjects = JSON.parse(localStorage.getItem("subjects") || "[]");
   const user = localStorage.getItem("username") || "User";
   const navigate = useNavigate();
@@ -165,8 +163,13 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
 
   const isVerySmallScreen = useMediaQuery("(max-width:376px)");
 
+  const token = sessionStorage.getItem("token")
+
   // Auto-close logic
   React.useEffect(() => {
+    if(token === null){
+      navigate("/")
+    }
     if (isMobile) {
       setOpen(false);
       setWasAutoClosed(true);
@@ -217,7 +220,7 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
   const handleClose = () => setIsOpen(false);
   const handleLogout = () => {
     navigate("/");
-    localStorage.setItem("token", "");
+    sessionStorage.removeItem("token");
   };
 
   React.useEffect(() => {

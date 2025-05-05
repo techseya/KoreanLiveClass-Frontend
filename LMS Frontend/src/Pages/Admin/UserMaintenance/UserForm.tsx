@@ -12,6 +12,7 @@ import {
 import "../../../Common/styles/user.css";
 import { useNavigate } from "react-router-dom";
 import { Add } from "@mui/icons-material";
+import { register } from "src/Services/auth_api";
 
 export default function UserForm() {
     const navigate = useNavigate();
@@ -20,10 +21,10 @@ export default function UserForm() {
     const [location, setLocation] = useState("Sri Lanka")
     const [phoneNo, setPhoneNo] = useState<any>("")
     const [email, setEmail] = useState("")
-    const [duration, setDuration] = useState<any>("")
+    const [password, setPassword] = useState<any>("")
     const [status, setStatus] = useState("Active")
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
         if (!emailRegex.test(email)) {
@@ -35,6 +36,27 @@ export default function UserForm() {
             alert("Phone number must be 11 or 12 digits long.");
             return;
         }
+
+        const body = {
+            userName: userName,
+            password: password,
+            email: email,
+            location: location,
+            phoneNo: phoneNo,
+            duration: 0,
+            activeStatus: status === "Active" ? 1 : 2
+        }
+
+        try {
+            const response = await register(body)
+            if(response.data.message === "Registration completed"){
+                alert("Registration completed")
+            }      
+        } catch (error:any) {
+            alert(error.response.data.message);            
+        }
+
+        window.location.reload()
     };
 
     return (
@@ -96,18 +118,11 @@ export default function UserForm() {
 
                     <Grid item xs={12} sm={6}>
                         <TextField
-                            label="Duration (Hours)"
+                            label="Password"
                             fullWidth
-                            value={duration}
-                            onChange={(e) => {
-                                const value = e.target.value;
-                                if (/^\d*$/.test(value)) {
-                                    if (value === '' || value[0] !== '0') {
-                                        setDuration(value);
-                                    }
-                                }
-                            }}
-                            inputProps={{ inputMode: 'numeric' }}
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
                         />
                     </Grid>
 
@@ -132,7 +147,7 @@ export default function UserForm() {
                             startIcon={<Add />}
                             sx={{ textTransform: 'none' }}
                             onClick={handleSubmit}
-                            disabled={!userName || !email || !status || !phoneNo || !location || !duration}
+                            disabled={!userName || !email || !status || !phoneNo || !location || !password}
                         >
                             Add User
                         </Button>

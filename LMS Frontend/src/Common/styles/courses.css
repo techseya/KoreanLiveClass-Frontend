@@ -11,6 +11,32 @@
     margin-top: 80px;
     background-color: rgb(2, 104, 199);
     color: white;
+    background-image: url("../../Assets/Images/item_bg.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: relative;
+}
+
+.c-board{
+    width: 100%;
+    height: auto;
+    padding: 5rem;
+    background-image: url("../../Assets/Images/item_bg2.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: fixed;
+    top: 80px;
+    display: none;
+}
+
+.visible{
+    display: none !important;
+}
+
+.bg{
+    position: absolute;
+    background-color: #3131316a;
+    inset: 0;
 }
 
 .courses-main-inner{
@@ -66,6 +92,7 @@
     padding-top: 80px;
     display: flex;
     justify-content: center;
+    z-index: 10;
 }
 
 .c-inner1{
@@ -74,6 +101,7 @@
     padding: 15px;
     display: flex;
     justify-content: center;
+    z-index: 10;
 }
 
 .c-in{
@@ -155,4 +183,31 @@
 
 .buy-course-button:hover {
     background-color: #115293;
+}
+
+@media (max-width: 1025px){
+
+    .c-inner1{
+        display: block;
+    }
+
+    .c-in{
+        display: none;
+    }
+
+    .visible{
+        display: flex !important;
+        width: 100%;
+        height: auto;
+    }
+
+    .c-in1{
+        width: 100%;
+    }
+}
+
+@media (max-width: 769px){
+    .ci{
+        display: block !important;
+    }
 }

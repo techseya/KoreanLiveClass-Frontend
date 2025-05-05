@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "../../Common/styles/courses.css";
 import { useEffect, useState } from "react";
 import { getRecordingsBySectionId, getSectionByCourseId } from "src/Services/course_api";
@@ -14,7 +14,7 @@ import { PlayCircleFilled } from "@mui/icons-material";
 import Footer from "src/Layout/Footer";
 import { useTranslation } from "react-i18next";
 
-export default function Course() {
+export default function MyCourse() {
     const location = useLocation();
     const course = location.state;
     const [sections, setSections] = useState<any[]>([]);
@@ -24,14 +24,16 @@ export default function Course() {
     const [videoType, setVideoType] = useState<string | null>(null);
     const { t, i18n } = useTranslation();
 
+    const token = sessionStorage.getItem("token")
+    const navigate = useNavigate()
+
     useEffect(() => {
+        if(token === null){
+            navigate("/")
+        }
         if (course?.id) handleGetSections();
         window.scrollTo(0, 0);
     }, []);    
-
-    const scrollTop = () => {
-        window.scrollTo(0, 0);
-    }
 
     const handleGetSections = async () => {
         try {
@@ -64,7 +66,6 @@ export default function Course() {
     };
 
     const handleVideoSelection = (rec: any) => {
-        scrollTop()
         setVideoType(rec.videoType); // "Vimeo" or "YouTube"
         setPlayingVideoUrl(rec.recordLink);
     };
@@ -75,7 +76,6 @@ export default function Course() {
 
     return (
         <div className="courses-main-outer">
-            <div className="c-board"></div>
             <div className="c-inner">
                 <div className="c-inner1">
                 <div className="c-in visible">
@@ -108,11 +108,9 @@ export default function Course() {
                             <img className="c-thumb" src={course.thumbnail} alt="Course Thumbnail" />
                         )}
                     </div>
-
                     <div className="c-in1">
-                        <div className="c-items-outer ci">
+                        <div className="c-items-outer">
                             <div className="c-title">{course.name}</div>
-                            <div className="c-price">LKR.{course.price}</div>
                         </div>
                         <div className="c-desc">{course.description}</div>
                         <div className="c-items-outer">
@@ -160,31 +158,17 @@ export default function Course() {
                                                         >
                                                             <PlayCircleFilled
                                                                 sx={{
-                                                                    color: rec.transactionStatus !== 1 ? '#0D47A1' : 'gray',
+                                                                    color:'#0D47A1',
                                                                     mr: 1
                                                                 }}
                                                             />
-                                                            <span style={{
-                                                                color: rec.transactionStatus !== 1 ? '#0D47A1' : 'gray',
-                                                                fontWeight: 500
+                                                            <span onClick={() => handleVideoSelection(rec)} style={{
+                                                                color:'#0D47A1',
+                                                                fontWeight: 500,
+                                                                cursor: 'pointer'
                                                             }}>
                                                                 {rec.name}
                                                             </span>
-                                                            {rec.transactionStatus !== 1 && (
-                                                                <button
-                                                                    onClick={() => handleVideoSelection(rec)}
-                                                                    style={{
-                                                                        marginLeft: 10,
-                                                                        background: 'none',
-                                                                        border: 'none',
-                                                                        color: '#1976d2',
-                                                                        cursor: 'pointer',
-                                                                        textDecoration: 'underline'
-                                                                    }}
-                                                                >
-                                                                    (Free)
-                                                                </button>
-                                                            )}
                                                         </Typography>
                                                     ))
                                                 ) : (
@@ -233,15 +217,6 @@ export default function Course() {
                         )}
                     </div>
                 </div>
-                <button className="buy-course-button" onClick={() =>
-                            window.open(
-                                "https://wa.me/821090736674?text=Hello%2C%20I%20need%20to%20Buy%20a%20course",
-                              "_blank"
-                            )
-                          }>
-                    {t("buyCourse")}
-                </button>
-
             </div>
 
             <div className="space1"></div>

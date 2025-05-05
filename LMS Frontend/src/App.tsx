@@ -8,16 +8,22 @@ import UserMaintenance from "./Pages/Admin/UserMaintenance/UserMaintenance";
 import Users from "./Pages/Admin/UserMaintenance";
 import Courses from "./Pages/User/Courses";
 import Course from "./Pages/User/Course";
+import Register from "./Pages/User/Register";
+import MyCourses from "./Pages/User/MyCourses";
+import MyCourse from "./Pages/User/MyCourse";
 
 const App: React.FC = () => {
   const location = useLocation();
   const isHomePage = location.pathname === "/";
   const isCourses = location.pathname === "/courses"
+  const isMyCourses = location.pathname === "/my-courses"
   const isCourse = location.pathname === "/course"
+  const isMyCourse = location.pathname === "/my-course"
+  const isRegister = location.pathname === "/register"
 
   return (
     <>
-      {!isHomePage && !isCourses && !isCourse ? (
+      {!isHomePage && !isCourses && !isCourse && !isRegister && !isMyCourses && !isMyCourse ?(
         <AdvancedNavbar>
           <Routes>
             <Route path="/dashboard" element={<Dashboard />} />
@@ -29,7 +35,10 @@ const App: React.FC = () => {
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/courses" element={<Courses/>} />
+            <Route path="/my-courses" element={<MyCourses/>} />
             <Route path="/course" element={<Course />} />
+            <Route path="/my-course" element={<MyCourse />} />
+            <Route path="/register" element={<Register />} />
           </Routes>
         </Navbar>
       )}

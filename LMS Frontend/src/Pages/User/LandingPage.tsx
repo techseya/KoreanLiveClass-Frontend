@@ -73,6 +73,10 @@ export default function Landing() {
     setLoginOpen(true);
   };
 
+  const handleRegister = () =>{
+    navigate("/register")
+  }
+
   const handleClose = () => {
     setLoginOpen(false);
   };
@@ -217,7 +221,7 @@ const handleGetTopCourses = async () => {
           <div className="red-text">
             {t("red-text")}
           </div>
-          <button onClick={handleLoginOpen} style={{ zIndex: 10 }} className="btn signup">{t('SignIn')}</button>
+          <button onClick={handleRegister} style={{ zIndex: 10 }} className="btn signup">{t('SignUp')}</button>
         </div>
       </div>
 

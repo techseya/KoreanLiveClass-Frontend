@@ -13,6 +13,12 @@
   flex-wrap: wrap;
 }
 
+.user-section {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .navbar {
   background-color: rgb(251, 253, 255);
   /*background: linear-gradient(90deg, rgba(247, 185, 185, 1) 0%, rgba(252, 214, 184, 1) 50%, rgba(174, 230, 240, 1) 100%);*/

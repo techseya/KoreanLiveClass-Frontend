@@ -55,11 +55,12 @@
     "login": "Login Page",
     "reset": "Password Reset Page",
     "resetBtn": "Reset",
-    "register": "Don't have an account? Call Us For Registraion.",
+    "register": "Don't have an account? Regiser.",
     "username": "Username",
     "password": "Password",
     "newPw": "New Password",
     "confirmPw": "Confirm Password",
-    "buyCourse": "Purchase Course"
+    "buyCourse": "Purchase Course",
+    "myCourses": "My Courses"
   }
   

@@ -38,3 +38,17 @@ export const getRecordingsBySectionId = async (sectionId:any) => {
         throw error;
     }
 }
+
+export const getCourseByUserId = async (userId: any, token: any) => {
+    try {
+        const response = await axios.get(`${api}user/my-courses?userId=${userId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response;
+    } catch (error) {
+        throw error;
+    }
+};
+

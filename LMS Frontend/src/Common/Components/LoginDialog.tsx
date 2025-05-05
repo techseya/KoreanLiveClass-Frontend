@@ -9,6 +9,9 @@ import Typography from "@mui/material/Typography";
 import "../styles/dialogbox.css";
 import logo from "../../Assets/Images/logo-light.png"
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
+import { login } from "src/Services/auth_api";
 
 interface LoginDialogboxProps {
     open: boolean;
@@ -18,6 +21,72 @@ interface LoginDialogboxProps {
 
 export default function LoginDialogbox({ open, onAgree, onClose }: LoginDialogboxProps) {
     const { t, i18n } = useTranslation();
+    const navigate = useNavigate()
+
+    React.useEffect(()=>{
+        getDeviceId()
+    },[])
+
+    const [email, setEmail] = React.useState("")
+    const [password, setPassword] = React.useState("")
+    const [deviceId, setDeviceId] = React.useState("")
+
+    const handleLogin = async () => {
+        const body = {
+            email,
+            password,
+            deviceId
+        }
+
+        try {
+            const response = await login(body)
+            if(response.data.token !== null){                
+                sessionStorage.setItem("token",response.data.token)
+                sessionStorage.setItem("id",response.data.id)
+                if(response.data.type === "Admin"){
+                    navigate("/dashboard")
+                }else{
+                    alert("Login Success")
+                }                
+                
+            }            
+        } catch (error:any) {  
+            if(error.response.data.message === "Login not allowed from this device."){
+                alert(error.response.data.message+" Please try again in different tab.")
+            }else{
+                alert(error.response.data.message)
+            }        
+        }
+
+        window.location.reload()
+    }
+
+     const getDeviceId = async () => {
+        const fp = await FingerprintJS.load();
+    
+        let attempts = 0;
+        let stableId = '';
+    
+        while (attempts < 3) {
+          const result = await fp.get();
+          const id = result.visitorId;
+    
+          console.log(`Attempt ${attempts + 1}: ${id}`);
+    
+          // If this is not the first attempt and ID matches previous, consider it stable
+          if (stableId && id === stableId) {
+            break;
+          }
+    
+          stableId = id;
+          attempts++;
+          await new Promise(resolve => setTimeout(resolve, 300)); // wait a bit between attempts
+        }
+    
+        setDeviceId(stableId)
+    
+      };
+
     return (
         <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
             <div className="login-dialog-header">
@@ -53,16 +122,20 @@ export default function LoginDialogbox({ open, onAgree, onClose }: LoginDialogbo
                     <TextField
                         margin="normal"
                         fullWidth
-                        placeholder={t("username")}
+                        placeholder="Email"
                         variant="outlined"
                         type="text"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                     />
                     <TextField
                         margin="normal"
                         fullWidth
-                        placeholder={t("password")}
+                        placeholder="Password"
                         variant="outlined"
                         type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
                     />
 
                     {/* Login Button */}
@@ -70,7 +143,7 @@ export default function LoginDialogbox({ open, onAgree, onClose }: LoginDialogbo
                         variant="contained"
                         fullWidth
                         sx={{ mt: 2 }}
-                        onClick={onAgree}
+                        onClick={handleLogin}
                     >
                         {t("SignIn")}
                     </Button>
@@ -80,12 +153,10 @@ export default function LoginDialogbox({ open, onAgree, onClose }: LoginDialogbo
                         variant="text"
                         fullWidth
                         sx={{ mt: 2 }}
-                        onClick={() =>
-                            window.open(
-                              "https://wa.me/821090736674?text=Hello%2C%20I%20would%20like%20to%20signup%20for%20KoreanLC%20student%20portal",
-                              "_blank"
-                            )
-                          }
+                        onClick={() => {
+                            onClose(); // close dialog
+                            navigate("/register"); // then navigate
+                        }}
                     >
                         {t("register")}
                     </Button>

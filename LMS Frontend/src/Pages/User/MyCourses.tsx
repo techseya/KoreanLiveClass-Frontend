@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import "../../Common/styles/courses.css";
 import "../../Common/styles/home.css";
-import { getAllCourses } from "src/Services/course_api";
+import { getAllCourses, getCourseByUserId } from "src/Services/course_api";
 import { ClockCircleOutlined } from "@ant-design/icons";
 import { Tooltip, TextField } from "@mui/material";
 import insImg from "../../Assets/Images/ins.jpg";
@@ -11,16 +11,18 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import Footer from "src/Layout/Footer";
 
-export default function Courses() {
+export default function MyCourses() {
     const [courses, setCourses] = useState<any[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>("");
     const { t, i18n } = useTranslation();
 
     const navigate = useNavigate();
+    const token = sessionStorage.getItem("token")
+    const id = sessionStorage.getItem("id")
 
     const handleCourseClick = (course: any) => {
         
-        navigate(`/course`, {
+        navigate(`/my-course`, {
             state: {
               id: course.id,
               name: course.name,
@@ -36,7 +38,10 @@ export default function Courses() {
 
 
     useEffect(() => {
-        handleGetTopCourses();
+        if(token === null){
+            navigate("/")
+        }
+        handleGetCourses();
 
         AOS.init({
             duration: 1000,
@@ -44,11 +49,11 @@ export default function Courses() {
         });
     }, []);
 
-    const handleGetTopCourses = async () => {
+    const handleGetCourses = async () => {
         try {
-            const response = await getAllCourses();
-            const activeCourses = response.data.filter((course: any) => course.activeStatus === 1);
-            setCourses(activeCourses);
+            const response = await getCourseByUserId(id,token);
+            console.log(response);
+            setCourses(response?.data);
         } catch (error) {
             console.error(error);
         }
@@ -62,8 +67,8 @@ export default function Courses() {
     return (
         <div className="courses-main-outer">
             <div className="courses-header" style={{ textAlign: "center", marginBottom: "1rem" }}>
-                <div className="bg"></div>
-                <h1 style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>{t("Courses")}</h1>
+            <div className="bg"></div>
+                <h1 style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>{t("myCourses")}</h1>
                 <TextField
                     variant="outlined"
                     placeholder="Search courses..."
@@ -93,7 +98,6 @@ export default function Courses() {
                         >
                             <div className="course-thumbnail">
                                 <img src={course.thumbnail} alt="Course Thumbnail" />
-                                <div className="price">Rs.{(course.price).toFixed(2)}</div>
                             </div>
 
                             <div className="course-info">
