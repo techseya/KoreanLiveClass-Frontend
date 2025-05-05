@@ -46,7 +46,7 @@ body {
   clip-path: polygon(0 0, 5% 100%, 100% 100%, 95% 0);
   display: flex;
   align-items: center;
-  animation: moveBanner 5s linear infinite;
+  animation: moveBanner 10s linear infinite;
   z-index: 2;
   color: white;
   font-size: 1.2rem;
@@ -66,7 +66,7 @@ body {
   text-shadow: 1px 1px 0px #000000;
   border-bottom: 4px solid rgba(255, 0, 0, 0.425);
   clip-path: polygon(0 0, 5% 100%, 100% 100%, 89% 0);
-  animation: moveMainBanner 5s linear infinite;
+  animation: moveMainBanner 10s linear infinite;
   z-index: 2;
   color: white;
   font-size: 1.2rem;
@@ -80,15 +80,40 @@ body {
 
 .banner-text {
   font-size: 25px !important;
-}
-
-.main-banner-text {
-  font-size: 45px !important;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 15s ease-out 2s infinite; /* Infinite repeat */
 }
 
 .main-banner-desc {
   font-size: 20px !important;
   padding: 25px;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 15s ease-out 2.5s infinite; /* Infinite repeat */
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  90% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(20px); /* Fade out and slide down */
+  }
 }
 
 .red-outer {
@@ -891,29 +916,37 @@ body {
 
 @keyframes moveBanner {
   0% {
-    left: -2000px;
+    left: -500px;
   }
-
+  10%{
+    left: -50px;
+  }
   50% {
     left: -50px;
   }
-
+  90% {
+    left: -50px; /* Hold position */
+  }
   100% {
-    left: -50px;
+    left: -700px;
   }
 }
 
 @keyframes moveMainBanner {
   0% {
-    left: -5000px;
+    left: -500px;
   }
-
+  10%{
+    left: -50px;
+  }
   50% {
     left: -50px;
   }
-
+  90% {
+    left: -50px; /* Hold position */
+  }
   100% {
-    left: -50px;
+    left: -900px;
   }
 }
 
