@@ -11,6 +11,9 @@ import Course from "./Pages/User/Course";
 import Register from "./Pages/User/Register";
 import MyCourses from "./Pages/User/MyCourses";
 import MyCourse from "./Pages/User/MyCourse";
+import Categories from "./Pages/Admin/CategoryMaintenance";
+import CoursesM from "./Pages/Admin/CourseMaintenance";
+import Sections from "./Pages/Admin/SectionMaintenance";
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -28,6 +31,9 @@ const App: React.FC = () => {
           <Routes>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/user-maintenance" element={<Users />} />
+            <Route path="/category-maintenance" element={<Categories />} />
+            <Route path="/course-maintenance" element={<CoursesM />} />
+            <Route path="/section-maintenance" element={<Sections />} />
           </Routes>
         </AdvancedNavbar>
       ) : (

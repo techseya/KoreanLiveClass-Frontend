@@ -16,14 +16,16 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useMediaQuery } from "@mui/material";
 import "../Common/styles/style.css";
 import "../Common/styles/navbar.css";
-import { BookOutlined, LogoutOutlined, MenuOutlined } from "@mui/icons-material";
+import { LogoutOutlined, MenuOutlined } from "@mui/icons-material";
 import logo from "../Assets/Images/logo.jpeg";
 import man from "../Assets/Images/man.png";
-import lms_logo from "../Assets/Images/lms_logo.png"
 import Dialogbox from "../Common/Components/DialogBox";
 import {
   DashboardOutlined,
   UserAddOutlined,
+  BlockOutlined,
+  BookOutlined,
+  PieChartOutlined
 } from "@ant-design/icons";
 
 const drawerWidth = 200;
@@ -120,44 +122,12 @@ interface Props {
 
 export default function AdvancedNavbar({ children }: Readonly<Props>) {
 
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const [openDropdown, setOpenDropdown] = React.useState<string | null>(null);
-
-  const cartCount = 3;
-
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-  const toggleDropdown = (menu: string) =>
-    setOpenDropdown(openDropdown === menu ? null : menu);
-
-  const handleNavAllCourses = () => {
-    setOpenDropdown(null)
-    navigate("/all-courses")
-  }
-
-  const handleNavMyCourses = () => {
-    setOpenDropdown(null)
-    navigate("/my-courses")
-  }
-
-  const handleNavHome = () => {
-    setOpenDropdown(null)
-    navigate("/")
-  }
-
-  const handleLogin = () => {
-    navigate("/home");
-  }
-
-
   const [open, setOpen] = React.useState(true);
   const [wasAutoClosed, setWasAutoClosed] = React.useState(false);
   const [active, setActive] = React.useState(0);
   const [isOpen, setIsOpen] = React.useState(false);
-  const [title, setTitle] = React.useState("");
 
   const isMobile = useMediaQuery("(max-width:800px)");
-  const subjects = JSON.parse(localStorage.getItem("subjects") || "[]");
-  const user = localStorage.getItem("username") || "User";
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -179,17 +149,6 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
         setWasAutoClosed(false);
       }
     }
-
-    const location = window.location.pathname;
-
-    if (location === "/user-maintenance") {
-      setTitle("User Maintenance");
-    } else if (location === "/dashboard") {
-      setTitle("Dashboard");
-    } else {
-      setTitle("");
-    }
-
 
     let timeoutId: NodeJS.Timeout;
     if (open) {
@@ -227,8 +186,14 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
     const path = location.pathname;
     if (path === "/dashboard") {
       setActive(1);
-    } else if (path === "/user-maintenance") {
+    } else if (path === "/category-maintenance") {
       setActive(2);
+    } else if (path === "/course-maintenance") {
+      setActive(3);
+    } else if (path === "/section-maintenance") {
+      setActive(4);
+    } else if (path === "/user-maintenance") {
+      setActive(5);
     } else {
       setActive(0);
     }
@@ -236,12 +201,30 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
 
   const handleClickDashboard = () => navigate("/dashboard");
   const handleClickUserMaintenance = () => navigate("/user-maintenance");
+  const handleClickCategory = () => navigate("/category-maintenance")
+  const handleClickCourse = () => navigate("/course-maintenance")
+  const handleClickSection = () => navigate("/section-maintenance")
 
   const drawerItems = [
     {
       name: "Dashboard",
       icon: <DashboardOutlined style={{ fontSize: "20px" }} />,
       onClick: handleClickDashboard,
+    },
+    {
+      name: "Category",
+      icon: <BlockOutlined style={{ fontSize: "20px" }} />,
+      onClick: handleClickCategory,
+    },
+    {
+      name: "Course",
+      icon: <BookOutlined style={{ fontSize: "20px" }} />,
+      onClick: handleClickCourse,
+    },
+    {
+      name: "Section",
+      icon: <PieChartOutlined style={{ fontSize: "20px" }} />,
+      onClick: handleClickSection,
     },
     {
       name: "Users",

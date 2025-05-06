@@ -63,6 +63,18 @@ export default function Landing() {
 
   const [categories, setCategories] = useState<any[]>([])
   const [topCourses, setTopCourses] = useState<any[]>([])
+  const [selectedBook, setSelectedBook] = useState<any>(null);
+  const [isModalOpen1, setIsModalOpen1] = useState(false);
+
+  const handleBookClick = (book: any) => {
+    setSelectedBook(book);
+    setIsModalOpen1(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen1(false);
+    setSelectedBook(null);
+  };
 
   const handleLogin = () => {
     navigate("/dashboard")
@@ -205,6 +217,64 @@ export default function Landing() {
     { url: "https://www.youtube.com/embed/fth6vweRyFA?&modestbranding=1&rel=0&playsinline=1" }
   ];
 
+  const books = [
+    {
+      name: "EPS TOPIK BOOK – 1",
+      description: "කොරියානු රැකියාවක් සදහා කොරියානු රජයේ අනුමත පාඩම් හැටකින් යුක්ත විෂය නිර්දේශයේ පළමු පාඩම් 30 මෙහි අන්තර්ගත වේ. මෙම ග්‍රන්ථයේ කොරියන් අක්ෂර ලියන ආකාරයේ සිට මූලික ව්‍යාකරණ එසේම වචන පිලිබදවත් පැහැදිලි කරනු ලබයි. මෙහි කෙටි වාක්‍ය සහ ජේද භාවිතා කරමින් අනුමාන ප්‍රශ්ණ පත්‍රයන්ද මෙහිදී ඔබට අධ්‍යනය කිරීමට හැකියාව ලැබේ. මෙහි සියලු පාඩම් ඔබට Korean Live Class Mobile App එක හරහා ඉගෙනීමටත් හැකියාවක් ඇත.",
+      price: 0,
+      tag: true,
+      image: "https://www.koreanliveclass.com/wp-content/uploads/2020/09/TOPIK-1.jpg"
+    },
+    {
+      name: "EPS TOPIK BOOK – 2",
+      description: "කොරියානු රජයේ අනුමත පාඩම් හැටකින් යුක්ත විෂය නිර්දේශයේ දෙවන පාඩම් 30 මෙහි අන්තර්ගත වේ. මෙම කොටසේදී වැඩබිමෙහි දැනගෙන සිටිය යුතු සංස්කෘතීන් / නීති රෙගුලාසි ආදී කරුණුත් එසේම පළමු පොතට වඩා ගැඹුරු ව්‍යාකරණ සහ වචන ඉගෙනීමටත් හැකියාව ලැබේ. එසේම දීර්ඝ ජේද සහ වාක්‍යයන් භාවිතා කරමින් අනුමාන ප්‍රශ්ණ පත්‍රයන්ට මුහුණ දීමටත් ඒවාට උත්තර සපයන ආකාරයත් මෙම ග්‍රන්ථ භාවිතා කිරීමෙන් ඔබට ඉගෙනීමට හැක. මෙහි සියලු පාඩම් ඔබට Korean Live Class Mobile App එක හරහා ඉගෙනීමටත් හැකියාවක් ඇත.",
+      price: 0,
+      tag: true,
+      image: "https://www.koreanliveclass.com/wp-content/uploads/2020/09/2.jpg"
+    },
+    {
+      name: "VERBS CLASSIFICATION",
+      description: "ක්‍රියාපද වර්ගීකරණය වන මෙම ග්‍රන්ථය මගින් ඔබගේ කොරියන් භාෂා දැනුම ඉතා කෙටි කාලයකින් දියුණු කර ගැනීමට හැකියාව ඇත. මෙහිදී ක්‍රියාපද 125 ක් ව්‍යාකරණ ක්‍රම 45 ක් සමග වර නගා ඇත. කථා බහේදී නිතර භාවිතා වන ව්‍යාකරණ මෙම ග්‍රන්ථයේදී වරනගා තිබේ.",
+      price: 1200.00,
+      tag: true,
+      image: "https://www.koreanliveclass.com/wp-content/uploads/2020/09/1-1-677x927.jpg"
+    },
+    {
+      name: "KOREAN LANGUAGE NOUNS & VERBS",
+      description: "කොරියන් භාෂාවේ එදිනෙදා නිතර භාවිත වන නාම පද හා ක්‍රියාපද එකතුකර නිර්මාණය කරන ලද ග්‍රන්ථයකි. මෙහි කොරියන් වචන උච්චාරණය කොරියන් ජාතික නිවේදිකාවක් විසින් සිදුකරන අතර එහි සිංහල අර්ථයද එකතු කර තිබේ. මෙහි හඩ පටයත් ඔබට ලබා ගත හැක.",
+      price: 1000.00,
+      tag: true,
+      image: "https://www.koreanliveclass.com/wp-content/uploads/2020/09/1-1-scaled-677x936.jpeg"
+    },
+    {
+      name: "Korean Language Grammer – Part 1",
+      description: "මෙම ග්‍රන්ථය කොරියන් භාෂාවේ ව්‍යාකරණ පිලිබදව සිදුකල ග්‍රන්ථයකි. මෙය 2016 වර්ෂයේ සිට 2017වර්ෂය දක්වා YouTube හරහා සිදුකල පාඩම් මාලාවේ අත් පොතයි. මෙහි සියලු ව්‍යාකරණ සහ උදාහරණ වාක්‍ය සියල්ල කොරියන් භාෂාවෙන් පමණක් සිදු කිරීමට හේතුව වන්නේ අදාල පාඩම් හි Videos බලා ලිවීමට හුරුකරවීමට ඇති අවශ්‍යතාවයයි.",
+      price: 1100.00,
+      tag: true,
+      image: "https://www.koreanliveclass.com/wp-content/uploads/2020/09/1-2-scaled-677x936.jpeg"
+    },
+    {
+      name: "KOREAN SINHALA DICTIONARY",
+      description: "කොරියන් සිංහල ශබ්දකෝෂය කොරියන් විභාගයන්ට අනිවාර්යෙන්ම දැනගෙන සිටියයුතු වචන එකතුකර කරන ලද ග්‍රන්ථයකි. එසේම කොරියාවේ උසස් අධ්‍යාපනය ලබන්නට බලාපොරොත්තු වන්නේ නම් මෙම ග්‍රන්ථය ඔබට මහත් උපකාරයක් වනු ඇත.",
+      price: 0,
+      tag: false,
+      image: "https://www.koreanliveclass.com/wp-content/uploads/2020/09/1-3-scaled-677x974.jpeg"
+    },
+    {
+      name: "TOPIK 1 ~ 2",
+      description: "මෙම ග්‍රන්ථය ටොපික් පළමු සහ දෙවන පන්ති විභාගය ඉලක්ක කර නිර්මාණය කරන ලද ප්‍රශ්ණපත්‍ර පොතකි. මෙහි Listening සහ Reading ආදී වශයෙන් වන අතර ප්‍රශ්ණපත්‍ර තුන බැගින් සාකච්ජ්චා කර ඇත. මෙම විභාගය කොරියාවේ පමණක් නොව ශ්‍රී ලංකාවේදී ද මුහුණ දීමට හැකියාව ඇත. මෙයට අදාල සියලු පාඩම් YouTube හරහා නැරබීමටත් හැක. මෙමෙ විභාගයට මුහුණ දීම තුලින් ඔබට වීසා මරු කිරීමෙදී විශාල උදව්වක් වනු ඇත.",
+      price: 0,
+      tag: false,
+      image: "https://www.koreanliveclass.com/wp-content/uploads/2020/09/1-677x902.jpg"
+    },
+    {
+      name: "TOPIK 3 ~ 6",
+      description: "මෙම ප්‍රශ්ණපත්‍ර පොත ටොපික් තුන්වන සහ හයවන පන්ති විභාගය ඉලක්ක කර නිර්මාණය කරන ලද ග්‍රන්ථයකි. මෙහිදී ප්‍රශ්ණපත්‍ර එක බැගින් සාකච්ජ්චා වන අතර එය Listening / Reading / Writing වශයෙන් කොටස් තුනකින් යුක්තය. මෙම විභාගයත් ශ්‍රී ලංකාවේ සිට මහුණ දීමට හැකි අතර ඔබ කොරියාවට පැමිණි පසු වෙනත් වීසා වලට මාරු වීමේදී ප්‍රයෝජනවත්ය. මෙයට අදාල සියලු පාඩම් YouTube හරහා නැරබීමටත් හැක.",
+      price: 0,
+      tag: false,
+      image: "https://www.koreanliveclass.com/wp-content/uploads/2020/09/1-scaled-677x948.jpeg"
+    }
+  ]
 
   return (
     <div
@@ -330,7 +400,7 @@ export default function Landing() {
                   <div className="pc hover-hide-controls">
                     <iframe
                       className="video-embed"
-                      src="https://www.youtube.com/embed/fAjqo3VbHSc?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0"
+                      src="https://www.youtube.com/embed/Dj5VolioQSk?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0"
                       title="YouTube video"
                       frameBorder="0"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; autoplay"
@@ -344,7 +414,7 @@ export default function Landing() {
                   <div className="pc hover-hide-controls">
                     <iframe
                       className="video-embed"
-                      src="https://www.youtube.com/embed/4CVXqep4eiM?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0&playsinline=1"
+                      src="https://www.youtube.com/embed/UTkjEDygbb0?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0&playsinline=1"
                       title="YouTube video"
                       frameBorder="0"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; autoplay"
@@ -358,7 +428,7 @@ export default function Landing() {
                   <div className="pc hover-hide-controls">
                     <iframe
                       className="video-embed"
-                      src="https://www.youtube.com/embed/fth6vweRyFA?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0&playsinline=1"
+                      src="https://www.youtube.com/embed/PwZk7_QRpQ4?autoplay=1&mute=1&controls=0&modestbranding=1&rel=0&showinfo=0&playsinline=1"
                       title="YouTube video"
                       frameBorder="0"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; autoplay"
@@ -504,6 +574,15 @@ export default function Landing() {
       </div>
 
       <div className="third-outer">
+        <div className="third-inner">
+          <div className="ti">
+            <div className="third-inner-title" data-aos="fade-up" data-aos-delay="100">
+              {t("aboutKorea")}
+            </div>
+          </div>
+        </div>
+        <div className="space"></div>
+        <div className="space"></div>
         <div className="top-courses-outer3" data-aos="fade-up" data-aos-delay="100">
           {url.slice(visibleIndex, visibleIndex + 4).map((u, index) => (
             <div className="i1">
@@ -520,25 +599,25 @@ export default function Landing() {
             </div>
           ))}
         </div>
-          <div className="arrow-buttons-row">
-            <div
-              className="arrow-button"
-              onClick={handlePrev1}
-              style={{ visibility: visibleIndex === 0 ? "hidden" : "visible" }}
-            >
-              <ArrowBackIosIcon />
-            </div>
-
-            <div
-              className="arrow-button"
-              onClick={handleNext1}
-              style={{
-                visibility: visibleIndex + 4 >= url.length ? "hidden" : "visible",
-              }}
-            >
-              <ArrowForwardIosIcon />
-            </div>
+        <div className="arrow-buttons-row">
+          <div
+            className="arrow-button"
+            onClick={handlePrev1}
+            style={{ visibility: visibleIndex === 0 ? "hidden" : "visible" }}
+          >
+            <ArrowBackIosIcon />
           </div>
+
+          <div
+            className="arrow-button"
+            onClick={handleNext1}
+            style={{
+              visibility: visibleIndex + 4 >= url.length ? "hidden" : "visible",
+            }}
+          >
+            <ArrowForwardIosIcon />
+          </div>
+        </div>
 
         <div className="space"></div>
         <div className="space"></div>
@@ -623,9 +702,88 @@ export default function Landing() {
         </div>
       </div>
 
+      <div id="korean-books" className="space"></div>
       <div className="space"></div>
       <div className="space"></div>
       <div className="space"></div>
+
+      <div className="third-outer">
+        <div className="third-inner">
+          <div className="ti">
+            <div className="third-inner-title" data-aos="fade-up" data-aos-delay="100">
+              {t("kbooks")}
+            </div>
+          </div>
+        </div>
+        <div className="space"></div>
+        <div className="space"></div>
+        <div className="top-courses-outer4" data-aos="fade-up" data-aos-delay="100">
+          {books.slice(visibleIndex, visibleIndex + 4).map((b, index) => (
+            <div
+              className="book-card"
+              data-aos="fade-up" data-aos-delay="100"
+              key={index}
+              onClick={() => handleBookClick(b)}
+              style={{ cursor: "pointer" }}
+            >
+              {/* your card code here */}
+              <div className="book-thumbnail">
+                <img className="book" src={b.image} alt="Course Thumbnail" />
+              </div>
+
+              <div className="course-info">
+                <h3 className="course-title">{b.name}</h3>
+              </div>
+            </div>
+          ))}
+        </div>
+        {isModalOpen1 && selectedBook && (
+          <div className="modal-overlay" onClick={closeModal}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              <button className="close-btn" onClick={closeModal}>×</button>
+
+              <img className="modal-image" src={selectedBook.image} alt={selectedBook.name} />
+
+              <div className="modal-details">
+                <h2>{selectedBook.name}</h2>
+                <p className="modal-desc">{selectedBook.description}</p>
+
+                <button onClick={() =>
+                            window.open(
+                                "https://wa.me/821090736674",
+                              "_blank"
+                            )
+                          } className="purchase-btn">Purchase</button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className="arrow-buttons-row">
+          <div
+            className="arrow-button"
+            onClick={handlePrev1}
+            style={{ visibility: visibleIndex === 0 ? "hidden" : "visible" }}
+          >
+            <ArrowBackIosIcon />
+          </div>
+
+          <div
+            className="arrow-button"
+            onClick={handleNext1}
+            style={{
+              visibility: visibleIndex + 4 >= url.length ? "hidden" : "visible",
+            }}
+          >
+            <ArrowForwardIosIcon />
+          </div>
+        </div>
+      </div>
+
+        <div className="space"></div>
+        <div className="space"></div>
+        <div className="space"></div>
+        <div className="space"></div>
 
       <div className="ins-outer">
         <div className="ins-inner">

@@ -11,3 +11,21 @@ export const getCategories = async () => {
         throw error;
     }
 }
+
+export const createCategory = async (body:any) => {
+    try {
+        const response = await axios.post(api+`category`,body)
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const updateCategory = async (id:any, body:any) => {
+    try {
+        const response = await axios.put(api+`category/${id}`,body)
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}

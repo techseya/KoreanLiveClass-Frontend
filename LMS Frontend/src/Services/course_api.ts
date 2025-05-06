@@ -12,6 +12,24 @@ export const getTopCourses = async () => {
     }
 }
 
+export const createCourse = async (body:any) => {
+    try {
+        const response = await axios.post(api+`course`, body)
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const updateCourse = async (id:any, body:any) => {
+    try {
+        const response = await axios.put(api+`course/${id}`, body)
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
 export const getAllCourses = async () => {
     try {
         const response = await axios.get(api+`course/all`)
