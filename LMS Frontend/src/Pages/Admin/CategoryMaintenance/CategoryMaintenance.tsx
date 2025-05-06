@@ -1,17 +1,10 @@
 import {
     Paper, IconButton, Box, Chip, Typography,
-    TextField, Grid, FormControl, InputLabel, Select, MenuItem, Button, Modal,
-    Checkbox, FormControlLabel
-} from "@mui/material";
+    TextField, Grid, FormControl, InputLabel, Select, MenuItem, Button
+    } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { useEffect, useState } from "react";
-import { LockReset, PhonelinkErase } from "@mui/icons-material";
-import Dialogbox from "src/Common/Components/DialogBox";
-import { getUsers, resetDevice, resetPassword, updateUser } from "src/Services/user_api";
-import { getAllCourses } from "src/Services/course_api";
 import { getCategories, updateCategory } from "src/Services/category_api";
 
 function CustomNoRowsOverlay() {
