@@ -918,7 +918,7 @@ export default function Landing() {
       <div className="space"></div>
       <div className="space"></div>
 
-      <div className="third-outer">
+      {/* {<div className="third-outer">
         <div className="ul-outer">
           <div className="ul-inner">
             <div className="ul-title">{t("ul")}</div>
@@ -944,7 +944,7 @@ export default function Landing() {
         </div>
         <div className="space"></div>
         <div className="space"></div>
-      </div>
+      </div>} */}
 
       <Footer />
 
