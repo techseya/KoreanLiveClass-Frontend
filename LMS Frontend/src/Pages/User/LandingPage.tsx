@@ -67,6 +67,11 @@ export default function Landing() {
   const [selectedBook, setSelectedBook] = useState<any>(null);
   const [isModalOpen1, setIsModalOpen1] = useState(false);
 
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const koreanWord = "안녕하세요"; // Example
+  const sinhalaMeaning = "ආයුබෝවන්";
+
   const handleBookClick = (book: any) => {
     setSelectedBook(book);
     setIsModalOpen1(true);
@@ -299,6 +304,31 @@ export default function Landing() {
         onClose={handleClose}
       />
       <div className="bg-overlay0"></div>
+
+      <div className="word-outer" onClick={() => setModalOpen(true)}>
+        {t("word")}
+      </div>
+      
+      {modalOpen && (
+        <div className="modal-overlay7" onClick={() => setModalOpen(false)}>
+          <div className="modal-box7" onClick={(e) => e.stopPropagation()}>
+            <h2>Let's learn Korean</h2>
+            <div className="modal-content7">
+              <div className="modal-field7">
+                <label>Korean Word:</label>
+                <input type="text" value={koreanWord} readOnly />
+              </div>
+              <div className="modal-field7">
+                <label>Sinhala Meaning:</label>
+                <input type="text" value={sinhalaMeaning} readOnly />
+              </div>
+            </div>
+            <button className="close-btn7" onClick={() => setModalOpen(false)}>
+            ×
+            </button>
+          </div>
+        </div>
+      )}
 
       <div className="floating-letters">
         {koreanLetters.map((letter, index) => (
