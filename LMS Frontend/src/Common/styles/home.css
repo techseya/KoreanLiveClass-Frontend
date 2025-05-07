@@ -521,7 +521,25 @@
     transition: background-color 0.3s;
 }
 
+
+.arrow-button1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    background-color: #f0f0f0;
+    border-radius: 50%;
+    cursor: pointer;
+    margin: 0;
+    transition: background-color 0.3s;
+}
+
 .arrow-button:hover {
+    background-color: #d0d0d0;
+}
+
+.arrow-button1:hover {
     background-color: #d0d0d0;
 }
 

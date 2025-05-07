@@ -5,7 +5,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import LoginDialogbox from "src/Common/Components/LoginDialog";
 import userIcon from "../Assets/Images/man.png"
-import { Logout } from "@mui/icons-material";
 import Dialogbox from "src/Common/Components/DialogBox";
 
 interface Props {
@@ -18,7 +17,7 @@ export default function Navbar({ children }: Readonly<Props>) {
     const [menuOpen, setMenuOpen] = useState(false);
     const [loginOpen, setLoginOpen] = useState(false);
     const [visible, setVisible] = useState(false)
-      const [isOpen1, setIsOpen1] = useState(false);
+    const [isOpen1, setIsOpen1] = useState(false);
 
     const location = useLocation();
     const isCourse = location.pathname === "/courses";
@@ -76,9 +75,9 @@ export default function Navbar({ children }: Readonly<Props>) {
         setMenuOpen(false);
     };
 
-    
-  const handleOpen1 = () => setIsOpen1(true);
-  const handleClose1 = () => setIsOpen1(false);
+
+    const handleOpen1 = () => setIsOpen1(true);
+    const handleClose1 = () => setIsOpen1(false);
 
     return (
         <>
@@ -89,15 +88,15 @@ export default function Navbar({ children }: Readonly<Props>) {
             />
 
             <Dialogbox
-                    open={isOpen1}
-                    title="Logout Confirmation"
-                    content="Are you sure you want to logout? Logging out will end your current session and any unsaved changes may be lost."
-                    agreeButtonText="Yes, Logout"
-                    disagreeButtonText="No"
-                    onAgree={handleLogout}
-                    onDisagree={handleClose1}
-                    onClose={handleClose1}
-                  />
+                open={isOpen1}
+                title="Logout Confirmation"
+                content="Are you sure you want to logout? Logging out will end your current session and any unsaved changes may be lost."
+                agreeButtonText="Yes, Logout"
+                disagreeButtonText="No"
+                onAgree={handleLogout}
+                onDisagree={handleClose1}
+                onClose={handleClose1}
+            />
             <nav className="navbar">
                 <div className="navbar-container">
                     <div className="logo">
@@ -113,7 +112,7 @@ export default function Navbar({ children }: Readonly<Props>) {
                         {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse) && <a href="#korean-books">{t('kbooks')}</a>}
                         {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse) && <a href="#who">{t('who')}</a>}
                         {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse) && <a href="#us">{t('what')}</a>}
-                        {visible && ( <a href="" onClick={handleNavMyCourses}>{t('myCourses')}</a>)}                       
+                        {visible && (<a href="" onClick={handleNavMyCourses}>{t('myCourses')}</a>)}
                         <a href="#contact">{t('Contact Us')}</a>
 
                         <select
@@ -132,13 +131,13 @@ export default function Navbar({ children }: Readonly<Props>) {
 
                         {visible && (
                             <div className="user-section">
-                            <img
-                                style={{ width: "30px", marginRight: "10px" }}
-                                src={userIcon}
-                                alt="User"
-                            />
-                            <button onClick={handleOpen1} className="btn signup">{t('logout')}</button>
-                        </div>
+                                <img
+                                    style={{ width: "30px", marginRight: "10px" }}
+                                    src={userIcon}
+                                    alt="User"
+                                />
+                                <button onClick={handleOpen1} className="btn signup">{t('logout')}</button>
+                            </div>
                         )}
 
                     </div>

@@ -58,6 +58,7 @@ export default function Landing() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [visibleStartIndex, setVisibleStartIndex] = useState(0);
   const [visibleIndex, setVisibleIndex] = useState(0);
+  const [visibleIndex1, setVisibleIndex1] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
 
@@ -115,6 +116,18 @@ export default function Landing() {
   const handlePrev1 = () => {
     if (visibleIndex - 4 >= 0) {
       setVisibleIndex(visibleIndex - 4);
+    }
+  };  
+
+  const handleNext2 = () => {
+    if (visibleIndex1 + 4 < books.length) {
+      setVisibleIndex1(visibleIndex1 + 4);
+    }
+  };
+
+  const handlePrev2 = () => {
+    if (visibleIndex1 - 4 >= 0) {
+      setVisibleIndex1(visibleIndex1 - 4);
     }
   };
 
@@ -519,7 +532,7 @@ export default function Landing() {
         <div className="space"></div>
         <div className="space"></div>
         <div className="top-courses-outer3" data-aos="fade-up" data-aos-delay="100">
-          {url.slice(visibleIndex, visibleIndex + 4).map((u, index) => (
+          {url.slice(visibleIndex, visibleIndex + 8).map((u, index) => (
             <div className="i1">
               <iframe
                 className="video-embed1"
@@ -534,9 +547,9 @@ export default function Landing() {
             </div>
           ))}
         </div>
-        <div className="arrow-buttons-row">
+        <div className="arrow-buttons-row1">
           <div
-            className="arrow-button"
+            className="arrow-button1"
             onClick={handlePrev1}
             style={{ visibility: visibleIndex === 0 ? "hidden" : "visible" }}
           >
@@ -544,7 +557,7 @@ export default function Landing() {
           </div>
 
           <div
-            className="arrow-button"
+            className="arrow-button1"
             onClick={handleNext1}
             style={{
               visibility: visibleIndex + 4 >= url.length ? "hidden" : "visible",
@@ -651,7 +664,7 @@ export default function Landing() {
         <div className="space"></div>
         <div className="space"></div>
         <div className="top-courses-outer4" data-aos="fade-up" data-aos-delay="100">
-          {books.slice(visibleIndex, visibleIndex + 4).map((b, index) => (
+          {books.slice(visibleIndex1, visibleIndex1 + 4).map((b, index) => (
             <div
               className="book-card"
               data-aos="fade-up" data-aos-delay="100"
@@ -692,20 +705,20 @@ export default function Landing() {
           </div>
         )}
 
-        <div className="arrow-buttons-row">
+        <div className="arrow-buttons-row1">
           <div
-            className="arrow-button"
-            onClick={handlePrev1}
-            style={{ visibility: visibleIndex === 0 ? "hidden" : "visible" }}
+            className="arrow-button1"
+            onClick={handlePrev2}
+            style={{ visibility: visibleIndex1 === 0 ? "hidden" : "visible" }}
           >
             <ArrowBackIosIcon />
           </div>
 
           <div
-            className="arrow-button"
-            onClick={handleNext1}
+            className="arrow-button1"
+            onClick={handleNext2}
             style={{
-              visibility: visibleIndex + 4 >= url.length ? "hidden" : "visible",
+              visibility: visibleIndex1 + 4 >= books.length ? "hidden" : "visible",
             }}
           >
             <ArrowForwardIosIcon />

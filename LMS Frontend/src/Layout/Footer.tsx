@@ -43,8 +43,7 @@ const Footer: React.FC = () => {
                     <div>
                         <h3 data-aos="fade-up" data-aos-duration="1000">{t('quick-services')}</h3>
                         <ul className="footer-links">
-                            <li data-aos="fade-up" data-aos-duration="1000"><Link to="/" className="footer-link">{t('Courses')}</Link></li>
-                            <li data-aos="fade-up" data-aos-duration="1000"><Link to="/" className="footer-link">{t('Categories')}</Link></li>
+                            <li data-aos="fade-up" data-aos-duration="1000"><Link to="/courses" className="footer-link">{t('Courses')}</Link></li>
                         </ul>
                     </div>
                     <div>
