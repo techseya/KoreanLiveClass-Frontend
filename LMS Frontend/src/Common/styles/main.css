@@ -1464,6 +1464,7 @@ body {
   .main-banner-strip {
     width: 87%;
     padding-right: 25px;
+    top: 20vh;
   }
 
   .banner-text {
