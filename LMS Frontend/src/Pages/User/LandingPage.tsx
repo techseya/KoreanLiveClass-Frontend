@@ -210,12 +210,11 @@ export default function Landing() {
   };
 
   const url = [
-    { url: "https://www.youtube.com/embed/fth6vweRyFA?&modestbranding=1&rel=0&playsinline=1" },
-    { url: "https://www.youtube.com/embed/fth6vweRyFA?&modestbranding=1&rel=0&playsinline=1" },
-    { url: "https://www.youtube.com/embed/fth6vweRyFA?&modestbranding=1&rel=0&playsinline=1" },
-    { url: "https://www.youtube.com/embed/fth6vweRyFA?&modestbranding=1&rel=0&playsinline=1" },
-    { url: "https://www.youtube.com/embed/fth6vweRyFA?&modestbranding=1&rel=0&playsinline=1" }
-  ];
+    { url: "https://www.youtube.com/embed/fth6vweRyFA?modestbranding=1&rel=0&playsinline=1" },
+    { url: "https://www.youtube.com/embed/Dj5VolioQSk?modestbranding=1&rel=0&playsinline=1" },
+    { url: "https://www.youtube.com/embed/UTkjEDygbb0?start=407&modestbranding=1&rel=0&playsinline=1" },
+    { url: "https://www.youtube.com/embed/PwZk7_QRpQ4?modestbranding=1&rel=0&playsinline=1" }
+  ];  
 
   const books = [
     {
@@ -469,31 +468,14 @@ export default function Landing() {
               {/* your card code here */}
               <div className="course-thumbnail">
                 <img src={course.thumbnail} alt="Course Thumbnail" />
-                <div className="price">Rs.{(course.price).toFixed(2)}</div>
+                {course.transactionStatus === 1 ? 
+                (<div className="price">Rs.{(course.price).toFixed(2)}</div>) : 
+                (<div className="price">FREE</div>)}                
               </div>
 
               <div className="course-info">
                 {<span className="course-level">{course.level}</span>}
                 <h3 className="course-title">{course.name}</h3>
-                {/*<div className="course-rating">
-                  {Array.from({ length: 5 }).map((_, i) =>
-                    i < course.ratings ? (
-                      <StarIcon key={i} sx={{ color: "#ffc107", fontSize: 20 }} />
-                    ) : (
-                      <StarBorderIcon key={i} sx={{ color: "#d1d5db", fontSize: 20 }} />
-                    )
-                  )}
-                </div>*/}
-              </div>
-
-              <div className="course-info2">
-                <Tooltip title="Ven. Kalyanapura Mangala" arrow placement="top">
-                  <img className="ins-img" src={insImg} alt="Instructor" style={{ cursor: "pointer" }} />
-                </Tooltip>
-                <div className="course-duration">
-                  <ClockCircleOutlined className="clock-icon" />
-                  {course.totalDuration} Hours
-                </div>
               </div>
             </div>
           ))}
@@ -520,54 +502,6 @@ export default function Landing() {
           </div>
         </div>
 
-        {/* Fullscreen Dialog Modal */}
-        <Dialog
-          fullScreen
-          open={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          TransitionComponent={Transition}
-        >
-          <AppBar sx={{ position: 'relative', backgroundColor: '#3b82f6' }}>
-            <Toolbar>
-              <IconButton
-                edge="start"
-                color="inherit"
-                onClick={() => setIsModalOpen(false)}
-                aria-label="close"
-              >
-                <CloseIcon />
-              </IconButton>
-              <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                Course Overview
-              </Typography>
-            </Toolbar>
-          </AppBar>
-
-          <div className="modal-content">
-            <img
-              src={thumb2}
-              alt="Course"
-              style={{ width: "100%", maxHeight: "300px", objectFit: "cover" }}
-            />
-            <div style={{ padding: "20px" }}>
-              <Typography variant="h4" gutterBottom>
-                {selectedCourse?.title}
-              </Typography>
-              <Typography variant="body1" sx={{ mb: 2 }}>
-                {selectedCourse?.description}
-              </Typography>
-              <Typography variant="h6">
-                Price: Rs.{(selectedCourse?.price)}
-              </Typography>
-              <Typography variant="subtitle1" sx={{ mt: 1 }}>
-                Duration: {selectedCourse?.duration}
-              </Typography>
-              <div style={{ marginTop: "20px" }}>
-                <button className="enroll-btn">Enroll Now</button>
-              </div>
-            </div>
-          </div>
-        </Dialog>
         <div className="space"></div>
         <div className="space"></div>
         <div className="space"></div>
@@ -749,11 +683,11 @@ export default function Landing() {
                 <p className="modal-desc">{selectedBook.description}</p>
 
                 <button onClick={() =>
-                            window.open(
-                                "https://wa.me/821090736674",
-                              "_blank"
-                            )
-                          } className="purchase-btn">Purchase</button>
+                  window.open(
+                    "https://wa.me/821090736674",
+                    "_blank"
+                  )
+                } className="purchase-btn">Purchase</button>
               </div>
             </div>
           </div>
@@ -780,10 +714,10 @@ export default function Landing() {
         </div>
       </div>
 
-        <div className="space"></div>
-        <div className="space"></div>
-        <div className="space"></div>
-        <div className="space"></div>
+      <div className="space"></div>
+      <div className="space"></div>
+      <div className="space"></div>
+      <div className="space"></div>
 
       <div className="ins-outer">
         <div className="ins-inner">

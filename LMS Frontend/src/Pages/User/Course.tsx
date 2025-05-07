@@ -36,22 +36,30 @@ export default function Course() {
     const handleGetSections = async () => {
         try {
             const response = await getSectionByCourseId(course.id);
-            setSections(response.data || []);
+            const filteredSections = (response.data || []).filter(
+                (section: any) => section.activeStatus === 1
+            );
+            setSections(filteredSections);
         } catch (error) {
             console.error("Error fetching sections", error);
         }
     };
+    
 
     const handleGetRecordings = async (sectionId: string) => {
         if (recordingsMap[sectionId]) return; // Avoid refetching
-
+    
         try {
             const response = await getRecordingsBySectionId(sectionId);
-            setRecordingsMap(prev => ({ ...prev, [sectionId]: response.data || [] }));
+            const filteredRecordings = (response.data || []).filter(
+                (rec: any) => rec.activeStatus === 1
+            );
+            setRecordingsMap(prev => ({ ...prev, [sectionId]: filteredRecordings }));
         } catch (error) {
             console.error("Error fetching recordings", error);
         }
     };
+    
 
     const getVimeoEmbedUrl = (url: string) => {
         const videoId = url.split("/").pop();
@@ -75,7 +83,16 @@ export default function Course() {
 
     return (
         <div className="courses-main-outer">
-            <div className="c-board"></div>
+            <div className="cc">
+                <div className="c-items-outer">
+                    <div className="c-title">{course.name}</div>
+                </div>
+                <div className="c-desc">{course.description}</div>
+                <div className="c-items-outer">
+                    <div className="c-label">{course.level}</div>
+                    <div className="c-section-count">Sections : {course.sectionCount}</div>
+                </div>
+            </div>
             <div className="c-inner">
                 <div className="c-inner1">
                 <div className="c-in visible">
@@ -110,15 +127,6 @@ export default function Course() {
                     </div>
 
                     <div className="c-in1">
-                        <div className="c-items-outer ci">
-                            <div className="c-title">{course.name}</div>
-                            <div className="c-price">LKR.{course.price}</div>
-                        </div>
-                        <div className="c-desc">{course.description}</div>
-                        <div className="c-items-outer">
-                            <div className="c-label">{course.level}</div>
-                            <div className="c-section-count">Sections : {course.sectionCount}</div>
-                        </div>
 
                         <Box sx={{ p: { xs: 2, mt: 2 }, mx: "auto" }}>
                             <Typography variant="h5" sx={{ mb: 2 }}>

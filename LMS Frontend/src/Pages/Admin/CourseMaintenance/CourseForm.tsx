@@ -190,7 +190,7 @@ export default function CourseForm() {
                             onClick={handleSubmit}
                             disabled={!name || !description || !status || !price || !type || !thumbnail}
                         >
-                            Add User
+                            Add Course
                         </Button>
                     </Grid>
                 </Grid>

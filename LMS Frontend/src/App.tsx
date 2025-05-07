@@ -14,6 +14,7 @@ import MyCourse from "./Pages/User/MyCourse";
 import Categories from "./Pages/Admin/CategoryMaintenance";
 import CoursesM from "./Pages/Admin/CourseMaintenance";
 import Sections from "./Pages/Admin/SectionMaintenance";
+import Recordings from "./Pages/Admin/RecordingMaintenance";
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -34,6 +35,7 @@ const App: React.FC = () => {
             <Route path="/category-maintenance" element={<Categories />} />
             <Route path="/course-maintenance" element={<CoursesM />} />
             <Route path="/section-maintenance" element={<Sections />} />
+            <Route path="/recording-maintenance" element={<Recordings />} />
           </Routes>
         </AdvancedNavbar>
       ) : (

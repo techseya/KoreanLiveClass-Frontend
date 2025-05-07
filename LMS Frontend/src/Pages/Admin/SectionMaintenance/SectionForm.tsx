@@ -133,7 +133,7 @@ export default function SectionForm() {
                             onClick={handleSubmit}
                             disabled={!name || !description || !status}
                         >
-                            Add User
+                            Add Section
                         </Button>
                     </Grid>
                 </Grid>

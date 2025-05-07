@@ -87,7 +87,7 @@ export default function CategoryForm() {
                             onClick={handleSubmit}
                             disabled={!name || !description || !status}
                         >
-                            Add User
+                            Add Category
                         </Button>
                     </Grid>
                 </Grid>

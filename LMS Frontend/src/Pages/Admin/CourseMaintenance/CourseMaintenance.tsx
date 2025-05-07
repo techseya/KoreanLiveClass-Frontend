@@ -1,18 +1,12 @@
 import {
     Paper, IconButton, Box, Chip, Typography,
-    TextField, Grid, FormControl, InputLabel, Select, MenuItem, Button, Modal,
-    Checkbox, FormControlLabel
-} from "@mui/material";
+    TextField, Grid, FormControl, InputLabel, Select, MenuItem, Button
+    } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { useEffect, useState } from "react";
-import { LockReset, PhonelinkErase } from "@mui/icons-material";
-import Dialogbox from "src/Common/Components/DialogBox";
-import { getUsers, resetDevice, resetPassword, updateUser } from "src/Services/user_api";
 import { getAllCourses, updateCourse } from "src/Services/course_api";
-import { getCategories, updateCategory } from "src/Services/category_api";
+import { getCategories } from "src/Services/category_api";
 
 function CustomNoRowsOverlay() {
     return (
@@ -24,12 +18,8 @@ function CustomNoRowsOverlay() {
 
 export default function CourseMaintenance() {
     const [visible, setVisible] = useState(false);
-    const [courseModalOpen, setCourseModalOpen] = useState(false);
     const [editingCourse, setEditingCourse] = useState<any | null>(null);
-    const [changePwDialog, setChangePwDialog] = useState(false)
-    const [changeDeviceDialog, setChangeDeviceDialog] = useState(false)
-    const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
-
+    const [rows, setRows] = useState<any[]>([]);
     const [categories, setCategories] = useState<any[]>([]);
 
     useEffect(() => {
@@ -54,26 +44,6 @@ export default function CourseMaintenance() {
             console.error(error);
         }
     }
-
-    const [rows, setRows] = useState<any[]>([]);
-
-    const handleCancelChangePwDialog = () => {
-        setChangePwDialog(false)
-    }
-
-    const handleChangePwDialog = () => {
-        setChangePwDialog(true)
-    }
-
-
-    const handleCancelChangeDeviceDialog = () => {
-        setChangeDeviceDialog(false)
-    }
-
-    const handleChangeDeviceDialog = () => {
-        setChangeDeviceDialog(true)
-    }
-
 
     const handleEditClick = (c: any) => {
         setEditingCourse(c);

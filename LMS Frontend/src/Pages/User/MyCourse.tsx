@@ -28,32 +28,39 @@ export default function MyCourse() {
     const navigate = useNavigate()
 
     useEffect(() => {
-        if(token === null){
+        if (token === null) {
             navigate("/")
         }
         if (course?.id) handleGetSections();
         window.scrollTo(0, 0);
-    }, []);    
+    }, []);
 
     const handleGetSections = async () => {
         try {
             const response = await getSectionByCourseId(course.id);
-            setSections(response.data || []);
+            const filteredSections = (response.data || []).filter(
+                (section: any) => section.activeStatus === 1
+            );
+            setSections(filteredSections);
         } catch (error) {
             console.error("Error fetching sections", error);
         }
     };
+    
 
     const handleGetRecordings = async (sectionId: string) => {
         if (recordingsMap[sectionId]) return; // Avoid refetching
-
+    
         try {
             const response = await getRecordingsBySectionId(sectionId);
-            setRecordingsMap(prev => ({ ...prev, [sectionId]: response.data || [] }));
+            const filteredRecordings = (response.data || []).filter(
+                (rec: any) => rec.activeStatus === 1
+            );
+            setRecordingsMap(prev => ({ ...prev, [sectionId]: filteredRecordings }));
         } catch (error) {
             console.error("Error fetching recordings", error);
         }
-    };
+    };    
 
     const getVimeoEmbedUrl = (url: string) => {
         const videoId = url.split("/").pop();
@@ -76,9 +83,20 @@ export default function MyCourse() {
 
     return (
         <div className="courses-main-outer">
+            <div className="cc">
+                <div className="c-items-outer">
+                    <div className="c-title">{course.name}</div>
+                </div>
+                <div className="c-desc">{course.description}</div>
+                <div className="c-items-outer">
+                    <div className="c-label">{course.level}</div>
+                    <div className="c-section-count">Sections : {course.sectionCount}</div>
+                </div>
+            </div>
             <div className="c-inner">
                 <div className="c-inner1">
-                <div className="c-in visible">
+
+                    <div className="c-in visible">
                         {playingVideoUrl ? (
                             <div className="c-thumb-wrapper">
                                 {videoType === "Vimeo" ? (
@@ -109,16 +127,8 @@ export default function MyCourse() {
                         )}
                     </div>
                     <div className="c-in1">
-                        <div className="c-items-outer">
-                            <div className="c-title">{course.name}</div>
-                        </div>
-                        <div className="c-desc">{course.description}</div>
-                        <div className="c-items-outer">
-                            <div className="c-label">{course.level}</div>
-                            <div className="c-section-count">Sections : {course.sectionCount}</div>
-                        </div>
 
-                        <Box sx={{ p: { xs: 2, mt: 2 }, mx: "auto" }}>
+                        <Box sx={{ p: { xs: 2, mt: 1 }, mx: "auto" }}>
                             <Typography variant="h5" sx={{ mb: 2 }}>
                                 Course Content
                             </Typography>
@@ -158,12 +168,12 @@ export default function MyCourse() {
                                                         >
                                                             <PlayCircleFilled
                                                                 sx={{
-                                                                    color:'#0D47A1',
+                                                                    color: '#0D47A1',
                                                                     mr: 1
                                                                 }}
                                                             />
                                                             <span onClick={() => handleVideoSelection(rec)} style={{
-                                                                color:'#0D47A1',
+                                                                color: '#0D47A1',
                                                                 fontWeight: 500,
                                                                 cursor: 'pointer'
                                                             }}>
@@ -222,7 +232,7 @@ export default function MyCourse() {
             <div className="space1"></div>
             <div className="space1"></div>
             <div className="space1"></div>
-            <Footer/>
+            <Footer />
         </div>
     );
 }

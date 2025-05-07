@@ -100,16 +100,6 @@ export default function Courses() {
                                 <span className="course-level">{course.level}</span>
                                 <h3 className="course-title">{course.name}</h3>
                             </div>
-
-                            <div className="course-info2">
-                                <Tooltip title="Ven. Kalyanapura Mangala" arrow placement="top">
-                                    <img className="ins-img" src={insImg} alt="Instructor" style={{ cursor: "pointer" }} />
-                                </Tooltip>
-                                <div className="course-duration">
-                                    <ClockCircleOutlined className="clock-icon" />
-                                    {course.totalDuration} Hours
-                                </div>
-                            </div>
                         </div>
                     )) : (
                         <p style={{ textAlign: "center", width: "100%" }}>No courses found.</p>

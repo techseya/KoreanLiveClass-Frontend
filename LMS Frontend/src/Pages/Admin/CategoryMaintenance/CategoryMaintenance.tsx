@@ -17,11 +17,8 @@ function CustomNoRowsOverlay() {
 
 export default function CategoryMaintenance() {
     const [visible, setVisible] = useState(false);
-    const [courseModalOpen, setCourseModalOpen] = useState(false);
     const [editingCategory, setEditingCategory] = useState<any | null>(null);
-    const [changePwDialog, setChangePwDialog] = useState(false)
-    const [changeDeviceDialog, setChangeDeviceDialog] = useState(false)
-    const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+    const [rows, setRows] = useState<any[]>([]);
 
     const token = sessionStorage.getItem("token")
 
@@ -38,26 +35,6 @@ export default function CategoryMaintenance() {
     useEffect(() => {
         handleGetCategories()
     }, [])
-
-    const [rows, setRows] = useState<any[]>([]);
-
-    const handleCancelChangePwDialog = () => {
-        setChangePwDialog(false)
-    }
-
-    const handleChangePwDialog = () => {
-        setChangePwDialog(true)
-    }
-
-
-    const handleCancelChangeDeviceDialog = () => {
-        setChangeDeviceDialog(false)
-    }
-
-    const handleChangeDeviceDialog = () => {
-        setChangeDeviceDialog(true)
-    }
-
 
     const handleEditClick = (c: any) => {
         setEditingCategory(c);

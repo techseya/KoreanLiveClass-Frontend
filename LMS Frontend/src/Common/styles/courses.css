@@ -17,6 +17,16 @@
     position: relative;
 }
 
+.cc{
+    width: auto;
+    height: auto;
+    min-height: 200px;
+    background: linear-gradient(180deg, rgb(10, 10, 10) 0%, rgba(229, 143, 6, 0.84) 100%);
+    padding: 15px 25px;
+    margin-top: 80px;
+    height: auto;
+}
+
 .c-board{
     width: 100%;
     height: auto;
@@ -89,7 +99,7 @@
 .c-inner{
     width: 100%;
     height: auto;
-    padding-top: 80px;
+    padding-top: 10px;
     display: flex;
     justify-content: center;
     z-index: 10;
@@ -126,6 +136,7 @@
     padding-top: 25px;
     font-size: 40px;
     font-family: publicsans, sans-serif;
+    color: white;
 }
 
 .c-desc{
@@ -133,11 +144,12 @@
     font-size: 18px;
     padding-right: 10px;
     text-align: justify;
+    color: rgb(225, 224, 224);
 }
 
 .c-items-outer{
     padding-top: 20px;
-    width: 97%;
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: end;
@@ -147,7 +159,7 @@
     font-size: 12px;
     font-weight: 600;
     color: white;
-    background-color: #3b82f6;
+    background-color: #0c0c0c;
     padding: 5px 10px;
     border-radius: 5px;
     margin-bottom: 10px;
@@ -157,7 +169,7 @@
 .c-section-count{
     font-size: 14px;   
     font-family: publicsans, sans-serif;
-    color: green;
+    color: rgb(239, 235, 235);
 }
 
 .c-price{

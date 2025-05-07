@@ -25,7 +25,9 @@ import {
   UserAddOutlined,
   BlockOutlined,
   BookOutlined,
-  PieChartOutlined
+  PieChartOutlined,
+  PlayCircleFilled,
+  PlayCircleOutlined
 } from "@ant-design/icons";
 
 const drawerWidth = 200;
@@ -192,8 +194,10 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
       setActive(3);
     } else if (path === "/section-maintenance") {
       setActive(4);
-    } else if (path === "/user-maintenance") {
+    } else if (path === "/recording-maintenance") {
       setActive(5);
+    } else if (path === "/user-maintenance") {
+      setActive(6);
     } else {
       setActive(0);
     }
@@ -204,6 +208,7 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
   const handleClickCategory = () => navigate("/category-maintenance")
   const handleClickCourse = () => navigate("/course-maintenance")
   const handleClickSection = () => navigate("/section-maintenance")
+  const handleClickRecording = () => navigate("/recording-maintenance")
 
   const drawerItems = [
     {
@@ -225,6 +230,11 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
       name: "Section",
       icon: <PieChartOutlined style={{ fontSize: "20px" }} />,
       onClick: handleClickSection,
+    },
+    {
+      name: "Recording",
+      icon: <PlayCircleOutlined style={{ fontSize: "20px" }} />,
+      onClick: handleClickRecording,
     },
     {
       name: "Users",
