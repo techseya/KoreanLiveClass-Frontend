@@ -30,7 +30,7 @@ const Footer: React.FC = () => {
     }, []);
 
     return (
-        <footer className="footer" data-aos="fade-up" data-aos-duration="1000">
+        <footer id='contact' className="footer" data-aos="fade-up" data-aos-duration="1000">
             <div className="f-container">
                 <div className="footer-grid">
                     <div style={{ paddingRight: '5px' }}>

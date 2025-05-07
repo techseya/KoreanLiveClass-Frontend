@@ -327,6 +327,7 @@ export default function Landing() {
       </div>} */}
 
       <div className="second-outer">
+        <div  id="who" className="space"></div>
         <div className="second-inner-wrapper">
           <div className="second-inner" data-aos="fade-up">
             <div className="second-title" data-aos="fade-up" data-aos-delay="100">
@@ -552,12 +553,10 @@ export default function Landing() {
             <ArrowForwardIosIcon />
           </div>
         </div>
-
-        <div className="space"></div>
-        <div className="space"></div>
-        <div className="space"></div>
       </div>
 
+      <div id="us" className="space"></div>
+      <div className="space"></div>
       <div className="space"></div>
       <div className="space"></div>
 
@@ -736,29 +735,25 @@ export default function Landing() {
                 ></iframe>
               </div>
 
-              <div className="img2">
+              <div className="img2" data-aos="fade-up" data-aos-delay="100">
                 <div className="ins-info">
                   <img className="img22" src={insImg} alt="" data-aos="fade-left" data-aos-delay="700" />
                   <div className="ins">
-                    <div className="int-name">{t("ins")}</div>
-                    <div className="ins-items">
+                    <div className="int-name" data-aos="fade-up" data-aos-delay="100">{t("ins")}</div>
+                    <div className="ins-items" data-aos="fade-up" data-aos-delay="100">
                       <div className="l">Korean Language</div>
                       <div className="l">Trainer</div>
                       <div className="l">Korean Culture</div>
                     </div>
-                    <div className="ins-items small-t">
+                    <div className="ins-items small-t" data-aos="fade-up" data-aos-delay="100">
                       B/A Kelaniya University, BA/MA (Uiduk University South Korea), Legal Interpreter, KiiP 6,
                       Topik 6, Sri lanka international Affairs Committee
                     </div>
                   </div>
                 </div>
-                {/* {<div className="ins-text-title" data-aos="fade-down" data-aos-delay="900">
-                  B/A Kelaniya University, BA/MA (Uiduk University South Korea), Legal Interpreter, KiiP 6,
-                  Topik 6, Sri lanka international Affairs Committee
-                </div>} */}
               </div>
             </div>
-            <div className="ins-in">
+            <div className="ins-in" data-aos="fade-up" data-aos-delay="100">
               <div className="ins-main-title" data-aos="fade-up" data-aos-delay="100">
                 {t("our-monk")}
               </div>

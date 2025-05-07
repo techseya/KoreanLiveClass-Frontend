@@ -111,9 +111,10 @@ export default function Navbar({ children }: Readonly<Props>) {
                     <div className={`nav-links ${menuOpen ? 'active' : ''}`}>
                         <a href="" onClick={handleNavCourses}>{t('Courses')}</a>
                         {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse) && <a href="#korean-books">{t('kbooks')}</a>}
+                        {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse) && <a href="#who">{t('who')}</a>}
+                        {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse) && <a href="#us">{t('what')}</a>}
                         {visible && ( <a href="" onClick={handleNavMyCourses}>{t('myCourses')}</a>)}                       
                         <a href="#contact">{t('Contact Us')}</a>
-                        <a href="#about">{t('About Us')}</a>
 
                         <select
                             onChange={(e) => changeLanguage(e.target.value)}
@@ -136,11 +137,7 @@ export default function Navbar({ children }: Readonly<Props>) {
                                 src={userIcon}
                                 alt="User"
                             />
-                            <Logout
-                                onClick={handleOpen1}
-                                style={{ cursor: 'pointer', color: 'black' }}
-                                titleAccess="Logout"
-                            />
+                            <button onClick={handleOpen1} className="btn signup">{t('logout')}</button>
                         </div>
                         )}
 

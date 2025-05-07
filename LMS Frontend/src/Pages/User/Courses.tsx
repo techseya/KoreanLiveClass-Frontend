@@ -19,19 +19,20 @@ export default function Courses() {
     const navigate = useNavigate();
 
     const handleCourseClick = (course: any) => {
-        
+
         navigate(`/course`, {
             state: {
-              id: course.id,
-              name: course.name,
-              description : course.description,
-              thumbnail: course.thumbnail,
-              level: course.level,
-              totalDuration: course.totalDuration,
-              price: course.price,
-              sectionCount: course.sectionCount,
+                id: course.id,
+                name: course.name,
+                description: course.description,
+                thumbnail: course.thumbnail,
+                level: course.level,
+                totalDuration: course.totalDuration,
+                price: course.price,
+                sectionCount: course.sectionCount,
+                transactionStatus: course.transactionStatus
             }
-          });
+        });
     };
 
 
@@ -93,7 +94,9 @@ export default function Courses() {
                         >
                             <div className="course-thumbnail">
                                 <img src={course.thumbnail} alt="Course Thumbnail" />
-                                <div className="price">Rs.{(course.price).toFixed(2)}</div>
+                                {course.transactionStatus === 1 ?
+                                    (<div className="price">Rs.{(course.price).toFixed(2)}</div>) :
+                                    (<div className="price">FREE</div>)}
                             </div>
 
                             <div className="course-info">
@@ -106,12 +109,12 @@ export default function Courses() {
                     )}
                 </div>
             </div>
-            
+
             <div className="space1"></div>
             <div className="space1"></div>
             <div className="space1"></div>
 
-            <Footer/>
+            <Footer />
         </div>
     );
 }

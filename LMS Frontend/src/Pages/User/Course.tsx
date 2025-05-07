@@ -127,8 +127,8 @@ export default function Course() {
                     </div>
 
                     <div className="c-in1">
-
-                        <Box sx={{ p: { xs: 2, mt: 2 }, mx: "auto" }}>
+                        {course.transactionStatus === 1 ? (
+                            <Box sx={{ p: { xs: 2, mt: 2 }, mx: "auto" }}>
                             <Typography variant="h5" sx={{ mb: 2 }}>
                                 Course Content
                             </Typography>
@@ -208,6 +208,75 @@ export default function Course() {
                                 <Typography>No Content available.</Typography>
                             )}
                         </Box>
+                        ) :(
+                            <Box sx={{ p: { xs: 2, mt: 1 }, mx: "auto" }}>
+                            <Typography variant="h5" sx={{ mb: 2 }}>
+                                Course Content
+                            </Typography>
+
+                            {sections.length > 0 ? (
+                                sections.map((section, index) => {
+                                    const isExpanded = expandedSection === section.name;
+                                    const recordings = recordingsMap[section.id] || [];
+
+                                    return (
+                                        <Accordion
+                                            key={index}
+                                            expanded={isExpanded}
+                                            onChange={(event, expanded) => {
+                                                const newExpanded = expanded ? section.name : false;
+                                                setExpandedSection(newExpanded);
+                                                if (expanded) {
+                                                    handleGetRecordings(section.id);
+                                                }
+                                            }}
+                                        >
+                                            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                                                <Typography sx={{ flexGrow: 1 }}>{section.name}</Typography>
+                                                <Typography color="text.secondary">{section.totalLength}</Typography>
+                                            </AccordionSummary>
+
+                                            <AccordionDetails>
+                                                <Typography variant="body2" sx={{ mb: 1 }}>
+                                                    {section.description}
+                                                </Typography>
+
+                                                {recordings.length > 0 ? (
+                                                    recordings.map((rec, i) => (
+                                                        <Typography
+                                                            key={i}
+                                                            sx={{ mb: 1, display: 'flex', alignItems: 'center' }}
+                                                        >
+                                                            <PlayCircleFilled
+                                                                sx={{
+                                                                    color: '#0D47A1',
+                                                                    mr: 1
+                                                                }}
+                                                            />
+                                                            <span onClick={() => handleVideoSelection(rec)} style={{
+                                                                color: '#0D47A1',
+                                                                fontWeight: 500,
+                                                                cursor: 'pointer'
+                                                            }}>
+                                                                {rec.name}
+                                                            </span>
+                                                        </Typography>
+                                                    ))
+                                                ) : (
+                                                    <Typography variant="body2" color="text.secondary">
+                                                        No recordings.
+                                                    </Typography>
+                                                )}
+                                            </AccordionDetails>
+                                        </Accordion>
+                                    );
+                                })
+                            ) : (
+                                <Typography>No Content available.</Typography>
+                            )}
+                        </Box>
+                        )}
+                        
                     </div>
 
                     <div className="c-in">
@@ -241,7 +310,8 @@ export default function Course() {
                         )}
                     </div>
                 </div>
-                <button className="buy-course-button" onClick={() =>
+                {course.transactionStatus !== 2 && (
+                    <button className="buy-course-button" onClick={() =>
                             window.open(
                                 "https://wa.me/821090736674?text=Hello%2C%20I%20need%20to%20Buy%20a%20course",
                               "_blank"
@@ -249,6 +319,7 @@ export default function Course() {
                           }>
                     {t("buyCourse")}
                 </button>
+                )}               
 
             </div>
 
