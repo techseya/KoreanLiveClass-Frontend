@@ -44,6 +44,7 @@ import { useNavigate } from "react-router-dom";
 import { getCategories } from "src/Services/category_api";
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import { getTopCourses } from "src/Services/course_api";
+import { getWord } from "src/Services/word_api";
 
 const Transition = forwardRef(function Transition(props: any, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -61,16 +62,16 @@ export default function Landing() {
   const [visibleIndex1, setVisibleIndex1] = useState(0);
   const [showModal, setShowModal] = useState(false);
   const [loginOpen, setLoginOpen] = useState(false);
-
   const [categories, setCategories] = useState<any[]>([])
   const [topCourses, setTopCourses] = useState<any[]>([])
   const [selectedBook, setSelectedBook] = useState<any>(null);
   const [isModalOpen1, setIsModalOpen1] = useState(false);
-
+  const [korean, setKorean] = useState("")
+  const [sinhala, setSinhala] = useState("")
   const [modalOpen, setModalOpen] = useState(false);
 
-  const koreanWord = "안녕하세요"; // Example
-  const sinhalaMeaning = "ආයුබෝවන්";
+  let koreanWord = "";
+  let sinhalaMeaning = "";
 
   const handleBookClick = (book: any) => {
     setSelectedBook(book);
@@ -86,15 +87,6 @@ export default function Landing() {
     navigate("/dashboard")
     setLoginOpen(false);
   };
-
-  const handleLoginOpen = () => {
-    getDeviceId();
-    setLoginOpen(true);
-  };
-
-  const handleRegister = () => {
-    navigate("/register")
-  }
 
   const handleClose = () => {
     setLoginOpen(false);
@@ -165,7 +157,8 @@ export default function Landing() {
     }
 
     handleGetCategories();
-    handleGetTopCourses()
+    handleGetTopCourses();
+    handleGetWord();
 
     AOS.init({
       duration: 1000,
@@ -181,31 +174,16 @@ export default function Landing() {
     };
   }, []);
 
-  const getDeviceId = async () => {
-    const fp = await FingerprintJS.load();
-
-    let attempts = 0;
-    let stableId = '';
-
-    while (attempts < 3) {
-      const result = await fp.get();
-      const id = result.visitorId;
-
-      console.log(`Attempt ${attempts + 1}: ${id}`);
-
-      // If this is not the first attempt and ID matches previous, consider it stable
-      if (stableId && id === stableId) {
-        break;
-      }
-
-      stableId = id;
-      attempts++;
-      await new Promise(resolve => setTimeout(resolve, 300)); // wait a bit between attempts
+  const handleGetWord = async () =>{
+    try {
+      const response = await getWord()
+      console.log(response.data);
+      setKorean(response.data.korean)
+      setSinhala(response.data.sinhala)
+    } catch (error) {
+      console.error(error);      
     }
-
-    alert(stableId);
-
-  };
+  }
 
   const handleGetTopCourses = async () => {
     try {
@@ -316,11 +294,11 @@ export default function Landing() {
             <div className="modal-content7">
               <div className="modal-field7">
                 <label>Korean Word:</label>
-                <input type="text" value={koreanWord} readOnly />
+                <input type="text" value={korean} readOnly />
               </div>
               <div className="modal-field7">
                 <label>Sinhala Meaning:</label>
-                <input type="text" value={sinhalaMeaning} readOnly />
+                <input type="text" value={sinhala} readOnly />
               </div>
             </div>
             <button className="close-btn7" onClick={() => setModalOpen(false)}>

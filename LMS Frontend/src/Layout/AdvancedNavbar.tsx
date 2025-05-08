@@ -16,7 +16,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useMediaQuery } from "@mui/material";
 import "../Common/styles/style.css";
 import "../Common/styles/navbar.css";
-import { LogoutOutlined, MenuOutlined } from "@mui/icons-material";
+import { LogoutOutlined, MenuOutlined, WysiwygOutlined } from "@mui/icons-material";
 import logo from "../Assets/Images/logo.jpeg";
 import man from "../Assets/Images/man.png";
 import Dialogbox from "../Common/Components/DialogBox";
@@ -198,6 +198,8 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
       setActive(5);
     } else if (path === "/user-maintenance") {
       setActive(6);
+    } else if (path === "/k-word") {
+      setActive(7);
     } else {
       setActive(0);
     }
@@ -209,6 +211,7 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
   const handleClickCourse = () => navigate("/course-maintenance")
   const handleClickSection = () => navigate("/section-maintenance")
   const handleClickRecording = () => navigate("/recording-maintenance")
+  const handleClickWord = () => navigate("/k-word")
 
   const drawerItems = [
     {
@@ -240,6 +243,11 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
       name: "Users",
       icon: <UserAddOutlined style={{ fontSize: "20px" }} />,
       onClick: handleClickUserMaintenance,
+    },
+    {
+      name: "Korean Word",
+      icon: <WysiwygOutlined style={{ fontSize: "20px" }} />,
+      onClick: handleClickWord,
     },
   ];
 
