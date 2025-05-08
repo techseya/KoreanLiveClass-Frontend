@@ -16,11 +16,13 @@ import CoursesM from "./Pages/Admin/CourseMaintenance";
 import Sections from "./Pages/Admin/SectionMaintenance";
 import Recordings from "./Pages/Admin/RecordingMaintenance";
 import KoreanWordMaintenance from "./Pages/Admin/KoreanWord/KoreanWordMaintenance";
+import Category from "./Pages/User/Category";
 
 const App: React.FC = () => {
   const location = useLocation();
   const isHomePage = location.pathname === "/";
   const isCourses = location.pathname === "/courses"
+  const isCategory = location.pathname === "/categories"
   const isMyCourses = location.pathname === "/my-courses"
   const isCourse = location.pathname === "/course"
   const isMyCourse = location.pathname === "/my-course"
@@ -28,7 +30,7 @@ const App: React.FC = () => {
 
   return (
     <>
-      {!isHomePage && !isCourses && !isCourse && !isRegister && !isMyCourses && !isMyCourse ?(
+      {!isHomePage && !isCourses && !isCategory && !isCourse && !isRegister && !isMyCourses && !isMyCourse ?(
         <AdvancedNavbar>
           <Routes>
             <Route path="/dashboard" element={<Dashboard />} />
@@ -45,6 +47,7 @@ const App: React.FC = () => {
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/courses" element={<Courses/>} />
+            <Route path="/categories" element={<Category/>} />
             <Route path="/my-courses" element={<MyCourses/>} />
             <Route path="/course" element={<Course />} />
             <Route path="/my-course" element={<MyCourse />} />

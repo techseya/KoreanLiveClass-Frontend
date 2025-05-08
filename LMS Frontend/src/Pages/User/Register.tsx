@@ -10,6 +10,7 @@ import { register } from "src/Services/auth_api";
 
 import { getCodeList } from "country-list";
 import { getCountryCallingCode, CountryCode } from "libphonenumber-js";
+import Footer from "src/Layout/Footer";
 
 type CountryOption = {
     code: string;
@@ -74,7 +75,7 @@ export default function Register() {
             location: country.name,
             phoneNo,
             duration: Number(duration),
-            activeStatus: status === "Active" ? 1 : 2
+            activeStatus: 1
         };
 
         try {
@@ -173,35 +174,21 @@ export default function Register() {
                             />
                         </Grid>
 
-                        <Grid item xs={12} sm={6}>
-                            <FormControl fullWidth>
-                                <InputLabel>Status</InputLabel>
-                                <Select
-                                    value={status}
-                                    onChange={(e) => setStatus(e.target.value)}
-                                    label="Status"
-                                >
-                                    <MenuItem value="Active">Active</MenuItem>
-                                    <MenuItem value="Inactive">Inactive</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Grid>
-
                         <Grid item xs={12} display="flex" justifyContent="flex-end">
                             <Button
                                 variant="contained"
                                 color="primary"
-                                startIcon={<Add />}
                                 sx={{ textTransform: 'none' }}
                                 onClick={handleSubmit}
-                                disabled={!userName || !email || !status || !phoneNo || !country || !duration || !password || !cpassword}
+                                disabled={!userName || !email || !phoneNo || !country || !duration || !password || !cpassword}
                             >
-                                Add User
+                                Register
                             </Button>
                         </Grid>
                     </Grid>
                 </Box>
             </div>
+            <Footer/>
         </div>
     );
 }

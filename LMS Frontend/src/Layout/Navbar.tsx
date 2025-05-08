@@ -21,6 +21,7 @@ export default function Navbar({ children }: Readonly<Props>) {
 
     const location = useLocation();
     const isCourse = location.pathname === "/courses";
+    const isCategory = location.pathname === "/categories";
     const isMyCourses = location.pathname === "/my-courses"
     const isCourse1 = location.pathname === "/course";
     const isMyCourse = location.pathname === "/my-course"
@@ -47,6 +48,10 @@ export default function Navbar({ children }: Readonly<Props>) {
 
     const handleNavCourses = () => {
         navigate("/courses")
+    }
+    
+    const handleNavCategories = () => {
+        navigate("/categories")
     }
 
     const handleNavMyCourses = () => {
@@ -109,9 +114,10 @@ export default function Navbar({ children }: Readonly<Props>) {
 
                     <div className={`nav-links ${menuOpen ? 'active' : ''}`}>
                         <a href="" onClick={handleNavCourses}>{t('Courses')}</a>
-                        {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse) && <a href="#korean-books">{t('kbooks')}</a>}
-                        {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse) && <a href="#who">{t('who1')}</a>}
-                        {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse) && <a href="#us">{t('what')}</a>}
+                        <a href="" onClick={handleNavCategories}>{t('Categories')}</a>
+                        {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory) && <a href="#korean-books">{t('kbooks')}</a>}
+                        {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory) && <a href="#who">{t('who1')}</a>}
+                        {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory) && <a href="#us">{t('what')}</a>}
                         {visible && (<a href="" onClick={handleNavMyCourses}>{t('myCourses')}</a>)}
                         <a href="#contact">{t('Contact Us')}</a>
 
