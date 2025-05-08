@@ -17,21 +17,21 @@ export default function Category() {
 
     const navigate = useNavigate();
 
-    const handleCourseClick = (course: any) => {
+    const handleCategoryClick = (course: any) => {
 
-        navigate(`/course`, {
-            state: {
-                id: course.id,
-                name: course.name,
-                description: course.description,
-                thumbnail: course.thumbnail,
-                level: course.level,
-                totalDuration: course.totalDuration,
-                price: course.price,
-                sectionCount: course.sectionCount,
-                transactionStatus: course.transactionStatus
-            }
-        });
+        // navigate(`/course`, {
+        //     state: {
+        //         id: course.id,
+        //         name: course.name,
+        //         description: course.description,
+        //         thumbnail: course.thumbnail,
+        //         level: course.level,
+        //         totalDuration: course.totalDuration,
+        //         price: course.price,
+        //         sectionCount: course.sectionCount,
+        //         transactionStatus: course.transactionStatus
+        //     }
+        // });
     };
 
 
@@ -87,7 +87,7 @@ export default function Category() {
                             className="course-card"
                             data-aos="fade-up"
                             data-aos-delay="100"
-                            onClick={() => handleCourseClick(course)}
+                            onClick={() => handleCategoryClick(course)}
                             key={index}
                             style={{ cursor: "pointer" }}
                         >
