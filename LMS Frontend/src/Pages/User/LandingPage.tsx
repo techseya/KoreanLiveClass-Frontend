@@ -6,7 +6,7 @@ import k1 from "../../Assets/Images/k1.jpg";
 import k2 from "../../Assets/Images/k2.jpg";
 import k3 from "../../Assets/Images/k3.jpg";
 import logo from "../../Assets/Images/logo.jpeg"
-import { AccessTime, Adjust, CheckCircleOutline, Facebook, Instagram, Verified, WhatsApp, X, YouTube } from "@mui/icons-material";
+import { Facebook, Instagram, Verified, WhatsApp, YouTube } from "@mui/icons-material";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import phoneTemp from "../../Assets/Images/phone-template.png"
@@ -26,26 +26,20 @@ import s1 from "../../Assets/Images/language.png"
 import s2 from "../../Assets/Images/guidance.png"
 import s3 from "../../Assets/Images/access-control.png"
 import s4 from "../../Assets/Images/hints.png"
-import thumb1 from "../../Assets/Images/thumb1.jpg";
-import thumb2 from "../../Assets/Images/thumb2.jpg";
-import StarIcon from '@mui/icons-material/Star';
-import StarBorderIcon from '@mui/icons-material/StarBorder';
 import insImg from "../../Assets/Images/ins.jpg";
-import { ClockCircleOutlined, TikTokFilled } from "@ant-design/icons";
-import { Tooltip, Dialog, AppBar, Toolbar, IconButton, Typography, Slide } from "@mui/material";
-import CloseIcon from '@mui/icons-material/Close';
+import { TikTokFilled } from "@ant-design/icons";
+import { Slide } from "@mui/material";
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import chess from "../../Assets/Images/chess.png";
-import insMain from "../../Assets/Images/ins1.jpg";
 import Footer from "../../Layout/Footer";
 import LoginDialogbox from "src/Common/Components/LoginDialog";
 import { useNavigate } from "react-router-dom";
 import { getCategories } from "src/Services/category_api";
-import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import { getTopCourses } from "src/Services/course_api";
 import { getWord } from "src/Services/word_api";
-import ketayam from "../../Assets/Images/ketayam.png"
+import skillImg from "../../Assets/Images/skill.jpg"
+import CountUp from "react-countup";
+import { useInView } from "react-intersection-observer";
 
 const Transition = forwardRef(function Transition(props: any, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -55,9 +49,6 @@ export default function Landing() {
   const navigate = useNavigate()
   const { t, i18n } = useTranslation();
   const [bgIndex, setBgIndex] = useState(0);
-
-  const [selectedCourse, setSelectedCourse] = useState<any>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [visibleStartIndex, setVisibleStartIndex] = useState(0);
   const [visibleIndex, setVisibleIndex] = useState(0);
   const [visibleIndex1, setVisibleIndex1] = useState(0);
@@ -70,9 +61,8 @@ export default function Landing() {
   const [korean, setKorean] = useState("")
   const [sinhala, setSinhala] = useState("")
   const [modalOpen, setModalOpen] = useState(false);
-
-  let koreanWord = "";
-  let sinhalaMeaning = "";
+  const [ref1, inView1] = useInView({ triggerOnce: true });
+  const [ref2, inView2] = useInView({ triggerOnce: true });
 
   const handleBookClick = (book: any) => {
     setSelectedBook(book);
@@ -115,7 +105,7 @@ export default function Landing() {
     if (visibleIndex - 4 >= 0) {
       setVisibleIndex(visibleIndex - 4);
     }
-  };  
+  };
 
   const handleNext2 = () => {
     if (visibleIndex1 + 4 < books.length) {
@@ -175,14 +165,14 @@ export default function Landing() {
     };
   }, []);
 
-  const handleGetWord = async () =>{
+  const handleGetWord = async () => {
     try {
       const response = await getWord()
       console.log(response.data);
       setKorean(response.data.korean)
       setSinhala(response.data.sinhala)
     } catch (error) {
-      console.error(error);      
+      console.error(error);
     }
   }
 
@@ -211,7 +201,7 @@ export default function Landing() {
     { url: "https://www.youtube.com/embed/Dj5VolioQSk?modestbranding=1&rel=0&playsinline=1" },
     { url: "https://www.youtube.com/embed/UTkjEDygbb0?start=407&modestbranding=1&rel=0&playsinline=1" },
     { url: "https://www.youtube.com/embed/PwZk7_QRpQ4?modestbranding=1&rel=0&playsinline=1" }
-  ];  
+  ];
 
   const books = [
     {
@@ -283,13 +273,10 @@ export default function Landing() {
         onClose={handleClose}
       />
       <div className="bg-overlay0"></div>
-
-      <img className="ketayam" src={ketayam} alt="" />
-
       <div className="word-outer" onClick={() => setModalOpen(true)}>
         {t("word")}
       </div>
-      
+
       {modalOpen && (
         <div className="modal-overlay7" onClick={() => setModalOpen(false)}>
           <div className="modal-box7" onClick={(e) => e.stopPropagation()}>
@@ -305,7 +292,7 @@ export default function Landing() {
               </div>
             </div>
             <button className="close-btn7" onClick={() => setModalOpen(false)}>
-            ×
+              ×
             </button>
           </div>
         </div>
@@ -341,19 +328,27 @@ export default function Landing() {
         </div>
       </div>
 
-      {/* {<div className="red-outer">
-        <div className="red-inner">
-          <div className="red-text">
-            {t("red-text")}
-          </div>
-          <button onClick={handleRegister} style={{ zIndex: 10 }} className="btn signup">{t('SignUp')}</button>
-        </div>
-      </div>} */}
-
       <div className="second-outer">
-        <div  id="who" className="space"></div>
-        <div className="second-inner-wrapper">
-          <div className="second-inner" data-aos="fade-up">
+        <div className="second-i">
+          <div className="second-inner-wrapper1">
+            <img className="skill-img" src={skillImg} alt="" data-aos="fade-up" data-aos-delay="100" />
+          </div>
+          <div className="second-inner-wrapper">
+            <div className="s-in" data-aos="fade-up" data-aos-delay="100" ref={ref1}>
+              <div className="s-in-no">
+                {inView1 && <CountUp start={0} end={10} duration={2} suffix="+" />}
+              </div>
+              <div className="s-in1">
+                <div className="s-in2" data-aos="fade-up" data-aos-delay="100">{t("experience")}</div>
+              </div>
+            </div>
+            <div className="s-in" data-aos="fade-up" data-aos-delay="100" ref={ref2}>
+              <div className="s-in-no">{inView2 && <CountUp start={0} end={1500} duration={2} suffix="+" />}</div>
+              <div className="s-in1">
+                <div className="s-in2" data-aos="fade-up" data-aos-delay="100">{t("students")}</div>
+              </div>
+            </div>
+            {/* <div className="second-inner" data-aos="fade-up">
             <div className="second-title" data-aos="fade-up" data-aos-delay="100">
               {t("who")}
             </div>
@@ -380,38 +375,10 @@ export default function Landing() {
             <div className="second-content" data-aos="fade-up" data-aos-delay="200">
               <Verified style={{ color: "#4caf50", marginRight: '10px' }} />{t("who-content6")}
             </div>
+          </div> */}
           </div>
         </div>
-        {/* {<div className="second-inner1">
-          <div className="phone-outer">
-            <img src={phoneTemp} alt="Phone" className="phone-bg" />
-            <div className="phone-inner">
-              <img className="phone-logo" src={logo} alt="Logo" />
-              <div className="phone-title">{t("phoneT")}</div>
-              <div className="space"></div>
-              <div className="space"></div>
-              <div className="space"></div>
-              <div className="pcard-inner">
-                <div className="pcard">
-                  <Adjust className="picon" />
-                  <div className="ptext">17 {t('ptext1')}</div>
-                </div>
-              </div>
-              <div className="pcard-inner">
-                <div className="pcard">
-                  <CheckCircleOutline className="picon" />
-                  <div className="ptext">{t('ptext2')}</div>
-                </div>
-              </div>
-              <div className="pcard-inner">
-                <div className="pcard">
-                  <AccessTime className="picon" />
-                  <div className="ptext">{t('ptext3')}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>} */}
+
         <div className="second-inner1">
           <div className="phone-outer">
             <img src={phoneTemp} alt="Phone" className="phone-bg" />
@@ -493,9 +460,9 @@ export default function Landing() {
               {/* your card code here */}
               <div className="course-thumbnail">
                 <img src={course.thumbnail} alt="Course Thumbnail" />
-                {course.transactionStatus === 1 ? 
-                (<div className="price">Rs.{(course.price).toFixed(2)}</div>) : 
-                (<div className="price">FREE</div>)}                
+                {course.transactionStatus === 1 ?
+                  (<div className="price">Rs.{(course.price).toFixed(2)}</div>) :
+                  (<div className="price">FREE</div>)}
               </div>
 
               <div className="course-info">
@@ -504,6 +471,78 @@ export default function Landing() {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* Arrow Button Row */}
+        <div className="arrow-buttons-row">
+          <div
+            className="arrow-button"
+            onClick={handlePrev}
+            style={{ visibility: visibleStartIndex === 0 ? "hidden" : "visible" }}
+          >
+            <ArrowBackIosIcon />
+          </div>
+
+          <div
+            className="arrow-button"
+            onClick={handleNext}
+            style={{
+              visibility: visibleStartIndex + 4 >= topCourses.length ? "hidden" : "visible",
+            }}
+          >
+            <ArrowForwardIosIcon />
+          </div>
+        </div>
+
+        <div className="space"></div>
+        <div className="space"></div>
+        <div className="space"></div>
+      </div>
+
+      <div id="who" className="space"></div>
+      <div className="space"></div>
+      <div className="space"></div>
+      <div className="space"></div>
+      <div className="space"></div>
+
+      <div className="third-outer">
+        <div className="third-inner">
+          <div className="ti">
+            <div className="third-inner-title" data-aos="fade-up" data-aos-delay="100">
+              {t("who")}
+            </div>
+          </div>
+        </div>
+
+        <div className="space"></div>
+        <div className="space"></div>
+        <div className="to" data-aos="fade-up" data-aos-delay="100">
+          <div className="to-in">
+            <div className="second-desc">
+              {t("who-desc")}
+            </div>
+            <div className="space"></div>
+            <div className="space"></div>
+            <div className="second-content" data-aos="fade-up" data-aos-delay="200">
+              <Verified style={{ color: "#4caf50", marginRight: '10px' }} />{t("who-content1")}
+            </div>
+            <div className="second-content" data-aos="fade-up" data-aos-delay="200">
+              <Verified style={{ color: "#4caf50", marginRight: '10px' }} />{t("who-content2")}
+            </div>
+            <div className="second-content" data-aos="fade-up" data-aos-delay="200">
+              <Verified style={{ color: "#4caf50", marginRight: '10px' }} />{t("who-content3")}
+            </div>
+            <div className="second-content" data-aos="fade-up" data-aos-delay="200">
+              <Verified style={{ color: "#4caf50", marginRight: '10px' }} />{t("who-content4")}
+            </div>
+            <div className="second-content" data-aos="fade-up" data-aos-delay="200">
+              <Verified style={{ color: "#4caf50", marginRight: '10px' }} />{t("who-content5")}
+            </div>
+            <div className="second-content" data-aos="fade-up" data-aos-delay="200">
+              <Verified style={{ color: "#4caf50", marginRight: '10px' }} />{t("who-content6")}
+            </div>
+          </div>
+          <div className="to-in1"></div>
         </div>
 
         {/* Arrow Button Row */}
@@ -578,7 +617,7 @@ export default function Landing() {
           </div>
         </div>
       </div>
-      
+
       <div id="korean-books" className="space"></div>
       <div className="space"></div>
       <div className="space"></div>

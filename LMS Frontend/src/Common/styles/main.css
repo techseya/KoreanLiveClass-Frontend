@@ -6,7 +6,7 @@ body {
 }
 
 * {
-  /*border: 1px solid red;*/
+  /* border: 1px solid red; */
 }
 
 .space {
@@ -267,14 +267,95 @@ body {
   width: 85%;
 }
 
+.second-i{
+  width: 50%;
+  height: auto;
+}
+
 .second-inner-wrapper {
   position: relative;
-  display: flex;
-  justify-content: right;
-  width: 50%;
+  width: 100%;
+  display: flex;  
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 25px;
   padding-bottom: 90px;
   overflow: hidden;
+  padding-top: 10px;
+}
+
+.second-inner-wrapper1 {
+  position: relative;
+  width: 100%;
+  display: flex;  
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding-bottom: 10px;
+  overflow: hidden;
   padding-top: 50px;
+}
+
+.skill-img{
+  width: 85%;
+  height: 250px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.to{
+  width: 100%;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+.to-in{
+  width: 40%;
+  height: auto;
+}
+
+.to-in1{
+  width: 40%;
+  height: auto;
+  background-image: url("../../Assets/Images/who.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 10px;
+}
+
+.s-in{
+  width: 40%;
+  height: auto;
+  text-align: center;
+  border: 3px solid rgb(255, 0, 0);
+  background-color: rgba(0, 0, 0, 0.352);
+  cursor: pointer;
+  padding: 25px 0;
+}
+
+.s-in:hover{
+  background-color: #000;
+  color: white;
+}
+
+.s-in1{
+  width: auto;
+  height: auto;
+  padding: 0 15px;
+}
+
+.s-in-no{
+  font-size: 85px;
+  color: rgb(207, 39, 13);
+  font-weight: bold;
+}
+
+.s-in2{
+  font-size: 25px;
 }
 
 .animated-shapes {
@@ -1394,6 +1475,10 @@ body {
   .ins-main-desc {
     padding-right: 35px;
   }
+
+  .s-in-no{
+    font-size: 75PX;
+  }
 }
 
 @media (max-width: 769px) {
@@ -1404,6 +1489,10 @@ body {
 
   .banner-strip {
     width: 50%;
+  }
+
+  .s-in-no{
+    font-size: 55PX;
   }
 
   .banner-text {
@@ -1563,6 +1652,18 @@ body {
     height: 35vh;
   }
 
+  .second-i{
+    width: 100%;
+  }
+
+  .to-in{
+    width: 80%;
+  }
+
+  .to-in1{
+    display: none;
+  }
+
   .red-outer {
     top: 50vh;
   }
@@ -1597,6 +1698,7 @@ body {
 
   .second-inner-wrapper {
     width: 100%;
+    height: auto;
     padding-bottom: 30px;
   }
 
