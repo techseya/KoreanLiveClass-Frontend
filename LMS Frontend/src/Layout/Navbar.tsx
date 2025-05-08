@@ -96,6 +96,9 @@ export default function Navbar({ children }: Readonly<Props>) {
                     </button>
 
                     <div className={`nav-links ${menuOpen ? "active" : ""}`}>
+                        <a href="#" onClick={handleNavHome} className="nav-home">
+                            <i className="fas fa-home"></i>
+                        </a>
                         <a href="#" onClick={handleNavCourses} className="nav-courses">
                             <i className="fas fa-book"></i> <span>{t("Courses")}</span>
                         </a>

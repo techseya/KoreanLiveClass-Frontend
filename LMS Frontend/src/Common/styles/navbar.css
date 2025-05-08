@@ -79,6 +79,14 @@
   color: white;
 }
 
+.nav-links a i {
+  display: none;
+}
+
+.nav-links a span {
+  display: inline;
+}
+
 @media (max-width: 768px) {
   .menu-toggle {
     display: block;
@@ -149,6 +157,7 @@
   .nav-my-courses::before { content: "\f02d"; font-family: "Font Awesome 6 Free"; font-weight: 900; } /* book */
   .nav-login::before { content: "\f2f6"; font-family: "Font Awesome 6 Free"; font-weight: 900; } /* sign-in-alt */
   .nav-logout::before { content: "\f2f5"; font-family: "Font Awesome 6 Free"; font-weight: 900; } /* sign-out-alt */
+  .nav-home::before { content: "\f015"; font-family: "Font Awesome 6 Free"; font-weight: 900; }
 
   .btn, .btn.signin, .btn.signup, select {
     display: none;
