@@ -312,7 +312,7 @@ export default function Landing() {
       {modalOpen && (
         <div className="modal-overlay7" onClick={() => setModalOpen(false)}>
           <div className="modal-box7" onClick={(e) => e.stopPropagation()}>
-            <h2>Let's learn Korean</h2>
+            <h2>{t("learnK")}</h2>
             <div className="modal-content7">
               <div className="modal-field7">
                 <label>Korean Word:</label>
