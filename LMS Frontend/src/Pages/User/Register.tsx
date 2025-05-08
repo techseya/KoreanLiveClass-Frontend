@@ -1,25 +1,53 @@
 import { useTranslation } from "react-i18next";
-import "../../Common/styles/register.css"
-import "../../Common/styles/user.css"
-import { useState } from "react";
+import "../../Common/styles/register.css";
+import "../../Common/styles/user.css";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/system";
 import { Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { Add } from "@mui/icons-material";
 import { register } from "src/Services/auth_api";
 
+import { getCodeList } from "country-list";
+import { getCountryCallingCode, CountryCode } from "libphonenumber-js";
+
+type CountryOption = {
+    code: string;
+    name: string;
+    callingCode: string;
+};
+
+// Filter countries that have a valid calling code
+const countryOptions: CountryOption[] = Object.entries(getCodeList())
+    .map(([code, name]) => {
+        try {
+            const callingCode = getCountryCallingCode(code.toUpperCase() as CountryCode);
+            return { code: code.toUpperCase(), name, callingCode };
+        } catch (error) {
+            return null; // Exclude invalid countries like AQ
+        }
+    })
+    .filter((country) => country !== null) as CountryOption[];
+
+
 export default function Register() {
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const navigate = useNavigate();
 
-    const [userName, setUserName] = useState("")
-    const [location, setLocation] = useState("Sri Lanka")
-    const [phoneNo, setPhoneNo] = useState<any>("")
-    const [email, setEmail] = useState("")
-    const [duration, setDuration] = useState<any>("0")
-    const [status, setStatus] = useState("Active")
-    const [password, setPassword] = useState("")
-    const [cpassword, setCPassword] = useState("")
+    const defaultCountry = countryOptions.find(c => c.name === "Sri Lanka") || countryOptions[0];
+    const [country, setCountry] = useState<CountryOption>(defaultCountry);
+
+    const [userName, setUserName] = useState("");
+    const [phoneNo, setPhoneNo] = useState(country.callingCode);
+    const [email, setEmail] = useState("");
+    const [duration, setDuration] = useState<any>("0");
+    const [status, setStatus] = useState("Active");
+    const [password, setPassword] = useState("");
+    const [cpassword, setCPassword] = useState("");
+
+    useEffect(() => {
+        setPhoneNo(country.callingCode); // Reset phone on country change
+    }, [country]);
 
     const handleSubmit = async () => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -29,42 +57,41 @@ export default function Register() {
             return;
         }
 
-        if (phoneNo.length !== 11 && phoneNo.length !== 12) {
-            alert("Phone number must be 11 or 12 digits long.");
+        if (phoneNo.length < 10 || phoneNo.length > 15) {
+            alert("Phone number must be 10 to 15 digits long (including country code).");
             return;
         }
 
-        if (password !== cpassword){
-            alert("Password and Confirm Password is Mismatched")
-            return
+        if (password !== cpassword) {
+            alert("Password and Confirm Password is mismatched.");
+            return;
         }
 
         const body = {
-            userName: userName,
-            password: password,
-            email: email,
-            location: location,
-            phoneNo: phoneNo,
+            userName,
+            password,
+            email,
+            location: country.name,
+            phoneNo,
             duration: Number(duration),
             activeStatus: status === "Active" ? 1 : 2
-        }
+        };
 
         try {
-            const response = await register(body)
-            if(response.data.message === "Registration completed"){
-                alert("Registration completed")
-            }      
-        } catch (error:any) {
-            alert(error.response.data.message);            
+            const response = await register(body);
+            if (response.data.message === "Registration completed") {
+                alert("Registration completed");
+                window.location.reload();
+            }
+        } catch (error: any) {
+            alert(error.response?.data?.message || "Registration failed.");
         }
-
-        window.location.reload()
     };
 
     return (
         <div className="register-outer">
             <div className="courses-header" style={{ textAlign: "center", marginBottom: "1rem" }}>
-            <div className="bg"></div>
+                <div className="bg"></div>
                 <h1 style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>{t("SignUp")}</h1>
             </div>
             <div className="user-form-outer1">
@@ -80,17 +107,12 @@ export default function Register() {
                         </Grid>
 
                         <Grid item xs={12} sm={6}>
-                            <FormControl fullWidth>
-                                <InputLabel>Location</InputLabel>
-                                <Select
-                                    value={location}
-                                    onChange={(e) => setLocation(e.target.value)}
-                                    label="Location"
-                                >
-                                    <MenuItem value="Sri Lanka">Sri Lanka</MenuItem>
-                                    <MenuItem value="South Korea">South Korea</MenuItem>
-                                </Select>
-                            </FormControl>
+                            <TextField
+                                label="Email"
+                                fullWidth
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                            />
                         </Grid>
 
                         <Grid item xs={12} sm={6}>
@@ -114,12 +136,23 @@ export default function Register() {
                         </Grid>
 
                         <Grid item xs={12} sm={6}>
-                            <TextField
-                                label="Email"
-                                fullWidth
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                            />
+                            <FormControl fullWidth>
+                                <InputLabel>Country</InputLabel>
+                                <Select
+                                    value={country.name}
+                                    onChange={(e) => {
+                                        const selected = countryOptions.find(c => c.name === e.target.value);
+                                        if (selected) setCountry(selected);
+                                    }}
+                                    label="Country"
+                                >
+                                    {countryOptions.map((c) => (
+                                        <MenuItem key={c.code} value={c.name}>
+                                            {c.name} (+{c.callingCode})
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
                         </Grid>
 
                         <Grid item xs={12} sm={6}>
@@ -127,17 +160,16 @@ export default function Register() {
                                 label="Phone No"
                                 fullWidth
                                 value={phoneNo}
-                                placeholder="947X XXX XXXX"
                                 onChange={(e) => {
-                                    const value = e.target.value;
-                                    // Allow only digits and disallow leading zero
-                                    if (/^\d*$/.test(value)) {
-                                        if (value === '' || value[0] !== '0') {
-                                            setPhoneNo(value);
-                                        }
+                                    const value = e.target.value.replace(/\D/g, '');
+                                    if (!value.startsWith(country.callingCode)) {
+                                        setPhoneNo(country.callingCode + value.slice(country.callingCode.length));
+                                    } else {
+                                        setPhoneNo(value);
                                     }
                                 }}
                                 inputProps={{ inputMode: 'numeric' }}
+                                placeholder={`+${country.callingCode} XXXXXXXX`}
                             />
                         </Grid>
 
@@ -162,7 +194,7 @@ export default function Register() {
                                 startIcon={<Add />}
                                 sx={{ textTransform: 'none' }}
                                 onClick={handleSubmit}
-                                disabled={!userName || !email || !status || !phoneNo || !location || !duration || !password || !cpassword}
+                                disabled={!userName || !email || !status || !phoneNo || !country || !duration || !password || !cpassword}
                             >
                                 Add User
                             </Button>
@@ -171,5 +203,5 @@ export default function Register() {
                 </Box>
             </div>
         </div>
-    )
+    );
 }

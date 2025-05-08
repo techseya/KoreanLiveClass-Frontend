@@ -4,7 +4,6 @@ import {
     Checkbox, FormControlLabel
 } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useEffect, useState } from "react";
@@ -12,6 +11,29 @@ import { LockReset, PhonelinkErase } from "@mui/icons-material";
 import Dialogbox from "src/Common/Components/DialogBox";
 import { getUsers, resetDevice, resetPassword, updateUser } from "src/Services/user_api";
 import { getAllCourses } from "src/Services/course_api";
+
+import { getCodeList } from "country-list";
+import { getCountryCallingCode, CountryCode } from "libphonenumber-js";
+
+type CountryOption = {
+    code: string;
+    name: string;
+    callingCode: string;
+};
+
+const countryOptions: CountryOption[] = Object.entries(getCodeList()).map(([code, name]) => {
+    try {
+        const callingCode = getCountryCallingCode(code.toUpperCase() as CountryCode);
+        return {
+            code: code.toUpperCase(), // Ensure ISO code is uppercase
+            name,
+            callingCode: callingCode || "", // Fallback for unknown country codes
+        };
+    } catch (e) {
+        // Catch errors for unsupported countries like "AQ" and skip them
+        return null;
+    }
+}).filter((option) => option !== null) as CountryOption[];
 
 function CustomNoRowsOverlay() {
     return (
@@ -28,8 +50,10 @@ export default function UserMaintenance() {
     const [changePwDialog, setChangePwDialog] = useState(false)
     const [changeDeviceDialog, setChangeDeviceDialog] = useState(false)
     const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
-
+    const [country, setCountry] = useState<CountryOption>(countryOptions[0]);
     const [allCourses, setAllCourses] = useState<any[]>([]);
+    const [location1, setLocation1] = useState("Sri Lanka");
+    const [phoneNo, setPhoneNo] = useState<any>("");
 
     const token = sessionStorage.getItem("token")
 
@@ -41,6 +65,16 @@ export default function UserMaintenance() {
             console.error(error);
         }
     }
+
+    useEffect(() => {
+        if (!editingUser) return;
+
+        const defaultCountry = countryOptions.find(c => c.name === editingUser.location) || countryOptions[0];
+        setLocation1(editingUser.location);
+        setCountry(defaultCountry);
+        setPhoneNo(defaultCountry.callingCode);
+    }, [editingUser]);
+
 
     useEffect(() => {
         handleGetUsers()
@@ -93,14 +127,15 @@ export default function UserMaintenance() {
 
     const handleUpdate = async () => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        
 
         if (!emailRegex.test(editingUser?.email)) {
             alert("Please enter a valid email address.");
             return;
         }
 
-        if (editingUser?.phoneNo?.length !== 11 && editingUser?.phoneNo?.length !== 12) {
-            alert("Phone number must be 11 or 12 digits long.");
+        if (editingUser.phoneNo.length < 10 || editingUser.phoneNo.length > 15) {
+            alert("Phone number must be 10 to 15 digits long (including country code).");
             return;
         }
 
@@ -118,6 +153,9 @@ export default function UserMaintenance() {
             }))
         };
 
+        console.log(payload);
+        
+
         try {
             const response = await updateUser(payload, token)
             alert(response.data.message)
@@ -133,39 +171,39 @@ export default function UserMaintenance() {
     };
 
     const handleChangePassword = async () => {
-        
+
         if (!selectedUserId) return;
-    
+
         const body = {
             userId: selectedUserId,
             newPassword: "abcd"
         };
-    
+
         try {
-            const res = await resetPassword(body,token)
+            const res = await resetPassword(body, token)
             alert(res.data.message)
-        } catch (error:any) {
+        } catch (error: any) {
             alert(error.response.message)
         }
-    
+
         setChangePwDialog(false);
     };
 
     const handleResetDevice = async () => {
-        
+
         if (!selectedUserId) return;
-    
+
         const body = {
             userId: selectedUserId
         };
-    
+
         try {
-            const res = await resetDevice(body,token)
+            const res = await resetDevice(body, token)
             alert(res.data.message)
-        } catch (error:any) {
+        } catch (error: any) {
             alert(error.response.message)
         }
-    
+
         setChangeDeviceDialog(false);
     };
 
@@ -268,7 +306,7 @@ export default function UserMaintenance() {
                         sx={{
                             border: 0,
                             minWidth: 600,
-                            '& .MuiDataGrid-columnHeaderTitle': {fontWeight: 'bold', fontSize: '15px', fontFamily: 'Public Sans, sans-serif' },
+                            '& .MuiDataGrid-columnHeaderTitle': { fontWeight: 'bold', fontSize: '15px', fontFamily: 'Public Sans, sans-serif' },
                             '& .MuiDataGrid-cell': { fontSize: '14px', fontFamily: 'Public Sans, sans-serif' }
                         }}
                         slots={{ noRowsOverlay: CustomNoRowsOverlay }}
@@ -289,26 +327,38 @@ export default function UserMaintenance() {
                         </Grid>
 
                         <Grid item xs={12} sm={6}>
-                            <FormControl fullWidth>
-                                <InputLabel>Location</InputLabel>
-                                <Select
-                                    value={editingUser?.location || ''}
-                                    label="Location"
-                                    onChange={(e) => handleFormChange("location", e.target.value)}
-                                >
-                                    <MenuItem value="Sri Lanka">Sri Lanka</MenuItem>
-                                    <MenuItem value="South Korea">South Korea</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Grid>
-
-                        <Grid item xs={12} sm={6}>
                             <TextField
                                 label="Email"
                                 fullWidth
                                 value={editingUser?.email || ''}
                                 onChange={(e) => handleFormChange("email", e.target.value)}
                             />
+                        </Grid>
+
+                        <Grid item xs={12} sm={6}>
+                            <FormControl fullWidth>
+                                <InputLabel>Location</InputLabel>
+                                <Select
+                                    value={location1}
+                                    onChange={(e) => {
+                                        const selectedCountry = countryOptions.find(c => c.name === e.target.value);
+                                        if (selectedCountry) {
+                                            setLocation1(selectedCountry.name);
+                                            setCountry(selectedCountry);
+                                            setPhoneNo(selectedCountry.callingCode);
+                                            handleFormChange("location", selectedCountry.name); // <-- you were missing this
+                                            handleFormChange("phoneNo", selectedCountry.callingCode); // move this below for clarity
+                                        }
+                                    }}                                    
+                                    label="Location"
+                                >
+                                    {countryOptions.map((c) => (
+                                        <MenuItem key={c.code} value={c.name}>
+                                            {c.name} (+{c.callingCode})
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
                         </Grid>
 
                         <Grid item xs={12} sm={6}>
