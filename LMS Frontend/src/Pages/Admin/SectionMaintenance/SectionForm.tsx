@@ -131,7 +131,7 @@ export default function SectionForm() {
                             startIcon={<Add />}
                             sx={{ textTransform: 'none' }}
                             onClick={handleSubmit}
-                            disabled={!name || !description || !status}
+                            disabled={!name || !status}
                         >
                             Add Section
                         </Button>

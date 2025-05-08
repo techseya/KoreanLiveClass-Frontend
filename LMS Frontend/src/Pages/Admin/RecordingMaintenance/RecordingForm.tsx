@@ -67,7 +67,7 @@ export default function RecordingForm() {
     const handleSubmit = async () => {
 
         const body = {
-            name: name,
+            name: name === "" ? "" : name,
             recordLink: recordingLink,
             recordDate: new Date().toISOString(),
             recordOrder: 0,
@@ -199,7 +199,7 @@ export default function RecordingForm() {
                             startIcon={<Add />}
                             sx={{ textTransform: 'none' }}
                             onClick={handleSubmit}
-                            disabled={!name || !recordingLink || !status || courseId === 0 || sectionId === 0}
+                            disabled={!recordingLink || !status || courseId === 0 || sectionId === 0}
                         >
                             Add Recording
                         </Button>

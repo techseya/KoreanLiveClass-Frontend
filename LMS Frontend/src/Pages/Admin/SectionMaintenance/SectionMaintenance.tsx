@@ -212,7 +212,7 @@ export default function SectionMaintenance() {
                         <Grid item xs={12} display="flex" justifyContent="flex-end">
                             <Button className="update-btn" variant="contained" onClick={handleCancel}>Cancel</Button>
                             <Button
-                                disabled={!editingSection?.name || !editingSection?.description || !editingSection?.activeStatus}
+                                disabled={!editingSection?.name || !editingSection?.activeStatus}
                                 variant="contained" onClick={handleUpdate}>Update</Button>
                         </Grid>
                     </Grid>

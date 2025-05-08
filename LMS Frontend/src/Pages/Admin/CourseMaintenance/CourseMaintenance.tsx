@@ -67,7 +67,7 @@ export default function CourseMaintenance() {
             name:  editingCourse.name,
             description: editingCourse.description,
             categoryId:  editingCourse.categoryId,
-            price: editingCourse.price,
+            price: editingCourse.price === "" ? 0 : editingCourse.price,
             thumbnail:  editingCourse.thumbnail,
             transactionStatus:  editingCourse.transactionStatus,
             level:  editingCourse.level,

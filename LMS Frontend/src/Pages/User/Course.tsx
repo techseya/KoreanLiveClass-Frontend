@@ -258,7 +258,7 @@ export default function Course() {
                                                                 fontWeight: 500,
                                                                 cursor: 'pointer'
                                                             }}>
-                                                                {rec.name}
+                                                                {rec.name === "" ? "View Lesson" : rec.name}
                                                             </span>
                                                         </Typography>
                                                     ))

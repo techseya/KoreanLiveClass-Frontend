@@ -47,7 +47,7 @@ export default function CourseForm() {
         const body = {
             name: name,
             description: description,
-            price: price,
+            price: price === "" ? 0 : price,
             transactionStatus: type,
             categoryId: categoryId,
             level: level,
@@ -188,7 +188,7 @@ export default function CourseForm() {
                             startIcon={<Add />}
                             sx={{ textTransform: 'none' }}
                             onClick={handleSubmit}
-                            disabled={!name || !description || !status || !price || !type || !thumbnail}
+                            disabled={!name || !description || !status || !type || !thumbnail}
                         >
                             Add Course
                         </Button>

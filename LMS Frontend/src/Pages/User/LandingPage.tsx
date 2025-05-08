@@ -45,6 +45,7 @@ import { getCategories } from "src/Services/category_api";
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import { getTopCourses } from "src/Services/course_api";
 import { getWord } from "src/Services/word_api";
+import ketayam from "../../Assets/Images/ketayam.png"
 
 const Transition = forwardRef(function Transition(props: any, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -282,6 +283,8 @@ export default function Landing() {
         onClose={handleClose}
       />
       <div className="bg-overlay0"></div>
+
+      <img className="ketayam" src={ketayam} alt="" />
 
       <div className="word-outer" onClick={() => setModalOpen(true)}>
         {t("word")}
@@ -540,7 +543,7 @@ export default function Landing() {
         <div className="space"></div>
         <div className="space"></div>
         <div className="top-courses-outer3" data-aos="fade-up" data-aos-delay="100">
-          {url.slice(visibleIndex, visibleIndex + 8).map((u, index) => (
+          {url.slice(visibleIndex, visibleIndex + 4).map((u, index) => (
             <div className="i1">
               <iframe
                 className="video-embed1"
@@ -569,6 +572,84 @@ export default function Landing() {
             onClick={handleNext1}
             style={{
               visibility: visibleIndex + 4 >= url.length ? "hidden" : "visible",
+            }}
+          >
+            <ArrowForwardIosIcon />
+          </div>
+        </div>
+      </div>
+      
+      <div id="korean-books" className="space"></div>
+      <div className="space"></div>
+      <div className="space"></div>
+      <div className="space"></div>
+
+      <div className="third-outer">
+        <div className="third-inner">
+          <div className="ti">
+            <div className="third-inner-title" data-aos="fade-up" data-aos-delay="100">
+              {t("kbooks")}
+            </div>
+          </div>
+        </div>
+        <div className="space"></div>
+        <div className="space"></div>
+        <div className="top-courses-outer4" data-aos="fade-up" data-aos-delay="100">
+          {books.slice(visibleIndex1, visibleIndex1 + 4).map((b, index) => (
+            <div
+              className="book-card"
+              data-aos="fade-up" data-aos-delay="100"
+              key={index}
+              onClick={() => handleBookClick(b)}
+              style={{ cursor: "pointer" }}
+            >
+              {/* your card code here */}
+              <div className="book-thumbnail">
+                <img className="book" src={b.image} alt="Course Thumbnail" />
+              </div>
+
+              <div className="course-info">
+                <h3 className="course-title">{b.name}</h3>
+              </div>
+            </div>
+          ))}
+        </div>
+        {isModalOpen1 && selectedBook && (
+          <div className="modal-overlay" onClick={closeModal}>
+            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+              <button className="close-btn" onClick={closeModal}>×</button>
+
+              <img className="modal-image" src={selectedBook.image} alt={selectedBook.name} />
+
+              <div className="modal-details">
+                <h2>{selectedBook.name}</h2>
+                <p className="modal-desc">{selectedBook.description}</p>
+
+                <button onClick={() =>
+                  window.open(
+                    "https://wa.me/821090736674",
+                    "_blank"
+                  )
+                } className="purchase-btn">{t("purchase")}</button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        <div className="arrow-buttons-row1">
+          <div
+            className="arrow-button1"
+            onClick={handlePrev2}
+            style={{ visibility: visibleIndex1 === 0 ? "hidden" : "visible" }}
+          >
+            <ArrowBackIosIcon />
+          </div>
+
+          <div
+            className="arrow-button1"
+            onClick={handleNext2}
+            style={{
+              visibility: visibleIndex1 + 4 >= books.length ? "hidden" : "visible",
             }}
           >
             <ArrowForwardIosIcon />
@@ -652,84 +733,6 @@ export default function Landing() {
               </div>
 
             </div>
-          </div>
-        </div>
-      </div>
-
-      <div id="korean-books" className="space"></div>
-      <div className="space"></div>
-      <div className="space"></div>
-      <div className="space"></div>
-
-      <div className="third-outer">
-        <div className="third-inner">
-          <div className="ti">
-            <div className="third-inner-title" data-aos="fade-up" data-aos-delay="100">
-              {t("kbooks")}
-            </div>
-          </div>
-        </div>
-        <div className="space"></div>
-        <div className="space"></div>
-        <div className="top-courses-outer4" data-aos="fade-up" data-aos-delay="100">
-          {books.slice(visibleIndex1, visibleIndex1 + 4).map((b, index) => (
-            <div
-              className="book-card"
-              data-aos="fade-up" data-aos-delay="100"
-              key={index}
-              onClick={() => handleBookClick(b)}
-              style={{ cursor: "pointer" }}
-            >
-              {/* your card code here */}
-              <div className="book-thumbnail">
-                <img className="book" src={b.image} alt="Course Thumbnail" />
-              </div>
-
-              <div className="course-info">
-                <h3 className="course-title">{b.name}</h3>
-              </div>
-            </div>
-          ))}
-        </div>
-        {isModalOpen1 && selectedBook && (
-          <div className="modal-overlay" onClick={closeModal}>
-            <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-              <button className="close-btn" onClick={closeModal}>×</button>
-
-              <img className="modal-image" src={selectedBook.image} alt={selectedBook.name} />
-
-              <div className="modal-details">
-                <h2>{selectedBook.name}</h2>
-                <p className="modal-desc">{selectedBook.description}</p>
-
-                <button onClick={() =>
-                  window.open(
-                    "https://wa.me/821090736674",
-                    "_blank"
-                  )
-                } className="purchase-btn">Purchase</button>
-              </div>
-            </div>
-          </div>
-        )}
-
-        <div className="arrow-buttons-row1">
-          <div
-            className="arrow-button1"
-            onClick={handlePrev2}
-            style={{ visibility: visibleIndex1 === 0 ? "hidden" : "visible" }}
-          >
-            <ArrowBackIosIcon />
-          </div>
-
-          <div
-            className="arrow-button1"
-            onClick={handleNext2}
-            style={{
-              visibility: visibleIndex1 + 4 >= books.length ? "hidden" : "visible",
-            }}
-          >
-            <ArrowForwardIosIcon />
           </div>
         </div>
       </div>

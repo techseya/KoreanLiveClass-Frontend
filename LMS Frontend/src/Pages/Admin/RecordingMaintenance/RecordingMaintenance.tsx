@@ -87,7 +87,7 @@ export default function RecordingMaintenance() {
 
         const payload = {
             id: editingRecording.id,
-            name: editingRecording.name,
+            name: editingRecording.name === "" ? "" : editingRecording.name,
             recordDate: new Date().toISOString(),
             recordLink: editingRecording.recordLink,
             recordOrder: 0,
@@ -283,7 +283,7 @@ export default function RecordingMaintenance() {
                         <Grid item xs={12} display="flex" justifyContent="flex-end">
                             <Button className="update-btn" variant="contained" onClick={handleCancel}>Cancel</Button>
                             <Button
-                                disabled={!editingRecording?.name || !editingRecording?.recordLink || !editingRecording.videoType || !editingRecording.transactionStatus || !editingRecording?.activeStatus}
+                                disabled={!editingRecording?.recordLink || !editingRecording.videoType || !editingRecording.transactionStatus || !editingRecording?.activeStatus}
                                 variant="contained" onClick={handleUpdate}>Update</Button>
                         </Grid>
                     </Grid>

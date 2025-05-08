@@ -36,7 +36,7 @@ const Footer: React.FC = () => {
                     <div style={{ paddingRight: '5px' }}>
                         <div className='f-main'>
                             <img className='fLogo' src={fLogo} alt=""  data-aos="fade-up" data-aos-duration="1000" />
-                            <div style={{ fontSize: '18px', fontWeight: 'bold', color: 'white' }}  data-aos="fade-up" data-aos-duration="1000">KoreanLC</div>
+                            <div style={{ fontSize: '18px', fontWeight: 'bold', color: 'white' }}  data-aos="fade-up" data-aos-duration="1000">Korean Live Class</div>
                         </div>
                         <p className='f-para'  data-aos="fade-up" data-aos-duration="1000">{t('f-desc')}</p>
                     </div>
