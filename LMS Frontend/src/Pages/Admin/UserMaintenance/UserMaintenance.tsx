@@ -151,10 +151,7 @@ export default function UserMaintenance() {
                 courseId: c.id,
                 courseName: c.name
             }))
-        };
-
-        console.log(payload);
-        
+        };        
 
         try {
             const response = await updateUser(payload, token)
