@@ -60,6 +60,11 @@
   padding: 5px;
 }
 
+.nav-links a:hover{
+  color: #3366cc;
+  text-decoration: underline;
+}
+
 .btn {
   padding: 5px 12px;
   border: 1px solid #3366cc;
