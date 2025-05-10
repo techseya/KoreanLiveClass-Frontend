@@ -47,6 +47,7 @@ export default function MyCourses() {
             duration: 1000,
             once: true
         });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }, []);
 
     const handleGetCourses = async () => {

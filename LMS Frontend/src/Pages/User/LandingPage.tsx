@@ -949,9 +949,9 @@ export default function Landing() {
 
       <div className="fab-container">
         <a href="https://facebook.com" target="_blank" className="fab fab-icon facebook"><Facebook /></a>
-        <a href="https://twitter.com" target="_blank" className="fab fab-icon tiktok"><TikTokFilled /></a>
+        <a href="https://www.tiktok.com/@korean.live.class?_t=ZS-8wDKjn6VeBs&_r=1" target="_blank" className="fab fab-icon tiktok"><TikTokFilled /></a>
         <a href="https://instagram.com" target="_blank" className="fab fab-icon instagram"><Instagram /></a>
-        <a href="https://youtube.com" target="_blank" className="fab fab-icon youtube"><YouTube /></a>
+        <a href="https://www.youtube.com/@koreanliveclassrev.mangala5996" target="_blank" className="fab fab-icon youtube"><YouTube /></a>
       </div>
     </div>
   );

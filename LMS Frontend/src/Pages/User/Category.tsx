@@ -42,6 +42,7 @@ export default function Category() {
             duration: 1000,
             once: true
         });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }, []);
 
     const handleGetCategories = async () => {

@@ -5,7 +5,7 @@
 }
 
 .footer {
-    background-color: #105a9d;
+    background-color: #043c71;
     color: #cdcdcd;
     padding: 3rem 0 1rem 0;
 }
@@ -39,13 +39,14 @@
     margin-bottom: 0.5rem;
     display: block;
     text-decoration: none;
-    font-size: 15px;
+    font-size: 16px;
     cursor: pointer;
 }
 
 .footer-link:hover {
-    color: #ebdb01;
+    color: #0994ff;
     text-decoration: none;
+    font-weight: bold;
 }
 
 .f-main{

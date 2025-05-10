@@ -77,11 +77,11 @@ const Footer: React.FC = () => {
                             <p className="footer-link" data-aos="fade-up" data-aos-duration="1000">{t("Terms of Service")}</p>
                             <p className="footer-link" data-aos="fade-up" data-aos-duration="1000">{t("Refund Policy")}</p>
                         </div>
-                        <div className="social-media-outer">
+                        {/* <div className="social-media-outer">
                             <a data-aos="fade-up" data-aos-duration="1200" href='https://www.facebook.com/KoreanLiveClass/' target="_blank" rel="noopener noreferrer" className="img-outer io"><img className='media-icon' src={sm1} alt="" /></a>
                             <a data-aos="fade-up" data-aos-duration="1400" href='https://www.linkedin.com/company/koreanlc' target="_blank" rel="noopener noreferrer" className="img-outer"><img className='media-icon' src={sm2} alt="" /></a>
                             <a data-aos="fade-up" data-aos-duration="1600" href='https://x.com/KoreanLiveClass' target="_blank" rel="noopener noreferrer" className="img-outer"><img className='media-icon' src={sm3} alt="" /></a>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
                 <div className="footer-border">
