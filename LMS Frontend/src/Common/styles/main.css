@@ -355,8 +355,9 @@ body {
   width: 40%;
   height: auto;
   text-align: center;
-  border: 3px solid rgb(0, 179, 255);
-  background: linear-gradient(180deg, #e6f0f9 0%, rgb(255, 255, 255) 50%, #e6f0f9 100%);
+  background-color: #e6f0f9;
+  border: 3px solid white;
+  border-radius: 8px;
   cursor: pointer;
   padding: 25px 0;
 }
@@ -374,7 +375,7 @@ body {
 }
 
 .bg-layer{
-  background: linear-gradient(180deg, #e6f0f9 0%, rgb(255, 255, 255) 50%, #e6f0f9 100%);
+  background-color: #e6f0f9;
 }
 
 .s-in-no{
@@ -943,7 +944,8 @@ body {
 }
 
 .bg-layer1{
-  background: linear-gradient(180deg, rgb(255, 255, 255) 0%, rgba(7, 173, 250, 0.479) 50%, rgba(255, 255, 255, 0.84) 100%);
+  background-color: #e6f0f9;
+  /* background: linear-gradient(180deg, rgb(255, 255, 255) 0%, #e6f0f9 50%, rgba(255, 255, 255, 0.84) 100%); */
 }
 
 .ti {
