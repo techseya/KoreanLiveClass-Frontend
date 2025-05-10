@@ -85,7 +85,7 @@ export default function CategoryForm() {
                             startIcon={<Add />}
                             sx={{ textTransform: 'none' }}
                             onClick={handleSubmit}
-                            disabled={!name || !description || !status}
+                            disabled={!name || !status}
                         >
                             Add Category
                         </Button>

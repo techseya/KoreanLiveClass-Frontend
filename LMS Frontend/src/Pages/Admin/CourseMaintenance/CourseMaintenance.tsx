@@ -261,7 +261,7 @@ export default function CourseMaintenance() {
                         <Grid item xs={12} display="flex" justifyContent="flex-end">
                             <Button className="update-btn" variant="contained" onClick={handleCancel}>Cancel</Button>
                             <Button
-                                disabled={! editingCourse?.name || ! editingCourse?.description || ! editingCourse?.activeStatus}
+                                disabled={! editingCourse?.name || ! editingCourse?.activeStatus}
                                 variant="contained" onClick={handleUpdate}>Update</Button>
                         </Grid>
                     </Grid>

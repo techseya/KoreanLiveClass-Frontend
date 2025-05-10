@@ -168,7 +168,7 @@ export default function CategoryMaintenance() {
                         <Grid item xs={12} display="flex" justifyContent="flex-end">
                             <Button className="update-btn" variant="contained" onClick={handleCancel}>Cancel</Button>
                             <Button
-                                disabled={!editingCategory?.name || !editingCategory?.description || !editingCategory?.activeStatus}
+                                disabled={!editingCategory?.name || !editingCategory?.activeStatus}
                                 variant="contained" onClick={handleUpdate}>Update</Button>
                         </Grid>
                     </Grid>

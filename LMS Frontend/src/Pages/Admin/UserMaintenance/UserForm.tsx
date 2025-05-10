@@ -158,7 +158,7 @@ export default function UserForm() {
                         <TextField
                             label="Password"
                             fullWidth
-                            type="password"
+                            type="text"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                         />

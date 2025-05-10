@@ -79,13 +79,6 @@
   color: white;
 }
 
-.nav-links a i {
-  display: none;
-}
-
-.nav-links a span {
-  display: inline;
-}
 
 @media (max-width: 768px) {
   .menu-toggle {
@@ -102,70 +95,6 @@
 
   .nav-links.active {
     display: flex;
-  }
-}
-
-@media (max-width: 426px) {
-  .navbar {
-    top: auto;
-    bottom: 0;
-    border-top: 1px solid #ccc;
-    padding: 0;
-  }
-
-  .navbar-container {
-    flex-direction: row;
-    justify-content: space-around;
-    padding: 10px;
-  }
-
-  .logo,
-  .menu-toggle {
-    display: none;
-  }
-
-  .nav-links {
-    display: flex !important;
-    flex-direction: row;
-    gap: 0;
-    justify-content: space-around;
-    width: 100%;
-  }
-
-  .nav-links a {
-    font-size: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 5px;
-    flex: 1;
-    color: #333;
-  }
-
-  .nav-links a::before {
-    font-size: 24px;
-    margin-bottom: 2px;
-  }
-
-  /* Example icons using Font Awesome class names */
-  .nav-courses::before { content: "\f02d"; font-family: "Font Awesome 6 Free"; font-weight: 900; } /* book icon */
-  .nav-categories::before { content: "\f03a"; font-family: "Font Awesome 6 Free"; font-weight: 900; } /* list icon */
-  .nav-books::before { content: "\f5da"; font-family: "Font Awesome 6 Free"; font-weight: 900; } /* book-open */
-  .nav-who::before { content: "\f007"; font-family: "Font Awesome 6 Free"; font-weight: 900; } /* user */
-  .nav-us::before { content: "\f0c0"; font-family: "Font Awesome 6 Free"; font-weight: 900; } /* users */
-  .nav-contact::before { content: "\f095"; font-family: "Font Awesome 6 Free"; font-weight: 900; } /* phone */
-  .nav-my-courses::before { content: "\f02d"; font-family: "Font Awesome 6 Free"; font-weight: 900; } /* book */
-  .nav-login::before { content: "\f2f6"; font-family: "Font Awesome 6 Free"; font-weight: 900; } /* sign-in-alt */
-  .nav-logout::before { content: "\f2f5"; font-family: "Font Awesome 6 Free"; font-weight: 900; } /* sign-out-alt */
-  .nav-home::before { content: "\f015"; font-family: "Font Awesome 6 Free"; font-weight: 900; }
-
-  .btn, .btn.signin, .btn.signup, select {
-    display: none;
-  }
-
-  .user-section {
-    flex: 1;
-    justify-content: center;
   }
 }
 

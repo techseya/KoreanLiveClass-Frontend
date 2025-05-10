@@ -188,7 +188,7 @@ export default function CourseForm() {
                             startIcon={<Add />}
                             sx={{ textTransform: 'none' }}
                             onClick={handleSubmit}
-                            disabled={!name || !description || !status || !type || !thumbnail}
+                            disabled={!name || !status || !type || !thumbnail}
                         >
                             Add Course
                         </Button>
