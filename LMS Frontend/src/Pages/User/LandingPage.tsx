@@ -40,10 +40,18 @@ import { getWord } from "src/Services/word_api";
 import trophy from "../../Assets/Images/trophy.png"
 import CountUp from "react-countup";
 import { useInView } from "react-intersection-observer";
+import DashLine from "src/Common/Components/DashLine";
 
 const Transition = forwardRef(function Transition(props: any, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
+
+interface CountCardProps {
+  count: number;
+  suffix?: string;
+  label: string;
+  positionClass: string;
+}
 
 export default function Landing() {
   const navigate = useNavigate()
@@ -62,8 +70,12 @@ export default function Landing() {
   const [sinhala, setSinhala] = useState("")
   const [modalOpen, setModalOpen] = useState(false);
   const [ref1, inView1] = useInView({ triggerOnce: true });
-  const [ref2, inView2] = useInView({ triggerOnce: true });
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  const { ref, inView } = useInView({
+    triggerOnce: true,
+    threshold: 0.3,
+  });
 
   const handleBookClick = (book: any) => {
     setSelectedBook(book);
@@ -142,17 +154,9 @@ export default function Landing() {
   const cards = [
     { count: 10, suffix: "+", label: t("experience") },
     { count: 1500, suffix: "+", label: t("students") },
-    { count: 50, suffix: "+", label: t("courses") },
-    { count: 5, suffix: "", label: t("years") },
-    { count: 100, suffix: "+", label: t("certified") },
-  ];
-
-  const images3 = [
-    "/images/img1.jpg",
-    "/images/img2.jpg",
-    "/images/img3.jpg",
-    "/images/img4.jpg",
-    "/images/img5.jpg",
+    { count: 3500, suffix: "+", label: t("words") },
+    { count: 400, suffix: "+", label: t("methods") },
+    { count: 100, suffix: "+", label: t("kc") },
   ];
 
   useEffect(() => {
@@ -360,22 +364,27 @@ export default function Landing() {
       <div className="second-outer">
         <div className="second-i">
           <div className="center">
-            <img className="trophy" src={trophy} alt="" />
-          </div>          
-          <div className="second-inner-wrapper">
-            {cards.map((card, index) => (
-              <div
-                key={index}
-                className={`s-in carousel-card ${getCardPosition(index)}`}
-              >
-                <div className="s-in-no">
-                  <CountUp start={0} end={card.count} duration={2} suffix={card.suffix} />
+            <img className="trophy" src={trophy} alt="" data-aos="fade-up" data-aos-delay="100" />
+          </div>
+          <div className="second-inner-wrapper" data-aos="fade-up" data-aos-delay="100" ref={ref1}>
+            {cards.map((card, index) => {
+              return (
+                <div
+                  key={index}
+                  ref={ref}
+                  className={`s-in carousel-card ${getCardPosition(index)}`}
+                >
+                  <div className="s-in-no">
+                    {inView && (
+                      <CountUp start={0} end={card.count} duration={2} suffix={card.suffix} />
+                    )}
+                  </div>
+                  <div className="s-in1">
+                    <div className="s-in2">{card.label}</div>
+                  </div>
                 </div>
-                <div className="s-in1">
-                  <div className="s-in2">{card.label}</div>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
         </div>

@@ -268,7 +268,7 @@ body {
 }
 
 .second-i{
-  width: 55%;
+  width: 50%;
   height: auto;
 }
 
@@ -302,6 +302,29 @@ body {
   height: 250px;
   object-fit: cover;
   border-radius: 10px;
+}
+
+.dash-bg {
+  position: absolute;
+  top: 100px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0; /* Behind content */
+  pointer-events: none;
+}
+
+
+.typing-dash {
+  stroke-dasharray: 1000;       /* Total length of the path */
+  stroke-dashoffset: 1000;      /* Hide entire path initially */
+  animation: drawDash 4s linear forwards;
+}
+
+@keyframes drawDash {
+  to {
+    stroke-dashoffset: 0;       /* Reveal the line from left to right */
+  }
 }
 
 .to{
@@ -380,6 +403,7 @@ body {
 
 .trophy{
   width: 350px;
+  z-index: 1000 !;
 }
 
 .carousel-card {
