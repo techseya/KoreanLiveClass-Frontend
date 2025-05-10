@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import "../Common/styles/footer.css"
 import fLogo from "../Assets/Images/logo-light.png"
 import sm1 from "../Assets/Images/facebook.png"
@@ -10,9 +10,16 @@ import 'aos/dist/aos.css';
 import { useTranslation } from 'react-i18next';
 
 const Footer: React.FC = () => {
-  const { t, i18n } = useTranslation();
+    const { t, i18n } = useTranslation();
 
     const navigate = useNavigate()
+    const location = useLocation();
+    const isCourse = location.pathname === "/courses";
+    const isCategory = location.pathname === "/categories";
+    const isMyCourses = location.pathname === "/my-courses"
+    const isCourse1 = location.pathname === "/course";
+    const isMyCourse = location.pathname === "/my-course"
+    const isReg = location.pathname === "/register";
 
     const handleNavAbout = () => {
         navigate("/about-us")
@@ -35,22 +42,32 @@ const Footer: React.FC = () => {
                 <div className="footer-grid">
                     <div style={{ paddingRight: '5px' }}>
                         <div className='f-main'>
-                            <img className='fLogo' src={fLogo} alt=""  data-aos="fade-up" data-aos-duration="1000" />
-                            <div style={{ fontSize: '18px', fontWeight: 'bold', color: 'white' }}  data-aos="fade-up" data-aos-duration="1000">Korean Live Class</div>
+                            <img className='fLogo' src={fLogo} alt="" data-aos="fade-up" data-aos-duration="1000" />
+                            <div style={{ fontSize: '18px', fontWeight: 'bold', color: 'white' }} data-aos="fade-up" data-aos-duration="1000">Korean Live Class</div>
                         </div>
-                        <p className='f-para'  data-aos="fade-up" data-aos-duration="1000">{t('f-desc')}</p>
+                        <p className='f-para' data-aos="fade-up" data-aos-duration="1000">{t('f-desc')}</p>
                     </div>
                     <div>
                         <h3 data-aos="fade-up" data-aos-duration="1000">{t('quick-services')}</h3>
                         <ul className="footer-links">
                             <li data-aos="fade-up" data-aos-duration="1000"><Link to="/courses" className="footer-link">{t('Courses')}</Link></li>
+                            <li data-aos="fade-up" data-aos-duration="1000"><Link to="/categories" className="footer-link">{t('Categories')}</Link></li>
+                            {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory) && <li data-aos="fade-up" data-aos-duration="1000"><a href="#korean-books" className="footer-link">{t('kbooks')}</a></li>}
+                            {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory) && <li data-aos="fade-up" data-aos-duration="1000"><a href="#who" className="footer-link">{t('who1')}</a></li>}
+                            {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory) && <li data-aos="fade-up" data-aos-duration="1000"><a href="#us" className="footer-link">{t('what')}</a></li>}                           
                         </ul>
                     </div>
                     <div>
-                        <h3 data-aos="fade-up" data-aos-duration="1000">{t("help")}</h3>
+                        <h3 data-aos="fade-up" data-aos-duration="1000">{t("cNo")}</h3>
                         <div className="footer-links">
-                            <p className="footer-link" data-aos="fade-up" data-aos-duration="1000">{t("Contact Us")}</p>
-                            <p className="footer-link" data-aos="fade-up" data-aos-duration="1000">{t("About Us")}</p>
+                            <p className="footer-link sans" data-aos="fade-up" data-aos-duration="1000">+9477-455-4007</p>
+                            <p className="footer-link sans" data-aos="fade-up" data-aos-duration="1000">+9471-567-5588</p>
+                            <p className="footer-link sans" data-aos="fade-up" data-aos-duration="1000">+8210-9073-6674</p>
+                            <div className="space"></div>
+                        </div>                        
+                        <h3 data-aos="fade-up" data-aos-duration="1000">{t("email")}</h3>
+                        <div className="footer-links">                            
+                            <p className="footer-link sans" data-aos="fade-up" data-aos-duration="1000">mangalathero788@gmail.com</p>
                         </div>
                     </div>
                     <div>
