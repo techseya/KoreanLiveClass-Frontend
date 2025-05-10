@@ -447,7 +447,7 @@ export default function Landing() {
       <div className="space"></div>
       <div className="space"></div>
 
-      <div className="third-outer">
+      <div className="third-outer bg-layer">
         <div className="third-inner">
           <div className="ti">
             <div className="third-inner-title" data-aos="fade-up" data-aos-delay="100">
@@ -593,7 +593,7 @@ export default function Landing() {
       <div className="space"></div>
       <div className="space"></div>
 
-      <div className="third-outer">
+      <div className="third-outer bg-layer">
         <div className="third-inner">
           <div className="ti">
             <div className="third-inner-title" data-aos="fade-up" data-aos-delay="100">
@@ -708,7 +708,7 @@ export default function Landing() {
       <div className="space"></div>
       <div className="space"></div>
 
-      <div className="third-outer">
+      <div className="third-outer bg-layer1">
         <div className="third-inner">
           <div className="ti">
             <div className="third-inner-title" data-aos="fade-up" data-aos-delay="100">
@@ -917,7 +917,7 @@ export default function Landing() {
       <div className="space"></div>
       <div className="space"></div>
 
-      {<div className="third-outer">
+      {<div className="third-outer bg-layer">
         <div className="ul-outer">
           <div className="ul-inner">
             <div className="ul-title">{t("ul")}</div>
