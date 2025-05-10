@@ -268,20 +268,21 @@ body {
 }
 
 .second-i{
-  width: 50%;
+  width: 55%;
   height: auto;
 }
 
 .second-inner-wrapper {
   position: relative;
   width: 100%;
+  height: 250px;
+  align-items: center;
   display: flex;  
   justify-content: center;
   flex-wrap: wrap;
   gap: 25px;
   padding-bottom: 90px;
   overflow: hidden;
-  padding-top: 10px;
 }
 
 .second-inner-wrapper1 {
@@ -331,13 +332,14 @@ body {
   width: 40%;
   height: auto;
   text-align: center;
-  border: 3px solid rgb(255, 0, 0);
-  background-color: rgba(0, 0, 0, 0.352);
+  border: 3px solid rgb(255, 200, 0);
+  background: linear-gradient(180deg, rgba(255, 221, 0, 0.41) 0%, rgb(255, 255, 255) 50%, rgba(255, 255, 0, 0.459) 100%);
   cursor: pointer;
   padding: 25px 0;
 }
 
 .s-in:hover{
+  background: none;
   background-color: #000;
   color: white;
 }
@@ -350,13 +352,67 @@ body {
 
 .s-in-no{
   font-size: 85px;
-  color: rgb(207, 39, 13);
+  color: rgb(255, 183, 0);
   font-weight: bold;
 }
 
 .s-in2{
   font-size: 25px;
+  font-weight: bold;
 }
+
+
+.carousel-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: auto;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.center{
+  width: auto;
+  text-align: center;
+  height: auto;
+}
+
+.trophy{
+  width: 350px;
+}
+
+.carousel-card {
+  position: absolute;
+  width: 35%;
+  transition: transform 0.8s ease, opacity 0.8s ease;
+  opacity: 0;
+  transform: scale(0.5) translateX(0);
+}
+
+.carousel-card.left {
+  transform: scale(0.7) translateX(-120%);
+  opacity: 1;
+  z-index: 1;
+}
+
+.carousel-card.center {
+  transform: scale(1) translateX(0);
+  opacity: 1;
+  z-index: 2;
+}
+
+.carousel-card.right {
+  transform: scale(0.7) translateX(120%);
+  opacity: 1;
+  z-index: 1;
+}
+
+.carousel-card.hidden {
+  opacity: 0;
+  z-index: 0;
+}
+
 
 .animated-shapes {
   position: absolute;

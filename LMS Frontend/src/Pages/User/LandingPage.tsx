@@ -37,7 +37,7 @@ import { useNavigate } from "react-router-dom";
 import { getCategories } from "src/Services/category_api";
 import { getTopCourses } from "src/Services/course_api";
 import { getWord } from "src/Services/word_api";
-import skillImg from "../../Assets/Images/skill.jpg"
+import trophy from "../../Assets/Images/trophy.png"
 import CountUp from "react-countup";
 import { useInView } from "react-intersection-observer";
 
@@ -63,6 +63,7 @@ export default function Landing() {
   const [modalOpen, setModalOpen] = useState(false);
   const [ref1, inView1] = useInView({ triggerOnce: true });
   const [ref2, inView2] = useInView({ triggerOnce: true });
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const handleBookClick = (book: any) => {
     setSelectedBook(book);
@@ -138,6 +139,22 @@ export default function Landing() {
   const images = [k1, k2, k3];
   const koreanLetters = [""];
 
+  const cards = [
+    { count: 10, suffix: "+", label: t("experience") },
+    { count: 1500, suffix: "+", label: t("students") },
+    { count: 50, suffix: "+", label: t("courses") },
+    { count: 5, suffix: "", label: t("years") },
+    { count: 100, suffix: "+", label: t("certified") },
+  ];
+
+  const images3 = [
+    "/images/img1.jpg",
+    "/images/img2.jpg",
+    "/images/img3.jpg",
+    "/images/img4.jpg",
+    "/images/img5.jpg",
+  ];
+
   useEffect(() => {
     const hasRefreshed = sessionStorage.getItem("hasRefreshed");
 
@@ -158,12 +175,24 @@ export default function Landing() {
 
     const interval = setInterval(() => {
       setBgIndex((prevIndex) => (prevIndex + 1) % images.length);
+      setCurrentIndex((prev) => (prev + 1) % cards.length);
     }, 5000);
 
     return () => {
       clearInterval(interval);
     };
   }, []);
+
+  const getCardPosition = (index: number) => {
+    const total = cards.length;
+    const prev = (currentIndex + total - 1) % total;
+    const next = (currentIndex + 1) % total;
+
+    if (index === prev) return "left";
+    if (index === currentIndex) return "center";
+    if (index === next) return "right";
+    return "hidden";
+  };
 
   const handleGetWord = async () => {
     try {
@@ -330,53 +359,25 @@ export default function Landing() {
 
       <div className="second-outer">
         <div className="second-i">
-          <div className="second-inner-wrapper1">
-            <img className="skill-img" src={skillImg} alt="" data-aos="fade-up" data-aos-delay="100" />
-          </div>
+          <div className="center">
+            <img className="trophy" src={trophy} alt="" />
+          </div>          
           <div className="second-inner-wrapper">
-            <div className="s-in" data-aos="fade-up" data-aos-delay="100" ref={ref1}>
-              <div className="s-in-no">
-                {inView1 && <CountUp start={0} end={10} duration={2} suffix="+" />}
+            {cards.map((card, index) => (
+              <div
+                key={index}
+                className={`s-in carousel-card ${getCardPosition(index)}`}
+              >
+                <div className="s-in-no">
+                  <CountUp start={0} end={card.count} duration={2} suffix={card.suffix} />
+                </div>
+                <div className="s-in1">
+                  <div className="s-in2">{card.label}</div>
+                </div>
               </div>
-              <div className="s-in1">
-                <div className="s-in2" data-aos="fade-up" data-aos-delay="100">{t("experience")}</div>
-              </div>
-            </div>
-            <div className="s-in" data-aos="fade-up" data-aos-delay="100" ref={ref2}>
-              <div className="s-in-no">{inView2 && <CountUp start={0} end={1500} duration={2} suffix="+" />}</div>
-              <div className="s-in1">
-                <div className="s-in2" data-aos="fade-up" data-aos-delay="100">{t("students")}</div>
-              </div>
-            </div>
-            {/* <div className="second-inner" data-aos="fade-up">
-            <div className="second-title" data-aos="fade-up" data-aos-delay="100">
-              {t("who")}
-            </div>
-            <div className="second-desc">
-              {t("who-desc")}
-            </div>
-            <div className="space"></div>
-            <div className="space"></div>
-            <div className="second-content" data-aos="fade-up" data-aos-delay="200">
-              <Verified style={{ color: "#4caf50", marginRight: '10px' }} />{t("who-content1")}
-            </div>
-            <div className="second-content" data-aos="fade-up" data-aos-delay="200">
-              <Verified style={{ color: "#4caf50", marginRight: '10px' }} />{t("who-content2")}
-            </div>
-            <div className="second-content" data-aos="fade-up" data-aos-delay="200">
-              <Verified style={{ color: "#4caf50", marginRight: '10px' }} />{t("who-content3")}
-            </div>
-            <div className="second-content" data-aos="fade-up" data-aos-delay="200">
-              <Verified style={{ color: "#4caf50", marginRight: '10px' }} />{t("who-content4")}
-            </div>
-            <div className="second-content" data-aos="fade-up" data-aos-delay="200">
-              <Verified style={{ color: "#4caf50", marginRight: '10px' }} />{t("who-content5")}
-            </div>
-            <div className="second-content" data-aos="fade-up" data-aos-delay="200">
-              <Verified style={{ color: "#4caf50", marginRight: '10px' }} />{t("who-content6")}
-            </div>
-          </div> */}
+            ))}
           </div>
+
         </div>
 
         <div className="second-inner1">
