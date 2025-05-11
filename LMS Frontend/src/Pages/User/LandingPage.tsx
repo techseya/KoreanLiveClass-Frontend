@@ -156,7 +156,7 @@ export default function Landing() {
     { count: 1500, suffix: "+", label: t("students") },
     { count: 3500, suffix: "+", label: t("words") },
     { count: 400, suffix: "+", label: t("methods") },
-    { count: 100, suffix: "+", label: t("kc") },
+    { count: 30, suffix: "+", label: t("kc") },
   ];
 
   useEffect(() => {
@@ -920,23 +920,23 @@ export default function Landing() {
       {<div className="third-outer bg-layer">
         <div className="ul-outer">
           <div className="ul-inner">
-            <div className="ul-title">{t("ul")}</div>
+            <div className="ul-title" data-aos="fade-up" data-aos-delay="100">{t("ul")}</div>
           </div>
         </div>
         <div className="space"></div>
         <div className="space"></div>
         <div className="ul-outer">
           <div className="ul-inner1">
-            <a style={{ textDecoration: "none" }} href="https://www.slbfe.lk/" target="_blank" rel="noopener noreferrer" className="ul">
+            <a data-aos="fade-up" data-aos-delay="100" style={{ textDecoration: "none" }} href="https://www.slbfe.lk/" target="_blank" rel="noopener noreferrer" className="ul">
               Sri Lanka Bureau of Foreign Employment
             </a>
-            <a style={{ textDecoration: "none" }} href="http://www.slembassykorea.com/eng/" target="_blank" rel="noopener noreferrer" className="ul">
+            <a data-aos="fade-up" data-aos-delay="100" style={{ textDecoration: "none" }} href="http://www.slembassykorea.com/eng/" target="_blank" rel="noopener noreferrer" className="ul">
               Sri Lankan Embassy in South Korea
             </a>
-            <a style={{ textDecoration: "none" }} href="https://overseas.mofa.go.kr/lk-ko/index.do" target="_blank" rel="noopener noreferrer" className="ul">
+            <a data-aos="fade-up" data-aos-delay="100" style={{ textDecoration: "none" }} href="https://overseas.mofa.go.kr/lk-ko/index.do" target="_blank" rel="noopener noreferrer" className="ul">
               Korean Embassy in Sri Lanka
             </a>
-            <a style={{ textDecoration: "none" }} href="https://www.topik.go.kr/usr/cmm/subLocation.do?menuSeq=2110601" target="_blank" rel="noopener noreferrer" className="ul">
+            <a data-aos="fade-up" data-aos-delay="100" style={{ textDecoration: "none" }} href="https://www.topik.go.kr/usr/cmm/subLocation.do?menuSeq=2110601" target="_blank" rel="noopener noreferrer" className="ul">
               Topic Exam Korea
             </a>
           </div>

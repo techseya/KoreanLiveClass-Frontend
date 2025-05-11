@@ -379,7 +379,7 @@ body {
 }
 
 .s-in-no{
-  font-size: 85px;
+  font-size: 65px;
   color: rgb(0, 179, 255);
   font-weight: bold;
 }
@@ -1534,7 +1534,7 @@ body {
   }
 
   .phone-inner {
-    top: 150px;
+    top: 14%;
   }
 
   .phone-title {
@@ -1570,7 +1570,7 @@ body {
   }
 
   .s-in-no{
-    font-size: 75PX;
+    font-size: 55px;
   }
 }
 
@@ -1590,7 +1590,7 @@ body {
   }
 
   .s-in-no{
-    font-size: 55PX;
+    font-size: 50px;
   }
 
   .banner-text {
@@ -1615,7 +1615,7 @@ body {
   }
 
   .phone-inner {
-    top: 70px;
+    top: 15%;
   }
 
   .phone-logo{
@@ -1745,7 +1745,151 @@ body {
   }
 }
 
+@media (max-width: 746px) {
+  .main-outer {
+    height: 35vh;
+  }
+
+  .second-i{
+    width: 100%;
+    height: 500px;
+  }
+
+  .to-in{
+    width: 80%;
+  }
+
+  .to-in1{
+    display: none;
+  }
+
+  .red-outer {
+    top: 50vh;
+  }
+
+  .red-inner {
+    width: 90%;
+  }
+
+  .animated-shapes {
+    display: none;
+  }
+
+  .banner-strip {
+    width: 75%;
+    padding-right: 20px;
+  }
+
+  .main-banner-strip {
+    width: 87%;
+    padding-right: 25px;
+    top: 20vh;
+  }
+
+  .banner-text {
+    font-size: 18px !important;
+  }
+
+  .second-outer {
+    padding-top: 40vh;
+    display: block;
+  }
+
+  .second-inner-wrapper {
+    width: 100%;
+    height: 300px;
+  }
+
+  .second-desc {
+    padding-right: 20px;
+  }
+
+  .second-content {
+    padding-right: 20px;
+  }
+
+  .second-inner1 {
+    width: 100%;
+    height: auto;
+    padding-bottom: 30px;
+  }
+
+  .ins-info{
+    display: block;
+    text-align: center;
+  }
+
+  .ins{
+    width: 100%;
+  }
+
+  .ins-items{
+    width: 100%;
+    justify-content: center;
+  }
+
+  .img2 {
+    margin-top: 0px;
+  }
+
+  .ins-main-title {
+    font-size: 35px;
+  }
+
+  .third-inner-title {
+    font-size: 35px;
+  }
+
+  .corner-box{
+    width: 80%;
+  }
+
+  .fourth-inner {
+    height: auto;
+    padding: 35px 0 1250px 0;
+  }
+
+  .phone-inner{
+    top: 15%;
+  }
+
+  .ins-items{
+    width: auto;
+    padding: 15px;
+  }
+
+  .main-banner-desc{
+    padding: 5px 25px;
+  }
+
+  .banner-strip{
+    justify-content: center;
+    background-color: #00000070;
+    height: auto;
+    padding: 5px 25px;
+  }
+
+  .main-banner-strip{
+    background-color: #00000070;
+  }
+
+  .third-inner-title{
+    text-align: center;
+  }
+
+  .ins-main-title{
+    text-align: center;
+  }
+
+  .ul-title{
+    text-align: center;
+  }
+}
+
 @media (max-width: 426px) {
+  .phone-inner{
+    top: 70px !important;
+  }
   .main-outer {
     height: 35vh;
   }
