@@ -13,6 +13,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { PlayCircleFilled } from "@mui/icons-material";
 import Footer from "src/Layout/Footer";
 import { useTranslation } from "react-i18next";
+import thumb from "../../Assets/Images/klc-thumb.png"
 
 export default function MyCourse() {
     const location = useLocation();
@@ -90,7 +91,7 @@ export default function MyCourse() {
                 <div className="c-desc">{course.description}</div>
                 <div className="c-items-outer">
                     <div className="c-label">{course.level}</div>
-                    <div className="c-section-count">Sections : {course.sectionCount}</div>
+                    <div className="c-section-count">Sections : {sections.length}</div>
                 </div>
             </div>
             <div className="c-inner">

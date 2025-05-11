@@ -10,6 +10,7 @@ import 'aos/dist/aos.css';
 import { useTranslation } from "react-i18next";
 import { useLocation, useNavigate } from "react-router-dom";
 import Footer from "src/Layout/Footer";
+import thumb from "../../Assets/Images/klc-thumb.png"
 
 export default function CategoryCourses() {
     const [courses, setCourses] = useState<any[]>([]);
@@ -30,7 +31,7 @@ export default function CategoryCourses() {
                 id: course.id,
                 name: course.name,
                 description: course.description,
-                thumbnail: course.thumbnail,
+                thumbnail: (course.thumbnail === null || course.thumbnail === "") ? thumb : course.thumbnail,
                 level: course.level,
                 totalDuration: course.totalDuration,
                 price: course.price,
@@ -100,7 +101,8 @@ export default function CategoryCourses() {
                             style={{ cursor: "pointer" }}
                         >
                             <div className="course-thumbnail">
-                                <img src={course.thumbnail} alt="Course Thumbnail" />
+                            {course.thumbnail === null || course.thumbnail === "" ? (<img src={thumb} alt="Course Thumbnail" />)
+                                : (<img src={course.thumbnail} alt="Course Thumbnail" />)} 
                                 {course.transactionStatus === 1 ?
                                     (<div className="price">Rs.{(course.price).toFixed(2)}</div>) :
                                     (<div className="price">FREE</div>)}
