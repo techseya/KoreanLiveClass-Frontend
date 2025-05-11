@@ -57,6 +57,19 @@ export const getRecordingsBySectionId = async (sectionId:any) => {
     }
 }
 
+export const getCourseByCategoryId = async (Id: any, token: any) => {
+    try {
+        const response = await axios.get(`${api}course?categoryId=${Id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response;
+    } catch (error) {
+        throw error;
+    }
+};
+
 export const getCourseByUserId = async (userId: any, token: any) => {
     try {
         const response = await axios.get(`${api}user/my-courses?userId=${userId}`, {

@@ -41,6 +41,7 @@ import trophy from "../../Assets/Images/trophy.png"
 import CountUp from "react-countup";
 import { useInView } from "react-intersection-observer";
 import DashLine from "src/Common/Components/DashLine";
+import thumb from "../../Assets/Images/klc-thumb.png"
 
 const Transition = forwardRef(function Transition(props: any, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -134,16 +135,10 @@ export default function Landing() {
 
   const handleCourseClick = (course: any) => {
 
-    navigate(`/course`, {
+    navigate(`/category-courses`, {
       state: {
         id: course.id,
         name: course.name,
-        description: course.description,
-        thumbnail: course.thumbnail,
-        level: course.level,
-        totalDuration: course.totalDuration,
-        price: course.price,
-        sectionCount: course.sectionCount,
       }
     });
   };
@@ -451,7 +446,7 @@ export default function Landing() {
         <div className="third-inner">
           <div className="ti">
             <div className="third-inner-title" data-aos="fade-up" data-aos-delay="100">
-              {t("top-courses")}
+              {t("top-categories")}
             </div>
           </div>
         </div>
@@ -459,7 +454,7 @@ export default function Landing() {
         <div className="space"></div>
         <div className="space"></div>
         <div className="top-courses-outer1" data-aos="fade-up" data-aos-delay="100">
-          {Array.isArray(topCourses) && topCourses.slice(visibleStartIndex, visibleStartIndex + 4).map((course, index) => (
+          {Array.isArray(categories) && categories.slice(visibleStartIndex, visibleStartIndex + 4).map((course, index) => (
             <div
               className="top-course-card"
               data-aos="fade-up" data-aos-delay="100"
@@ -469,15 +464,13 @@ export default function Landing() {
             >
               {/* your card code here */}
               <div className="course-thumbnail">
-                <img src={course.thumbnail} alt="Course Thumbnail" />
-                {course.transactionStatus === 1 ?
-                  (<div className="price">Rs.{(course.price).toFixed(2)}</div>) :
-                  (<div className="price">FREE</div>)}
+                {course.imageUrl === null ? (<img src={thumb} alt="Course Thumbnail" />) : (<img src={course.imageUrl} alt="Course Thumbnail" />)}
+                
               </div>
 
               <div className="course-info">
-                {<span className="course-level">{course.level}</span>}
                 <h3 className="course-title">{course.name}</h3>
+                {<span className="course-level">Courses : {course.courseCount}</span>}
               </div>
             </div>
           ))}

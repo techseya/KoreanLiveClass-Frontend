@@ -21,20 +21,22 @@ export default function CategoryForm() {
     const [name, setName] = useState("")
     const [description, setDescription] = useState("")
     const [status, setStatus] = useState("Active")
+    const [thumbnail, setThumbnail] = useState("")
 
     const handleSubmit = async () => {
 
         const body = {
             name: name,
             description: description,
+            imageUrl: thumbnail,
             activeStatus: status === "Active" ? 1 : 2
         }
 
         try {
             const response = await createCategory(body)
-            alert(response.data.message)     
-        } catch (error:any) {
-            alert(error.response.data.message);            
+            alert(response.data.message)
+        } catch (error: any) {
+            alert(error.response.data.message);
         }
 
         window.location.reload()
@@ -76,6 +78,19 @@ export default function CategoryForm() {
                             value={description}
                             onChange={(e) => setDescription(e.target.value)}
                         />
+                    </Grid>
+
+                    <Grid item xs={12} sm={12}>
+                        <TextField
+                            label="Thumbnail"
+                            fullWidth
+                            value={thumbnail}
+                            onChange={(e) => setThumbnail(e.target.value)}
+                        />
+                    </Grid>
+
+                    <Grid item xs={12} sm={3}>
+                        <img style={{ width: "80%", border: '1px solid black', borderRadius: "8px" }} src={thumbnail} alt="" />
                     </Grid>
 
                     <Grid item xs={12} display="flex" justifyContent="flex-end">

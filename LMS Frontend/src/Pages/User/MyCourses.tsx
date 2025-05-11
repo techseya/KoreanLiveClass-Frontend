@@ -69,7 +69,7 @@ export default function MyCourses() {
         <div className="courses-main-outer">
             <div className="courses-header" style={{ textAlign: "center", marginBottom: "1rem" }}>
             <div className="bg"></div>
-                <h1 style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>{t("myCourses")}</h1>
+                <h1 style={{ fontSize: "2rem", marginBottom: "0.5rem", zIndex:10 }}>{t("myCourses")}</h1>
                 <TextField
                     variant="outlined"
                     placeholder="Search courses..."

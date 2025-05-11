@@ -26,6 +26,7 @@ export default function Navbar({ children }: Readonly<Props>) {
     const isCourse1 = location.pathname === "/course";
     const isMyCourse = location.pathname === "/my-course"
     const isReg = location.pathname === "/register";
+    const isCategoryC = location.pathname === "/category-courses"
 
     const token = sessionStorage.getItem("token")
 
@@ -49,7 +50,7 @@ export default function Navbar({ children }: Readonly<Props>) {
     const handleNavCourses = () => {
         navigate("/courses")
     }
-    
+
     const handleNavCategories = () => {
         navigate("/categories")
     }
@@ -114,12 +115,12 @@ export default function Navbar({ children }: Readonly<Props>) {
 
                     <div className={`nav-links ${menuOpen ? 'active' : ''}`}>
                         <a href="" onClick={handleNavCourses}>{t('Courses')}</a>
-                        <a href="" onClick={handleNavCategories}>{t('Categories')}</a>
-                        {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory) && <a href="#korean-books">{t('kbooks')}</a>}
-                        {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory) && <a href="#who">{t('who1')}</a>}
-                        {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory) && <a href="#us">{t('what')}</a>}
+                        {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC) && <a href="#korean-books">{t('kbooks')}</a>}
+                        {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC) && <a href="#who">{t('who1')}</a>}
+                        {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC) && <a href="#us">{t('what')}</a>}
                         {visible && (<a href="" onClick={handleNavMyCourses}>{t('myCourses')}</a>)}
-                        <a href="#contact">{t('Contact Us')}</a>
+                        {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC) && <a href="#contact">{t('Contact Us')}</a>}
+                        
 
                         <select
                             onChange={(e) => changeLanguage(e.target.value)}

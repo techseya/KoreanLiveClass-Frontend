@@ -1,20 +1,25 @@
 import { useEffect, useState } from "react";
 import "../../Common/styles/courses.css";
 import "../../Common/styles/home.css";
-import { getAllCourses } from "src/Services/course_api";
+import { getAllCourses, getCourseByCategoryId } from "src/Services/course_api";
 import { ClockCircleOutlined } from "@ant-design/icons";
 import { Tooltip, TextField } from "@mui/material";
 import insImg from "../../Assets/Images/ins.jpg";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Footer from "src/Layout/Footer";
 
-export default function Courses() {
+export default function CategoryCourses() {
     const [courses, setCourses] = useState<any[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>("");
     const { t, i18n } = useTranslation();
+
+    const token = sessionStorage.getItem("token")
+
+    const location = useLocation();
+    const course = location.state;
 
     const navigate = useNavigate();
 
@@ -37,7 +42,7 @@ export default function Courses() {
 
 
     useEffect(() => {
-        handleGetTopCourses();
+        if (course?.id) handleGetTopCourses();
 
         AOS.init({
             duration: 1000,
@@ -49,7 +54,7 @@ export default function Courses() {
 
     const handleGetTopCourses = async () => {
         try {
-            const response = await getAllCourses();
+            const response = await getCourseByCategoryId(course.id,token);
             const activeCourses = response.data.filter((course: any) => course.activeStatus === 1);
             setCourses(activeCourses);
         } catch (error) {
@@ -66,7 +71,7 @@ export default function Courses() {
         <div className="courses-main-outer">
             <div className="courses-header" style={{ textAlign: "center", marginBottom: "1rem" }}>
                 <div className="bg"></div>
-                <h1 style={{ fontSize: "2rem", marginBottom: "0.5rem", zIndex:10 }}>{t("Courses")}</h1>
+                <h1 style={{ fontSize: "2rem", marginBottom: "0.5rem", zIndex:10 }}>{course.name}</h1>
                 <TextField
                     variant="outlined"
                     placeholder="Search courses..."

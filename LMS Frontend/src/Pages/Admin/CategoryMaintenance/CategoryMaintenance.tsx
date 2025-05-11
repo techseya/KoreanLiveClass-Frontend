@@ -1,7 +1,7 @@
 import {
     Paper, IconButton, Box, Chip, Typography,
     TextField, Grid, FormControl, InputLabel, Select, MenuItem, Button
-    } from "@mui/material";
+} from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";
@@ -54,20 +54,21 @@ export default function CategoryMaintenance() {
     const handleUpdate = async () => {
 
         const payload = {
-            id:  editingCategory.id,
-            name:  editingCategory.name,
-            description:  editingCategory.description,
-            activeStatus:  editingCategory.activeStatus
+            id: editingCategory.id,
+            name: editingCategory.name,
+            description: editingCategory.description,
+            imageUrl: editingCategory.imageUrl,
+            activeStatus: editingCategory.activeStatus
         };
 
         try {
-            const response = await updateCategory(editingCategory.id,payload)
+            const response = await updateCategory(editingCategory.id, payload)
             alert(response.data.message)
         } catch (error: any) {
             alert(error.response.message)
         }
         setRows((prevRows) =>
-            prevRows.map((row) => (row.id ===  editingCategory.id ?  editingCategory : row))
+            prevRows.map((row) => (row.id === editingCategory.id ? editingCategory : row))
         );
 
         setEditingCategory(null);
@@ -163,6 +164,19 @@ export default function CategoryMaintenance() {
                                 value={editingCategory?.description || ''}
                                 onChange={(e) => handleFormChange("description", e.target.value)}
                             />
+                        </Grid>
+
+                        <Grid item xs={12} sm={12}>
+                            <TextField
+                                label="Thumbnail"
+                                fullWidth
+                                value={editingCategory?.imageUrl || ''}
+                                onChange={(e) => handleFormChange("thumbnail", e.target.value)}
+                            />
+                        </Grid>
+
+                        <Grid item xs={12} sm={3}>
+                            <img style={{ width: "80%", border: '1px solid black', borderRadius: "8px" }} src={editingCategory?.imageUrl} alt="" />
                         </Grid>
 
                         <Grid item xs={12} display="flex" justifyContent="flex-end">

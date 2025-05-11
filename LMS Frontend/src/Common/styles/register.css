@@ -3,14 +3,18 @@
     height: auto;
 }
 
-.courses-header {
+.courses-header1 {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 3rem;
+    padding: 5rem;
     margin-top: 80px;
     background-color: rgb(2, 104, 199);
     color: white;
+    background: linear-gradient(180deg, rgb(10, 10, 10) 0%, rgba(6, 121, 229, 0.84) 100%);
+    background-size: cover;
+    background-repeat: no-repeat;
+    position: relative;
 }
 
 .user-form-outer1 {

@@ -93,7 +93,7 @@ export default function Register() {
         <div className="register-outer">
             <div className="courses-header" style={{ textAlign: "center", marginBottom: "1rem" }}>
                 <div className="bg"></div>
-                <h1 style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>{t("SignUp")}</h1>
+                <h1 style={{ fontSize: "2rem", marginBottom: "0.5rem", zIndex:10 }}>{t("SignUp")}</h1>
             </div>
             <div className="user-form-outer1">
                 <Box component="form" noValidate autoComplete="off" sx={{ p: 2, width: "95%" }}>

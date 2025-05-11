@@ -11,7 +11,7 @@
     margin-top: 80px;
     background-color: rgb(2, 104, 199);
     color: white;
-    background-image: url("../../Assets/Images/item_bg.jpg");
+    background: linear-gradient(180deg, rgb(10, 10, 10) 0%, rgba(6, 121, 229, 0.84) 100%);
     background-size: cover;
     background-repeat: no-repeat;
     position: relative;
@@ -21,7 +21,7 @@
     width: auto;
     height: auto;
     min-height: 200px;
-    background: linear-gradient(180deg, rgb(10, 10, 10) 0%, rgba(229, 143, 6, 0.84) 100%);
+    background: linear-gradient(180deg, rgb(10, 10, 10) 0%, rgba(6, 121, 229, 0.84) 100%);
     padding: 15px 25px;
     margin-top: 80px;
     height: auto;
