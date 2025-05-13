@@ -14,7 +14,11 @@ export const getTopCourses = async () => {
 
 export const createCourse = async (body:any) => {
     try {
-        const response = await axios.post(api+`course`, body)
+        const response = await axios.post(api+`course`, body,{
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
         return response;
     } catch (error) {
         throw error;

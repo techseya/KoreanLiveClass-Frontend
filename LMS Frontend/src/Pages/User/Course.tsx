@@ -122,7 +122,7 @@ export default function Course() {
 
                             </div>
                         ) : (
-                            <img className="c-thumb" src={course.thumbnail} alt="Course Thumbnail" />
+                            <img className="c-thumb" src={course.thumbnail.replace("dl=0", "raw=1")} alt="Course Thumbnail" />
                         )}
                     </div>
 
@@ -306,7 +306,7 @@ export default function Course() {
 
                             </div>
                         ) : (
-                            <img className="c-thumb" src={course.thumbnail} alt="Course Thumbnail" />
+                            <img className="c-thumb" src={course.thumbnail.replace("dl=0", "raw=1")} alt="Course Thumbnail" />
                         )}
                     </div>
                 </div>

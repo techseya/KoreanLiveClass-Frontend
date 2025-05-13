@@ -1,7 +1,7 @@
 import {
     Paper, IconButton, Box, Chip, Typography,
     TextField, Grid, FormControl, InputLabel, Select, MenuItem, Button
-    } from "@mui/material";
+} from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";
@@ -63,25 +63,25 @@ export default function CourseMaintenance() {
     const handleUpdate = async () => {
 
         const payload = {
-            id:  editingCourse.id,
-            name:  editingCourse.name,
+            id: editingCourse.id,
+            name: editingCourse.name,
             description: editingCourse.description,
-            categoryId:  editingCourse.categoryId,
+            categoryId: editingCourse.categoryId,
             price: editingCourse.price === "" ? 0 : editingCourse.price,
-            thumbnail:  editingCourse.thumbnail,
-            transactionStatus:  editingCourse.transactionStatus,
-            level:  editingCourse.level,
-            activeStatus:  editingCourse.activeStatus
+            thumbnail: editingCourse.thumbnail,
+            transactionStatus: editingCourse.transactionStatus,
+            level: editingCourse.level,
+            activeStatus: editingCourse.activeStatus
         };
 
         try {
-            const response = await updateCourse( editingCourse.id, payload)
+            const response = await updateCourse(editingCourse.id, payload)
             alert(response.data.message)
         } catch (error: any) {
             alert(error.response.message)
         }
         setRows((prevRows) =>
-            prevRows.map((row) => (row.id ===  editingCourse.id ?  editingCourse : row))
+            prevRows.map((row) => (row.id === editingCourse.id ? editingCourse : row))
         );
 
         setEditingCourse(null);
@@ -150,7 +150,7 @@ export default function CourseMaintenance() {
                             <TextField
                                 label="Name"
                                 fullWidth
-                                value={ editingCourse?.name || ''}
+                                value={editingCourse?.name || ''}
                                 onChange={(e) => handleFormChange("name", e.target.value)}
                             />
                         </Grid>
@@ -159,7 +159,7 @@ export default function CourseMaintenance() {
                             <TextField
                                 label="Price"
                                 fullWidth
-                                value={ editingCourse?.price || ''}
+                                value={editingCourse?.price || ''}
                                 onChange={(e) => {
                                     const value = e.target.value;
                                     // Allow only digits and disallow leading zero
@@ -177,7 +177,7 @@ export default function CourseMaintenance() {
                             <FormControl fullWidth>
                                 <InputLabel>Level</InputLabel>
                                 <Select
-                                    value={ editingCourse?.level || ''}
+                                    value={editingCourse?.level || ''}
                                     label="Level"
                                     onChange={(e) => handleFormChange("level", e.target.value)}
                                 >
@@ -192,7 +192,7 @@ export default function CourseMaintenance() {
                             <FormControl fullWidth>
                                 <InputLabel>Type</InputLabel>
                                 <Select
-                                    value={ editingCourse?.transactionStatus || ''}
+                                    value={editingCourse?.transactionStatus || ''}
                                     label="Type"
                                     onChange={(e) => handleFormChange("transactionStatus", e.target.value)}
                                 >
@@ -206,7 +206,7 @@ export default function CourseMaintenance() {
                             <FormControl fullWidth>
                                 <InputLabel>Category</InputLabel>
                                 <Select
-                                    value={ editingCourse?.categoryId || ''}
+                                    value={editingCourse?.categoryId || ''}
                                     label="Category"
                                     onChange={(e) => handleFormChange("categoryId", e.target.value)}
                                     fullWidth
@@ -224,7 +224,7 @@ export default function CourseMaintenance() {
                             <FormControl fullWidth>
                                 <InputLabel>Status</InputLabel>
                                 <Select
-                                    value={ editingCourse?.activeStatus || ''}
+                                    value={editingCourse?.activeStatus || ''}
                                     label="Status"
                                     onChange={(e) => handleFormChange("activeStatus", e.target.value)}
                                 >
@@ -240,28 +240,41 @@ export default function CourseMaintenance() {
                                 fullWidth
                                 multiline
                                 rows={3}
-                                value={ editingCourse?.description || ''}
+                                value={editingCourse?.description || ''}
                                 onChange={(e) => handleFormChange("description", e.target.value)}
                             />
                         </Grid>
 
                         <Grid item xs={12} sm={12}>
-                            <TextField
-                                label="Thumbnail"
-                                fullWidth
-                                value={ editingCourse?.thumbnail || ''}
-                                onChange={(e) => handleFormChange("thumbnail", e.target.value)}
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => {
+                                    const file = e.target.files?.[0];
+                                    if (file) {
+                                        const url = URL.createObjectURL(file);
+                                        handleFormChange("thumbnail", url);
+
+                                        // OPTIONAL: If you want to upload the file to a server, do it here
+                                        // e.g. uploadFile(file).then(url => handleFormChange("thumbnail", url));
+                                    }
+                                }}
                             />
+
                         </Grid>
 
                         <Grid item xs={12} sm={3}>
-                            <img style={{width: "80%", border: '1px solid black', borderRadius: "8px"}} src={ editingCourse?.thumbnail} alt="" />
+                            <img
+                                style={{ width: "80%", border: '1px solid black', borderRadius: "8px" }}
+                                src={editingCourse?.thumbnail?.replace("dl=0", "raw=1")}
+                                alt="Course Thumbnail"
+                            />
                         </Grid>
 
                         <Grid item xs={12} display="flex" justifyContent="flex-end">
                             <Button className="update-btn" variant="contained" onClick={handleCancel}>Cancel</Button>
                             <Button
-                                disabled={! editingCourse?.name || ! editingCourse?.activeStatus}
+                                disabled={!editingCourse?.name || !editingCourse?.activeStatus}
                                 variant="contained" onClick={handleUpdate}>Update</Button>
                         </Grid>
                     </Grid>

@@ -24,7 +24,8 @@ export default function CourseForm() {
     const [price, setPrice] = useState("")
     const [level, setLevel] = useState("Beginner")
     const [type, setType] = useState(1)
-    const [thumbnail, setThumbnail] = useState("")
+    const [thumbnail, setThumbnail] = useState<File | any>(null);
+    const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
     const [status, setStatus] = useState("Active")
     const [categoryId, setCategoryId] = useState(1)
     const [categories, setCategories] = useState<any[]>([]);
@@ -44,19 +45,18 @@ export default function CourseForm() {
 
     const handleSubmit = async () => {
 
-        const body = {
-            name: name,
-            description: description,
-            price: price === "" ? 0 : price,
-            transactionStatus: type,
-            categoryId: categoryId,
-            level: level,
-            thumbnail: thumbnail,
-            activeStatus: status === "Active" ? 1 : 2
-        }
+        const formData = new FormData();
+        formData.append("Name", name);
+        formData.append("Description", description);
+        formData.append("Price", price === "" ? "0" : price);
+        formData.append("TransactionStatus", String(type));
+        formData.append("CategoryId", categoryId.toString());
+        formData.append("Level", level);
+        formData.append("ThumbnailFile", thumbnail);
+        formData.append("ActiveStatus", status === "Active" ? "1" : "2");
 
         try {
-            const response = await createCourse(body)
+            const response = await createCourse(formData)
             alert(response.data.message)
         } catch (error: any) {
             alert(error.response.data.message);
@@ -169,16 +169,30 @@ export default function CourseForm() {
                     </Grid>
 
                     <Grid item xs={12} sm={12}>
-                        <TextField
-                            label="Thumbnail"
-                            fullWidth
-                            value={thumbnail}
-                            onChange={(e) => setThumbnail(e.target.value)}
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => {
+                                if (e.target.files && e.target.files[0]) {
+                                    const file = e.target.files[0];
+                                    setThumbnail(file);
+                                    setThumbnailPreview(URL.createObjectURL(file));
+                                }
+                            }}
                         />
                     </Grid>
 
                     <Grid item xs={12} sm={3}>
-                        <img style={{ width: "80%", border: '1px solid black', borderRadius: "8px" }} src={thumbnail} alt="" />
+                        {thumbnailPreview && (
+                            <div>
+                                <p>Image Preview:</p>
+                                <img
+                                    src={thumbnailPreview}
+                                    alt="Thumbnail Preview"
+                                    style={{ width: "200px", height: "auto", marginTop: "10px" }}
+                                />
+                            </div>
+                        )}
                     </Grid>
 
                     <Grid item xs={12} display="flex" justifyContent="flex-end">

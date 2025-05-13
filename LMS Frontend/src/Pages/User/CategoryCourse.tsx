@@ -102,7 +102,7 @@ export default function CategoryCourses() {
                         >
                             <div className="course-thumbnail">
                             {course.thumbnail === null || course.thumbnail === "" ? (<img src={thumb} alt="Course Thumbnail" />)
-                                : (<img src={course.thumbnail} alt="Course Thumbnail" />)} 
+                                : (<img src={course.thumbnail.replace("dl=0", "raw=1")} alt="Course Thumbnail" />)} 
                                 {course.transactionStatus === 1 ?
                                     (<div className="price">Rs.{(course.price).toFixed(2)}</div>) :
                                     (<div className="price">FREE</div>)}
