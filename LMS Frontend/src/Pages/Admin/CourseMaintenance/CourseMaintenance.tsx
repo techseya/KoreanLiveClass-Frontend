@@ -1,6 +1,8 @@
 import {
     Paper, IconButton, Box, Chip, Typography,
-    TextField, Grid, FormControl, InputLabel, Select, MenuItem, Button
+    TextField, Grid, FormControl, InputLabel, Select, MenuItem, Button,
+    Backdrop,
+    CircularProgress
 } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
@@ -21,6 +23,8 @@ export default function CourseMaintenance() {
     const [editingCourse, setEditingCourse] = useState<any | null>(null);
     const [rows, setRows] = useState<any[]>([]);
     const [categories, setCategories] = useState<any[]>([]);
+    const [thumb, setThumb] = useState<File | any>(null);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         handleGetCourses()
@@ -61,6 +65,7 @@ export default function CourseMaintenance() {
     };
 
     const handleUpdate = async () => {
+        setLoading(true);
 
         const formData = new FormData();
         formData.append("id", editingCourse.id);
@@ -71,23 +76,25 @@ export default function CourseMaintenance() {
         formData.append("transactionStatus", editingCourse.transactionStatus);
         formData.append("level", editingCourse.level);
         formData.append("activeStatus", editingCourse.activeStatus);
-
-        if (editingCourse.thumbnail instanceof File) {
-            formData.append("thumbnail", editingCourse.thumbnail);
-        }
+        formData.append("thumbnail", thumb);
 
         try {
             const response = await updateCourse(editingCourse.id, formData)
             alert(response.data.message)
+            setVisible(false);
         } catch (error: any) {
-            alert(error.response.message)
+            alert(error?.response?.message || "Update failed");
+        } finally {
+            setLoading(false);
         }
+
         setRows((prevRows) =>
             prevRows.map((row) => (row.id === editingCourse.id ? editingCourse : row))
         );
 
         setEditingCourse(null);
         setVisible(false);
+        window.location.reload()
     };
 
     const columns: GridColDef[] = [
@@ -126,6 +133,12 @@ export default function CourseMaintenance() {
 
     return (
         <>
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={loading}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
             {!visible && (
                 <Paper sx={{ height: 'auto', width: '100%', marginTop: 2, overflowX: 'auto' }}>
                     <DataGrid
@@ -256,9 +269,7 @@ export default function CourseMaintenance() {
                                     if (file) {
                                         const url = URL.createObjectURL(file);
                                         handleFormChange("thumbnail", url);
-
-                                        // OPTIONAL: If you want to upload the file to a server, do it here
-                                        // e.g. uploadFile(file).then(url => handleFormChange("thumbnail", url));
+                                        setThumb(file)
                                     }
                                 }}
                             />
