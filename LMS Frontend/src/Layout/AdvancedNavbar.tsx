@@ -16,7 +16,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useMediaQuery } from "@mui/material";
 import "../Common/styles/style.css";
 import "../Common/styles/navbar.css";
-import { LogoutOutlined, MenuOutlined, WysiwygOutlined } from "@mui/icons-material";
+import { LogoutOutlined, MenuOutlined, OndemandVideo, WysiwygOutlined } from "@mui/icons-material";
 import logo from "../Assets/Images/logo.jpeg";
 import man from "../Assets/Images/man.png";
 import Dialogbox from "../Common/Components/DialogBox";
@@ -200,6 +200,8 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
       setActive(6);
     } else if (path === "/k-word") {
       setActive(7);
+    } else if (path === "/video-maintenance") {
+      setActive(8);
     } else {
       setActive(0);
     }
@@ -212,6 +214,7 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
   const handleClickSection = () => navigate("/section-maintenance")
   const handleClickRecording = () => navigate("/recording-maintenance")
   const handleClickWord = () => navigate("/k-word")
+  const handleClickVideos = () => navigate("/video-maintenance")
 
   const drawerItems = [
     {
@@ -248,6 +251,11 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
       name: "Korean Word",
       icon: <WysiwygOutlined style={{ fontSize: "20px" }} />,
       onClick: handleClickWord,
+    },
+    {
+      name: "Korean Videos",
+      icon: <OndemandVideo style={{ fontSize: "20px" }} />,
+      onClick: handleClickVideos,
     },
   ];
 

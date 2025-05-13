@@ -18,6 +18,7 @@ import Recordings from "./Pages/Admin/RecordingMaintenance";
 import KoreanWordMaintenance from "./Pages/Admin/KoreanWord/KoreanWordMaintenance";
 import Category from "./Pages/User/Category";
 import CategoryCourses from "./Pages/User/CategoryCourse";
+import KoreanVideos from "./Pages/Admin/KoreanVideoMaintenance";
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -41,6 +42,7 @@ const App: React.FC = () => {
             <Route path="/course-maintenance" element={<CoursesM />} />
             <Route path="/section-maintenance" element={<Sections />} />
             <Route path="/recording-maintenance" element={<Recordings />} />
+            <Route path="/video-maintenance" element={<KoreanVideos />} />
             <Route path="/k-word" element={<KoreanWordMaintenance />} />
           </Routes>
         </AdvancedNavbar>

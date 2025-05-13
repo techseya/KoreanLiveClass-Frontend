@@ -42,6 +42,7 @@ import CountUp from "react-countup";
 import { useInView } from "react-intersection-observer";
 import DashLine from "src/Common/Components/DashLine";
 import thumb from "../../Assets/Images/klc-thumb.png"
+import { getVideos } from "src/Services/videos_api";
 
 const Transition = forwardRef(function Transition(props: any, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -65,6 +66,7 @@ export default function Landing() {
   const [loginOpen, setLoginOpen] = useState(false);
   const [categories, setCategories] = useState<any[]>([])
   const [topCourses, setTopCourses] = useState<any[]>([])
+  const [videos, setvideos] = useState<any[]>([])
   const [selectedBook, setSelectedBook] = useState<any>(null);
   const [isModalOpen1, setIsModalOpen1] = useState(false);
   const [korean, setKorean] = useState("")
@@ -110,7 +112,7 @@ export default function Landing() {
   };
 
   const handleNext1 = () => {
-    if (visibleIndex + 4 < url.length) {
+    if (visibleIndex + 4 < videos.length) {
       setVisibleIndex(visibleIndex + 4);
     }
   };
@@ -166,6 +168,7 @@ export default function Landing() {
     handleGetCategories();
     handleGetTopCourses();
     handleGetWord();
+    handleGetVideos()
 
     AOS.init({
       duration: 1000,
@@ -204,6 +207,15 @@ export default function Landing() {
     }
   }
 
+  const handleGetVideos = async () => {
+    try {
+      const res = await getVideos()
+      setvideos(res.data)
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   const handleGetTopCourses = async () => {
     try {
       const response = await getTopCourses()
@@ -224,12 +236,20 @@ export default function Landing() {
     }
   };
 
-  const url = [
-    { url: "https://www.youtube.com/embed/fth6vweRyFA?modestbranding=1&rel=0&playsinline=1" },
-    { url: "https://www.youtube.com/embed/Dj5VolioQSk?modestbranding=1&rel=0&playsinline=1" },
-    { url: "https://www.youtube.com/embed/UTkjEDygbb0?start=407&modestbranding=1&rel=0&playsinline=1" },
-    { url: "https://www.youtube.com/embed/PwZk7_QRpQ4?modestbranding=1&rel=0&playsinline=1" }
-  ];
+  const convertToEmbedUrl = (url: string) => {
+    let videoId = "";
+
+    if (url.includes("youtu.be")) {
+      // Handle short youtu.be format
+      videoId = url.split("youtu.be/")[1].split(/[?&]/)[0];
+    } else if (url.includes("youtube.com/watch")) {
+      // Handle full watch?v= format
+      const params = new URLSearchParams(url.split("?")[1]);
+      videoId = params.get("v") || "";
+    }
+
+    return `https://www.youtube.com/embed/${videoId}`;
+  };
 
   const books = [
     {
@@ -465,7 +485,7 @@ export default function Landing() {
               {/* your card code here */}
               <div className="course-thumbnail">
                 {course.imageUrl === null ? (<img src={thumb} alt="Course Thumbnail" />) : (<img src={course.imageUrl} alt="Course Thumbnail" />)}
-                
+
               </div>
 
               <div className="course-info">
@@ -660,12 +680,12 @@ export default function Landing() {
         <div className="space"></div>
         <div className="space"></div>
         <div className="top-courses-outer3" data-aos="fade-up" data-aos-delay="100">
-          {url.slice(visibleIndex, visibleIndex + 4).map((u, index) => (
-            <div className="i1">
+          {videos.slice(visibleIndex, visibleIndex + 4).map((u, index) => (
+            <div className="i1" key={u.id}>
               <iframe
                 className="video-embed1"
-                src={u.url}
-                title="YouTube video"
+                src={convertToEmbedUrl(u.link)}
+                title={`YouTube video ${u.id}`}
                 frameBorder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
@@ -674,6 +694,7 @@ export default function Landing() {
               ></iframe>
             </div>
           ))}
+
         </div>
         <div className="arrow-buttons-row1">
           <div
@@ -688,7 +709,7 @@ export default function Landing() {
             className="arrow-button1"
             onClick={handleNext1}
             style={{
-              visibility: visibleIndex + 4 >= url.length ? "hidden" : "visible",
+              visibility: visibleIndex + 4 >= videos.length ? "hidden" : "visible",
             }}
           >
             <ArrowForwardIosIcon />
