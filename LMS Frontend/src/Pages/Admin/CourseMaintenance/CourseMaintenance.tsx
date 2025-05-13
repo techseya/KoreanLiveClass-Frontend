@@ -62,20 +62,22 @@ export default function CourseMaintenance() {
 
     const handleUpdate = async () => {
 
-        const payload = {
-            id: editingCourse.id,
-            name: editingCourse.name,
-            description: editingCourse.description,
-            categoryId: editingCourse.categoryId,
-            price: editingCourse.price === "" ? 0 : editingCourse.price,
-            thumbnail: editingCourse.thumbnail,
-            transactionStatus: editingCourse.transactionStatus,
-            level: editingCourse.level,
-            activeStatus: editingCourse.activeStatus
-        };
+        const formData = new FormData();
+        formData.append("id", editingCourse.id);
+        formData.append("name", editingCourse.name);
+        formData.append("description", editingCourse.description);
+        formData.append("categoryId", editingCourse.categoryId);
+        formData.append("price", editingCourse.price === "" ? "0" : editingCourse.price);
+        formData.append("transactionStatus", editingCourse.transactionStatus);
+        formData.append("level", editingCourse.level);
+        formData.append("activeStatus", editingCourse.activeStatus);
+
+        if (editingCourse.thumbnail instanceof File) {
+            formData.append("thumbnail", editingCourse.thumbnail);
+        }
 
         try {
-            const response = await updateCourse(editingCourse.id, payload)
+            const response = await updateCourse(editingCourse.id, formData)
             alert(response.data.message)
         } catch (error: any) {
             alert(error.response.message)

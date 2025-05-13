@@ -27,7 +27,13 @@ export const createCourse = async (body:any) => {
 
 export const updateCourse = async (id:any, body:any) => {
     try {
-        const response = await axios.put(api+`course/${id}`, body)
+        const response = await axios.put(api+`course/${id}`, body,
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            }
+        )
         return response;
     } catch (error) {
         throw error;
