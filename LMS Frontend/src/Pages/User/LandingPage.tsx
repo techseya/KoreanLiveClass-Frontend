@@ -484,7 +484,7 @@ export default function Landing() {
             >
               {/* your card code here */}
               <div className="course-thumbnail">
-                {course.imageUrl === null ? (<img src={thumb} alt="Course Thumbnail" />) : (<img src={course.imageUrl} alt="Course Thumbnail" />)}
+                {course.imageUrl === null ? (<img src={thumb} alt="Course Thumbnail" />) : (<img src={course.imageUrl.replace("dl=0", "raw=1")} alt="Course Thumbnail" />)}
 
               </div>
 
