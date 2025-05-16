@@ -94,7 +94,7 @@ export default function CourseMaintenance() {
 
         setEditingCourse(null);
         setVisible(false);
-        //window.location.reload()
+        window.location.reload()
     };
 
     const columns: GridColDef[] = [
