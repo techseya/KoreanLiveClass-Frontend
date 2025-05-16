@@ -73,6 +73,7 @@ export default function CategoryMaintenance() {
 
         setEditingCategory(null);
         setVisible(false);
+        window.location.reload()
     };
 
     const columns: GridColDef[] = [
