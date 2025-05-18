@@ -308,7 +308,7 @@
 
 .course-thumbnail {
     width: 100%;
-    height: 200px;
+    height: auto;
     background-color: #e2e2e2;
     display: flex;
     justify-content: center;
