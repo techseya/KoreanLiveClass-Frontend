@@ -1,6 +1,8 @@
 import {
     Paper, IconButton, Box, Chip, Typography,
-    TextField, Grid, FormControl, InputLabel, Select, MenuItem, Button
+    TextField, Grid, FormControl, InputLabel, Select, MenuItem, Button,
+    Backdrop,
+    CircularProgress
 } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
@@ -20,6 +22,7 @@ export default function CategoryMaintenance() {
     const [editingCategory, setEditingCategory] = useState<any | null>(null);
     const [rows, setRows] = useState<any[]>([]);
     const [thumb, setThumb] = useState<File | any>(null);
+    const [loading, setLoading] = useState(false);
 
     const token = sessionStorage.getItem("token")
 
@@ -53,19 +56,23 @@ export default function CategoryMaintenance() {
     };
 
     const handleUpdate = async () => {
+        setLoading(true);
 
         const formData = new FormData();
         formData.append("id", editingCategory.id);
         formData.append("name", editingCategory.name);
         formData.append("description", editingCategory.description);
-        formData.append("imageUrl", editingCategory.imageUrl)
+        formData.append("imageUrl", thumb)
         formData.append("activeStatus", editingCategory.activeStatus);
 
         try {
             const response = await updateCategory(editingCategory.id, formData)
             alert(response.data.message)
+            setLoading(false);
         } catch (error: any) {
             alert(error.response.message)
+        } finally {
+            setLoading(false);
         }
         setRows((prevRows) =>
             prevRows.map((row) => (row.id === editingCategory.id ? editingCategory : row))
@@ -111,6 +118,12 @@ export default function CategoryMaintenance() {
 
     return (
         <>
+        <Backdrop
+                        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                        open={loading}
+                    >
+                        <CircularProgress color="inherit" />
+                    </Backdrop>
             {!visible && (
                 <Paper sx={{ height: 'auto', width: '100%', marginTop: 2, overflowX: 'auto' }}>
                     <DataGrid
@@ -175,7 +188,7 @@ export default function CategoryMaintenance() {
                                     const file = e.target.files?.[0];
                                     if (file) {
                                         const url = URL.createObjectURL(file);
-                                        handleFormChange("thumbnail", url);
+                                        handleFormChange("imageUrl", url);
                                         setThumb(file)
                                     }
                                 }}
@@ -185,7 +198,7 @@ export default function CategoryMaintenance() {
                         <Grid item xs={12} sm={3}>
                         <img
                                 style={{ width: "80%", border: '1px solid black', borderRadius: "8px" }}
-                                src={editingCategory?.thumbnail?.replace("dl=0", "raw=1")}
+                                src={editingCategory?.imageUrl?.replace("dl=0", "raw=1")}
                                 alt="Course Thumbnail"
                             />
                         </Grid>
