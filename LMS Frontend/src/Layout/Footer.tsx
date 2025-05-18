@@ -29,6 +29,10 @@ const Footer: React.FC = () => {
         navigate("/contact-us")
     }
 
+    const handleNavPrivacy = () => {
+        navigate("/privacy-policy")
+    }
+
     useEffect(() => {
         AOS.init({
             duration: 1000,
@@ -73,7 +77,7 @@ const Footer: React.FC = () => {
                     <div>
                         <h3 data-aos="fade-up" data-aos-duration="1000">{t("help2")}</h3>
                         <div className="footer-links">
-                            <p className="footer-link" data-aos="fade-up" data-aos-duration="1000">{t("Privacy Policy")}</p>
+                            <p onClick={handleNavPrivacy} className="footer-link" data-aos="fade-up" data-aos-duration="1000">{t("Privacy Policy")}</p>
                             <p className="footer-link" data-aos="fade-up" data-aos-duration="1000">{t("Terms of Service")}</p>
                             <p className="footer-link" data-aos="fade-up" data-aos-duration="1000">{t("Refund Policy")}</p>
                         </div>
