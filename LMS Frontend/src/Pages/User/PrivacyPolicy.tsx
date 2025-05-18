@@ -1,9 +1,15 @@
 import "../../Common/styles/privacy.css";
 import "../../Common/styles/courses.css";
 import { useTranslation } from "react-i18next";
+import Footer from "src/Layout/Footer";
+import { useEffect } from "react";
 
 export default function PrivacyPolicy() {
     const { t } = useTranslation();
+
+    useEffect(() => {
+        window.scroll(0, 0);
+    }, []);
 
     return (
         <div className="p-outer">
@@ -12,50 +18,52 @@ export default function PrivacyPolicy() {
                 <h1 style={{ fontSize: "2rem", marginBottom: "0.5rem", zIndex: 10 }}>{t("Privacy Policy")}</h1>
             </div>
             <div className="p-inner">
-                <p>We are committed to maintaining the accuracy, confidentiality, and security of your personally identifiable information ("Personal Information"). This privacy policy governs our practices regarding the collection, use, and disclosure of Personal Information and is based on the principles set forth in the Electronic Transactions Act of Sri Lanka.</p>
+                <p>{t("pp-p1")}</p>
 
                 <br />
-                <h2>1. Introduction</h2>
-                <p>We are responsible for the Personal Information under our control and have designated individuals to ensure compliance with this privacy policy.</p>
+                <h2>{t("pp-h1")}</h2>
+                <p>{t("pp-p2")}</p>
                 <br />
-                <h2>2. Identifying Purposes</h2>
-                <p>We collect, use, and disclose Personal Information to provide requested products or services and to offer related products or services we believe may interest you. The purpose of collection will be identified before or at the time of collection. In some cases, purposes are evident and consent is implied — for example, when you provide your name, address, and payment information during a purchase.</p>
+                <h2>{t("pp-h2")}</h2>
+                <p>{t("pp-p3")}</p>
                 <br />
-                <h2>3. Consent</h2>
-                <p>Your knowledge and consent are required for the collection, use, or disclosure of Personal Information, except where permitted or required by law. You always have the choice to provide or withhold your information. However, refusal may limit the services we can provide.</p>
+                <h2>{t("pp-h3")}</h2>
+                <p>{t("pp-p4")}</p>
                 <br />
-                <h2>4. Limiting Collection</h2>
-                <p>We will collect only the Personal Information necessary for identified purposes. With your consent, information may be collected through in-person interactions, phone, mail, fax, or online communication.</p>
+                <h2>{t("pp-h4")}</h2>
+                <p>{t("pp-p5")}</p>
                 <br />
-                <h2>5. Limiting Use, Disclosure, and Retention</h2>
-                <p>We will use or disclose Personal Information only for the purposes for which it was collected, unless otherwise authorized by you or required by law. Information will be retained only as long as necessary to fulfill those purposes or comply with legal requirements.</p>
+                <h2>{t("pp-h5")}</h2>
+                <p>{t("pp-p6")}</p>
                 <br />
-                <h2>6. Accuracy</h2>
-                <p>We strive to keep Personal Information accurate, complete, and up-to-date as required for the purposes for which it is used.</p>
+                <h2>{t("pp-h6")}</h2>
+                <p>{t("pp-p7")}</p>
                 <br />
-                <h2>7. Safeguarding Customer Information</h2>
-                <p>We protect Personal Information with appropriate security measures based on its sensitivity. We take reasonable precautions to prevent loss, misuse, or unauthorized access. In response to user feedback, we may block accounts when appropriate.</p>
-                <p><strong>Note:</strong> Once phone numbers are shared between service providers and consumers, we cannot control subsequent interactions. We disclaim responsibility for any issues arising thereafter. However, we may review complaints and take precautionary action such as blacklisting offending parties.</p>
+                <h2>{t("pp-h7")}</h2>
+                <p>{t("pp-p8")}</p>
+                <p>{t("pp-note1")}</p>
                 <br />
-                <h2>8. Openness</h2>
-                <p>We will make information about our privacy practices available to you upon request.</p>
+                <h2>{t("pp-h8")}</h2>
+                <p>{t("pp-p9")}</p>
                 <br />
-                <h2>9. Customer Access</h2>
-                <p>Upon request, you will be informed of the existence, use, and disclosure of your Personal Information and given access to it. You may request corrections if appropriate. In some cases, we may not be able to disclose certain information due to legal or proprietary constraints.</p>
+                <h2>{t("pp-h9")}</h2>
+                <p>{t("pp-p10")}</p>
                 <br />
-                <h2>10. Handling Complaints and Suggestions</h2>
-                <p>For any questions or concerns regarding this policy or our privacy practices, please contact us at:</p>
-                <p><strong>Email:</strong> info@koreanliveclass.com</p>
-                <p><strong>Special Note:</strong> Once we share contact details between service providers and consumers, we consider our responsibility fulfilled. We do not mediate further disputes. However, we may review serious complaints and reserve the right to blacklist accounts if necessary.</p>
+                <h2>{t("pp-h10")}</h2>
+                <p>{t("pp-p11")}</p>
+                <p>{t("pp-email")}</p>
+                <p>{t("pp-note2")}</p>
                 <br />
-                <h2>Additional Information</h2>
+                <h2>{t("pp-h11")}</h2>
                 <br />
-                <h3>Cookies</h3>
-                <p>We may use cookies to enhance website functionality and provide a personalized user experience. Most browsers accept cookies by default, but you may adjust your settings to decline them. Note that disabling cookies may affect website performance.</p>
+                <h3>{t("pp-h12")}</h3>
+                <p>{t("pp-p12")}</p>
                 <br />
-                <h3>Third-Party Websites</h3>
-                <p>Our website may link to third-party sites that are not governed by this policy. We recommend reviewing their privacy policies to understand how they handle your information.</p>
+                <h3>{t("pp-h13")}</h3>
+                <p>{t("pp-p13")}</p>
             </div>
+
+            <Footer />
         </div>
     );
 }
