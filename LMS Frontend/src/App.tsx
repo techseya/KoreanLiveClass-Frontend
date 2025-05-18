@@ -20,6 +20,7 @@ import Category from "./Pages/User/Category";
 import CategoryCourses from "./Pages/User/CategoryCourse";
 import KoreanVideos from "./Pages/Admin/KoreanVideoMaintenance";
 import PrivacyPolicy from "./Pages/User/PrivacyPolicy";
+import Terms from "./Pages/User/Terms";
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -32,10 +33,11 @@ const App: React.FC = () => {
   const isMyCourse = location.pathname === "/my-course"
   const isRegister = location.pathname === "/register"
   const isPrivacy = location.pathname === "/privacy-policy"
+  const isTerms = location.pathname === "/terms-services"
 
   return (
     <>
-      {!isHomePage && !isCourses && !isCategory && !isCourse && !isRegister && !isMyCourses && !isMyCourse && !isCategoryC && !isPrivacy ?(
+      {!isHomePage && !isCourses && !isCategory && !isCourse && !isRegister && !isMyCourses && !isMyCourse && !isCategoryC && !isPrivacy && !isTerms ?(
         <AdvancedNavbar>
           <Routes>
             <Route path="/dashboard" element={<Dashboard />} />
@@ -60,6 +62,7 @@ const App: React.FC = () => {
             <Route path="/my-course" element={<MyCourse />} />
             <Route path="/register" element={<Register />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="/terms-services" element={<Terms />} />
           </Routes>
         </Navbar>
       )}

@@ -20,13 +20,12 @@ const Footer: React.FC = () => {
     const isCourse1 = location.pathname === "/course";
     const isMyCourse = location.pathname === "/my-course"
     const isReg = location.pathname === "/register";
+    const isCategoryC = location.pathname === "/category-courses"
+    const isPrivacy = location.pathname === "/privacy-policy"
+    const isTerms = location.pathname === "/terms-services"
 
-    const handleNavAbout = () => {
-        navigate("/about-us")
-    }
-
-    const handleNavContact = () => {
-        navigate("/contact-us")
+    const handleNavTerms = () => {
+        navigate("/terms-services")
     }
 
     const handleNavPrivacy = () => {
@@ -56,9 +55,9 @@ const Footer: React.FC = () => {
                         <ul className="footer-links">
                             <li data-aos="fade-up" data-aos-duration="1000"><Link to="/courses" className="footer-link">{t('Courses')}</Link></li>
                             <li data-aos="fade-up" data-aos-duration="1000"><Link to="/categories" className="footer-link">{t('Categories')}</Link></li>
-                            {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory) && <li data-aos="fade-up" data-aos-duration="1000"><a href="#korean-books" className="footer-link">{t('kbooks')}</a></li>}
-                            {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory) && <li data-aos="fade-up" data-aos-duration="1000"><a href="#who" className="footer-link">{t('who1')}</a></li>}
-                            {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory) && <li data-aos="fade-up" data-aos-duration="1000"><a href="#us" className="footer-link">{t('what')}</a></li>}                           
+                            {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy || isTerms) && <li data-aos="fade-up" data-aos-duration="1000"><a href="#korean-books" className="footer-link">{t('kbooks')}</a></li>}
+                            {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy || isTerms) && <li data-aos="fade-up" data-aos-duration="1000"><a href="#who" className="footer-link">{t('who1')}</a></li>}
+                            {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy || isTerms) && <li data-aos="fade-up" data-aos-duration="1000"><a href="#us" className="footer-link">{t('what')}</a></li>}
                         </ul>
                     </div>
                     <div>
@@ -68,9 +67,9 @@ const Footer: React.FC = () => {
                             <p className="footer-link sans" data-aos="fade-up" data-aos-duration="1000">+9471-567-5588</p>
                             <p className="footer-link sans" data-aos="fade-up" data-aos-duration="1000">+8210-9073-6674</p>
                             <div className="space"></div>
-                        </div>                        
+                        </div>
                         <h3 data-aos="fade-up" data-aos-duration="1000">{t("email")}</h3>
-                        <div className="footer-links">                            
+                        <div className="footer-links">
                             <p className="footer-link sans" data-aos="fade-up" data-aos-duration="1000">mangalathero788@gmail.com</p>
                         </div>
                     </div>
@@ -78,8 +77,7 @@ const Footer: React.FC = () => {
                         <h3 data-aos="fade-up" data-aos-duration="1000">{t("help2")}</h3>
                         <div className="footer-links">
                             <p onClick={handleNavPrivacy} className="footer-link" data-aos="fade-up" data-aos-duration="1000">{t("Privacy Policy")}</p>
-                            <p className="footer-link" data-aos="fade-up" data-aos-duration="1000">{t("Terms of Service")}</p>
-                            <p className="footer-link" data-aos="fade-up" data-aos-duration="1000">{t("Refund Policy")}</p>
+                            <p onClick={handleNavTerms} className="footer-link" data-aos="fade-up" data-aos-duration="1000">{t("Terms of Service")}</p>
                         </div>
                         {/* <div className="social-media-outer">
                             <a data-aos="fade-up" data-aos-duration="1200" href='https://www.facebook.com/KoreanLiveClass/' target="_blank" rel="noopener noreferrer" className="img-outer io"><img className='media-icon' src={sm1} alt="" /></a>

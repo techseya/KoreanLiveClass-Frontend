@@ -28,6 +28,7 @@ export default function Navbar({ children }: Readonly<Props>) {
     const isReg = location.pathname === "/register";
     const isCategoryC = location.pathname === "/category-courses"
     const isPrivacy = location.pathname === "/privacy-policy"
+  const isTerms = location.pathname === "/terms-services"
 
     const token = sessionStorage.getItem("token")
 
@@ -116,11 +117,11 @@ export default function Navbar({ children }: Readonly<Props>) {
 
                     <div className={`nav-links ${menuOpen ? 'active' : ''}`}>
                         <a href="" onClick={handleNavCourses}>{t('Courses')}</a>
-                        {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy) && <a href="#korean-books">{t('kbooks')}</a>}
-                        {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy) && <a href="#who">{t('who1')}</a>}
-                        {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy) && <a href="#us">{t('what')}</a>}
+                        {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy || isTerms) && <a href="#korean-books">{t('kbooks')}</a>}
+                        {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy || isTerms) && <a href="#who">{t('who1')}</a>}
+                        {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy || isTerms) && <a href="#us">{t('what')}</a>}
                         {visible && (<a href="" onClick={handleNavMyCourses}>{t('myCourses')}</a>)}
-                        {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy) && <a href="#contact">{t('Contact Us')}</a>}
+                        {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy || isTerms) && <a href="#contact">{t('Contact Us')}</a>}
 
 
                         <select
