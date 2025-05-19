@@ -51,6 +51,7 @@ export default function Navbar({ children }: Readonly<Props>) {
 
     const handleNavCourses = () => {
         navigate("/courses")
+        setMenuOpen(false)
     }
 
     const handleNavCategories = () => {
@@ -59,14 +60,17 @@ export default function Navbar({ children }: Readonly<Props>) {
 
     const handleNavMyCourses = () => {
         navigate("/my-courses")
+        setMenuOpen(false)
     }
 
     const handleLoginOpen = () => {
         setLoginOpen(true);
+        setMenuOpen(false)
     };
 
     const handleRegister = () => {
         navigate("/register")
+        setMenuOpen(false)
     }
 
     const handleClose = () => {
@@ -83,6 +87,9 @@ export default function Navbar({ children }: Readonly<Props>) {
         setMenuOpen(false);
     };
 
+    const handleMenu = () => {
+        setMenuOpen(false)
+    }
 
     const handleOpen1 = () => setIsOpen1(true);
     const handleClose1 = () => setIsOpen1(false);
@@ -117,11 +124,11 @@ export default function Navbar({ children }: Readonly<Props>) {
 
                     <div className={`nav-links ${menuOpen ? 'active' : ''}`}>
                         <a href="" onClick={handleNavCourses}>{t('Courses')}</a>
-                        {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy || isTerms) && <a href="#korean-books">{t('kbooks')}</a>}
-                        {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy || isTerms) && <a href="#who">{t('who1')}</a>}
-                        {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy || isTerms) && <a href="#us">{t('what')}</a>}
+                        {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy || isTerms) && <a onClick={handleMenu} href="#korean-books">{t('kbooks')}</a>}
+                        {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy || isTerms) && <a onClick={handleMenu} href="#who">{t('who1')}</a>}
+                        {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy || isTerms) && <a onClick={handleMenu} href="#us">{t('what')}</a>}
                         {visible && (<a href="" onClick={handleNavMyCourses}>{t('myCourses')}</a>)}
-                        {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy || isTerms) && <a href="#contact">{t('Contact Us')}</a>}
+                        {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy || isTerms) && <a onClick={handleMenu} href="#contact">{t('Contact Us')}</a>}
 
 
                         <select

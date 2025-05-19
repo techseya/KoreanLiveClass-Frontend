@@ -21,11 +21,6 @@ import b8 from "../../Assets/Images/b8.png"
 import b9 from "../../Assets/Images/b9.png"
 import b10 from "../../Assets/Images/b10.png"
 import b11 from "../../Assets/Images/b11.png"
-import monkImage from "../../Assets/Images/play-button.png"
-import s1 from "../../Assets/Images/language.png"
-import s2 from "../../Assets/Images/guidance.png"
-import s3 from "../../Assets/Images/access-control.png"
-import s4 from "../../Assets/Images/hints.png"
 import insImg from "../../Assets/Images/ins.jpg";
 import { TikTokFilled } from "@ant-design/icons";
 import { Slide } from "@mui/material";
@@ -40,9 +35,16 @@ import { getWord } from "src/Services/word_api";
 import trophy from "../../Assets/Images/trophy.png"
 import CountUp from "react-countup";
 import { useInView } from "react-intersection-observer";
-import DashLine from "src/Common/Components/DashLine";
 import thumb from "../../Assets/Images/klc-thumb.png"
 import { getVideos } from "src/Services/videos_api";
+import book1 from "../../Assets/Images/b1.jpeg"
+import book2 from "../../Assets/Images/b2.jpeg"
+import book3 from "../../Assets/Images/b3.jpeg"
+import book4 from "../../Assets/Images/b4.jpeg"
+import book5 from "../../Assets/Images/b5.jpeg"
+import book6 from "../../Assets/Images/b6.jpeg"
+import book7 from "../../Assets/Images/b7.jpeg"
+import book8 from "../../Assets/Images/b8.jpeg"
 
 const Transition = forwardRef(function Transition(props: any, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -257,56 +259,56 @@ export default function Landing() {
       description: "කොරියානු රැකියාවක් සදහා කොරියානු රජයේ අනුමත පාඩම් හැටකින් යුක්ත විෂය නිර්දේශයේ පළමු පාඩම් 30 මෙහි අන්තර්ගත වේ. මෙම ග්‍රන්ථයේ කොරියන් අක්ෂර ලියන ආකාරයේ සිට මූලික ව්‍යාකරණ එසේම වචන පිලිබදවත් පැහැදිලි කරනු ලබයි. මෙහි කෙටි වාක්‍ය සහ ජේද භාවිතා කරමින් අනුමාන ප්‍රශ්ණ පත්‍රයන්ද මෙහිදී ඔබට අධ්‍යනය කිරීමට හැකියාව ලැබේ. මෙහි සියලු පාඩම් ඔබට Korean Live Class Mobile App එක හරහා ඉගෙනීමටත් හැකියාවක් ඇත.",
       price: 0,
       tag: true,
-      image: "https://www.koreanliveclass.com/wp-content/uploads/2020/09/TOPIK-1.jpg"
+      image: book8
     },
     {
       name: "EPS TOPIK BOOK – 2",
       description: "කොරියානු රජයේ අනුමත පාඩම් හැටකින් යුක්ත විෂය නිර්දේශයේ දෙවන පාඩම් 30 මෙහි අන්තර්ගත වේ. මෙම කොටසේදී වැඩබිමෙහි දැනගෙන සිටිය යුතු සංස්කෘතීන් / නීති රෙගුලාසි ආදී කරුණුත් එසේම පළමු පොතට වඩා ගැඹුරු ව්‍යාකරණ සහ වචන ඉගෙනීමටත් හැකියාව ලැබේ. එසේම දීර්ඝ ජේද සහ වාක්‍යයන් භාවිතා කරමින් අනුමාන ප්‍රශ්ණ පත්‍රයන්ට මුහුණ දීමටත් ඒවාට උත්තර සපයන ආකාරයත් මෙම ග්‍රන්ථ භාවිතා කිරීමෙන් ඔබට ඉගෙනීමට හැක. මෙහි සියලු පාඩම් ඔබට Korean Live Class Mobile App එක හරහා ඉගෙනීමටත් හැකියාවක් ඇත.",
       price: 0,
       tag: true,
-      image: "https://www.koreanliveclass.com/wp-content/uploads/2020/09/2.jpg"
+      image: book7
     },
     {
       name: "VERBS CLASSIFICATION",
       description: "ක්‍රියාපද වර්ගීකරණය වන මෙම ග්‍රන්ථය මගින් ඔබගේ කොරියන් භාෂා දැනුම ඉතා කෙටි කාලයකින් දියුණු කර ගැනීමට හැකියාව ඇත. මෙහිදී ක්‍රියාපද 125 ක් ව්‍යාකරණ ක්‍රම 45 ක් සමග වර නගා ඇත. කථා බහේදී නිතර භාවිතා වන ව්‍යාකරණ මෙම ග්‍රන්ථයේදී වරනගා තිබේ.",
       price: 1200.00,
       tag: true,
-      image: "https://www.koreanliveclass.com/wp-content/uploads/2020/09/1-1-677x927.jpg"
+      image: book4
     },
     {
       name: "KOREAN LANGUAGE NOUNS & VERBS",
       description: "කොරියන් භාෂාවේ එදිනෙදා නිතර භාවිත වන නාම පද හා ක්‍රියාපද එකතුකර නිර්මාණය කරන ලද ග්‍රන්ථයකි. මෙහි කොරියන් වචන උච්චාරණය කොරියන් ජාතික නිවේදිකාවක් විසින් සිදුකරන අතර එහි සිංහල අර්ථයද එකතු කර තිබේ. මෙහි හඩ පටයත් ඔබට ලබා ගත හැක.",
       price: 1000.00,
       tag: true,
-      image: "https://www.koreanliveclass.com/wp-content/uploads/2020/09/1-1-scaled-677x936.jpeg"
+      image: book1
     },
     {
       name: "Korean Language Grammer – Part 1",
       description: "මෙම ග්‍රන්ථය කොරියන් භාෂාවේ ව්‍යාකරණ පිලිබදව සිදුකල ග්‍රන්ථයකි. මෙය 2016 වර්ෂයේ සිට 2017වර්ෂය දක්වා YouTube හරහා සිදුකල පාඩම් මාලාවේ අත් පොතයි. මෙහි සියලු ව්‍යාකරණ සහ උදාහරණ වාක්‍ය සියල්ල කොරියන් භාෂාවෙන් පමණක් සිදු කිරීමට හේතුව වන්නේ අදාල පාඩම් හි Videos බලා ලිවීමට හුරුකරවීමට ඇති අවශ්‍යතාවයයි.",
       price: 1100.00,
       tag: true,
-      image: "https://www.koreanliveclass.com/wp-content/uploads/2020/09/1-2-scaled-677x936.jpeg"
+      image: book3
     },
     {
       name: "KOREAN SINHALA DICTIONARY",
       description: "කොරියන් සිංහල ශබ්දකෝෂය කොරියන් විභාගයන්ට අනිවාර්යෙන්ම දැනගෙන සිටියයුතු වචන එකතුකර කරන ලද ග්‍රන්ථයකි. එසේම කොරියාවේ උසස් අධ්‍යාපනය ලබන්නට බලාපොරොත්තු වන්නේ නම් මෙම ග්‍රන්ථය ඔබට මහත් උපකාරයක් වනු ඇත.",
       price: 0,
       tag: false,
-      image: "https://www.koreanliveclass.com/wp-content/uploads/2020/09/1-3-scaled-677x974.jpeg"
+      image: book2
     },
     {
       name: "TOPIK 1 ~ 2",
       description: "මෙම ග්‍රන්ථය ටොපික් පළමු සහ දෙවන පන්ති විභාගය ඉලක්ක කර නිර්මාණය කරන ලද ප්‍රශ්ණපත්‍ර පොතකි. මෙහි Listening සහ Reading ආදී වශයෙන් වන අතර ප්‍රශ්ණපත්‍ර තුන බැගින් සාකච්ජ්චා කර ඇත. මෙම විභාගය කොරියාවේ පමණක් නොව ශ්‍රී ලංකාවේදී ද මුහුණ දීමට හැකියාව ඇත. මෙයට අදාල සියලු පාඩම් YouTube හරහා නැරබීමටත් හැක. මෙමෙ විභාගයට මුහුණ දීම තුලින් ඔබට වීසා මරු කිරීමෙදී විශාල උදව්වක් වනු ඇත.",
       price: 0,
       tag: false,
-      image: "https://www.koreanliveclass.com/wp-content/uploads/2020/09/1-677x902.jpg"
+      image: book6
     },
     {
       name: "TOPIK 3 ~ 6",
       description: "මෙම ප්‍රශ්ණපත්‍ර පොත ටොපික් තුන්වන සහ හයවන පන්ති විභාගය ඉලක්ක කර නිර්මාණය කරන ලද ග්‍රන්ථයකි. මෙහිදී ප්‍රශ්ණපත්‍ර එක බැගින් සාකච්ජ්චා වන අතර එය Listening / Reading / Writing වශයෙන් කොටස් තුනකින් යුක්තය. මෙම විභාගයත් ශ්‍රී ලංකාවේ සිට මහුණ දීමට හැකි අතර ඔබ කොරියාවට පැමිණි පසු වෙනත් වීසා වලට මාරු වීමේදී ප්‍රයෝජනවත්ය. මෙයට අදාල සියලු පාඩම් YouTube හරහා නැරබීමටත් හැක.",
       price: 0,
       tag: false,
-      image: "https://www.koreanliveclass.com/wp-content/uploads/2020/09/1-scaled-677x948.jpeg"
+      image: book5
     }
   ]
 
@@ -321,9 +323,9 @@ export default function Landing() {
         onClose={handleClose}
       />
       <div className="bg-overlay0"></div>
-      <div className="word-outer" onClick={() => setModalOpen(true)}>
+      {/* <div className="word-outer" onClick={() => setModalOpen(true)}>
         {t("word")}
-      </div>
+      </div> */}
 
       {modalOpen && (
         <div className="modal-overlay7" onClick={() => setModalOpen(false)}>
@@ -962,7 +964,7 @@ export default function Landing() {
       <Footer />
 
       <div className="fab-container">
-        <a href="https://web.facebook.com/KoreanLiveClass/?_rdc=1&_rdr#" target="_blank" className="fab fab-icon facebook"><Facebook /></a>
+        <a href="https://www.facebook.com/share/1BiH9u5kgC/?mibextid=wwXIfr" target="_blank" className="fab fab-icon facebook"><Facebook /></a>
         <a href="https://www.tiktok.com/@korean.live.class?_t=ZS-8wDKjn6VeBs&_r=1" target="_blank" className="fab fab-icon tiktok"><TikTokFilled /></a>
         <a href="https://www.instagram.com/korean_live_class/" target="_blank" className="fab fab-icon instagram"><Instagram /></a>
         <a href="https://www.youtube.com/@koreanliveclassrev.mangala5996" target="_blank" className="fab fab-icon youtube"><YouTube /></a>
