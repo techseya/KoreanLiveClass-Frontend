@@ -193,7 +193,7 @@ body {
 .fab-container {
   position: fixed;
   height: auto;
-  bottom: 40vh;
+  bottom: 30vh;
   right: 0px;
   display: flex;
   flex-direction: column-reverse;
