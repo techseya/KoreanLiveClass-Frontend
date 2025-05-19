@@ -6,11 +6,14 @@ import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/system";
 import { Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { Add } from "@mui/icons-material";
+import FingerprintJS from '@fingerprintjs/fingerprintjs';
+import { login } from "src/Services/auth_api";
 import { register } from "src/Services/auth_api";
 
 import { getCodeList } from "country-list";
 import { getCountryCallingCode, CountryCode } from "libphonenumber-js";
 import Footer from "src/Layout/Footer";
+import React from "react";
 
 type CountryOption = {
     code: string;
@@ -46,8 +49,67 @@ export default function Register() {
     const [password, setPassword] = useState("");
     const [cpassword, setCPassword] = useState("");
 
+    const [deviceId, setDeviceId] = React.useState("")
+
+    const handleLogin = async () => {
+        const body = {
+            email,
+            password,
+            deviceId
+        }
+
+        try {
+            const response = await login(body)
+            if (response.data.token !== null) {
+                sessionStorage.setItem("token", response.data.token)
+                sessionStorage.setItem("id", response.data.id)
+                if (response.data.type === "Admin") {
+                    navigate("/dashboard")
+                } else {
+                    alert("Login Success")
+                }
+
+            }
+        } catch (error: any) {
+            if (error.response.data.message === "Login not allowed from this device.") {
+                alert(error.response.data.message + " Please try again in different tab.")
+            } else {
+                alert(error.response.data.message)
+            }
+        }
+
+        window.location.reload()
+    }
+
+    const getDeviceId = async () => {
+        const fp = await FingerprintJS.load();
+
+        let attempts = 0;
+        let stableId = '';
+
+        while (attempts < 3) {
+            const result = await fp.get();
+            const id = result.visitorId;
+
+            console.log(`Attempt ${attempts + 1}: ${id}`);
+
+            // If this is not the first attempt and ID matches previous, consider it stable
+            if (stableId && id === stableId) {
+                break;
+            }
+
+            stableId = id;
+            attempts++;
+            await new Promise(resolve => setTimeout(resolve, 300)); // wait a bit between attempts
+        }
+
+        setDeviceId(stableId)
+
+    };
+
     useEffect(() => {
         setPhoneNo(country.callingCode); // Reset phone on country change
+        getDeviceId()
     }, [country]);
 
     const handleSubmit = async () => {
@@ -82,7 +144,7 @@ export default function Register() {
             const response = await register(body);
             if (response.data.message === "Registration completed") {
                 alert("Registration completed");
-                window.location.reload();
+                handleLogin()
             }
         } catch (error: any) {
             alert(error.response?.data?.message || "Registration failed.");
@@ -93,7 +155,7 @@ export default function Register() {
         <div className="register-outer">
             <div className="courses-header" style={{ textAlign: "center", marginBottom: "1rem" }}>
                 <div className="bg"></div>
-                <h1 style={{ fontSize: "2rem", marginBottom: "0.5rem", zIndex:10 }}>{t("SignUp")}</h1>
+                <h1 style={{ fontSize: "2rem", marginBottom: "0.5rem", zIndex: 10 }}>{t("SignUp")}</h1>
             </div>
             <div className="user-form-outer1">
                 <Box component="form" noValidate autoComplete="off" sx={{ p: 2, width: "95%" }}>
@@ -188,7 +250,7 @@ export default function Register() {
                     </Grid>
                 </Box>
             </div>
-            <Footer/>
+            <Footer />
         </div>
     );
 }

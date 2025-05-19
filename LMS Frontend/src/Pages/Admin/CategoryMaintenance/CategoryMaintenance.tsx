@@ -1,6 +1,8 @@
 import {
     Paper, IconButton, Box, Chip, Typography,
-    TextField, Grid, FormControl, InputLabel, Select, MenuItem, Button
+    TextField, Grid, FormControl, InputLabel, Select, MenuItem, Button,
+    Backdrop,
+    CircularProgress
 } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
@@ -19,6 +21,8 @@ export default function CategoryMaintenance() {
     const [visible, setVisible] = useState(false);
     const [editingCategory, setEditingCategory] = useState<any | null>(null);
     const [rows, setRows] = useState<any[]>([]);
+    const [thumb, setThumb] = useState<File | any>(null);
+    const [loading, setLoading] = useState(false);
 
     const token = sessionStorage.getItem("token")
 
@@ -52,20 +56,23 @@ export default function CategoryMaintenance() {
     };
 
     const handleUpdate = async () => {
+        setLoading(true);
 
-        const payload = {
-            id: editingCategory.id,
-            name: editingCategory.name,
-            description: editingCategory.description,
-            imageUrl: editingCategory.imageUrl,
-            activeStatus: editingCategory.activeStatus
-        };
+        const formData = new FormData();
+        formData.append("id", editingCategory.id);
+        formData.append("name", editingCategory.name);
+        formData.append("description", editingCategory.description);
+        formData.append("imageUrl", thumb)
+        formData.append("activeStatus", editingCategory.activeStatus);
 
         try {
-            const response = await updateCategory(editingCategory.id, payload)
+            const response = await updateCategory(editingCategory.id, formData)
             alert(response.data.message)
+            setLoading(false);
         } catch (error: any) {
             alert(error.response.message)
+        } finally {
+            setLoading(false);
         }
         setRows((prevRows) =>
             prevRows.map((row) => (row.id === editingCategory.id ? editingCategory : row))
@@ -73,6 +80,7 @@ export default function CategoryMaintenance() {
 
         setEditingCategory(null);
         setVisible(false);
+        window.location.reload()
     };
 
     const columns: GridColDef[] = [
@@ -110,6 +118,12 @@ export default function CategoryMaintenance() {
 
     return (
         <>
+        <Backdrop
+                        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                        open={loading}
+                    >
+                        <CircularProgress color="inherit" />
+                    </Backdrop>
             {!visible && (
                 <Paper sx={{ height: 'auto', width: '100%', marginTop: 2, overflowX: 'auto' }}>
                     <DataGrid
@@ -167,16 +181,26 @@ export default function CategoryMaintenance() {
                         </Grid>
 
                         <Grid item xs={12} sm={12}>
-                            <TextField
-                                label="Thumbnail"
-                                fullWidth
-                                value={editingCategory?.imageUrl || ''}
-                                onChange={(e) => handleFormChange("thumbnail", e.target.value)}
+                            <input
+                                type="file"
+                                accept="image/*"
+                                onChange={(e) => {
+                                    const file = e.target.files?.[0];
+                                    if (file) {
+                                        const url = URL.createObjectURL(file);
+                                        handleFormChange("imageUrl", url);
+                                        setThumb(file)
+                                    }
+                                }}
                             />
                         </Grid>
 
                         <Grid item xs={12} sm={3}>
-                            <img style={{ width: "80%", border: '1px solid black', borderRadius: "8px" }} src={editingCategory?.imageUrl} alt="" />
+                        <img
+                                style={{ width: "80%", border: '1px solid black', borderRadius: "8px" }}
+                                src={editingCategory?.imageUrl?.replace("dl=0", "raw=1")}
+                                alt="Course Thumbnail"
+                            />
                         </Grid>
 
                         <Grid item xs={12} display="flex" justifyContent="flex-end">

@@ -21,19 +21,19 @@ export default function CategoryForm() {
     const [name, setName] = useState("")
     const [description, setDescription] = useState("")
     const [status, setStatus] = useState("Active")
-    const [thumbnail, setThumbnail] = useState("")
+    const [thumbnail, setThumbnail] = useState<File | any>(null);
+    const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
 
     const handleSubmit = async () => {
 
-        const body = {
-            name: name,
-            description: description,
-            imageUrl: thumbnail,
-            activeStatus: status === "Active" ? 1 : 2
-        }
+        const formData = new FormData();
+        formData.append("name", name);
+        formData.append("description", description)
+        formData.append("imageUrl", thumbnail);
+        formData.append("activeStatus", status === "Active" ? "1" : "2");
 
         try {
-            const response = await createCategory(body)
+            const response = await createCategory(formData)
             alert(response.data.message)
         } catch (error: any) {
             alert(error.response.data.message);
@@ -81,16 +81,30 @@ export default function CategoryForm() {
                     </Grid>
 
                     <Grid item xs={12} sm={12}>
-                        <TextField
-                            label="Thumbnail"
-                            fullWidth
-                            value={thumbnail}
-                            onChange={(e) => setThumbnail(e.target.value)}
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => {
+                                if (e.target.files && e.target.files[0]) {
+                                    const file = e.target.files[0];
+                                    setThumbnail(file);
+                                    setThumbnailPreview(URL.createObjectURL(file));
+                                }
+                            }}
                         />
                     </Grid>
 
                     <Grid item xs={12} sm={3}>
-                        <img style={{ width: "80%", border: '1px solid black', borderRadius: "8px" }} src={thumbnail} alt="" />
+                    {thumbnailPreview && (
+                            <div>
+                                <p>Image Preview:</p>
+                                <img
+                                    src={thumbnailPreview}
+                                    alt="Thumbnail Preview"
+                                    style={{ width: "200px", height: "auto", marginTop: "10px" }}
+                                />
+                            </div>
+                        )}
                     </Grid>
 
                     <Grid item xs={12} display="flex" justifyContent="flex-end">

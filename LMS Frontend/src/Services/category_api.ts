@@ -14,7 +14,11 @@ export const getCategories = async () => {
 
 export const createCategory = async (body:any) => {
     try {
-        const response = await axios.post(api+`category`,body)
+        const response = await axios.post(api+`category`,body,{
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
         return response;
     } catch (error) {
         throw error;
@@ -23,7 +27,11 @@ export const createCategory = async (body:any) => {
 
 export const updateCategory = async (id:any, body:any) => {
     try {
-        const response = await axios.put(api+`category/${id}`,body)
+        const response = await axios.put(api+`category/${id}`,body,{
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
         return response;
     } catch (error) {
         throw error;

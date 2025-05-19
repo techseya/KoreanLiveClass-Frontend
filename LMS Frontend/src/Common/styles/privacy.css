@@ -1,0 +1,18 @@
+.p-outer{
+    width: 100%;
+    height: auto;
+}
+
+.p-inner{
+    width: auto;
+    height: auto;
+    padding: 25px 40px;
+}
+
+h2{
+    padding: 10px 0;
+}
+
+p{
+    padding: 5px 0;
+}
