@@ -622,22 +622,22 @@ body {
 }
 
 .word-outer {
+  width: auto;
+  height: auto;
   position: fixed;
-  padding: 5px 10px;
+  padding: 5px;
   display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
+  justify-content: center;
   right: 0;
-  top: 170px;
+  top: 150px;
   color: white;
-  background-color: rgb(145, 27, 11);
   z-index: 900;
   border-top-left-radius: 5px;
   border-bottom-left-radius: 5px;
   font-size: 18px;
-  border: 1px solid black;
   cursor: pointer;
   animation: bouncePulse 1.8s infinite;
+  z-index: 900;
 }
 
 .modal-overlay7 {

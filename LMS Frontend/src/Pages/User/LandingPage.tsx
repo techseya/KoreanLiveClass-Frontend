@@ -45,6 +45,9 @@ import book5 from "../../Assets/Images/b5.jpeg"
 import book6 from "../../Assets/Images/b6.jpeg"
 import book7 from "../../Assets/Images/b7.jpeg"
 import book8 from "../../Assets/Images/b8.jpeg"
+import notificationIcon from "../../Assets/Images/notification.png"
+import { getAllNotices } from "src/Services/notice_api";
+import CustomModal from "src/Common/Components/CustomModal";
 
 const Transition = forwardRef(function Transition(props: any, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -76,11 +79,19 @@ export default function Landing() {
   const [modalOpen, setModalOpen] = useState(false);
   const [ref1, inView1] = useInView({ triggerOnce: true });
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [notice, setNotice] = useState<any[]>([])
+  const [showModal1, setShowModal1] = useState(false);
 
   const { ref, inView } = useInView({
     triggerOnce: true,
     threshold: 0.3,
   });
+
+  const noticeToken = sessionStorage.getItem("noticeToken")
+
+  const handleClose1 = () => {
+    setShowModal1(false);
+  };
 
   const handleBookClick = (book: any) => {
     setSelectedBook(book);
@@ -161,6 +172,10 @@ export default function Landing() {
   useEffect(() => {
     const hasRefreshed = sessionStorage.getItem("hasRefreshed");
 
+    if(!noticeToken){
+      setShowModal1(true)
+    }
+
     if (!hasRefreshed) {
       sessionStorage.setItem("hasRefreshed", "true");
       window.location.reload(); // Only once per session
@@ -171,6 +186,7 @@ export default function Landing() {
     handleGetTopCourses();
     handleGetWord();
     handleGetVideos()
+    handleGetNotices()
 
     AOS.init({
       duration: 1000,
@@ -206,6 +222,17 @@ export default function Landing() {
       setSinhala(response.data.sinhala)
     } catch (error) {
       console.error(error);
+    }
+  }
+
+  const handleGetNotices = async () => {
+    try {
+      const response = await getAllNotices("")
+      console.log(response.data);
+      setNotice(response.data)
+    } catch (error) {
+      console.error(error);
+
     }
   }
 
@@ -317,12 +344,26 @@ export default function Landing() {
       className="main-outer"
       style={{ backgroundImage: `url(${images[bgIndex]})` }}
     >
+      {showModal1 && (
+        <CustomModal
+          title={notice[0]?.title}
+          description={notice[0]?.notification}
+          onClose={handleClose1}
+        />
+      )}
+      
       <LoginDialogbox
         open={loginOpen}
         onAgree={handleLogin}
         onClose={handleClose}
       />
+
       <div className="bg-overlay0"></div>
+      {noticeToken === "later" && (
+        <div className="word-outer">
+        <img style={{width: "50px"}} src={notificationIcon} alt="" onClick={(e) => setShowModal1(true)} />
+      </div>
+      )}      
       {/* <div className="word-outer" onClick={() => setModalOpen(true)}>
         {t("word")}
       </div> */}

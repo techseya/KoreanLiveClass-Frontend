@@ -16,7 +16,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useMediaQuery } from "@mui/material";
 import "../Common/styles/style.css";
 import "../Common/styles/navbar.css";
-import { LogoutOutlined, MenuOutlined, OndemandVideo, WysiwygOutlined } from "@mui/icons-material";
+import { LogoutOutlined, MenuOutlined, NotificationsNone, OndemandVideo, WysiwygOutlined } from "@mui/icons-material";
 import logo from "../Assets/Images/logo.jpeg";
 import man from "../Assets/Images/man.png";
 import Dialogbox from "../Common/Components/DialogBox";
@@ -198,10 +198,12 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
       setActive(5);
     } else if (path === "/user-maintenance") {
       setActive(6);
-    } else if (path === "/k-word") {
+    } else if (path === "/notice") {
       setActive(7);
-    } else if (path === "/video-maintenance") {
+    } else if (path === "/k-word") {
       setActive(8);
+    } else if (path === "/video-maintenance") {
+      setActive(9);
     } else {
       setActive(0);
     }
@@ -213,6 +215,7 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
   const handleClickCourse = () => navigate("/course-maintenance")
   const handleClickSection = () => navigate("/section-maintenance")
   const handleClickRecording = () => navigate("/recording-maintenance")
+  const handleClickNotice = () => navigate("/notice")
   const handleClickWord = () => navigate("/k-word")
   const handleClickVideos = () => navigate("/video-maintenance")
 
@@ -246,6 +249,11 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
       name: "Users",
       icon: <UserAddOutlined style={{ fontSize: "20px" }} />,
       onClick: handleClickUserMaintenance,
+    },
+    {
+      name: "Notice",
+      icon: <NotificationsNone style={{ fontSize: "20px" }} />,
+      onClick: handleClickNotice,
     },
     {
       name: "Korean Word",
