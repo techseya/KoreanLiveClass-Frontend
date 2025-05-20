@@ -11,10 +11,12 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import Footer from "src/Layout/Footer";
 import thumb from "../../Assets/Images/klc-thumb.png"
+import { getAllWords } from "src/Services/word_api";
 
 export default function MyCourses() {
     const [courses, setCourses] = useState<any[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>("");
+    const [rows, setRows] = useState<any[]>([]);
     const { t, i18n } = useTranslation();
 
     const navigate = useNavigate();
@@ -22,27 +24,27 @@ export default function MyCourses() {
     const id = sessionStorage.getItem("id")
 
     const handleCourseClick = (course: any) => {
-        
+
         navigate(`/my-course`, {
             state: {
-              id: course.id,
-              name: course.name,
-              description : course.description,
-              thumbnail: (course.thumbnail === null || course.thumbnail === "") ? thumb : course.thumbnail,
-              level: course.level,
-              totalDuration: course.totalDuration,
-              price: course.price,
-              sectionCount: course.sectionCount,
+                id: course.id,
+                name: course.name,
+                description: course.description,
+                thumbnail: (course.thumbnail === null || course.thumbnail === "") ? thumb : course.thumbnail,
+                level: course.level,
+                totalDuration: course.totalDuration,
+                price: course.price,
+                sectionCount: course.sectionCount,
             }
-          });
+        });
     };
 
-
     useEffect(() => {
-        if(token === null){
+        if (token === null) {
             navigate("/")
         }
         handleGetCourses();
+        handleGetLessons();
 
         AOS.init({
             duration: 1000,
@@ -51,9 +53,39 @@ export default function MyCourses() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, []);
 
+    const handleGetLessons = async () => {
+    try {
+        const response = await getAllWords(token);
+        const allWords = response.data;
+
+        if (allWords.length === 0) {
+            setRows([]);
+            return;
+        }
+
+        const baseDate = new Date(allWords[0].createdAt).toISOString().split("T")[0];
+
+        const filteredWords = allWords
+            .map((word: any) => ({
+                ...word,
+                createdAtDate: new Date(word.createdAt).toISOString().split("T")[0]
+            }))
+            .filter((word:any) => word.createdAtDate === baseDate)
+            .map((word:any) => ({
+                ...word,
+                active: "Yes"
+            }));
+
+        setRows(filteredWords);
+    } catch (error: any) {
+        console.error(error);
+    }
+};
+
+
     const handleGetCourses = async () => {
         try {
-            const response = await getCourseByUserId(id,token);
+            const response = await getCourseByUserId(id, token);
             console.log(response);
             setCourses(response?.data);
         } catch (error) {
@@ -69,8 +101,8 @@ export default function MyCourses() {
     return (
         <div className="courses-main-outer">
             <div className="courses-header" style={{ textAlign: "center", marginBottom: "1rem" }}>
-            <div className="bg"></div>
-                <h1 style={{ fontSize: "2rem", marginBottom: "0.5rem", zIndex:10 }}>{t("myCourses")}</h1>
+                <div className="bg"></div>
+                <h1 style={{ fontSize: "2rem", marginBottom: "0.5rem", zIndex: 10 }}>{t("myCourses")}</h1>
                 <TextField
                     variant="outlined"
                     placeholder="Search courses..."
@@ -99,9 +131,9 @@ export default function MyCourses() {
                             style={{ cursor: "pointer" }}
                         >
                             <div className="course-thumbnail">
-                                {course.thumbnail === null || course.thumbnail === ""? (<img src={thumb} alt="Course Thumbnail" />)
-                                : (<img src={course.thumbnail.replace("dl=0", "raw=1")} alt="Course Thumbnail" />)} 
-                                
+                                {course.thumbnail === null || course.thumbnail === "" ? (<img src={thumb} alt="Course Thumbnail" />)
+                                    : (<img src={course.thumbnail.replace("dl=0", "raw=1")} alt="Course Thumbnail" />)}
+
                             </div>
 
                             <div className="course-info">
@@ -114,12 +146,16 @@ export default function MyCourses() {
                     )}
                 </div>
             </div>
-            
+
             <div className="space1"></div>
             <div className="space1"></div>
             <div className="space1"></div>
 
-            <Footer/>
+            <div className="tl-outer">
+                {t("extra")}
+            </div>
+
+            <Footer />
         </div>
     );
 }
