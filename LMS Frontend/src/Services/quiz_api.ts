@@ -12,9 +12,9 @@ export const getQuiz = async (id:any) => {
     }
 }
 
-export const getQuestions = async (id:any) => {
+export const getQuestions = async (id:any,type:any) => {
     try {
-        const response = await axios.get(api+`question?quizId=${id}`)
+        const response = await axios.get(api+`question?quizId=${id}&type=${type}`)
         return response;
     } catch (error) {
         throw error;

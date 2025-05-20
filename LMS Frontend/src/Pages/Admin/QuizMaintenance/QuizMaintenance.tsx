@@ -39,7 +39,7 @@ export default function QuizMaintenance() {
 
     const handleGetQuestions = async (id: any) => {
         try {
-            const res = await getQuestions(id);
+            const res = await getQuestions(id,"admin");
             const transformed = res.data.map((q: any) => ({
                 ...q,
                 answer1: q.answer.answer1,
