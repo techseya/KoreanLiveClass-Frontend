@@ -200,7 +200,7 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
       setActive(6);
     } else if (path === "/notice") {
       setActive(7);
-    } else if (path === "/k-word") {
+    } else if (path === "/k-lesson") {
       setActive(8);
     } else if (path === "/video-maintenance") {
       setActive(9);
@@ -216,7 +216,7 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
   const handleClickSection = () => navigate("/section-maintenance")
   const handleClickRecording = () => navigate("/recording-maintenance")
   const handleClickNotice = () => navigate("/notice")
-  const handleClickWord = () => navigate("/k-word")
+  const handleClickWord = () => navigate("/k-lesson")
   const handleClickVideos = () => navigate("/video-maintenance")
 
   const drawerItems = [

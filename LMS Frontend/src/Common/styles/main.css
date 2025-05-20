@@ -199,6 +199,7 @@ body {
   flex-direction: column-reverse;
   align-items: center;
   z-index: 999 !important;
+  color: #0b8df721;
 }
 
 .fab {

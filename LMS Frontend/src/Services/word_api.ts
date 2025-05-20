@@ -14,7 +14,7 @@ export const getWord = async () => {
 
 export const getAllWords = async (token:any) => {
     try {
-        const response = await axios.get(`${api}today-lesson/all`, {
+        const response = await axios.get(`${api}today-lesson-notification/all`, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -27,9 +27,10 @@ export const getAllWords = async (token:any) => {
 
 export const addWord = async (token:any, body:any) => {
     try {
-        const response = await axios.post(`${api}today-lesson`,body, {
+        const response = await axios.post(`${api}today-lesson-notification`,body, {
             headers: {
-                Authorization: `Bearer ${token}`
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'multipart/form-data'
             }
         });
         return response;
