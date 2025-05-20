@@ -202,7 +202,8 @@
     padding: 10px 18px;
     height: auto;
     position: fixed;
-    background-color: #e9e7e7;
+    background-color: #030b4a;
+    color: white;
     bottom: 50px;
     right: 50px;
     z-index: 900;
