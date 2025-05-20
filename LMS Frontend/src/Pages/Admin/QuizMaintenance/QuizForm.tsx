@@ -98,8 +98,6 @@ export default function QuizForm() {
     const handleCheckQuiz = async (id: any) => {
         try {
             const response = await getQuiz(id)
-            console.log(response.data[0]);
-
             if (response.data.length === 0) {
                 handleAddQuiz(id)
             } else {

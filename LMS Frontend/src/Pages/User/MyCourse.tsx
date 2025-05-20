@@ -8,12 +8,15 @@ import {
     Accordion,
     AccordionSummary,
     AccordionDetails,
+    Modal,
+    Button,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { PlayCircleFilled } from "@mui/icons-material";
+import { ArrowBackIos, ArrowForwardIos, AutoStories, PlayCircleFilled, Quiz } from "@mui/icons-material";
 import Footer from "src/Layout/Footer";
 import { useTranslation } from "react-i18next";
 import thumb from "../../Assets/Images/klc-thumb.png"
+import { getQuestions, getQuiz } from "src/Services/quiz_api";
 
 export default function MyCourse() {
     const location = useLocation();
@@ -24,6 +27,12 @@ export default function MyCourse() {
     const [playingVideoUrl, setPlayingVideoUrl] = useState<string | null>(null);
     const [videoType, setVideoType] = useState<string | null>(null);
     const { t, i18n } = useTranslation();
+    const [quizId, setQuizId] = useState("")
+    const [openQuizModal, setOpenQuizModal] = useState(false);
+    const [questions, setQuestions] = useState<any[]>([]);
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+    const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
+    const [confirmedAnswers, setConfirmedAnswers] = useState<Record<number, string>>({});
 
     const token = sessionStorage.getItem("token")
     const navigate = useNavigate()
@@ -32,7 +41,11 @@ export default function MyCourse() {
         if (token === null) {
             navigate("/")
         }
-        if (course?.id) handleGetSections();
+        if (course?.id) {
+            handleGetSections();
+            handleGetQuiz()
+        }
+
         window.scrollTo(0, 0);
     }, []);
 
@@ -47,11 +60,29 @@ export default function MyCourse() {
             console.error("Error fetching sections", error);
         }
     };
-    
+
+    const handleGetQuiz = async () => {
+        try {
+            const response = await getQuiz(course.id)
+            setQuizId(response.data[0].id)
+            handleGetQuestions(response.data[0].id)
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const handleGetQuestions = async (id: any) => {
+        try {
+            const response = await getQuestions(id, "user")
+            setQuestions(response.data);
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     const handleGetRecordings = async (sectionId: string) => {
         if (recordingsMap[sectionId]) return; // Avoid refetching
-    
+
         try {
             const response = await getRecordingsBySectionId(sectionId);
             const filteredRecordings = (response.data || []).filter(
@@ -61,7 +92,7 @@ export default function MyCourse() {
         } catch (error) {
             console.error("Error fetching recordings", error);
         }
-    };    
+    };
 
     const getVimeoEmbedUrl = (url: string) => {
         const videoId = url.split("/").pop();
@@ -84,13 +115,107 @@ export default function MyCourse() {
 
     return (
         <div className="courses-main-outer">
+
+            <Modal open={openQuizModal} onClose={() => setOpenQuizModal(false)}>
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: { xs: '90%', sm: 400 },
+                        maxHeight: '90vh',
+                        bgcolor: 'background.paper',
+                        borderRadius: 2,
+                        boxShadow: 24,
+                        p: { xs: 2, sm: 4 },
+                        overflowY: 'auto',
+                        display: 'flex',
+                        flexDirection: 'column',
+                      }}
+                >
+                    {questions.length > 0 ? (
+                        <>
+                            <Typography variant="h6" gutterBottom>
+                                Question {currentQuestionIndex + 1}
+                            </Typography>
+                            <Typography sx={{ mb: 2 }}>
+                                {questions[currentQuestionIndex].questionText}
+                            </Typography>
+
+                            {Object.entries(questions[currentQuestionIndex].answer)
+                                .filter(([key]) => key.startsWith("answer"))
+                                .map(([key, val]) => {
+                                    const valStr = val as string;
+                                    const isSelected = selectedAnswer === valStr;
+                                    const isConfirmed = confirmedAnswers[currentQuestionIndex] === valStr;
+
+                                    return (
+                                        <Button
+                                            key={key}
+                                            variant={isSelected ? "contained" : "outlined"}
+                                            color={isConfirmed ? "success" : "primary"}
+                                            fullWidth
+                                            sx={{ mb: 1, textTransform: "none" }}
+                                            onClick={() => {
+                                                if (!confirmedAnswers[currentQuestionIndex]) {
+                                                    setSelectedAnswer(valStr);
+                                                }
+                                            }}
+                                            disabled={!!confirmedAnswers[currentQuestionIndex]} // disable buttons after confirm
+                                        >
+                                            {valStr}
+                                        </Button>
+                                    );
+                                })}
+
+                            <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
+                                <Button
+                                    disabled={currentQuestionIndex === 0}
+                                    onClick={() => {
+                                        setCurrentQuestionIndex((prev) => prev - 1);
+                                    }}
+                                >
+                                    <ArrowBackIos />
+                                </Button>
+
+                                <Button disabled={selectedAnswer === null}>
+                                    Confirm
+                                </Button>
+
+                                <Button
+                                    disabled={currentQuestionIndex === questions.length - 1}
+                                    onClick={() => {
+                                        setCurrentQuestionIndex((prev) => prev + 1);
+                                    }}
+                                >
+                                    <ArrowForwardIos />
+                                </Button>
+                            </Box>
+                        </>
+                    ) : (
+                        <Typography>No questions available.</Typography>
+                    )}
+
+                </Box>
+            </Modal>
+
             <div className="cc">
                 <div className="c-items-outer">
                     <div className="c-title">{course.name}</div>
                 </div>
                 <div className="c-desc">{course.description}</div>
                 <div className="c-items-outer">
-                    <div className="c-label">{course.level}</div>
+                    <div style={{ display: "flex", gap: "10px" }}>
+                        <div className="c-label">{course.level}</div>
+                        {questions.length > 0 && (
+                            <div className="c-label1" onClick={() => setOpenQuizModal(true)}>
+                                <Quiz />
+                                {t("quiz")}
+                            </div>
+                        )}
+                    </div>
+
                     <div className="c-section-count">Sections : {sections.length}</div>
                 </div>
             </div>

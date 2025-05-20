@@ -159,11 +159,29 @@
     font-size: 12px;
     font-weight: 600;
     color: white;
+    display: flex;
+    align-items: center;
     background-color: #0c0c0c;
     padding: 5px 10px;
     border-radius: 5px;
     margin-bottom: 10px;
     font-family: publicsans, sans-serif;
+}
+
+.c-label1{
+    font-size: 12px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: white;
+    background-color: #3a9b14;
+    border: 1px solid black;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    font-family: publicsans, sans-serif;
+    cursor: pointer;
 }
 
 .c-section-count{
