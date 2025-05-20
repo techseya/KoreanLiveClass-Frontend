@@ -16,7 +16,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useMediaQuery } from "@mui/material";
 import "../Common/styles/style.css";
 import "../Common/styles/navbar.css";
-import { LogoutOutlined, MenuOutlined, NotificationsNone, OndemandVideo, WysiwygOutlined } from "@mui/icons-material";
+import { LogoutOutlined, MenuOutlined, NotificationsNone, OndemandVideo, PostAdd, WysiwygOutlined } from "@mui/icons-material";
 import logo from "../Assets/Images/logo.jpeg";
 import man from "../Assets/Images/man.png";
 import Dialogbox from "../Common/Components/DialogBox";
@@ -196,14 +196,16 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
       setActive(4);
     } else if (path === "/recording-maintenance") {
       setActive(5);
-    } else if (path === "/user-maintenance") {
+    } else if (path === "/quiz-maintenance") {
       setActive(6);
-    } else if (path === "/notice") {
+    } else if (path === "/user-maintenance") {
       setActive(7);
-    } else if (path === "/k-lesson") {
+    } else if (path === "/notice") {
       setActive(8);
-    } else if (path === "/video-maintenance") {
+    } else if (path === "/k-lesson") {
       setActive(9);
+    } else if (path === "/video-maintenance") {
+      setActive(10);
     } else {
       setActive(0);
     }
@@ -215,6 +217,7 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
   const handleClickCourse = () => navigate("/course-maintenance")
   const handleClickSection = () => navigate("/section-maintenance")
   const handleClickRecording = () => navigate("/recording-maintenance")
+  const handleClickQuiz = () => navigate("/quiz-maintenance")
   const handleClickNotice = () => navigate("/notice")
   const handleClickWord = () => navigate("/k-lesson")
   const handleClickVideos = () => navigate("/video-maintenance")
@@ -244,6 +247,11 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
       name: "Recording",
       icon: <PlayCircleOutlined style={{ fontSize: "20px" }} />,
       onClick: handleClickRecording,
+    },
+    {
+      name: "Quiz",
+      icon: <PostAdd style={{ fontSize: "20px" }} />,
+      onClick: handleClickQuiz,
     },
     {
       name: "Users",
