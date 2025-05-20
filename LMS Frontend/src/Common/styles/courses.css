@@ -199,7 +199,7 @@
 
 .tl-outer{
     width: auto;
-    padding: 10px 15px;
+    padding: 10px 18px;
     height: auto;
     position: fixed;
     background-color: #e9e7e7;
@@ -207,13 +207,30 @@
     right: 50px;
     z-index: 900;
     display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
     justify-content: center;
     align-items: center;
     border-bottom-left-radius: 15px;
     border-top-left-radius: 15px;
     border-top-right-radius: 15px;
     cursor: pointer;
+    font-size: 16px;
 }
+
+.loader {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  animation: spin 1s linear infinite;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 
 @media (max-width: 1025px){
 
