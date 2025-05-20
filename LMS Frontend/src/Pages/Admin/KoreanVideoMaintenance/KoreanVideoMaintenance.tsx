@@ -14,7 +14,7 @@ import Dialogbox from "src/Common/Components/DialogBox";
 function CustomNoRowsOverlay() {
     return (
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', padding: 2 }}>
-            <Typography variant="h6" color="text.secondary">No Courses Found</Typography>
+            <Typography variant="h6" color="text.secondary">No Videos Found</Typography>
         </Box>
     );
 }
