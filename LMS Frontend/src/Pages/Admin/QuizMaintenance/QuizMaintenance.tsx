@@ -1,12 +1,12 @@
 import {
-    Paper, IconButton, Box, Chip, Typography,
-    TextField, Grid, FormControl, InputLabel, Select, MenuItem, Button
-    } from "@mui/material";
+    Paper, IconButton, Box, Typography, TextField,
+    Grid, FormControl, InputLabel, Select, MenuItem, Button
+} from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";
 import { getAllCourses } from "src/Services/course_api";
-import { getSections, updateSection } from "src/Services/section_api";
+import { getQuestions, updateQuestion } from "src/Services/quiz_api";
 
 function CustomNoRowsOverlay() {
     return (
@@ -18,112 +18,101 @@ function CustomNoRowsOverlay() {
 
 export default function QuizMaintenance() {
     const [visible, setVisible] = useState(false);
-    const [editingSection, setEditingSection] = useState<any | null>(null);
-    const [courseId, setCourseId] = useState(1)
+    const [editingQuestion, setEditingQuestion] = useState<any | null>(null);
+    const [courseId, setCourseId] = useState(1);
     const [courses, setCourses] = useState<any[]>([]);
+    const [rows, setRows] = useState<any[]>([]);
 
     useEffect(() => {
-        handleGetCourses()
-        handleGetSections(courseId)
-    }, [])
+        handleGetCourses();
+        handleGetQuestions(courseId);
+    }, []);
 
     const handleGetCourses = async () => {
         try {
-            const res = await getAllCourses()
-            setCourses(res.data)
+            const res = await getAllCourses();
+            setCourses(res.data);
         } catch (error) {
             console.error(error);
         }
-    }
-    
-    const handleGetSections = async (id:any) => {
+    };
+
+    const handleGetQuestions = async (id: any) => {
         try {
-            const res = await getSections(id)
-            setRows(res.data)
+            const res = await getQuestions(id);
+            const transformed = res.data.map((q: any) => ({
+                ...q,
+                answer1: q.answer.answer1,
+                answer2: q.answer.answer2,
+                answer3: q.answer.answer3,
+                answer4: q.answer.answer4,
+                isCorrectAnswers: q.answer.isCorrectAnswers
+            }));
+            setRows(transformed);
         } catch (error) {
             console.error(error);
         }
-    }
+    };
 
-    const [rows, setRows] = useState<any[]>([]);
+    const handleEditClick = (q: any) => {
+        const correctAnswerIndex = Array.isArray(q.isCorrectAnswers)
+            ? q.isCorrectAnswers.findIndex((val: boolean) => val === true)
+            : 0;
 
+        setEditingQuestion({
+            ...q,
+            correctAnswer: correctAnswerIndex >= 0 ? correctAnswerIndex : 0
+        });
 
-
-
-
-
-
-    const handleEditClick = (c: any) => {
-        setEditingSection(c);
         setVisible(true);
     };
 
     const handleCancel = () => {
         setVisible(false);
+        setEditingQuestion(null);
     };
 
-    const [status, setStatus] = useState(1)
-
-    const handleFormChange = (field: string, value: string) => {
-        setEditingSection((prev: any) => ({ ...prev, [field]: value }));
+    const handleFormChange = (field: string, value: any) => {
+        setEditingQuestion((prev: any) => ({ ...prev, [field]: value }));
     };
 
     const handleUpdate = async () => {
+        const newCorrectAnswers = [0, 1, 2, 3].map(i => i === editingQuestion.correctAnswer);
 
-        const payload = {
-            id: editingSection.id,
-            name: editingSection.name,
-            description: editingSection.description,
-            dateTime: "",
-            totalLength: "",
-            courseId,
-            activeStatus: editingSection.activeStatus
+        const updatedQuestion = {
+            ...editingQuestion,
+            isCorrectAnswers: newCorrectAnswers
         };
 
         try {
-            const response = await updateSection(editingSection.id, payload)
+            const response = await updateQuestion(updatedQuestion)            
             alert(response.data.message)
-        } catch (error: any) {
+        } catch (error:any) {
             alert(error.response.message)
         }
-        setRows((prevRows) =>
-            prevRows.map((row) => (row.id === editingSection.id ? editingSection : row))
-        );
 
-        setEditingSection(null);
+        setEditingQuestion(null);
         setVisible(false);
+        window.location.reload()
     };
 
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', width: 70 },
-        { field: 'name', headerName: 'Name', flex: 1, minWidth: 130 },
-        { field: 'description', headerName: 'Description', flex: 1, minWidth: 130 },
-        { field: 'recordingCount', headerName: 'Recordings', flex: 1, minWidth: 130 },
-        {
-            field: 'activeStatus',
-            headerName: 'Status',
-            flex: 1,
-            minWidth: 100,
-            renderCell: (params) => {
-                const value = params.value;
-                let color: 'success' | 'error' | 'info' = 'info';
-                if (value === 1) color = 'success';
-                else if (value === 2) color = 'error';
-                return <Chip label={value === 1 ? "Active" : "Inactive"} color={color} size="small" style={{ width: '70px', opacity: '0.8' }} />;
-            }
-        },
+        { field: 'questionText', headerName: 'Question', flex: 1, minWidth: 130 },
+        { field: 'answer1', headerName: 'Answer 1', flex: 1, minWidth: 130 },
+        { field: 'answer2', headerName: 'Answer 2', flex: 1, minWidth: 130 },
+        { field: 'answer3', headerName: 'Answer 3', flex: 1, minWidth: 130 },
+        { field: 'answer4', headerName: 'Answer 4', flex: 1, minWidth: 130 },
         {
             field: 'actions',
             headerName: 'Actions',
-            width: 220,
+            width: 100,
             sortable: false,
             filterable: false,
             renderCell: (params) => (
-                <Box>
-                    <IconButton sx={{ color: 'black' }} aria-label="edit" onClick={() => handleEditClick(params.row)}>
-                        <EditIcon />
-                    </IconButton>
-                </Box>
+                <IconButton sx={{ color: 'black' }} aria-label="edit" onClick={() => handleEditClick(params.row)}>
+                    <EditIcon />
+                </IconButton>
             ),
         },
     ];
@@ -132,91 +121,87 @@ export default function QuizMaintenance() {
         <>
             {!visible && (
                 <>
-                <Grid item xs={12} sm={12}>
+                    <Grid item xs={12}>
                         <FormControl fullWidth>
                             <InputLabel>Course</InputLabel>
                             <Select
                                 value={courseId}
                                 label="Course"
                                 onChange={(e) => {
-                                    setCourseId(Number(e.target.value))
-                                    handleGetSections(Number(e.target.value))
+                                    setCourseId(Number(e.target.value));
+                                    handleGetQuestions(Number(e.target.value));
                                 }}
                                 fullWidth
                             >
                                 {courses?.map((c: any, index) => (
-                                    <MenuItem key={index} value={c.id}>
-                                        {c.name}
-                                    </MenuItem>
+                                    <MenuItem key={index} value={c.id}>{c.name}</MenuItem>
                                 ))}
                             </Select>
                         </FormControl>
                     </Grid>
-                <Paper sx={{ height: 'auto', width: '100%', marginTop: 2, overflowX: 'auto' }}>
-                    
-                    <DataGrid
-                        rows={rows}
-                        columns={columns}
-                        initialState={{ pagination: { paginationModel: { page: 0, pageSize: 5 } } }}
-                        pageSizeOptions={[5]}
-                        autoHeight
-                        sx={{
-                            border: 0,
-                            minWidth: 600,
-                            '& .MuiDataGrid-columnHeaderTitle': { fontWeight: 'bold', fontSize: '15px', fontFamily: 'Public Sans, sans-serif' },
+
+                    <Paper sx={{ mt: 2 }}>
+                        <DataGrid
+                            rows={rows}
+                            columns={columns}
+                            initialState={{ pagination: { paginationModel: { page: 0, pageSize: 5 } } }}
+                            pageSizeOptions={[5]}
+                            autoHeight
+                            sx={{
+                                border: 0,
+                                minWidth: 600,
+                                '& .MuiDataGrid-columnHeaderTitle': { fontWeight: 'bold', fontSize: '15px', fontFamily: 'Public Sans, sans-serif' },
                             '& .MuiDataGrid-cell': { fontSize: '14px', fontFamily: 'Public Sans, sans-serif' }
-                        }}
-                        slots={{ noRowsOverlay: CustomNoRowsOverlay }}
-                    />
-                </Paper>
+                            }}
+                            slots={{ noRowsOverlay: CustomNoRowsOverlay }}
+                        />
+                    </Paper>
                 </>
             )}
 
-            {visible && (
-                <>
-                    <Grid container spacing={2}>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                label="Name"
-                                fullWidth
-                                value={editingSection?.name || ''}
-                                onChange={(e) => handleFormChange("name", e.target.value)}
-                            />
-                        </Grid>
-
-                        <Grid item xs={12} sm={6}>
-                            <FormControl fullWidth>
-                                <InputLabel>Status</InputLabel>
-                                <Select
-                                    value={editingSection?.activeStatus || ''}
-                                    label="Status"
-                                    onChange={(e) => handleFormChange("activeStatus", e.target.value)}
-                                >
-                                    <MenuItem value={1}>Active</MenuItem>
-                                    <MenuItem value={2}>Inactive</MenuItem>
-                                </Select>
-                            </FormControl>
-                        </Grid>
-
-                        <Grid item xs={12} sm={12}>
-                            <TextField
-                                label="Description"
-                                fullWidth
-                                multiline
-                                rows={3}
-                                value={editingSection?.description || ''}
-                                onChange={(e) => handleFormChange("description", e.target.value)}
-                            />
-                        </Grid>
-
-                        <Grid item xs={12} display="flex" justifyContent="flex-end">
-                            <Button className="update-btn" variant="contained" onClick={handleCancel}>Cancel</Button>
-                            <Button
-                                disabled={!editingSection?.name || !editingSection?.activeStatus}
-                                variant="contained" onClick={handleUpdate}>Update</Button>
-                        </Grid>
+            {visible && editingQuestion && (
+                <Grid container spacing={2} mt={2}>
+                    <Grid item xs={12}>
+                        <TextField
+                            label="Question"
+                            fullWidth
+                            value={editingQuestion.questionText || ''}
+                            onChange={(e) => handleFormChange("questionText", e.target.value)}
+                        />
                     </Grid>
-                </>
+
+                    {["answer1", "answer2", "answer3", "answer4"].map((field, index) => (
+                        <Grid item xs={12} sm={6} key={index}>
+                            <TextField
+                                label={`Answer ${index + 1}`}
+                                fullWidth
+                                value={editingQuestion[field] || ''}
+                                onChange={(e) => handleFormChange(field, e.target.value)}
+                            />
+                        </Grid>
+                    ))}
+
+                    <Grid item xs={12} sm={6}>
+                        <FormControl fullWidth>
+                            <InputLabel>Correct Answer</InputLabel>
+                            <Select
+                                value={editingQuestion.correctAnswer}
+                                label="Correct Answer"
+                                onChange={(e) => handleFormChange("correctAnswer", Number(e.target.value))}
+                            >
+                                <MenuItem value={0}>Answer 1</MenuItem>
+                                <MenuItem value={1}>Answer 2</MenuItem>
+                                <MenuItem value={2}>Answer 3</MenuItem>
+                                <MenuItem value={3}>Answer 4</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid>
+
+                    <Grid item xs={12} display="flex" justifyContent="flex-end">
+                        <Button variant="outlined" onClick={handleCancel} sx={{ mr: 2 }}>Cancel</Button>
+                        <Button variant="contained" onClick={handleUpdate}>Update</Button>
+                    </Grid>
+                </Grid>
             )}
         </>
     );
