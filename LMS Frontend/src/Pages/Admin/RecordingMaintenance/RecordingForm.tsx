@@ -15,6 +15,7 @@ import { Add } from "@mui/icons-material";
 import { getAllCourses } from "src/Services/course_api";
 import { createSection, getSections } from "src/Services/section_api";
 import { createRecording } from "src/Services/recording_api";
+import { access } from "fs";
 
 export default function RecordingForm() {
     const navigate = useNavigate();
@@ -42,7 +43,8 @@ export default function RecordingForm() {
     const handleGetCourses = async () => {
         try {
             const response = await getAllCourses()
-            setCourses(response.data)
+            const activeCourses = response.data.filter((course: any) => course.activeStatus === 1);
+            setCourses(activeCourses)
         } catch (error) {
             console.error(error);
         }
@@ -128,7 +130,7 @@ export default function RecordingForm() {
                                 fullWidth
                             >
                                 <MenuItem disabled value={0}>Select a Section</MenuItem>
-                                {sections?.map((c: any, index) => (
+                                {sections?.filter((course) => course.activeStatus === 1).map((c: any, index) => (
                                     <MenuItem key={index} value={c.id}>
                                         {c.name}
                                     </MenuItem>

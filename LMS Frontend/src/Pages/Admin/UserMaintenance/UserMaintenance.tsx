@@ -111,7 +111,7 @@ export default function UserMaintenance() {
 
     const handleUpdate = async () => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        
+
 
         if (!emailRegex.test(editingUser?.email)) {
             alert("Please enter a valid email address.");
@@ -135,7 +135,7 @@ export default function UserMaintenance() {
                 courseId: c.id,
                 courseName: c.name
             }))
-        };        
+        };
 
         try {
             const response = await updateUser(payload, token)
@@ -329,7 +329,7 @@ export default function UserMaintenance() {
                                             handleFormChange("location", selectedCountry.name);
                                             handleFormChange("phoneNo", selectedCountry.callingCode);
                                         }
-                                    }}                                    
+                                    }}
                                     label="Location"
                                 >
                                     {countryOptions.map((c) => (
@@ -410,19 +410,20 @@ export default function UserMaintenance() {
                 >
                     <Typography variant="h6" mb={2}>Assign Courses : {editingUser?.userName}</Typography>
                     <Grid container spacing={1}>
-                        {allCourses.map((course) => (
-                            <Grid item xs={12} sm={4} key={course.id}>
-                                <FormControlLabel
-                                    control={
-                                        <Checkbox
-                                            checked={editingUser?.courses?.some((c: any) => c.id === course.id) || false}
-                                            onChange={(e) => handleCourseChange(course, e.target.checked)}
-                                        />
-                                    }
-                                    label={course.name}
-                                />
-                            </Grid>
-                        ))}
+                        {allCourses
+                            .filter((course) => course.activeStatus === 1).map((course) => (
+                                <Grid item xs={12} sm={4} key={course.id}>
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                checked={editingUser?.courses?.some((c: any) => c.id === course.id) || false}
+                                                onChange={(e) => handleCourseChange(course, e.target.checked)}
+                                            />
+                                        }
+                                        label={course.name}
+                                    />
+                                </Grid>
+                            ))}
                     </Grid>
 
                     <Box mt={2} display="flex" justifyContent="flex-end">

@@ -226,7 +226,7 @@ export default function CourseMaintenance() {
                                     onChange={(e) => handleFormChange("categoryId", e.target.value)}
                                     fullWidth
                                 >
-                                    {categories?.map((c: any, index) => (
+                                    {categories?.filter((course) => course.activeStatus === 1).map((c: any, index) => (
                                         <MenuItem key={index} value={c.id}>
                                             {c.name}
                                         </MenuItem>

@@ -35,7 +35,8 @@ export default function RecordingMaintenance() {
     const handleGetCourses = async () => {
         try {
             const res = await getAllCourses()
-            setCourses(res.data)
+            const activeCourses = res.data.filter((course: any) => course.activeStatus === 1);
+            setCourses(activeCourses)
         } catch (error) {
             console.error(error);
         }
@@ -188,7 +189,7 @@ export default function RecordingMaintenance() {
                                     fullWidth
                                 >
                                     <MenuItem disabled value={0}>Select a Section</MenuItem>
-                                    {sections?.map((c: any, index) => (
+                                    {sections?.filter((course) => course.activeStatus === 1).map((c: any, index) => (
                                         <MenuItem key={index} value={c.id}>
                                             {c.name}
                                         </MenuItem>

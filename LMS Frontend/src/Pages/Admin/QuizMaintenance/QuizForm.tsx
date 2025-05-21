@@ -45,7 +45,8 @@ export default function QuizForm() {
     const handleGetCourses = async () => {
         try {
             const response = await getAllCourses()
-            setCourses(response.data)
+            const activeCourses = response.data.filter((course: any) => course.activeStatus === 1);
+            setCourses(activeCourses)
         } catch (error) {
             console.error(error);
         }

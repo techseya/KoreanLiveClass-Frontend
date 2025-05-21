@@ -30,7 +30,8 @@ export default function SectionMaintenance() {
     const handleGetCourses = async () => {
         try {
             const res = await getAllCourses()
-            setCourses(res.data)
+            const activeCourses = res.data.filter((course: any) => course.activeStatus === 1);
+            setCourses(activeCourses)
         } catch (error) {
             console.error(error);
         }
@@ -46,11 +47,6 @@ export default function SectionMaintenance() {
     }
 
     const [rows, setRows] = useState<any[]>([]);
-
-
-
-
-
 
 
     const handleEditClick = (c: any) => {
