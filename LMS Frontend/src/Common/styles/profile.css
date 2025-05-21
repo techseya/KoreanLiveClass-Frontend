@@ -93,3 +93,21 @@
     border-radius: 8px;
     font-weight: 500;
 }
+
+@media (max-width: 769px){
+    .profile-container{
+        display: block;
+    }
+
+    .line{
+        display: none;
+    }
+
+    .p-inner1{
+        width: 100%;
+    }
+    .p-inner{
+        width: 100%;
+        padding: 25px 0;
+    }
+}
