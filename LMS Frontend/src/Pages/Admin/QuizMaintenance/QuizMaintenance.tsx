@@ -6,7 +6,9 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";
 import { getAllCourses } from "src/Services/course_api";
-import { getQuestions, updateQuestion } from "src/Services/quiz_api";
+import { deleteQuestion, getQuestions, updateQuestion } from "src/Services/quiz_api";
+import { Delete } from "@mui/icons-material";
+import Dialogbox from "src/Common/Components/DialogBox";
 
 function CustomNoRowsOverlay() {
     return (
@@ -22,6 +24,8 @@ export default function QuizMaintenance() {
     const [courseId, setCourseId] = useState(1);
     const [courses, setCourses] = useState<any[]>([]);
     const [rows, setRows] = useState<any[]>([]);
+    const [isOpen, setIsOpen] = useState(false);
+    const [quizId, setQuizId] = useState("")
 
     useEffect(() => {
         handleGetCourses();
@@ -39,7 +43,7 @@ export default function QuizMaintenance() {
 
     const handleGetQuestions = async (id: any) => {
         try {
-            const res = await getQuestions(id,"admin");
+            const res = await getQuestions(id, "admin");
             const transformed = res.data.map((q: any) => ({
                 ...q,
                 answer1: q.answer.answer1,
@@ -85,9 +89,9 @@ export default function QuizMaintenance() {
         };
 
         try {
-            const response = await updateQuestion(updatedQuestion)            
+            const response = await updateQuestion(updatedQuestion)
             alert(response.data.message)
-        } catch (error:any) {
+        } catch (error: any) {
             alert(error.response.message)
         }
 
@@ -95,6 +99,25 @@ export default function QuizMaintenance() {
         setVisible(false);
         window.location.reload()
     };
+
+    const handleDeleteClick = (c: any) => {
+        setQuizId(c.id)
+        setIsOpen(true)
+    };
+
+    const handleDelete = async () => {
+        try {
+            const response = await deleteQuestion(quizId)
+            alert(response.data.message)
+        } catch (error:any) {
+            alert(error.response.message)
+        }
+
+        handleClose()
+        window.location.reload()
+    }
+
+    const handleClose = () => setIsOpen(false);
 
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', width: 70 },
@@ -110,15 +133,31 @@ export default function QuizMaintenance() {
             sortable: false,
             filterable: false,
             renderCell: (params) => (
-                <IconButton sx={{ color: 'black' }} aria-label="edit" onClick={() => handleEditClick(params.row)}>
-                    <EditIcon />
-                </IconButton>
+                <Box>
+                    <IconButton sx={{ color: 'black' }} aria-label="edit" onClick={() => handleEditClick(params.row)}>
+                        <EditIcon />
+                    </IconButton>
+                    <IconButton sx={{ color: 'red' }} aria-label="edit" onClick={() => handleDeleteClick(params.row)}>
+                        <Delete />
+                    </IconButton>
+                </Box>
+
             ),
         },
     ];
 
     return (
         <>
+            <Dialogbox
+                open={isOpen}
+                title="Delete Confirmation"
+                content="Are you sure you want to delete this question?"
+                agreeButtonText="Yes, Delete"
+                disagreeButtonText="No"
+                onAgree={handleDelete}
+                onDisagree={handleClose}
+                onClose={handleClose}
+            />
             {!visible && (
                 <>
                     <Grid item xs={12}>
@@ -151,7 +190,7 @@ export default function QuizMaintenance() {
                                 border: 0,
                                 minWidth: 600,
                                 '& .MuiDataGrid-columnHeaderTitle': { fontWeight: 'bold', fontSize: '15px', fontFamily: 'Public Sans, sans-serif' },
-                            '& .MuiDataGrid-cell': { fontSize: '14px', fontFamily: 'Public Sans, sans-serif' }
+                                '& .MuiDataGrid-cell': { fontSize: '14px', fontFamily: 'Public Sans, sans-serif' }
                             }}
                             slots={{ noRowsOverlay: CustomNoRowsOverlay }}
                         />

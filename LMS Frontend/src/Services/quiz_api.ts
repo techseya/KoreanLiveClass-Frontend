@@ -21,6 +21,15 @@ export const getQuestions = async (id:any,type:any) => {
     }
 }
 
+export const getAnswer = async (id:any) => {
+    try {
+        const response = await axios.get(api+`question/by-id?questionId=${id}`)
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
 export const createQuiz = async (body:any) => {
     try {
         const response = await axios.post(api+`quiz`, body)
@@ -48,9 +57,9 @@ export const updateQuestion = async (body:any) => {
     }
 }
 
-export const updateSection = async (id:any, body:any) => {
+export const deleteQuestion = async (id:any) => {
     try {
-        const response = await axios.put(api+`section/${id}`, body)
+        const response = await axios.delete(api+`question/${id}`)
         return response;
     } catch (error) {
         throw error;

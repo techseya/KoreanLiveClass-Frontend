@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 import { Add } from "@mui/icons-material";
 import { getAllCourses } from "src/Services/course_api";
 import { createSection } from "src/Services/section_api";
-import { createQuiz, getQuiz } from "src/Services/quiz_api";
+import { createQuestion, createQuiz, getQuiz } from "src/Services/quiz_api";
 
 export default function QuizForm() {
     const navigate = useNavigate();
@@ -67,7 +67,7 @@ export default function QuizForm() {
         };        
     
         try {
-            const response = await createQuiz(body);
+            const response = await createQuestion(body);
             alert(response.data.message);
         } catch (error: any) {
             alert(error.response.data.message);

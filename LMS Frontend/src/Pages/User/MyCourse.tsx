@@ -16,7 +16,9 @@ import { ArrowBackIos, ArrowForwardIos, AutoStories, PlayCircleFilled, Quiz } fr
 import Footer from "src/Layout/Footer";
 import { useTranslation } from "react-i18next";
 import thumb from "../../Assets/Images/klc-thumb.png"
-import { getQuestions, getQuiz } from "src/Services/quiz_api";
+import { getAnswer, getQuestions, getQuiz } from "src/Services/quiz_api";
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 export default function MyCourse() {
     const location = useLocation();
@@ -33,6 +35,7 @@ export default function MyCourse() {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
     const [confirmedAnswers, setConfirmedAnswers] = useState<Record<number, string>>({});
+    const [correctAnswersIndexMap, setCorrectAnswersIndexMap] = useState<Record<number, number>>({});
 
     const token = sessionStorage.getItem("token")
     const navigate = useNavigate()
@@ -113,6 +116,54 @@ export default function MyCourse() {
         return <p>Course data not found.</p>;
     }
 
+    const handleGetCorerctAnswer = async (questionId: any) => {
+        try {
+            const response = await getAnswer(questionId);
+            const answerData = response.data.answer;
+
+            const answerOptions = Object.entries(answerData)
+                .filter(([key]) => key.startsWith("answer"))
+                .map(([_, value]) => value);
+
+            const correctIndex = answerData.isCorrectAnswers.findIndex((val: boolean) => val === true);
+            const selectedIndex = answerOptions.findIndex(val => val === selectedAnswer);
+
+            setConfirmedAnswers(prev => ({
+                ...prev,
+                [currentQuestionIndex]: selectedAnswer!
+            }));
+
+            setCorrectAnswersIndexMap(prev => ({
+                ...prev,
+                [currentQuestionIndex]: correctIndex
+            }));
+        } catch (error) {
+            console.error("Error checking answer:", error);
+        }
+    };
+
+    const iconAnimation = {
+        animation: 'pop 0.6s ease',
+        fontSize: '22px',
+        verticalAlign: 'middle',
+        marginRight: 1,
+        '@keyframes pop': {
+            '0%': {
+                transform: 'scale(0.5)',
+                opacity: 0,
+            },
+            '50%': {
+                transform: 'scale(1.2)',
+                opacity: 1,
+            },
+            '100%': {
+                transform: 'scale(1)',
+                opacity: 1,
+            },
+        },
+    };
+
+
     return (
         <div className="courses-main-outer">
 
@@ -132,7 +183,7 @@ export default function MyCourse() {
                         overflowY: 'auto',
                         display: 'flex',
                         flexDirection: 'column',
-                      }}
+                    }}
                 >
                     {questions.length > 0 ? (
                         <>
@@ -142,32 +193,102 @@ export default function MyCourse() {
                             <Typography sx={{ mb: 2 }}>
                                 {questions[currentQuestionIndex].questionText}
                             </Typography>
+                            {confirmedAnswers.hasOwnProperty(currentQuestionIndex) && (
+                                <Box
+                                    sx={{
+                                        position: "absolute",
+                                        top: 15,
+                                        right: 15,
+                                        px: 1.5,
+                                        py: 0.5,
+                                        borderRadius: 1,
+                                        fontWeight: "bold",
+                                        fontSize: "16px",
+                                        color:
+                                            confirmedAnswers[currentQuestionIndex] ===
+                                                questions[currentQuestionIndex].answer[
+                                                Object.keys(questions[currentQuestionIndex].answer).filter(key =>
+                                                    key.startsWith("answer")
+                                                )[correctAnswersIndexMap[currentQuestionIndex]]
+                                                ]
+                                                ? "green"
+                                                : "red",
+                                        userSelect: "none",
+                                        display: "flex",
+                                        alignItems: "center",
+                                    }}
+                                >
+                                    {confirmedAnswers[currentQuestionIndex] ===
+                                        questions[currentQuestionIndex].answer[
+                                        Object.keys(questions[currentQuestionIndex].answer).filter(key =>
+                                            key.startsWith("answer")
+                                        )[correctAnswersIndexMap[currentQuestionIndex]]
+                                        ] ? (
+                                        <>
+                                            <CheckCircleIcon sx={iconAnimation} />
+                                            Correct
+                                        </>
+                                    ) : (
+                                        <>
+                                            <CancelIcon sx={iconAnimation} />
+                                            Wrong
+                                        </>
+                                    )}
+                                </Box>
+
+                            )}
 
                             {Object.entries(questions[currentQuestionIndex].answer)
                                 .filter(([key]) => key.startsWith("answer"))
-                                .map(([key, val]) => {
+                                .map(([key, val], index) => {
                                     const valStr = val as string;
-                                    const isSelected = selectedAnswer === valStr;
-                                    const isConfirmed = confirmedAnswers[currentQuestionIndex] === valStr;
+                                    const isConfirmed = confirmedAnswers.hasOwnProperty(currentQuestionIndex);
+                                    const correctIndex = correctAnswersIndexMap[currentQuestionIndex];
+                                    const confirmedAnswer = confirmedAnswers[currentQuestionIndex];
+
+                                    let buttonColor: "primary" | "success" | "error" = "primary";
+                                    let buttonVariant: "contained" | "outlined" = "outlined";
+
+                                    if (isConfirmed) {
+                                        if (index === correctIndex) {
+                                            // Correct answer: green contained
+                                            buttonColor = "success";
+                                            buttonVariant = "contained";
+                                        } else if (valStr === confirmedAnswer && index !== correctIndex) {
+                                            // User selected wrong answer: red contained
+                                            buttonColor = "error";
+                                            buttonVariant = "contained";
+                                        } else {
+                                            // Other answers after confirmation: outlined and disabled (gray)
+                                            buttonColor = "primary";
+                                            buttonVariant = "outlined";
+                                        }
+                                    } else {
+                                        // Before confirmation, highlight selected answer
+                                        if (selectedAnswer === valStr) {
+                                            buttonVariant = "contained";
+                                            buttonColor = "primary";
+                                        }
+                                    }
 
                                     return (
                                         <Button
                                             key={key}
-                                            variant={isSelected ? "contained" : "outlined"}
-                                            color={isConfirmed ? "success" : "primary"}
+                                            variant={buttonVariant}
+                                            color={buttonColor}
                                             fullWidth
                                             sx={{ mb: 1, textTransform: "none" }}
                                             onClick={() => {
-                                                if (!confirmedAnswers[currentQuestionIndex]) {
+                                                if (!isConfirmed) {
                                                     setSelectedAnswer(valStr);
                                                 }
                                             }}
-                                            disabled={!!confirmedAnswers[currentQuestionIndex]} // disable buttons after confirm
                                         >
                                             {valStr}
                                         </Button>
                                     );
                                 })}
+
 
                             <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
                                 <Button
@@ -179,7 +300,16 @@ export default function MyCourse() {
                                     <ArrowBackIos />
                                 </Button>
 
-                                <Button disabled={selectedAnswer === null}>
+                                <Button
+                                    disabled={
+                                        selectedAnswer === null ||
+                                        Boolean(confirmedAnswers[currentQuestionIndex])
+                                    }
+
+                                    onClick={() =>
+                                        handleGetCorerctAnswer(questions[currentQuestionIndex].id)
+                                    }
+                                >
                                     Confirm
                                 </Button>
 
@@ -196,9 +326,9 @@ export default function MyCourse() {
                     ) : (
                         <Typography>No questions available.</Typography>
                     )}
-
                 </Box>
             </Modal>
+
 
             <div className="cc">
                 <div className="c-items-outer">
