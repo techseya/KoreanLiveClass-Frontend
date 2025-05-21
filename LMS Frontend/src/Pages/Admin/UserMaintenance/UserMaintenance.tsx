@@ -129,7 +129,7 @@ export default function UserMaintenance() {
             email: editingUser.email,
             location: editingUser.location,
             phoneNo: editingUser.phoneNo,
-            duration: editingUser.duration || 0, // default if not provided
+            duration: editingUser.duration || 0,
             activeStatus: editingUser.status,
             userCourses: editingUser.courses.map((c: any) => ({
                 courseId: c.id,
