@@ -1,12 +1,13 @@
 import "../../Common/styles/profile.css"
 import userIcon from "../../Assets/Images/man.png"
 import { useEffect, useState } from "react"
-import { getUser } from "src/Services/user_api"
+import { changePassword, getUser, resetPassword } from "src/Services/user_api"
 import { Email, LocationCity, LocationOn, Phone } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
-import { Box, Tab, Tabs } from "@mui/material"
+import { Box, Button, Modal, Tab, Tabs, TextField, Typography } from "@mui/material"
 import React from "react"
 import Footer from "src/Layout/Footer"
+import { useNavigate } from "react-router-dom"
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -44,12 +45,62 @@ export default function Profile() {
     const { i18n, t } = useTranslation();
     const [user, setUser] = useState<any>()
     const [value, setValue] = React.useState(0);
+    const [openModal, setOpenModal] = useState(false)
+    const [email, setEmail] = useState("")
+    const [oldPassword, setOldPassword] = useState("")
+    const [newPassword, setNewPassword] = useState("")
+    const [error, setError] = useState("")
+    const [loading, setLoading] = useState(false)
+
+    const handleOpen = () => {
+        setEmail(user?.email || "")
+        setOpenModal(true)
+    }
+    const handleClose = () => {
+        setOldPassword("")
+        setNewPassword("")
+        setError("")
+        setOpenModal(false)
+    }
+
+    const handleChangePassword = async () => {
+        if (!oldPassword || !newPassword) {
+            setError("All fields are required.")
+            return
+        }
+
+        const body = {
+            email,
+            oldPassword,
+            newPassword
+        }
+
+        try {
+            setLoading(true)
+            const response = await changePassword(body, token)
+            alert(response.data.message)
+        } catch (err: any) {
+            if (err.response.data.message === "Invalid credentials") {
+                alert("Incorrect Password")
+            }
+        } finally {
+            setLoading(false)
+        }
+
+        setOpenModal(false)
+    }
+
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
     };
 
+    const navigate = useNavigate()
+
     useEffect(() => {
+        if (token === null) {
+            navigate("/")
+        }
         handleGetDetails()
     }, [])
 
@@ -64,6 +115,67 @@ export default function Profile() {
 
     return (
         <div className="profile-outer">
+
+            <Modal
+                open={openModal}
+                onClose={handleClose}
+                aria-labelledby="modal-title"
+                aria-describedby="modal-description"
+            >
+                <Box sx={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: 350,
+                    bgcolor: 'background.paper',
+                    boxShadow: 24,
+                    p: 4,
+                    borderRadius: 2
+                }}>
+                    <Typography id="modal-title" variant="h6" component="h2" gutterBottom>
+                        Change Password
+                    </Typography>
+                    <TextField
+                        label="Email"
+                        value={email}
+                        fullWidth
+                        disabled
+                        margin="normal"
+                    />
+                    <TextField
+                        label="Old Password"
+                        type="password"
+                        value={oldPassword}
+                        onChange={(e) => setOldPassword(e.target.value)}
+                        fullWidth
+                        margin="normal"
+                    />
+                    <TextField
+                        label="New Password"
+                        type="password"
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                        fullWidth
+                        margin="normal"
+                    />
+                    {error && (
+                        <Typography variant="body2" color="error" mt={1}>
+                            {error}
+                        </Typography>
+                    )}
+                    <Button
+                        variant="contained"
+                        fullWidth
+                        onClick={handleChangePassword}
+                        disabled={loading}
+                        sx={{ mt: 2 }}
+                    >
+                        {loading ? "Changing..." : "Change Password"}
+                    </Button>
+                </Box>
+            </Modal>
+
             <div className="profile-inner">
                 <div className="profile-container">
                     <div className="p-inner">
@@ -93,10 +205,14 @@ export default function Profile() {
                             <br />
 
                             <div className="i-outer">
-                                <button className="btn signup">{t('changeP')}</button>
+                                <button className="btn signup" onClick={handleOpen}>
+                                    {t('changeP')}
+                                </button>
+
                             </div>
                         </div>
                     </div>
+                    <div className="line"></div>
                     <div className="p-inner1">
                         <Box sx={{ width: '95%' }}>
                             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
@@ -127,8 +243,8 @@ export default function Profile() {
                 </div>
             </div>
 
-<br /><br />
-            <Footer/>
+            <br /><br />
+            <Footer />
         </div>
     )
 }

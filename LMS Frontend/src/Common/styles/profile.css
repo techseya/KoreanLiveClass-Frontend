@@ -28,7 +28,7 @@
 }
 
 .p-inner {
-    width: 30%;
+    width: 29%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -36,6 +36,13 @@
 
 .p-inner1 {
     width: 70%;
+    margin-left: 5px;
+}
+
+.line{
+    width: 1px;
+    height: 100%;
+    background-color: rgba(128, 128, 128, 0.37);
 }
 
 .pi1 {
