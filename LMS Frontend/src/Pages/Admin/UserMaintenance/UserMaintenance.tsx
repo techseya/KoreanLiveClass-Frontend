@@ -5,13 +5,11 @@ import {
 } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { useEffect, useState } from "react";
 import { LockReset, PhonelinkErase } from "@mui/icons-material";
 import Dialogbox from "src/Common/Components/DialogBox";
 import { getUsers, resetDevice, resetPassword, updateUser } from "src/Services/user_api";
 import { getAllCourses } from "src/Services/course_api";
-
 import { getCodeList } from "country-list";
 import { getCountryCallingCode, CountryCode } from "libphonenumber-js";
 
@@ -25,12 +23,11 @@ const countryOptions: CountryOption[] = Object.entries(getCodeList()).map(([code
     try {
         const callingCode = getCountryCallingCode(code.toUpperCase() as CountryCode);
         return {
-            code: code.toUpperCase(), // Ensure ISO code is uppercase
+            code: code.toUpperCase(),
             name,
-            callingCode: callingCode || "", // Fallback for unknown country codes
+            callingCode: callingCode || "",
         };
     } catch (e) {
-        // Catch errors for unsupported countries like "AQ" and skip them
         return null;
     }
 }).filter((option) => option !== null) as CountryOption[];
@@ -75,7 +72,6 @@ export default function UserMaintenance() {
         setPhoneNo(defaultCountry.callingCode);
     }, [editingUser]);
 
-
     useEffect(() => {
         handleGetUsers()
         handleGetCourses()
@@ -96,19 +92,9 @@ export default function UserMaintenance() {
         setChangePwDialog(false)
     }
 
-    const handleChangePwDialog = () => {
-        setChangePwDialog(true)
-    }
-
-
     const handleCancelChangeDeviceDialog = () => {
         setChangeDeviceDialog(false)
     }
-
-    const handleChangeDeviceDialog = () => {
-        setChangeDeviceDialog(true)
-    }
-
 
     const handleEditClick = (user: any) => {
         setEditingUser(user);
@@ -118,8 +104,6 @@ export default function UserMaintenance() {
     const handleCancel = () => {
         setVisible(false);
     };
-
-    const [status, setStatus] = useState(1)
 
     const handleFormChange = (field: string, value: string) => {
         setEditingUser((prev: any) => ({ ...prev, [field]: value }));
@@ -178,7 +162,7 @@ export default function UserMaintenance() {
 
         try {
             const res = await resetPassword(body, token)
-            alert(res.data.message)
+            alert(res.data.message + ". New password is 'abcd'")
         } catch (error: any) {
             alert(error.response.message)
         }
@@ -203,7 +187,6 @@ export default function UserMaintenance() {
 
         setChangeDeviceDialog(false);
     };
-
 
     const handleCourseChange = (course: any, checked: boolean) => {
         if (!editingUser) return;
@@ -343,8 +326,8 @@ export default function UserMaintenance() {
                                             setLocation1(selectedCountry.name);
                                             setCountry(selectedCountry);
                                             setPhoneNo(selectedCountry.callingCode);
-                                            handleFormChange("location", selectedCountry.name); // <-- you were missing this
-                                            handleFormChange("phoneNo", selectedCountry.callingCode); // move this below for clarity
+                                            handleFormChange("location", selectedCountry.name);
+                                            handleFormChange("phoneNo", selectedCountry.callingCode);
                                         }
                                     }}                                    
                                     label="Location"
@@ -365,7 +348,6 @@ export default function UserMaintenance() {
                                 value={editingUser?.phoneNo || ''}
                                 onChange={(e) => {
                                     const value = e.target.value;
-                                    // Allow only digits and disallow leading zero
                                     if (/^\d*$/.test(value)) {
                                         if (value === '' || value[0] !== '0') {
                                             handleFormChange("phoneNo", e.target.value)
