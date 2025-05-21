@@ -23,6 +23,7 @@ import PrivacyPolicy from "./Pages/User/PrivacyPolicy";
 import Terms from "./Pages/User/Terms";
 import NoticeMaintenance from "./Pages/Admin/NoticeMaintenance/NoticeMaintenance";
 import Quizes from "./Pages/Admin/QuizMaintenance";
+import Profile from "./Pages/User/Profile";
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -36,10 +37,11 @@ const App: React.FC = () => {
   const isRegister = location.pathname === "/register"
   const isPrivacy = location.pathname === "/privacy-policy"
   const isTerms = location.pathname === "/terms-services"
+  const isProfile = location.pathname === "/profile"
 
   return (
     <>
-      {!isHomePage && !isCourses && !isCategory && !isCourse && !isRegister && !isMyCourses && !isMyCourse && !isCategoryC && !isPrivacy && !isTerms ?(
+      {!isProfile && !isHomePage && !isCourses && !isCategory && !isCourse && !isRegister && !isMyCourses && !isMyCourse && !isCategoryC && !isPrivacy && !isTerms ?(
         <AdvancedNavbar>
           <Routes>
             <Route path="/dashboard" element={<Dashboard />} />
@@ -67,6 +69,7 @@ const App: React.FC = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms-services" element={<Terms />} />
+            <Route path="/profile" element={<Profile />} />
           </Routes>
         </Navbar>
       )}

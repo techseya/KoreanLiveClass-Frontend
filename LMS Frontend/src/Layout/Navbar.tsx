@@ -28,7 +28,8 @@ export default function Navbar({ children }: Readonly<Props>) {
     const isReg = location.pathname === "/register";
     const isCategoryC = location.pathname === "/category-courses"
     const isPrivacy = location.pathname === "/privacy-policy"
-  const isTerms = location.pathname === "/terms-services"
+    const isTerms = location.pathname === "/terms-services"
+    const isProfile = location.pathname === "/profile"
 
     const token = sessionStorage.getItem("token")
 
@@ -94,6 +95,11 @@ export default function Navbar({ children }: Readonly<Props>) {
     const handleOpen1 = () => setIsOpen1(true);
     const handleClose1 = () => setIsOpen1(false);
 
+    const handleNavProfile = () => {
+        navigate("/profile")
+        setMenuOpen(false)
+    }
+
     return (
         <>
             <LoginDialogbox
@@ -124,11 +130,11 @@ export default function Navbar({ children }: Readonly<Props>) {
 
                     <div className={`nav-links ${menuOpen ? 'active' : ''}`}>
                         <a href="" onClick={handleNavCourses}>{t('Courses')}</a>
-                        {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy || isTerms) && <a onClick={handleMenu} href="#korean-books">{t('kbooks')}</a>}
-                        {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy || isTerms) && <a onClick={handleMenu} href="#who">{t('who1')}</a>}
-                        {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy || isTerms) && <a onClick={handleMenu} href="#us">{t('what')}</a>}
+                        {!(isProfile || isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy || isTerms) && <a onClick={handleMenu} href="#korean-books">{t('kbooks')}</a>}
+                        {!(isProfile || isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy || isTerms) && <a onClick={handleMenu} href="#who">{t('who1')}</a>}
+                        {!(isProfile || isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy || isTerms) && <a onClick={handleMenu} href="#us">{t('what')}</a>}
                         {visible && (<a href="" onClick={handleNavMyCourses}>{t('myCourses')}</a>)}
-                        {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy || isTerms) && <a onClick={handleMenu} href="#contact">{t('Contact Us')}</a>}
+                        {!(isProfile || isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy || isTerms) && <a onClick={handleMenu} href="#contact">{t('Contact Us')}</a>}
 
 
                         <select
@@ -148,7 +154,8 @@ export default function Navbar({ children }: Readonly<Props>) {
                         {visible && (
                             <div className="user-section">
                                 <img
-                                    style={{ width: "30px", marginRight: "10px" }}
+                                    onClick={handleNavProfile}
+                                    style={{ width: "30px", marginRight: "10px", cursor: 'pointer' }}
                                     src={userIcon}
                                     alt="User"
                                 />

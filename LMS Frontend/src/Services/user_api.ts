@@ -54,3 +54,16 @@ export const resetDevice = async (body:any, token: any) => {
         throw error;
     }
 };
+
+export const getUser = async (id:any, token: any) => {
+    try {
+        const response = await axios.get(`${api}admin/user-by-id?userId=${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response;
+    } catch (error) {
+        throw error;
+    }
+};

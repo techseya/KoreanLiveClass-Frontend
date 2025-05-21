@@ -23,6 +23,7 @@ const Footer: React.FC = () => {
     const isCategoryC = location.pathname === "/category-courses"
     const isPrivacy = location.pathname === "/privacy-policy"
     const isTerms = location.pathname === "/terms-services"
+    const isProfile = location.pathname === "/profile"
 
     const handleNavTerms = () => {
         navigate("/terms-services")
@@ -55,9 +56,9 @@ const Footer: React.FC = () => {
                         <ul className="footer-links">
                             <li data-aos="fade-up" data-aos-duration="1000"><Link to="/courses" className="footer-link">{t('Courses')}</Link></li>
                             <li data-aos="fade-up" data-aos-duration="1000"><Link to="/categories" className="footer-link">{t('Categories')}</Link></li>
-                            {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy || isTerms) && <li data-aos="fade-up" data-aos-duration="1000"><a href="#korean-books" className="footer-link">{t('kbooks')}</a></li>}
-                            {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy || isTerms) && <li data-aos="fade-up" data-aos-duration="1000"><a href="#who" className="footer-link">{t('who1')}</a></li>}
-                            {!(isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy || isTerms) && <li data-aos="fade-up" data-aos-duration="1000"><a href="#us" className="footer-link">{t('what')}</a></li>}
+                            {!(isProfile || isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy || isTerms) && <li data-aos="fade-up" data-aos-duration="1000"><a href="#korean-books" className="footer-link">{t('kbooks')}</a></li>}
+                            {!(isProfile || isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy || isTerms) && <li data-aos="fade-up" data-aos-duration="1000"><a href="#who" className="footer-link">{t('who1')}</a></li>}
+                            {!(isProfile || isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy || isTerms) && <li data-aos="fade-up" data-aos-duration="1000"><a href="#us" className="footer-link">{t('what')}</a></li>}
                         </ul>
                     </div>
                     <div>
