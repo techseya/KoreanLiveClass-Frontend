@@ -62,8 +62,6 @@ export default function SectionMaintenance() {
         setVisible(false);
     };
 
-    const [status, setStatus] = useState(1)
-
     const handleFormChange = (field: string, value: string) => {
         setEditingSection((prev: any) => ({ ...prev, [field]: value }));
     };
