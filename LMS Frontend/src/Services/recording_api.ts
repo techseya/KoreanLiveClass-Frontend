@@ -29,3 +29,12 @@ export const updateRecording = async (id:any, body:any) => {
         throw error;
     }
 }
+
+export const deleteRecording = async (id:any) => {
+    try {
+        const response = await axios.delete(api+`recording/${id}`)
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}

@@ -7,7 +7,9 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";
 import { getAllCourses } from "src/Services/course_api";
 import { getSections, updateSection } from "src/Services/section_api";
-import { getRecordings, updateRecording } from "src/Services/recording_api";
+import { deleteRecording, getRecordings, updateRecording } from "src/Services/recording_api";
+import { Delete } from "@mui/icons-material";
+import Dialogbox from "src/Common/Components/DialogBox";
 
 function CustomNoRowsOverlay() {
     return (
@@ -25,6 +27,8 @@ export default function RecordingMaintenance() {
     const [courseId, setCourseId] = useState(0)
     const [courses, setCourses] = useState<any[]>([]);
     const [rows, setRows] = useState<any[]>([]);
+    const [isOpen, setIsOpen] = useState(false);
+    const [id, setId] = useState("")
 
     useEffect(() => {
         handleGetCourses()
@@ -143,13 +147,45 @@ export default function RecordingMaintenance() {
                     <IconButton sx={{ color: 'black' }} aria-label="edit" onClick={() => handleEditClick(params.row)}>
                         <EditIcon />
                     </IconButton>
+                    <IconButton sx={{ color: 'red' }} aria-label="edit" onClick={() => handleDeleteClick(params.row)}>
+                        <Delete />
+                    </IconButton>
                 </Box>
             ),
         },
     ];
 
+    const handleDeleteClick = (c: any) => {
+        setId(c.id)
+        setIsOpen(true)
+    };
+
+    const handleClose = () => setIsOpen(false);
+
+    const handleDelete = async () => {
+        try {
+            const response = await deleteRecording(id)
+            alert(response.data.message)
+        } catch (error: any) {
+            alert(error.response.message)
+        }
+
+        handleClose()
+        window.location.reload()
+    }
+
     return (
         <>
+            <Dialogbox
+                open={isOpen}
+                title="Delete Confirmation"
+                content="Are you sure you want to delete this recording?"
+                agreeButtonText="Yes, Delete"
+                disagreeButtonText="No"
+                onAgree={handleDelete}
+                onDisagree={handleClose}
+                onClose={handleClose}
+            />
             {!visible && (
                 <>
                     <Grid container spacing={2}>
@@ -237,7 +273,7 @@ export default function RecordingMaintenance() {
                                 value={editingRecording?.recordLink || ''}
                                 onChange={(e) => handleFormChange("recordLink", e.target.value)}
                             />
-                        </Grid>                        
+                        </Grid>
 
                         <Grid item xs={12} sm={6}>
                             <FormControl fullWidth>

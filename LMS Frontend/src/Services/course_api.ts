@@ -40,6 +40,15 @@ export const updateCourse = async (id:any, body:any) => {
     }
 }
 
+export const deleteCourse = async (id:any) => {
+    try {
+        const response = await axios.delete(api+`course/${id}`)
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
 export const getAllCourses = async () => {
     try {
         const response = await axios.get(api+`course/all`)

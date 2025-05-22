@@ -29,3 +29,12 @@ export const updateSection = async (id:any, body:any) => {
         throw error;
     }
 }
+
+export const deleteSection = async (id:any) => {
+    try {
+        const response = await axios.delete(api+`section/${id}`)
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}

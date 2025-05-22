@@ -7,7 +7,9 @@ import {
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";
-import { getCategories, updateCategory } from "src/Services/category_api";
+import { deleteCategory, getCategories, updateCategory } from "src/Services/category_api";
+import { Delete } from "@mui/icons-material";
+import Dialogbox from "src/Common/Components/DialogBox";
 
 function CustomNoRowsOverlay() {
     return (
@@ -23,6 +25,8 @@ export default function CategoryMaintenance() {
     const [rows, setRows] = useState<any[]>([]);
     const [thumb, setThumb] = useState<File | any>(null);
     const [loading, setLoading] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+    const [id, setId] = useState("")
 
     const token = sessionStorage.getItem("token")
 
@@ -48,8 +52,6 @@ export default function CategoryMaintenance() {
     const handleCancel = () => {
         setVisible(false);
     };
-
-    const [status, setStatus] = useState(1)
 
     const handleFormChange = (field: string, value: string) => {
         setEditingCategory((prev: any) => ({ ...prev, [field]: value }));
@@ -83,6 +85,11 @@ export default function CategoryMaintenance() {
         window.location.reload()
     };
 
+    const handleDeleteClick = (c: any) => {
+        setId(c.id)
+        setIsOpen(true)
+    };
+
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', width: 70 },
         { field: 'name', headerName: 'Name', flex: 1, minWidth: 130 },
@@ -111,19 +118,46 @@ export default function CategoryMaintenance() {
                     <IconButton sx={{ color: 'black' }} aria-label="edit" onClick={() => handleEditClick(params.row)}>
                         <EditIcon />
                     </IconButton>
+                    <IconButton sx={{ color: 'red' }} aria-label="edit" onClick={() => handleDeleteClick(params.row)}>
+                        <Delete />
+                    </IconButton>
                 </Box>
             ),
         },
     ];
 
+    const handleClose = () => setIsOpen(false);
+
+    const handleDelete = async () =>{
+        try {
+                const response = await deleteCategory(id)
+                alert(response.data.message)
+            } catch (error:any) {
+                alert(error.response.message)
+            }
+        
+            handleClose()
+            window.location.reload()
+    }
+
     return (
         <>
-        <Backdrop
-                        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-                        open={loading}
-                    >
-                        <CircularProgress color="inherit" />
-                    </Backdrop>
+            <Dialogbox
+                open={isOpen}
+                title="Delete Confirmation"
+                content="Are you sure you want to delete this category?"
+                agreeButtonText="Yes, Delete"
+                disagreeButtonText="No"
+                onAgree={handleDelete}
+                onDisagree={handleClose}
+                onClose={handleClose}
+            />
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+                open={loading}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
             {!visible && (
                 <Paper sx={{ height: 'auto', width: '100%', marginTop: 2, overflowX: 'auto' }}>
                     <DataGrid
@@ -196,7 +230,7 @@ export default function CategoryMaintenance() {
                         </Grid>
 
                         <Grid item xs={12} sm={3}>
-                        <img
+                            <img
                                 style={{ width: "80%", border: '1px solid black', borderRadius: "8px" }}
                                 src={editingCategory?.imageUrl?.replace("dl=0", "raw=1")}
                                 alt="Course Thumbnail"

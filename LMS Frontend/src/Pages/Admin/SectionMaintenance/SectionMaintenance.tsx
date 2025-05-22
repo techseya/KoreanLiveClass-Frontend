@@ -1,12 +1,14 @@
 import {
     Paper, IconButton, Box, Chip, Typography,
     TextField, Grid, FormControl, InputLabel, Select, MenuItem, Button
-    } from "@mui/material";
+} from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";
 import { getAllCourses } from "src/Services/course_api";
-import { getSections, updateSection } from "src/Services/section_api";
+import { deleteSection, getSections, updateSection } from "src/Services/section_api";
+import { Delete } from "@mui/icons-material";
+import Dialogbox from "src/Common/Components/DialogBox";
 
 function CustomNoRowsOverlay() {
     return (
@@ -21,6 +23,8 @@ export default function SectionMaintenance() {
     const [editingSection, setEditingSection] = useState<any | null>(null);
     const [courseId, setCourseId] = useState(1)
     const [courses, setCourses] = useState<any[]>([]);
+    const [isOpen, setIsOpen] = useState(false);
+    const [id, setId] = useState("")
 
     useEffect(() => {
         handleGetCourses()
@@ -36,8 +40,8 @@ export default function SectionMaintenance() {
             console.error(error);
         }
     }
-    
-    const handleGetSections = async (id:any) => {
+
+    const handleGetSections = async (id: any) => {
         try {
             const res = await getSections(id)
             setRows(res.data)
@@ -119,16 +123,48 @@ export default function SectionMaintenance() {
                     <IconButton sx={{ color: 'black' }} aria-label="edit" onClick={() => handleEditClick(params.row)}>
                         <EditIcon />
                     </IconButton>
+                    <IconButton sx={{ color: 'red' }} aria-label="edit" onClick={() => handleDeleteClick(params.row)}>
+                        <Delete />
+                    </IconButton>
                 </Box>
             ),
         },
     ];
 
+    const handleDeleteClick = (c: any) => {
+        setId(c.id)
+        setIsOpen(true)
+    };
+
+    const handleClose = () => setIsOpen(false);
+
+    const handleDelete = async () => {
+        try {
+            const response = await deleteSection(id)
+            alert(response.data.message)
+        } catch (error: any) {
+            alert(error.response.message)
+        }
+
+        handleClose()
+        window.location.reload()
+    }
+
     return (
         <>
+            <Dialogbox
+                open={isOpen}
+                title="Delete Confirmation"
+                content="Are you sure you want to delete this section?"
+                agreeButtonText="Yes, Delete"
+                disagreeButtonText="No"
+                onAgree={handleDelete}
+                onDisagree={handleClose}
+                onClose={handleClose}
+            />
             {!visible && (
                 <>
-                <Grid item xs={12} sm={12}>
+                    <Grid item xs={12} sm={12}>
                         <FormControl fullWidth>
                             <InputLabel>Course</InputLabel>
                             <Select
@@ -148,23 +184,23 @@ export default function SectionMaintenance() {
                             </Select>
                         </FormControl>
                     </Grid>
-                <Paper sx={{ height: 'auto', width: '100%', marginTop: 2, overflowX: 'auto' }}>
-                    
-                    <DataGrid
-                        rows={rows}
-                        columns={columns}
-                        initialState={{ pagination: { paginationModel: { page: 0, pageSize: 5 } } }}
-                        pageSizeOptions={[5]}
-                        autoHeight
-                        sx={{
-                            border: 0,
-                            minWidth: 600,
-                            '& .MuiDataGrid-columnHeaderTitle': { fontWeight: 'bold', fontSize: '15px', fontFamily: 'Public Sans, sans-serif' },
-                            '& .MuiDataGrid-cell': { fontSize: '14px', fontFamily: 'Public Sans, sans-serif' }
-                        }}
-                        slots={{ noRowsOverlay: CustomNoRowsOverlay }}
-                    />
-                </Paper>
+                    <Paper sx={{ height: 'auto', width: '100%', marginTop: 2, overflowX: 'auto' }}>
+
+                        <DataGrid
+                            rows={rows}
+                            columns={columns}
+                            initialState={{ pagination: { paginationModel: { page: 0, pageSize: 5 } } }}
+                            pageSizeOptions={[5]}
+                            autoHeight
+                            sx={{
+                                border: 0,
+                                minWidth: 600,
+                                '& .MuiDataGrid-columnHeaderTitle': { fontWeight: 'bold', fontSize: '15px', fontFamily: 'Public Sans, sans-serif' },
+                                '& .MuiDataGrid-cell': { fontSize: '14px', fontFamily: 'Public Sans, sans-serif' }
+                            }}
+                            slots={{ noRowsOverlay: CustomNoRowsOverlay }}
+                        />
+                    </Paper>
                 </>
             )}
 

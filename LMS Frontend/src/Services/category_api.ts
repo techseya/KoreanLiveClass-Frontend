@@ -37,3 +37,12 @@ export const updateCategory = async (id:any, body:any) => {
         throw error;
     }
 }
+
+export const deleteCategory = async (id:any) => {
+    try {
+        const response = await axios.delete(api+`category/${id}`)
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}

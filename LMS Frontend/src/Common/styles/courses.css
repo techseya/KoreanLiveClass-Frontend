@@ -119,6 +119,7 @@
     height: 100%;
     display: flex;
     justify-content: center;
+    align-items: start;
 }
 
 .c-in1{
@@ -276,4 +277,9 @@
     .ci{
         display: block !important;
     }
+
+    .c-thumb-wrapper {
+        left: 0;
+    }
+
 }

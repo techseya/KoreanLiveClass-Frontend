@@ -7,8 +7,10 @@ import {
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";
-import { getAllCourses, updateCourse } from "src/Services/course_api";
+import { deleteCourse, getAllCourses, updateCourse } from "src/Services/course_api";
 import { getCategories } from "src/Services/category_api";
+import Dialogbox from "src/Common/Components/DialogBox";
+import { Delete } from "@mui/icons-material";
 
 function CustomNoRowsOverlay() {
     return (
@@ -25,6 +27,8 @@ export default function CourseMaintenance() {
     const [categories, setCategories] = useState<any[]>([]);
     const [thumb, setThumb] = useState<File | any>(null);
     const [loading, setLoading] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
+    const [id, setId] = useState("")
 
     useEffect(() => {
         handleGetCourses()
@@ -126,13 +130,46 @@ export default function CourseMaintenance() {
                     <IconButton sx={{ color: 'black' }} aria-label="edit" onClick={() => handleEditClick(params.row)}>
                         <EditIcon />
                     </IconButton>
+
+                    <IconButton sx={{ color: 'red' }} aria-label="edit" onClick={() => handleDeleteClick(params.row)}>
+                        <Delete />
+                    </IconButton>
                 </Box>
             ),
         },
     ];
 
+    const handleDeleteClick = (c: any) => {
+        setId(c.id)
+        setIsOpen(true)
+    };
+
+    const handleClose = () => setIsOpen(false);
+
+    const handleDelete = async () => {
+        try {
+            const response = await deleteCourse(id)
+            alert(response.data.message)
+        } catch (error: any) {
+            alert(error.response.message)
+        }
+
+        handleClose()
+        window.location.reload()
+    }
+
     return (
         <>
+            <Dialogbox
+                open={isOpen}
+                title="Delete Confirmation"
+                content="Are you sure you want to delete this course?"
+                agreeButtonText="Yes, Delete"
+                disagreeButtonText="No"
+                onAgree={handleDelete}
+                onDisagree={handleClose}
+                onClose={handleClose}
+            />
             <Backdrop
                 sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
                 open={loading}
