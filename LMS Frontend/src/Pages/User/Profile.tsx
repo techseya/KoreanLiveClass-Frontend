@@ -8,6 +8,7 @@ import { Box, Button, Modal, Tab, Tabs, TextField, Typography } from "@mui/mater
 import React from "react"
 import Footer from "src/Layout/Footer"
 import { useNavigate } from "react-router-dom"
+import trophy from "../../Assets/Images/trophy-p.png"
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -217,15 +218,17 @@ export default function Profile() {
                         <Box sx={{ width: '95%' }}>
                             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                                    <Tab label="My Courses List" {...a11yProps(0)} />
-                                    <Tab label="Instructor Chat" {...a11yProps(1)} />
+                                    <Tab label={t("myCourses")} {...a11yProps(0)} />
+                                    <Tab label={t("chat")} {...a11yProps(1)} />
                                 </Tabs>
                             </Box>
+
                             <CustomTabPanel value={value} index={0}>
                                 <div className="courses-list">
                                     {user?.userCoursesList && user.userCoursesList.length > 0 ? (
                                         user.userCoursesList.map((course: any) => (
                                             <div key={course.id} className="course-item">
+                                                <img className="trophy-p" src={trophy} alt="" />
                                                 {course.courseName}
                                             </div>
                                         ))
