@@ -81,7 +81,27 @@ export default function Dashboard() {
     const handleGetLessons = async () => {
         try {
             const response = await getAllWords(token)
-            setLessonsCount(response.data.length)
+            const allWords = response.data;
+
+            if (allWords.length === 0) {
+                setLessonsCount(0);
+                return;
+            }
+
+            const baseDate = new Date(allWords[0].createdAt).toISOString().split("T")[0];
+
+            const filteredWords = allWords
+                .map((word: any) => ({
+                    ...word,
+                    createdAtDate: new Date(word.createdAt).toISOString().split("T")[0]
+                }))
+                .filter((word: any) => word.createdAtDate === baseDate)
+                .map((word: any) => ({
+                    ...word,
+                    active: "Yes"
+                }));
+
+            setLessonsCount(filteredWords.length)
         } catch (error) {
             console.error(error);
         }
