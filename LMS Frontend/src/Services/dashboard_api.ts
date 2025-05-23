@@ -11,3 +11,21 @@ export const getFamousCourses = async () => {
         throw error;
     }
 }
+
+export const getTopStudents = async () => {
+    try {
+        const response = await axios.get(api+`user/top-students`)
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const getTopLocations = async () => {
+    try {
+        const response = await axios.get(api+`user/top-locations`)
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
