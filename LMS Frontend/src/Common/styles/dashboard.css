@@ -1,8 +1,92 @@
 *{
-    /*font-family: publicsans, sans-serif;*/
+    font-family: publicsans, sans-serif;
 }
 
 .dashboard-outer{
     width: 100%;
     height: auto;
+    display: flex;
+    justify-content: center;
+    margin: 15px 0;
+}
+
+.dashboard-inner{
+    width: 75%;
+}
+
+.dashboard-inner1{
+    width: 25%;
+}
+
+.d-img-outer{
+    width: 95%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(232, 243, 253);
+    border-radius: 8px
+}
+
+.d-text-outer{
+    width: 80%;
+    padding: 10px 0;
+}
+
+.d-main-img{
+    width: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.d-title{
+    margin-left: 15px;
+    font-size: 16px;
+    font-weight: bold;
+    color: rgb(31, 91, 203);
+}
+
+.d-desc{
+    width: 75%;
+    margin: 10px 0 0 15px;
+    font-size: 15px;
+}
+
+.focus-text{
+    font-weight: bold;
+    color: orange;
+}
+
+.fc-img{
+    width: 90%;
+}
+
+.d-stat-card-outer{
+    width: 95%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 10px 0;
+}
+
+.d-stat-card{
+    width: 200px;
+    height: 50px;
+    background-color: rgb(232, 243, 253);
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ds-inner{
+    width: 75%;
+}
+
+.ds-inner1{
+    width: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

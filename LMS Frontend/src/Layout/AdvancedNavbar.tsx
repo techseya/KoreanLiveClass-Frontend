@@ -264,7 +264,7 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
       onClick: handleClickNotice,
     },
     {
-      name: "Korean Word",
+      name: "Korean Lessons",
       icon: <WysiwygOutlined style={{ fontSize: "20px" }} />,
       onClick: handleClickWord,
     },
