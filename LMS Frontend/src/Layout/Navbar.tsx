@@ -6,6 +6,8 @@ import { useTranslation } from "react-i18next";
 import LoginDialogbox from "src/Common/Components/LoginDialog";
 import userIcon from "../Assets/Images/man.png"
 import Dialogbox from "src/Common/Components/DialogBox";
+import useIdleTimer from "./IdleTimer";
+import env from "../env"
 
 interface Props {
     children: React.ReactElement;
@@ -32,6 +34,15 @@ export default function Navbar({ children }: Readonly<Props>) {
     const isProfile = location.pathname === "/profile"
 
     const token = sessionStorage.getItem("token")
+
+    useIdleTimer({
+        timeout: env.TIME_OUT,
+        onIdle: () => {
+          sessionStorage.clear();
+          window.location.reload();
+        },
+        enabled: token !== null,
+      });
 
     useEffect(() => {
         if (token === null) {
