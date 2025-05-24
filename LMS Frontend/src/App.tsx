@@ -24,6 +24,7 @@ import Terms from "./Pages/User/Terms";
 import NoticeMaintenance from "./Pages/Admin/NoticeMaintenance/NoticeMaintenance";
 import Quizes from "./Pages/Admin/QuizMaintenance";
 import Profile from "./Pages/User/Profile";
+import InstructorChat from "./Pages/Admin/Chat/InstructorChat";
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -54,6 +55,7 @@ const App: React.FC = () => {
             <Route path="/video-maintenance" element={<KoreanVideos />} />
             <Route path="/notice" element={<NoticeMaintenance />} />
             <Route path="/k-lesson" element={<KoreanWordMaintenance />} />
+            <Route path="/messages" element={<InstructorChat />} />
           </Routes>
         </AdvancedNavbar>
       ) : (

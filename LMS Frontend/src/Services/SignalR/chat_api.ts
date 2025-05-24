@@ -29,3 +29,13 @@ export const getMessages = async (id:any) => {
         throw error;
     }
 }
+
+
+export const getChatList = async (id:any) => {
+    try {
+        const response = await axios.get(api+`chat/chat-list?instructorId=${id}`)
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}

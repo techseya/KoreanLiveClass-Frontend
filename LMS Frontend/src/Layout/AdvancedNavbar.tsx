@@ -276,12 +276,14 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
     },
   ];
 
+  const handleNavChats = () => navigate("/messages")
+
   return (
     <Box
       sx={{ display: "flex", minHeight: "100vh" }}
     >
-      <div className="chat-outer">
-        <img className="chat-img" src={chatImg} alt="" />
+      <div className="chat-outer" onClick={handleNavChats}>
+        <img className="chat-img" src={chatImg} alt=""/>
         Messages
       </div>
       <Dialogbox

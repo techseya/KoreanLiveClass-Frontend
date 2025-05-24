@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../../Common/styles/chat.css";
 import { getMessages, initChat, postChatMessage } from "src/Services/SignalR/chat_api";
 import userIcon from "../../Assets/Images/man.png"
@@ -14,6 +14,9 @@ export default function UserChat() {
     const [messages, setMessages] = useState<Message[]>([]);
     const [messageText, setMessageText] = useState("");
     const [threadId, setThreadId] = useState<any>()
+
+    const messagesEndRef = useRef<HTMLDivElement | null>(null);
+const containerRef = useRef<HTMLDivElement | null>(null);
 
     let userId = Number(sessionStorage.getItem("id"));
     const instructorId = 1;
@@ -53,6 +56,13 @@ export default function UserChat() {
     };
 
     useEffect(() => {
+        if (containerRef.current) {
+          containerRef.current.scrollTop = containerRef.current.scrollHeight;
+        }
+      }, [messages]);
+      
+
+    useEffect(() => {
         const storedThreadId = sessionStorage.getItem("threadId");
         const storedUserId = Number(sessionStorage.getItem("id"));
         userId = storedUserId;
@@ -63,8 +73,7 @@ export default function UserChat() {
         } else {
             handleInitChat();
         }
-    }, []);
-    
+    }, []);    
 
     useEffect(() => {
         fetchMessages(threadId);
@@ -85,14 +94,14 @@ export default function UserChat() {
             await postChatMessage(body);
             setMessageText("");
             fetchMessages(threadId);
-        } catch (err) {
-            console.error("Failed to send message", err);
+        } catch (err:any) {
+            alert(err.response.message);
         }
     };
 
     return (
         <div className="chat-container">
-            <div className="chat-messages">
+            <div className="chat-messages"  ref={containerRef}>
                 {messages
                     .filter((msg) => msg.messageText !== "init")
                     .map((msg, index) => (
@@ -114,6 +123,7 @@ export default function UserChat() {
                             )}
                         </div>
                     ))}
+                    <div ref={messagesEndRef} />
             </div>
 
             <div className="chat-input">
