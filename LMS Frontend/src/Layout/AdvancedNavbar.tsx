@@ -29,6 +29,7 @@ import {
   PlayCircleFilled,
   PlayCircleOutlined
 } from "@ant-design/icons";
+import chatImg from "../Assets/Images/conversation.png"
 
 const drawerWidth = 200;
 
@@ -279,6 +280,10 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
     <Box
       sx={{ display: "flex", minHeight: "100vh" }}
     >
+      <div className="chat-outer">
+        <img className="chat-img" src={chatImg} alt="" />
+        Messages
+      </div>
       <Dialogbox
         open={isOpen}
         title="Logout Confirmation"

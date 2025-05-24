@@ -3,6 +3,25 @@
   /*border: 1px solid red;*/
 }
 
+.chat-outer{
+  background-color: #066dfc;
+  z-index: 900;
+  position: fixed;
+  bottom: 20px;
+  right: 30px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  color: white;
+  border-radius: 15px;
+  cursor: pointer;
+}
+
+.chat-img{
+  width: 30px;
+}
+
 .navbar-container {
   display: flex;
   justify-content: space-between;
