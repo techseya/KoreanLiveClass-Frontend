@@ -12,6 +12,7 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import { login } from "src/Services/auth_api";
+import { initChat } from "src/Services/SignalR/chat_api";
 
 interface LoginDialogboxProps {
     open: boolean;
@@ -23,13 +24,15 @@ export default function LoginDialogbox({ open, onAgree, onClose }: LoginDialogbo
     const { t, i18n } = useTranslation();
     const navigate = useNavigate()
 
-    React.useEffect(()=>{
+    React.useEffect(() => {
         getDeviceId()
-    },[])
+    }, [])
 
     const [email, setEmail] = React.useState("")
     const [password, setPassword] = React.useState("")
     const [deviceId, setDeviceId] = React.useState("")
+
+    const id = sessionStorage.getItem("id")
 
     const handleLogin = async () => {
         const body = {
@@ -40,52 +43,72 @@ export default function LoginDialogbox({ open, onAgree, onClose }: LoginDialogbo
 
         try {
             const response = await login(body)
-            if(response.data.token !== null){                
-                sessionStorage.setItem("token",response.data.token)
-                sessionStorage.setItem("id",response.data.id)
-                if(response.data.type === "Admin"){
+            if (response.data.token !== null) {
+                sessionStorage.setItem("token", response.data.token)
+                sessionStorage.setItem("id", response.data.id)
+                if (response.data.type === "Admin") {
                     navigate("/dashboard")
-                }else{
+                } else {
+                    sessionStorage.setItem("deviceId", deviceId)
+                    // handleInitChat()
                     alert("Login Success")
-                }                
-                
-            }            
-        } catch (error:any) {  
-            if(error.response.data.message === "Login not allowed from this device."){
-                alert(error.response.data.message+" Please try again in different tab.")
-            }else{
+                }
+
+            }
+        } catch (error: any) {
+            if (error.response.data.message === "Login not allowed from this device.") {
+                alert(error.response.data.message + " Please try again in different tab.")
+            } else {
                 alert(error.response.data.message)
-            }        
+            }
         }
 
         window.location.reload()
     }
 
-     const getDeviceId = async () => {
+    const handleInitChat = async () => {
+        const body = {
+            threadId: "00000000-0000-0000-0000-000000000000",
+            userId: id,
+            instructorId: 1,
+            senderRole: 1,
+            messageText: "init"
+        };
+
+        try {
+            const res = await initChat(body);
+            const actualThreadId = res.data?.data?.threadId;
+            sessionStorage.setItem("threadId", actualThreadId);
+        } catch (err) {
+            console.error("Failed to initialize chat", err);
+        }
+    };
+
+    const getDeviceId = async () => {
         const fp = await FingerprintJS.load();
-    
+
         let attempts = 0;
         let stableId = '';
-    
+
         while (attempts < 3) {
-          const result = await fp.get();
-          const id = result.visitorId;
-    
-          console.log(`Attempt ${attempts + 1}: ${id}`);
-    
-          // If this is not the first attempt and ID matches previous, consider it stable
-          if (stableId && id === stableId) {
-            break;
-          }
-    
-          stableId = id;
-          attempts++;
-          await new Promise(resolve => setTimeout(resolve, 300)); // wait a bit between attempts
+            const result = await fp.get();
+            const id = result.visitorId;
+
+            console.log(`Attempt ${attempts + 1}: ${id}`);
+
+            // If this is not the first attempt and ID matches previous, consider it stable
+            if (stableId && id === stableId) {
+                break;
+            }
+
+            stableId = id;
+            attempts++;
+            await new Promise(resolve => setTimeout(resolve, 300)); // wait a bit between attempts
         }
-    
+
         setDeviceId(stableId)
-    
-      };
+
+    };
 
     return (
         <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>

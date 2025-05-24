@@ -9,6 +9,7 @@ import React from "react"
 import Footer from "src/Layout/Footer"
 import { useNavigate } from "react-router-dom"
 import trophy from "../../Assets/Images/trophy-p.png"
+import UserChat from "./UserChat"
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -239,7 +240,7 @@ export default function Profile() {
                             </CustomTabPanel>
 
                             <CustomTabPanel value={value} index={1}>
-
+                                <UserChat/>
                             </CustomTabPanel>
                         </Box>
                     </div>
