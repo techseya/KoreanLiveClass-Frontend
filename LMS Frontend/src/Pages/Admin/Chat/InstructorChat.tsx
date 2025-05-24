@@ -13,16 +13,18 @@ export default function InstructorChat() {
     const [userId, setUserId] = useState<any>()
     const [selectedThreadId, setSelectedThreadId] = useState<string | null>(null);
 
-    const bottomRef = useRef<HTMLDivElement | null>(null);
-    
+    const messagesEndRef = useRef<HTMLDivElement | null>(null);
+    const containerRef = useRef<HTMLDivElement | null>(null);
+
     const instructorId = 1;
     let tId = sessionStorage.getItem("threadId");
 
     useEffect(() => {
-        if (bottomRef.current) {
-            bottomRef.current.scrollIntoView({ behavior: "smooth" });
+        if (containerRef.current) {
+            containerRef.current.scrollTop = containerRef.current.scrollHeight;
         }
     }, [messages]);
+
 
     useEffect(() => {
         handleGetList();
@@ -33,7 +35,7 @@ export default function InstructorChat() {
             const response = await getChatList(instructorId);
             const chats = response.data;
             setChatList(chats);
-    
+
             if (chats.length > 0) {
                 const first = chats[0];
                 setThreadId(first.threadId);
@@ -45,7 +47,7 @@ export default function InstructorChat() {
             console.error(error);
         }
     };
-    
+
 
     const handleGetMessages = async (threadId: any) => {
         try {
@@ -57,24 +59,24 @@ export default function InstructorChat() {
     }
 
     const sendMessage = async () => {
-            if (!messageText.trim()) return;
-    
-            const body = {
-                threadId: threadId,
-                userId,
-                instructorId,
-                senderRole: 2,
-                messageText
-            };
-    
-            try {
-                await postChatMessage(body);
-                setMessageText("");
-                handleGetMessages(threadId);
-            } catch (err:any) {
-                alert(err.response.message);
-            }
+        if (!messageText.trim()) return;
+
+        const body = {
+            threadId: threadId,
+            userId,
+            instructorId,
+            senderRole: 2,
+            messageText
         };
+
+        try {
+            await postChatMessage(body);
+            setMessageText("");
+            handleGetMessages(threadId);
+        } catch (err: any) {
+            alert(err.response.message);
+        }
+    };
 
     return (
         <CommanLayout name="Messages" path="messages">
@@ -82,15 +84,15 @@ export default function InstructorChat() {
                 <div className="i-chat-inner">
                     {chatList.map((chat, index) => (
                         <div
-                        key={index}
-                        className={`chat-list-item ${selectedThreadId === chat.threadId ? "selected" : ""}`}
-                        onClick={() => {
-                            setThreadId(chat.threadId);
-                            setUserId(chat.userId);
-                            setSelectedThreadId(chat.threadId);
-                            handleGetMessages(chat.threadId);
-                        }}
-                    >                    
+                            key={index}
+                            className={`chat-list-item ${selectedThreadId === chat.threadId ? "selected" : ""}`}
+                            onClick={() => {
+                                setThreadId(chat.threadId);
+                                setUserId(chat.userId);
+                                setSelectedThreadId(chat.threadId);
+                                handleGetMessages(chat.threadId);
+                            }}
+                        >
                             <div className="chat-user-info">
                                 <div className="chat-name">{chat.name}</div>
                                 <div className="chat-last-msg">
@@ -103,7 +105,7 @@ export default function InstructorChat() {
 
                 <div className="i-chat-inner1">
                     <div className="chat-container">
-                        <div className="chat-messages">
+                        <div className="chat-messages"  ref={containerRef}>
                             {messages
                                 .filter((msg) => msg.messageText !== "init")
                                 .map((msg, index) => (
@@ -123,10 +125,10 @@ export default function InstructorChat() {
                                         {msg.senderRole !== 1 && (
                                             <img src={InsIcon} alt="instructor" className="avatar" />
                                         )}
-                                        
+
                                     </div>
                                 ))}
-                                <div ref={bottomRef}></div>
+                            <div ref={messagesEndRef} />
                         </div>
 
                         <div className="chat-input">
