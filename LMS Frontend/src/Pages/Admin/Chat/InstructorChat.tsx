@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { getChatList, getMessages, postChatMessage } from "src/Services/SignalR/chat_api";
 import userIcon from "../../../Assets/Images/man.png"
 import InsIcon from "../../../Assets/Images/ins.jpg"
+import { connectToChatHub } from "src/Services/SignalR/signalrService";
 
 export default function InstructorChat() {
     const [chatList, setChatList] = useState<any[]>([]);
@@ -30,6 +31,13 @@ export default function InstructorChat() {
         handleGetList();
     }, []);
 
+    const connectToHub = async (id: string) => {
+        await connectToChatHub(id, (newMessage: any) => {
+            // Append new message received via SignalR to state
+            setMessages((prevMessages) => [...prevMessages, newMessage]);
+        });
+    };
+
     const handleGetList = async () => {
         try {
             const response = await getChatList(instructorId);
@@ -42,6 +50,7 @@ export default function InstructorChat() {
                 setUserId(first.userId);
                 setSelectedThreadId(first.threadId);
                 handleGetMessages(first.threadId);
+                connectToHub(first.threadId)
             }
         } catch (error) {
             console.error(error);
@@ -91,6 +100,7 @@ export default function InstructorChat() {
                                 setUserId(chat.userId);
                                 setSelectedThreadId(chat.threadId);
                                 handleGetMessages(chat.threadId);
+                                connectToHub(chat.threadId)
                             }}
                         >
                             <div className="chat-user-info">
@@ -105,7 +115,7 @@ export default function InstructorChat() {
 
                 <div className="i-chat-inner1">
                     <div className="chat-container">
-                        <div className="chat-messages"  ref={containerRef}>
+                        <div className="chat-messages" ref={containerRef}>
                             {messages
                                 .filter((msg) => msg.messageText !== "init")
                                 .map((msg, index) => (

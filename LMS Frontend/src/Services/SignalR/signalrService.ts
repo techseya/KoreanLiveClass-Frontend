@@ -1,5 +1,6 @@
 // services/signalrService.ts
 import * as signalR from "@microsoft/signalr";
+import env from "src/env";
 
 let connection: signalR.HubConnection | null = null;
 
@@ -8,7 +9,7 @@ export const connectToChatHub = async (
   onReceiveMessage: (message: any) => void
 ) => {
   connection = new signalR.HubConnectionBuilder()
-    .withUrl(`/chatHub?threadId=${threadId}`)
+    .withUrl(`${env.BASE_URL}chatHub?threadId=${threadId}`)
     .withAutomaticReconnect()
     .build();
 
