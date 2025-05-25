@@ -57,7 +57,7 @@ export default function InstructorChat() {
 
             for (const msg of fetchedMessages) {
                 if (
-                    msg.senderRole === 1 && // User message
+                    msg.senderRole === 1 &&
                     !msg.isRead &&
                     msg.messageText !== "init"
                 ) {
