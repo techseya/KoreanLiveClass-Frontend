@@ -118,17 +118,17 @@ export default function Dashboard() {
 
     const handleGetLocations = async () => {
         try {
-          const response = await getTopLocations();
-          const parsed = response.data.map((item: any) => ({
-            ...item,
-            studentsCount: parseInt(item.studentsCount, 10)
-          }));
-          setTopLocations(parsed);
+            const response = await getTopLocations();
+            const parsed = response.data.map((item: any) => ({
+                ...item,
+                studentsCount: parseInt(item.studentsCount, 10)
+            }));
+            setTopLocations(parsed);
         } catch (error) {
-          console.error(error);
+            console.error(error);
         }
-      };
-      
+    };
+
 
     return (
         <CommanLayout name="Dashboard" path="dashboard">
@@ -207,7 +207,7 @@ export default function Dashboard() {
 
                     <div className="graph-outer">
                         <div className="bar-graph-outer">
-                            <h3 style={{marginBottom: "25px"}}>Top 5 Courses</h3>
+                            <h3 style={{ marginBottom: "25px" }}>Top 5 Courses</h3>
                             <ResponsiveContainer width="100%" height={300}>
                                 <BarChart data={famousCourses}>
                                     <XAxis dataKey="courseName" />
@@ -219,7 +219,7 @@ export default function Dashboard() {
                         </div>
 
                         <div className="pie-chart-outer">
-                            <h3 style={{marginBottom: "25px"}}>Top Locations</h3>
+                            <h3 style={{ marginBottom: "25px" }}>Top Locations</h3>
                             <ResponsiveContainer width="100%" height={300}>
                                 <PieChart>
                                     <Pie
@@ -247,7 +247,7 @@ export default function Dashboard() {
                     </div>
                     <div className="top-students-container">
                         {topStudents.length > 0 ? (
-                            topStudents.map((student, index) => (
+                            topStudents.slice(0, 5).map((student, index) => (
                                 <div key={student.id} className="top-student-card">
                                     <div className="top-student-rank">#{index + 1}</div>
                                     <div className="top-student-details">
@@ -259,6 +259,7 @@ export default function Dashboard() {
                         ) : (
                             <div className="top-student-empty">No top students found.</div>
                         )}
+
                     </div>
                 </div>
             </div>
