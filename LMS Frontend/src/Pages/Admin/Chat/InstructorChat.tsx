@@ -112,7 +112,7 @@ export default function InstructorChat() {
     };
 
     const debouncedGetUnread = React.useMemo(
-        () => debounce(() => handleGetMessages(threadId), 2000), // 2 seconds debounce
+        () => debounce(() => handleChatClick(), 2000), // 2 seconds debounce
         []
       );
     
