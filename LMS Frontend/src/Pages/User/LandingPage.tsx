@@ -217,7 +217,6 @@ export default function Landing() {
   const handleGetWord = async () => {
     try {
       const response = await getWord()
-      console.log(response.data);
       setKorean(response.data.korean)
       setSinhala(response.data.sinhala)
     } catch (error) {
@@ -228,11 +227,10 @@ export default function Landing() {
   const handleGetNotices = async () => {
     try {
       const response = await getAllNotices("")
-      console.log(response.data);
       setNotice(response.data)
     } catch (error) {
+      setNotice([])
       console.error(error);
-
     }
   }
 
@@ -344,7 +342,7 @@ export default function Landing() {
       className="main-outer"
       style={{ backgroundImage: `url(${images[bgIndex]})` }}
     >
-      {showModal1 && (
+      {showModal1 && notice.length !== 0 &&(
         <CustomModal
           title={notice[0]?.title}
           description={notice[0]?.notification}
