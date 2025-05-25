@@ -32,6 +32,7 @@ import {
 import chatImg from "../Assets/Images/conversation.png"
 import { getUnread } from "src/Services/SignalR/chat_api"
 import newMsgIcon from "../Assets/Images/new-message.png"
+import { debounce } from "lodash";
 
 const drawerWidth = 200;
 
@@ -140,6 +141,28 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
   const isVerySmallScreen = useMediaQuery("(max-width:376px)");
 
   const token = sessionStorage.getItem("token")
+
+  const debouncedGetUnread = React.useMemo(
+    () => debounce(() => handleGetUnread(), 2000), // 2 seconds debounce
+    []
+  );
+
+  React.useEffect(() => {
+    const handleUserActivity = () => {
+      debouncedGetUnread();
+    };
+
+    window.addEventListener("mousemove", handleUserActivity);
+    window.addEventListener("keydown", handleUserActivity);
+    window.addEventListener("click", handleUserActivity);
+
+    return () => {
+      window.removeEventListener("mousemove", handleUserActivity);
+      window.removeEventListener("keydown", handleUserActivity);
+      window.removeEventListener("click", handleUserActivity);
+      debouncedGetUnread.cancel(); // Cleanup debounce
+    };
+  }, [debouncedGetUnread]);
 
   // Auto-close logic
   React.useEffect(() => {
@@ -295,10 +318,10 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
       sx={{ display: "flex", minHeight: "100vh" }}
     >
       <div className="chat-outer" onClick={handleNavChats}>
-        <div className="chat-i1">{isUnread && <img className="mail-icon" src={newMsgIcon} alt="" /> }</div>
+        <div className="chat-i1">{isUnread && <img className="mail-icon" src={newMsgIcon} alt="" />}</div>
         <img className="chat-img" src={chatImg} alt="" />
         Messages
-        
+
       </div>
       <Dialogbox
         open={isOpen}

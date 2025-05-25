@@ -5,6 +5,8 @@ import { getChatList, getMessages, postChatMessage, readChatMessage } from "src/
 import userIcon from "../../../Assets/Images/man.png"
 import InsIcon from "../../../Assets/Images/ins.jpg"
 import { connectToChatHub } from "src/Services/SignalR/signalrService";
+import React from "react";
+import { debounce } from "lodash";
 
 export default function InstructorChat() {
     const [chatList, setChatList] = useState<any[]>([]);
@@ -108,6 +110,28 @@ export default function InstructorChat() {
             alert(err.response.message);
         }
     };
+
+    const debouncedGetUnread = React.useMemo(
+        () => debounce(() => handleGetMessages(threadId), 2000), // 2 seconds debounce
+        []
+      );
+    
+      React.useEffect(() => {
+        const handleUserActivity = () => {
+          debouncedGetUnread();
+        };
+    
+        window.addEventListener("mousemove", handleUserActivity);
+        window.addEventListener("keydown", handleUserActivity);
+        window.addEventListener("click", handleUserActivity);
+    
+        return () => {
+          window.removeEventListener("mousemove", handleUserActivity);
+          window.removeEventListener("keydown", handleUserActivity);
+          window.removeEventListener("click", handleUserActivity);
+          debouncedGetUnread.cancel(); // Cleanup debounce
+        };
+      }, [debouncedGetUnread]);
 
 
     return (
