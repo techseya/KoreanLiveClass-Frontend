@@ -19,6 +19,7 @@ import thumb from "../../Assets/Images/klc-thumb.png"
 import { getAnswer, getQuestions, getQuiz } from "src/Services/quiz_api";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CancelIcon from '@mui/icons-material/Cancel';
+import { getAssignSections } from "src/Services/user_api";
 
 export default function MyCourse() {
     const location = useLocation();
@@ -36,8 +37,10 @@ export default function MyCourse() {
     const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
     const [confirmedAnswers, setConfirmedAnswers] = useState<Record<number, string>>({});
     const [correctAnswersIndexMap, setCorrectAnswersIndexMap] = useState<Record<number, number>>({});
+    const [sectionIds, setSectionIds] = useState<any[]>([])
 
     const token = sessionStorage.getItem("token")
+    const id = sessionStorage.getItem("id")
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -47,10 +50,20 @@ export default function MyCourse() {
         if (course?.id) {
             handleGetSections();
             handleGetQuiz()
+            handleGetAssignSections()
         }
 
         window.scrollTo(0, 0);
     }, []);
+
+    const handleGetAssignSections = async () => {
+        try {
+            const response = await getAssignSections(course.id, id, token)
+            setSectionIds(response.data.sectionIds)
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     const handleGetSections = async () => {
         try {
@@ -346,7 +359,7 @@ export default function MyCourse() {
                         )}
                     </div>
 
-                    <div className="c-section-count">Sections : {sections.length}</div>
+                    <div className="c-section-count">Sections : {sectionIds.length === 0 ? sections.length : sectionIds.length}</div>
                 </div>
             </div>
             <div className="c-inner">
@@ -389,7 +402,66 @@ export default function MyCourse() {
                                 Course Content
                             </Typography>
 
-                            {sections.length > 0 ? (
+                            {sections.length === 0 ? (
+                                <Typography variant="body2" color="text.secondary">
+                                    No Content.
+                                </Typography>
+                            ) : (sectionIds?.length ?? 0) > 0 ? (
+                                sections
+                                    .filter((s) => sectionIds.includes(s.id))
+                                    .map((section, index) => {
+                                        const isExpanded = expandedSection === section.name;
+                                        const recordings = recordingsMap[section.id] || [];
+
+                                        return (
+                                            <Accordion
+                                                key={index}
+                                                expanded={isExpanded}
+                                                onChange={(event, expanded) => {
+                                                    const newExpanded = expanded ? section.name : false;
+                                                    setExpandedSection(newExpanded);
+                                                    if (expanded) handleGetRecordings(section.id);
+                                                }}
+                                            >
+                                                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                                                    <Typography sx={{ flexGrow: 1 }}>{section.name}</Typography>
+                                                    <Typography color="text.secondary">{section.totalLength}</Typography>
+                                                </AccordionSummary>
+
+                                                <AccordionDetails>
+                                                    <Typography variant="body2" sx={{ mb: 1 }}>
+                                                        {section.description}
+                                                    </Typography>
+
+                                                    {recordings.length > 0 ? (
+                                                        recordings.map((rec, i) => (
+                                                            <Typography
+                                                                key={i}
+                                                                sx={{ mb: 1, display: "flex", alignItems: "center" }}
+                                                            >
+                                                                <PlayCircleFilled sx={{ color: "#0D47A1", mr: 1 }} />
+                                                                <span
+                                                                    onClick={() => handleVideoSelection(rec)}
+                                                                    style={{
+                                                                        color: "#0D47A1",
+                                                                        fontWeight: 500,
+                                                                        cursor: "pointer",
+                                                                    }}
+                                                                >
+                                                                    {rec.name === "" ? "View Lesson" : rec.name}
+                                                                </span>
+                                                            </Typography>
+                                                        ))
+                                                    ) : (
+                                                        <Typography variant="body2" color="text.secondary">
+                                                            No recordings.
+                                                        </Typography>
+                                                    )}
+                                                </AccordionDetails>
+                                            </Accordion>
+                                        );
+                                    })
+                            ) : (
                                 sections.map((section, index) => {
                                     const isExpanded = expandedSection === section.name;
                                     const recordings = recordingsMap[section.id] || [];
@@ -401,9 +473,7 @@ export default function MyCourse() {
                                             onChange={(event, expanded) => {
                                                 const newExpanded = expanded ? section.name : false;
                                                 setExpandedSection(newExpanded);
-                                                if (expanded) {
-                                                    handleGetRecordings(section.id);
-                                                }
+                                                if (expanded) handleGetRecordings(section.id);
                                             }}
                                         >
                                             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -420,19 +490,17 @@ export default function MyCourse() {
                                                     recordings.map((rec, i) => (
                                                         <Typography
                                                             key={i}
-                                                            sx={{ mb: 1, display: 'flex', alignItems: 'center' }}
+                                                            sx={{ mb: 1, display: "flex", alignItems: "center" }}
                                                         >
-                                                            <PlayCircleFilled
-                                                                sx={{
-                                                                    color: '#0D47A1',
-                                                                    mr: 1
+                                                            <PlayCircleFilled sx={{ color: "#0D47A1", mr: 1 }} />
+                                                            <span
+                                                                onClick={() => handleVideoSelection(rec)}
+                                                                style={{
+                                                                    color: "#0D47A1",
+                                                                    fontWeight: 500,
+                                                                    cursor: "pointer",
                                                                 }}
-                                                            />
-                                                            <span onClick={() => handleVideoSelection(rec)} style={{
-                                                                color: '#0D47A1',
-                                                                fontWeight: 500,
-                                                                cursor: 'pointer'
-                                                            }}>
+                                                            >
                                                                 {rec.name === "" ? "View Lesson" : rec.name}
                                                             </span>
                                                         </Typography>
@@ -446,8 +514,6 @@ export default function MyCourse() {
                                         </Accordion>
                                     );
                                 })
-                            ) : (
-                                <Typography>No Content available.</Typography>
                             )}
                         </Box>
                     </div>

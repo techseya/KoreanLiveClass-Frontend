@@ -565,7 +565,7 @@ export default function UserMaintenance() {
                     <Grid container spacing={1}>
 
                         <Grid container spacing={1} sx={{ mt: 2 }}>
-                            {sections.map((section) => {
+                            {sections.filter((c) => c.activeStatus === 1).map((section) => {
                                 const isChecked = sectionIds.includes(section.id);
 
                                 return (
