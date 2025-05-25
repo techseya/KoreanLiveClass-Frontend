@@ -191,3 +191,13 @@
   border-left: 4px solid #007bff;
 }
 
+.unread-separator {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  margin: 10px 0;
+  font-weight: bold;
+  color: #999;
+}
+

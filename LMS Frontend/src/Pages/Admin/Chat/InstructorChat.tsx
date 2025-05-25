@@ -13,6 +13,7 @@ export default function InstructorChat() {
     const [threadId, setThreadId] = useState<any>()
     const [userId, setUserId] = useState<any>()
     const [selectedThreadId, setSelectedThreadId] = useState<string | null>(null);
+    const [connectedThreadIds, setConnectedThreadIds] = useState<Set<string>>(new Set());
 
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
     const containerRef = useRef<HTMLDivElement | null>(null);
@@ -31,12 +32,13 @@ export default function InstructorChat() {
     }, []);
 
     const connectToHub = async (id: string) => {
-        await connectToChatHub(id, (newMessage: any) => {
-            // Append new message received via SignalR to state
-            setMessages((prevMessages) => [...prevMessages, newMessage]);
-        });
+        if (!connectedThreadIds.has(id)) {
+            await connectToChatHub(id, (newMessage: any) => {
+                setMessages((prev) => [...prev, newMessage]);
+            });
+            setConnectedThreadIds((prev) => new Set(prev).add(id));
+        }
     };
-
     const handleGetList = async () => {
         try {
             const response = await getChatList(instructorId);
@@ -49,33 +51,46 @@ export default function InstructorChat() {
 
 
     const handleGetMessages = async (threadId: any) => {
+            handleGetList();
         try {
             const res = await getMessages(threadId);
             const fetchedMessages = res.data;
-
             setMessages(fetchedMessages);
-
             for (const msg of fetchedMessages) {
-                if (
-                    msg.senderRole === 1 &&
-                    !msg.isRead &&
-                    msg.messageText !== "init"
-                ) {
+                if (msg.senderRole === 1 && !msg.isRead && msg.messageText !== "init") {
                     await readChatMessage(msg.chatId);
                 }
             }
 
-            handleGetList();
+            await connectToHub(threadId); // ensure connected
+            
         } catch (error: any) {
             console.error(error);
         }
-    }
+    };
+
+    const handleChatClick = async () => {
+        if (!threadId) return;
+    
+        for (const msg of messages) {
+          if (
+            msg.senderRole === 2 &&
+            !msg.isRead &&
+            msg.messageText !== "init" &&
+            msg.chatId
+          ) {
+            await readChatMessage(msg.chatId);
+          }
+        }
+
+        handleGetList()
+      };
 
     const sendMessage = async () => {
         if (!messageText.trim()) return;
 
         const body = {
-            threadId: threadId,
+            threadId,
             userId,
             instructorId,
             senderRole: 2,
@@ -85,11 +100,13 @@ export default function InstructorChat() {
         try {
             await postChatMessage(body);
             setMessageText("");
+            await connectToHub(threadId); // just in case it's not connected
             handleGetMessages(threadId);
         } catch (err: any) {
             alert(err.response.message);
         }
     };
+
 
     return (
         <CommanLayout name="Messages" path="messages">
@@ -105,6 +122,7 @@ export default function InstructorChat() {
                                 setSelectedThreadId(chat.threadId);
                                 handleGetMessages(chat.threadId);
                                 connectToHub(chat.threadId)
+                                handleChatClick()
                             }}
                         >
                             <div className="chat-user-info">
@@ -126,7 +144,7 @@ export default function InstructorChat() {
                     <div className="chat-container">
                         <div className="chat-messages" ref={containerRef}>
                             {messages
-                                .filter((msg) => msg.messageText !== "init")
+                                .filter((msg) => msg.messageText !== "init" && msg.userId === userId)
                                 .map((msg, index) => (
                                     <div
                                         key={index}

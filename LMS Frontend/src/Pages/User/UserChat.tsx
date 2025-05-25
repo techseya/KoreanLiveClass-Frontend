@@ -1,14 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import "../../Common/styles/chat.css";
-import { getMessages, initChat, postChatMessage } from "src/Services/SignalR/chat_api";
+import { getMessages, initChat, postChatMessage, readChatMessage } from "src/Services/SignalR/chat_api";
 import { connectToChatHub, sendMessage as signalRSendMessage, disconnect } from "../../Services/SignalR/signalrService";
 import userIcon from "../../Assets/Images/man.png";
 import InsIcon from "../../Assets/Images/ins.jpg";
 
 interface Message {
+  chatId?: string;
   senderRole: number;
   messageText: string;
-  sentAt: string;
+  sentAt?: string;
+  isRead: boolean;
 }
 
 export default function UserChat() {
@@ -28,7 +30,6 @@ export default function UserChat() {
     }
   }, [messages]);
 
-  // Initialize chat thread (from API or create new)
   const handleInitChat = async () => {
     try {
       const body = {
@@ -45,9 +46,7 @@ export default function UserChat() {
       if (actualThreadId) {
         sessionStorage.setItem("threadId", actualThreadId);
         setThreadId(actualThreadId);
-        // Fetch messages after init
         await fetchMessages(actualThreadId);
-        // Connect to SignalR after threadId is ready
         connectToHub(actualThreadId);
       }
     } catch (err) {
@@ -55,11 +54,10 @@ export default function UserChat() {
     }
   };
 
-  // Fetch messages from API
   const fetchMessages = async (id: string) => {
     try {
       const res = await getMessages(id);
-      setMessages(res.data);
+      setMessages(res.data.filter((msg: Message) => msg.messageText !== "init"));
     } catch (error: any) {
       if (error.response?.data?.status === 400) {
         handleInitChat();
@@ -69,15 +67,14 @@ export default function UserChat() {
     }
   };
 
-  // Connect to SignalR Hub and handle incoming messages
   const connectToHub = async (id: string) => {
     await connectToChatHub(id, (newMessage: Message) => {
-      // Append new message received via SignalR to state
-      setMessages((prevMessages) => [...prevMessages, newMessage]);
+      if (newMessage.messageText !== "init") {
+        setMessages((prevMessages) => [...prevMessages, newMessage]);
+      }
     });
   };
 
-  // On mount, check for existing threadId or init new chat
   useEffect(() => {
     const storedThreadId = sessionStorage.getItem("threadId");
 
@@ -89,54 +86,81 @@ export default function UserChat() {
       handleInitChat();
     }
 
-    // Cleanup SignalR connection on unmount
     return () => {
       disconnect();
     };
   }, []);
 
-  // Send message using SignalR (preferred) and fallback to API post
+  const handleChatClick = async () => {
+    if (!threadId) return;
+
+    const updatedMessages = [...messages];
+
+    for (const msg of updatedMessages) {
+      if (
+        msg.senderRole === 2 &&
+        !msg.isRead &&
+        msg.messageText !== "init" &&
+        msg.chatId
+      ) {
+        await readChatMessage(msg.chatId);
+      }
+    }
+
+    fetchMessages(threadId)
+  };
+
+
   const sendMessage = async () => {
     if (!messageText.trim() || !threadId) return;
 
-      // fallback to postChatMessage API if SignalR fails
-      try {
-        const body = {
-          threadId,
-          userId,
-          instructorId,
-          senderRole: 1,
-          messageText,
-        };
-        await postChatMessage(body);
-        setMessageText("");
-        fetchMessages(threadId);
-      } catch (apiErr: any) {
-        alert(apiErr.response?.message || "Failed to send message");
-      }
+    try {
+      const body = {
+        threadId,
+        userId,
+        instructorId,
+        senderRole: 1,
+        messageText,
+      };
+      await postChatMessage(body);
+      setMessageText("");
+      fetchMessages(threadId);
+    } catch (apiErr: any) {
+      alert(apiErr.response?.message || "Failed to send message");
+    }
+  };
+
+  // Determine where to insert the "unread" separator
+  const renderMessagesWithUnreadSeparator = () => {
+    const indexOfFirstUnread = messages.findIndex((msg) => !msg.isRead && msg.senderRole === 2);
+
+    return messages.map((msg, index) => {
+      const showSeparator = index === indexOfFirstUnread;
+
+      return (
+        <React.Fragment key={index}>
+          {showSeparator && (
+            <div className="unread-separator"><div>unread</div></div>
+          )}
+          <div className={`chat-message ${msg.senderRole === 1 ? "right" : "left"}`}>
+            {msg.senderRole !== 1 && <img src={InsIcon} alt="instructor" className="avatar" />}
+            <div
+              className={`message-bubble ${msg.senderRole === 1 ? "message-right" : "message-left"
+                }`}
+            >
+              {msg.messageText}
+            </div>
+            {msg.senderRole === 1 && <img src={userIcon} alt="user" className="avatar" />}
+          </div>
+        </React.Fragment>
+      );
+    });
   };
 
   return (
-    <div className="chat-container">
+    <div className="chat-container" onClick={handleChatClick}>
       <div className="chat-messages" ref={containerRef}>
-        {messages
-          .filter((msg) => msg.messageText !== "init")
-          .map((msg, index) => (
-            <div
-              key={index}
-              className={`chat-message ${msg.senderRole === 1 ? "right" : "left"}`}
-            >
-              {msg.senderRole !== 1 && <img src={InsIcon} alt="instructor" className="avatar" />}
-              <div
-                className={`message-bubble ${
-                  msg.senderRole === 1 ? "message-right" : "message-left"
-                }`}
-              >
-                {msg.messageText}
-              </div>
-              {msg.senderRole === 1 && <img src={userIcon} alt="user" className="avatar" />}
-            </div>
-          ))}
+        {renderMessagesWithUnreadSeparator()}
       </div>
 
       <div className="chat-input">
@@ -150,5 +174,6 @@ export default function UserChat() {
         <button onClick={sendMessage}>Send</button>
       </div>
     </div>
+
   );
 }
