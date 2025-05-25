@@ -6,9 +6,9 @@ import {
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";
-import { LockReset, PhonelinkErase } from "@mui/icons-material";
+import { LockReset, PhonelinkErase, Send } from "@mui/icons-material";
 import Dialogbox from "src/Common/Components/DialogBox";
-import { getUsers, resetDevice, resetPassword, updateUser } from "src/Services/user_api";
+import { assignCourse, getUsers, resetDevice, resetPassword, updateUser } from "src/Services/user_api";
 import { getAllCourses, getSectionByCourseId } from "src/Services/course_api";
 import { getCodeList } from "country-list";
 import { getCountryCallingCode, CountryCode } from "libphonenumber-js";
@@ -43,6 +43,7 @@ function CustomNoRowsOverlay() {
 export default function UserMaintenance() {
     const [visible, setVisible] = useState(false);
     const [courseModalOpen, setCourseModalOpen] = useState(false);
+    const [courseModalOpen2, setCourseModalOpen2] = useState(false);
     const [sectionModalOpen, setSectionModalOpen] = useState(false);
     const [editingUser, setEditingUser] = useState<any | null>(null);
     const [changePwDialog, setChangePwDialog] = useState(false)
@@ -54,6 +55,8 @@ export default function UserMaintenance() {
     const [location1, setLocation1] = useState("Sri Lanka");
     const [phoneNo, setPhoneNo] = useState<any>("");
     const [selectedCourseId, setSelectedCourseId] = useState<number | null>(null);
+    const [selectedCourseName, setSelectedCourseName] = useState<any>();
+    const [sectionIds, setSectionIds] = useState<any[]>([]);
 
     const token = sessionStorage.getItem("token")
 
@@ -138,13 +141,12 @@ export default function UserMaintenance() {
             activeStatus: editingUser.status,
             userCourses: editingUser.courses.map((c: any) => ({
                 courseId: c.id,
-                courseName: c.name,
-                sectionIds: c.sectionIds,
+                courseName: c.name
             })),
         };
 
         // console.log(payload);
-        
+
         try {
             const response = await updateUser(payload, token);
             alert(response.data.message);
@@ -213,6 +215,23 @@ export default function UserMaintenance() {
         } catch (error) {
             console.error(error);
         }
+    }
+
+    const handleAssignSections = async () => {
+        const body = {
+            courseId: selectedCourseId,
+            userId: selectedUserId,
+            sectionIds: sectionIds
+        }
+
+        try {
+            const response = await assignCourse(body, token)
+            alert(response.data.message)
+        } catch (error: any) {
+            alert(error.response.message)
+        }
+
+        window.location.reload()
     }
 
     const columns: GridColDef[] = [
@@ -395,7 +414,7 @@ export default function UserMaintenance() {
                             </Button>
                         </Grid>
                         <Grid item xs={12}>
-                            <Button variant="outlined" onClick={() => setSectionModalOpen(true)}>
+                            <Button variant="outlined" onClick={() => setCourseModalOpen2(true)}>
                                 Assign Sections
                             </Button>
                         </Grid>
@@ -431,22 +450,33 @@ export default function UserMaintenance() {
                     }}
                 >
                     <Typography variant="h6" mb={2}>Assign Courses : {editingUser?.userName}</Typography>
+
                     <Grid container spacing={1}>
                         {allCourses
-                            .filter((course) => course.activeStatus === 1).map((course) => (
-                                <Grid item xs={12} sm={4} key={course.id}>
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox
-                                                checked={editingUser?.courses?.some((c: any) => c.id === course.id) || false}
-                                                onChange={(e) => handleCourseChange(course, e.target.checked)}
-                                            />
-                                        }
-                                        label={course.name}
-                                    />
-                                </Grid>
-                            ))}
+                            .filter((course) => course.activeStatus === 1)
+                            .map((course) => {
+                                const isChecked = editingUser?.courses?.some((c: any) => c.id === course.id) || false;
+
+                                return (
+                                    <Grid item xs={12} sm={4} key={course.id}>
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={isChecked}
+                                                    onChange={(e) => handleCourseChange(course, e.target.checked)}
+                                                />
+                                            }
+                                            label={
+                                                <Box display="flex" alignItems="center">
+                                                    <span>{course.name}</span>
+                                                </Box>
+                                            }
+                                        />
+                                    </Grid>
+                                );
+                            })}
                     </Grid>
+
 
                     <Box mt={2} display="flex" justifyContent="flex-end">
                         <Button variant="contained" onClick={() => setCourseModalOpen(false)}>Done</Button>
@@ -454,6 +484,62 @@ export default function UserMaintenance() {
                 </Box>
             </Modal>
 
+
+            <Modal
+                open={courseModalOpen2}
+                onClose={() => setCourseModalOpen2(false)}
+            >
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: '50%',
+                        maxHeight: '80vh',
+                        bgcolor: 'background.paper',
+                        boxShadow: 24,
+                        p: 4,
+                        overflowY: 'auto',
+                        borderRadius: '10px'
+                    }}
+                >
+                    <Typography variant="h6" mb={2}>Assign Courses : {editingUser?.userName}</Typography>
+
+                    <Grid container spacing={1}>
+                        {editingUser?.courses.map((course: any) => (
+                            <Grid item xs={12} key={course.id}>
+                                <Box display="flex" alignItems="center" justifyContent="space-between" bgcolor="#eef6ff" p="5px 10px" borderRadius="10px">
+                                    <span>{course.name}</span>
+                                    <IconButton
+                                        size="small"
+                                        onClick={() => {
+                                            setSectionModalOpen(true);
+                                            setSelectedCourseId(course.id);
+                                            setSelectedUserId(editingUser?.id);
+                                            setSelectedCourseName(course.name);
+                                            handleGetSections(course.id);
+
+                                            const matchedCourse = editingUser?.courses?.find(
+                                                (c: any) => c.id === course.id
+                                            );
+                                            setSectionIds(matchedCourse?.sectionIds || []);
+                                        }}
+                                        sx={{ ml: 1 }}
+                                    >
+                                        <Send fontSize="small" color="primary" />
+                                    </IconButton>
+                                </Box>
+                            </Grid>
+                        ))}
+
+                        {editingUser?.courses.length === 0 && (
+                                <Grid item xs={12} sm={12}>No courses assign to this user. First you need to assign courses.</Grid>
+                            )}
+                    </Grid>
+
+                </Box>
+            </Modal>
 
             {/* Modal for section selection */}
             <Modal
@@ -475,66 +561,28 @@ export default function UserMaintenance() {
                         borderRadius: '10px'
                     }}
                 >
-                    <Typography variant="h6" mb={2}>Assign Sections : {editingUser?.userName}</Typography>
+                    <Typography variant="h6" mb={2}>Assign Sections : {editingUser?.userName} | Course : {selectedCourseName}</Typography>
                     <Grid container spacing={1}>
-                        <Grid item xs={12} sm={12}>
-                            <FormControl fullWidth>
-                                <InputLabel id="course-select-label">Select Course</InputLabel>
-                                <Select
-                                    labelId="course-select-label"
-                                    value={selectedCourseId ?? ""}
-                                    label="Select Course"
-                                    onChange={(e) => {
-                                        setSelectedCourseId(Number(e.target.value))
-                                        handleGetSections(Number(e.target.value))
-                                    }}
-                                >
-                                    {editingUser?.courses?.map((course: any) => (
-                                        <MenuItem key={course.id} value={course.id}>
-                                            {course.name}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </Grid>
 
                         <Grid container spacing={1} sx={{ mt: 2 }}>
                             {sections.map((section) => {
-                                // Check if this section is selected for the editingUser
-                                const isChecked = editingUser?.sections?.some((s: any) => s.id === section.id) || false;
+                                const isChecked = sectionIds.includes(section.id);
 
                                 return (
                                     <Grid item xs={12} sm={6} key={section.id}>
                                         <FormControlLabel
                                             control={
                                                 <Checkbox
-                                                    checked={Array.isArray(editingUser?.courses?.[0]?.sectionIds)
-                                                        ? editingUser.courses[0].sectionIds.includes(section.id)
-                                                        : false}
-
+                                                    checked={isChecked}
                                                     onChange={(e) => {
-                                                        if (!editingUser) return;
-
-                                                        const updatedSectionIds = [...(editingUser.courses[0]?.sectionIds || [])];
                                                         if (e.target.checked) {
-                                                            updatedSectionIds.push(section.id);
+                                                            setSectionIds((prev) => [...prev, section.id]);
                                                         } else {
-                                                            const index = updatedSectionIds.indexOf(section.id);
-                                                            if (index > -1) updatedSectionIds.splice(index, 1);
+                                                            setSectionIds((prev) =>
+                                                                prev.filter((id) => id !== section.id)
+                                                            );
                                                         }
-
-                                                        const updatedCourses = [...editingUser.courses];
-                                                        updatedCourses[0] = {
-                                                            ...updatedCourses[0],
-                                                            sectionIds: updatedSectionIds,
-                                                        };
-
-                                                        setEditingUser((prev: any) => ({
-                                                            ...prev,
-                                                            courses: updatedCourses,
-                                                        }));
                                                     }}
-
                                                 />
                                             }
                                             label={section.name}
@@ -542,13 +590,19 @@ export default function UserMaintenance() {
                                     </Grid>
                                 );
                             })}
+
+                            {sections.length === 0 && (
+                                <Grid item xs={12} sm={12}>No Sections for this course</Grid>
+                            )}
                         </Grid>
+
                     </Grid>
 
                     <Box mt={2} display="flex" justifyContent="flex-end">
-                        <Button variant="contained" onClick={() => {
+                        <Button variant="contained" disabled={sections.length === 0} onClick={() => {
                             setSectionModalOpen(false)
-                        }}>Done</Button>
+                            handleAssignSections()
+                        }}>Update</Button>
                     </Box>
                 </Box>
             </Modal>

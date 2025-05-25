@@ -29,6 +29,19 @@ export const updateUser = async (body:any, token: any) => {
     }
 };
 
+export const assignCourse = async (body:any, token: any) => {
+    try {
+        const response = await axios.post(`${api}admin/assign-course`,body,{
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response;
+    } catch (error) {
+        throw error;
+    }
+};
+
 export const resetPassword = async (body:any, token:any) =>{
     try {
         const response = await axios.post(`${api}admin/password-reset`,body, {
