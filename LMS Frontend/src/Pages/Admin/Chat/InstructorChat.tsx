@@ -14,6 +14,8 @@ export default function InstructorChat() {
     const [userId, setUserId] = useState<any>()
     const [selectedThreadId, setSelectedThreadId] = useState<string | null>(null);
     const [connectedThreadIds, setConnectedThreadIds] = useState<Set<string>>(new Set());
+    const [searchTerm, setSearchTerm] = useState("");
+    const [showOnlyUnread, setShowOnlyUnread] = useState(false);
 
     const messagesEndRef = useRef<HTMLDivElement | null>(null);
     const containerRef = useRef<HTMLDivElement | null>(null);
@@ -51,7 +53,7 @@ export default function InstructorChat() {
 
 
     const handleGetMessages = async (threadId: any) => {
-            handleGetList();
+        handleGetList();
         try {
             const res = await getMessages(threadId);
             const fetchedMessages = res.data;
@@ -63,7 +65,7 @@ export default function InstructorChat() {
             }
 
             await connectToHub(threadId); // ensure connected
-            
+
         } catch (error: any) {
             console.error(error);
         }
@@ -71,20 +73,20 @@ export default function InstructorChat() {
 
     const handleChatClick = async () => {
         if (!threadId) return;
-    
+
         for (const msg of messages) {
-          if (
-            msg.senderRole === 2 &&
-            !msg.isRead &&
-            msg.messageText !== "init" &&
-            msg.chatId
-          ) {
-            await readChatMessage(msg.chatId);
-          }
+            if (
+                msg.senderRole === 2 &&
+                !msg.isRead &&
+                msg.messageText !== "init" &&
+                msg.chatId
+            ) {
+                await readChatMessage(msg.chatId);
+            }
         }
 
         handleGetList()
-      };
+    };
 
     const sendMessage = async () => {
         if (!messageText.trim()) return;
@@ -112,32 +114,61 @@ export default function InstructorChat() {
         <CommanLayout name="Messages" path="messages">
             <div className="i-chat-outer">
                 <div className="i-chat-inner">
-                    {chatList.map((chat, index) => (
-                        <div
-                            key={index}
-                            className={`chat-list-item ${selectedThreadId === chat.threadId ? "selected" : ""}`}
-                            onClick={() => {
-                                setThreadId(chat.threadId);
-                                setUserId(chat.userId);
-                                setSelectedThreadId(chat.threadId);
-                                handleGetMessages(chat.threadId);
-                                connectToHub(chat.threadId)
-                                handleChatClick()
-                            }}
-                        >
-                            <div className="chat-user-info">
-                                <div className="chat-name">{chat.name}</div>
-                                <div className="chat-last-msg">
-                                    {chat.lastMessage !== "init" ? chat.lastMessage : "New chat started"}
+                    <div className="chat-search-container">
+                        <input
+                            type="text"
+                            placeholder="Search by name..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            className="chat-search-bar"
+                        />
+                        {searchTerm && (
+                            <span className="clear-icon" onClick={() => setSearchTerm("")}>
+                                &times;
+                            </span>
+                        )}
+                    </div>
+
+
+                        <label style={{ marginRight: "5px", fontSize: "14px", display: "flex", alignItems: "center", justifyContent: "end" }}>
+                            <input
+                                type="checkbox"
+                                checked={showOnlyUnread}
+                                onChange={(e) => setShowOnlyUnread(e.target.checked)}
+                                style={{ marginRight: "5px" }}
+                            />
+                            Unread
+                        </label>
+
+                    {chatList
+                        .filter(chat =>
+                            chat.name?.toLowerCase().includes(searchTerm.toLowerCase())
+                        ).filter(chat => !showOnlyUnread || chat.unreadCount > 0).map((chat, index) => (
+                            <div
+                                key={index}
+                                className={`chat-list-item ${selectedThreadId === chat.threadId ? "selected" : ""}`}
+                                onClick={() => {
+                                    setThreadId(chat.threadId);
+                                    setUserId(chat.userId);
+                                    setSelectedThreadId(chat.threadId);
+                                    handleGetMessages(chat.threadId);
+                                    connectToHub(chat.threadId)
+                                    handleChatClick()
+                                }}
+                            >
+                                <div className="chat-user-info">
+                                    <div className="chat-name">{chat.name}</div>
+                                    <div className="chat-last-msg">
+                                        {chat.lastMessage !== "init" ? chat.lastMessage : "New chat started"}
+                                    </div>
+                                </div>
+                                <div className="chat-meta">
+                                    {chat.unreadCount > 0 && (
+                                        <div className="chat-unread">{chat.unreadCount}</div>
+                                    )}
                                 </div>
                             </div>
-                            <div className="chat-meta">
-                                {chat.unreadCount > 0 && (
-                                    <div className="chat-unread">{chat.unreadCount}</div>
-                                )}
-                            </div>
-                        </div>
-                    ))}
+                        ))}
                 </div>
 
                 <div className="i-chat-inner1">

@@ -201,3 +201,26 @@
   color: #999;
 }
 
+.chat-search-container {
+  position: relative;
+  margin-bottom: 10px;
+}
+
+.chat-search-bar {
+  width: 100%;
+  padding: 10px 35px 10px 10px; /* extra space for the clear icon */
+  font-size: 14px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.clear-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: #666;
+  cursor: pointer;
+  user-select: none;
+}
