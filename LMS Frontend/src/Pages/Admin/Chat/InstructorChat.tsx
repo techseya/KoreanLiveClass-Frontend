@@ -1,7 +1,7 @@
 import CommanLayout from "src/Layout/CommanLayout";
 import "../../../Common/styles/chat.css";
 import { useEffect, useRef, useState } from "react";
-import { getChatList, getMessages, postChatMessage } from "src/Services/SignalR/chat_api";
+import { getChatList, getMessages, postChatMessage, readChatMessage } from "src/Services/SignalR/chat_api";
 import userIcon from "../../../Assets/Images/man.png"
 import InsIcon from "../../../Assets/Images/ins.jpg"
 import { connectToChatHub } from "src/Services/SignalR/signalrService";
@@ -18,7 +18,6 @@ export default function InstructorChat() {
     const containerRef = useRef<HTMLDivElement | null>(null);
 
     const instructorId = 1;
-    let tId = sessionStorage.getItem("threadId");
 
     useEffect(() => {
         if (containerRef.current) {
@@ -43,15 +42,6 @@ export default function InstructorChat() {
             const response = await getChatList(instructorId);
             const chats = response.data;
             setChatList(chats);
-
-            if (chats.length > 0) {
-                const first = chats[0];
-                setThreadId(first.threadId);
-                setUserId(first.userId);
-                setSelectedThreadId(first.threadId);
-                handleGetMessages(first.threadId);
-                connectToHub(first.threadId)
-            }
         } catch (error) {
             console.error(error);
         }
@@ -61,7 +51,21 @@ export default function InstructorChat() {
     const handleGetMessages = async (threadId: any) => {
         try {
             const res = await getMessages(threadId);
-            setMessages(res.data);
+            const fetchedMessages = res.data;
+
+            setMessages(fetchedMessages);
+
+            for (const msg of fetchedMessages) {
+                if (
+                    msg.senderRole === 1 && // User message
+                    !msg.isRead &&
+                    msg.messageText !== "init"
+                ) {
+                    await readChatMessage(msg.chatId);
+                }
+            }
+
+            handleGetList();
         } catch (error: any) {
             console.error(error);
         }
@@ -108,6 +112,11 @@ export default function InstructorChat() {
                                 <div className="chat-last-msg">
                                     {chat.lastMessage !== "init" ? chat.lastMessage : "New chat started"}
                                 </div>
+                            </div>
+                            <div className="chat-meta">
+                                {chat.unreadCount > 0 && (
+                                    <div className="chat-unread">{chat.unreadCount}</div>
+                                )}
                             </div>
                         </div>
                     ))}

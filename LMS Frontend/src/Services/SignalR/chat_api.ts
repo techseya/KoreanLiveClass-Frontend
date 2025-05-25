@@ -21,6 +21,15 @@ export const postChatMessage = async (body:any) => {
     }
 }
 
+export const readChatMessage = async (id:any) => {
+    try {
+        const response = await axios.put(api+`chat/mark-as-read/${id}`)
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
 export const getMessages = async (id:any) => {
     try {
         const response = await axios.get(api+`chat?threadId=${id}`)
