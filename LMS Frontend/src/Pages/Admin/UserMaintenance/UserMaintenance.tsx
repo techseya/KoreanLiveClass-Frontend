@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 import { LockReset, PhonelinkErase } from "@mui/icons-material";
 import Dialogbox from "src/Common/Components/DialogBox";
 import { getUsers, resetDevice, resetPassword, updateUser } from "src/Services/user_api";
-import { getAllCourses } from "src/Services/course_api";
+import { getAllCourses, getSectionByCourseId } from "src/Services/course_api";
 import { getCodeList } from "country-list";
 import { getCountryCallingCode, CountryCode } from "libphonenumber-js";
 
@@ -43,14 +43,17 @@ function CustomNoRowsOverlay() {
 export default function UserMaintenance() {
     const [visible, setVisible] = useState(false);
     const [courseModalOpen, setCourseModalOpen] = useState(false);
+    const [sectionModalOpen, setSectionModalOpen] = useState(false);
     const [editingUser, setEditingUser] = useState<any | null>(null);
     const [changePwDialog, setChangePwDialog] = useState(false)
     const [changeDeviceDialog, setChangeDeviceDialog] = useState(false)
     const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
     const [country, setCountry] = useState<CountryOption>(countryOptions[0]);
     const [allCourses, setAllCourses] = useState<any[]>([]);
+    const [sections, setSections] = useState<any[]>([]);
     const [location1, setLocation1] = useState("Sri Lanka");
     const [phoneNo, setPhoneNo] = useState<any>("");
+    const [selectedCourseId, setSelectedCourseId] = useState<number | null>(null);
 
     const token = sessionStorage.getItem("token")
 
@@ -71,6 +74,7 @@ export default function UserMaintenance() {
         setCountry(defaultCountry);
         setPhoneNo(defaultCountry.callingCode);
     }, [editingUser]);
+
 
     useEffect(() => {
         handleGetUsers()
@@ -112,7 +116,6 @@ export default function UserMaintenance() {
     const handleUpdate = async () => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-
         if (!emailRegex.test(editingUser?.email)) {
             alert("Please enter a valid email address.");
             return;
@@ -122,6 +125,8 @@ export default function UserMaintenance() {
             alert("Phone number must be 10 to 15 digits long (including country code).");
             return;
         }
+
+        const selectedSectionIds = editingUser.sections ? editingUser.sections.map((s: any) => s.id) : [];
 
         const payload = {
             id: editingUser.id,
@@ -133,15 +138,18 @@ export default function UserMaintenance() {
             activeStatus: editingUser.status,
             userCourses: editingUser.courses.map((c: any) => ({
                 courseId: c.id,
-                courseName: c.name
-            }))
+                courseName: c.name,
+                sectionIds: c.sectionIds,
+            })),
         };
 
+        // console.log(payload);
+        
         try {
-            const response = await updateUser(payload, token)
-            alert(response.data.message)
+            const response = await updateUser(payload, token);
+            alert(response.data.message);
         } catch (error: any) {
-            alert(error.response.message)
+            alert(error.response.message);
         }
         setRows((prevRows) =>
             prevRows.map((row) => (row.id === editingUser.id ? editingUser : row))
@@ -197,6 +205,15 @@ export default function UserMaintenance() {
             return { ...prev, courses: updatedCourses };
         });
     };
+
+    const handleGetSections = async (id: any) => {
+        try {
+            const response = await getSectionByCourseId(id)
+            setSections(response.data)
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', width: 70 },
@@ -377,6 +394,11 @@ export default function UserMaintenance() {
                                 Manage Courses
                             </Button>
                         </Grid>
+                        <Grid item xs={12}>
+                            <Button variant="outlined" onClick={() => setSectionModalOpen(true)}>
+                                Assign Sections
+                            </Button>
+                        </Grid>
 
                         <Grid item xs={12} display="flex" justifyContent="flex-end">
                             <Button className="update-btn" variant="contained" onClick={handleCancel}>Cancel</Button>
@@ -428,6 +450,105 @@ export default function UserMaintenance() {
 
                     <Box mt={2} display="flex" justifyContent="flex-end">
                         <Button variant="contained" onClick={() => setCourseModalOpen(false)}>Done</Button>
+                    </Box>
+                </Box>
+            </Modal>
+
+
+            {/* Modal for section selection */}
+            <Modal
+                open={sectionModalOpen}
+                onClose={() => setSectionModalOpen(false)}
+            >
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: '80%',
+                        maxHeight: '80vh',
+                        bgcolor: 'background.paper',
+                        boxShadow: 24,
+                        p: 4,
+                        overflowY: 'auto',
+                        borderRadius: '10px'
+                    }}
+                >
+                    <Typography variant="h6" mb={2}>Assign Sections : {editingUser?.userName}</Typography>
+                    <Grid container spacing={1}>
+                        <Grid item xs={12} sm={12}>
+                            <FormControl fullWidth>
+                                <InputLabel id="course-select-label">Select Course</InputLabel>
+                                <Select
+                                    labelId="course-select-label"
+                                    value={selectedCourseId ?? ""}
+                                    label="Select Course"
+                                    onChange={(e) => {
+                                        setSelectedCourseId(Number(e.target.value))
+                                        handleGetSections(Number(e.target.value))
+                                    }}
+                                >
+                                    {editingUser?.courses?.map((course: any) => (
+                                        <MenuItem key={course.id} value={course.id}>
+                                            {course.name}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </Grid>
+
+                        <Grid container spacing={1} sx={{ mt: 2 }}>
+                            {sections.map((section) => {
+                                // Check if this section is selected for the editingUser
+                                const isChecked = editingUser?.sections?.some((s: any) => s.id === section.id) || false;
+
+                                return (
+                                    <Grid item xs={12} sm={6} key={section.id}>
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={Array.isArray(editingUser?.courses?.[0]?.sectionIds)
+                                                        ? editingUser.courses[0].sectionIds.includes(section.id)
+                                                        : false}
+
+                                                    onChange={(e) => {
+                                                        if (!editingUser) return;
+
+                                                        const updatedSectionIds = [...(editingUser.courses[0]?.sectionIds || [])];
+                                                        if (e.target.checked) {
+                                                            updatedSectionIds.push(section.id);
+                                                        } else {
+                                                            const index = updatedSectionIds.indexOf(section.id);
+                                                            if (index > -1) updatedSectionIds.splice(index, 1);
+                                                        }
+
+                                                        const updatedCourses = [...editingUser.courses];
+                                                        updatedCourses[0] = {
+                                                            ...updatedCourses[0],
+                                                            sectionIds: updatedSectionIds,
+                                                        };
+
+                                                        setEditingUser((prev: any) => ({
+                                                            ...prev,
+                                                            courses: updatedCourses,
+                                                        }));
+                                                    }}
+
+                                                />
+                                            }
+                                            label={section.name}
+                                        />
+                                    </Grid>
+                                );
+                            })}
+                        </Grid>
+                    </Grid>
+
+                    <Box mt={2} display="flex" justifyContent="flex-end">
+                        <Button variant="contained" onClick={() => {
+                            setSectionModalOpen(false)
+                        }}>Done</Button>
                     </Box>
                 </Box>
             </Modal>
