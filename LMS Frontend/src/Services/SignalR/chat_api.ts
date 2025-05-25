@@ -30,6 +30,16 @@ export const readChatMessage = async (id:any) => {
     }
 }
 
+export const getUnread = async (id:any) => {
+    try {
+        const response = await axios.get(api+`chat/unread?senderRole=${id}`)
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
+
 export const getMessages = async (id:any) => {
     try {
         const response = await axios.get(api+`chat?threadId=${id}`)

@@ -16,7 +16,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useMediaQuery } from "@mui/material";
 import "../Common/styles/style.css";
 import "../Common/styles/navbar.css";
-import { LogoutOutlined, MenuOutlined, NotificationsNone, OndemandVideo, PostAdd, WysiwygOutlined } from "@mui/icons-material";
+import { LogoutOutlined, Mail, MenuOutlined, NotificationsNone, OndemandVideo, PostAdd, WysiwygOutlined } from "@mui/icons-material";
 import logo from "../Assets/Images/logo.jpeg";
 import man from "../Assets/Images/man.png";
 import Dialogbox from "../Common/Components/DialogBox";
@@ -30,6 +30,8 @@ import {
   PlayCircleOutlined
 } from "@ant-design/icons";
 import chatImg from "../Assets/Images/conversation.png"
+import { getUnread } from "src/Services/SignalR/chat_api"
+import newMsgIcon from "../Assets/Images/new-message.png"
 
 const drawerWidth = 200;
 
@@ -129,6 +131,7 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
   const [wasAutoClosed, setWasAutoClosed] = React.useState(false);
   const [active, setActive] = React.useState(0);
   const [isOpen, setIsOpen] = React.useState(false);
+  const [isUnread, setIsUnread] = React.useState(false)
 
   const isMobile = useMediaQuery("(max-width:800px)");
   const navigate = useNavigate();
@@ -140,7 +143,7 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
 
   // Auto-close logic
   React.useEffect(() => {
-    if(token === null){
+    if (token === null) {
       navigate("/")
     }
     if (isMobile) {
@@ -152,7 +155,7 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
         setWasAutoClosed(false);
       }
     }
-
+    handleGetUnread()
     let timeoutId: NodeJS.Timeout;
     if (open) {
       timeoutId = setTimeout(() => {
@@ -170,6 +173,15 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
 
     return () => clearTimeout(timeoutId);
   }, [isMobile, location.pathname]);
+
+  const handleGetUnread = async () => {
+    try {
+      const res = await getUnread(1)
+      setIsUnread(res.data)
+    } catch (error) {
+      console.error(error);
+    }
+  }
 
   // Manual drawer toggle
   const handleDrawerOpen = () => {
@@ -283,8 +295,10 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
       sx={{ display: "flex", minHeight: "100vh" }}
     >
       <div className="chat-outer" onClick={handleNavChats}>
-        <img className="chat-img" src={chatImg} alt=""/>
+        <div className="chat-i1">{isUnread && <img className="mail-icon" src={newMsgIcon} alt="" /> }</div>
+        <img className="chat-img" src={chatImg} alt="" />
         Messages
+        
       </div>
       <Dialogbox
         open={isOpen}
@@ -311,11 +325,11 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
             ]}
           >
             <MenuOutlined />
-            
+
           </IconButton>
-          
+
           <div className="toolbar-inner">
-          <nav className="navbar" style={{height: "60px !important" , padding: "0 25px"}}>
+            <nav className="navbar" style={{ height: "60px !important", padding: "0 25px" }}>
             </nav>
             <img
               className="man-icon"

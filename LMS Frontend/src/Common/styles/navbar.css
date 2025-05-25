@@ -18,6 +18,25 @@
   cursor: pointer;
 }
 
+.chat-i1{
+  position: absolute;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.mail-icon {
+  position: relative;
+  top: -20px;
+  left: -20px;
+  width: 35px;
+  animation: pulse 1.5s infinite;
+}
+
+
 .chat-img{
   width: 30px;
 }
