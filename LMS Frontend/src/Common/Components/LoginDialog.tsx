@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import { login } from "src/Services/auth_api";
-import { initChat } from "src/Services/SignalR/chat_api";
+import { get } from "lodash";
 
 interface LoginDialogboxProps {
     open: boolean;
@@ -41,6 +41,11 @@ export default function LoginDialogbox({ open, onAgree, onClose }: LoginDialogbo
             deviceId
         }
 
+        const platform = getDevicePlatform();
+        if (platform === "IOS"){
+            body.deviceId = "IOS";
+        }
+
         try {
             const response = await login(body)
             if (response.data.token !== null) {
@@ -50,7 +55,6 @@ export default function LoginDialogbox({ open, onAgree, onClose }: LoginDialogbo
                     navigate("/dashboard")
                 } else {
                     sessionStorage.setItem("deviceId", deviceId)
-                    // handleInitChat()
                     alert("Login Success")
                 }
 
@@ -65,24 +69,6 @@ export default function LoginDialogbox({ open, onAgree, onClose }: LoginDialogbo
 
         window.location.reload()
     }
-
-    const handleInitChat = async () => {
-        const body = {
-            threadId: "00000000-0000-0000-0000-000000000000",
-            userId: id,
-            instructorId: 1,
-            senderRole: 1,
-            messageText: "init"
-        };
-
-        try {
-            const res = await initChat(body);
-            const actualThreadId = res.data?.data?.threadId;
-            sessionStorage.setItem("threadId", actualThreadId);
-        } catch (err) {
-            console.error("Failed to initialize chat", err);
-        }
-    };
 
     const getDeviceId = async () => {
         const fp = await FingerprintJS.load();
@@ -109,6 +95,32 @@ export default function LoginDialogbox({ open, onAgree, onClose }: LoginDialogbo
         setDeviceId(stableId)
 
     };
+
+    const getDevicePlatform = (): string => {
+        const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera;
+
+        if (/windows phone/i.test(userAgent)) {
+            return "Windows Phone";
+        }
+        if (/android/i.test(userAgent)) {
+            return "Android";
+        }
+        if (/iPad|iPhone|iPod/.test(userAgent) && !(window as any).MSStream) {
+            return "IOS";
+        }
+        if (/Win(dows )?NT/.test(userAgent)) {
+            return "Windows";
+        }
+        if (/Macintosh/.test(userAgent)) {
+            return "Mac";
+        }
+        if (/Linux/.test(userAgent)) {
+            return "Linux";
+        }
+
+        return "Unknown";
+    };
+
 
     return (
         <Dialog open={open} onClose={onClose} maxWidth="xs" fullWidth>
