@@ -164,7 +164,7 @@ export default function Landing() {
   const cards = [
     { count: 10, suffix: "+", label: t("experience") },
     { count: 1500, suffix: "+", label: t("students") },
-    { count: 3500, suffix: "+", label: t("words") },
+    { count: 35000, suffix: "+", label: t("words") },
     { count: 400, suffix: "+", label: t("methods") },
     { count: 30, suffix: "+", label: t("kc") },
   ];
