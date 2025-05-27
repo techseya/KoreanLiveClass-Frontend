@@ -316,8 +316,8 @@ export default function UserMaintenance() {
                     <DataGrid
                         rows={rows}
                         columns={columns}
-                        initialState={{ pagination: { paginationModel: { page: 0, pageSize: 5 } } }}
-                        pageSizeOptions={[5]}
+                        initialState={{ pagination: { paginationModel: { page: 0, pageSize: 50 } } }}
+                        pageSizeOptions={[50]}
                         autoHeight
                         sx={{
                             border: 0,
