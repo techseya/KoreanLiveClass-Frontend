@@ -484,10 +484,6 @@ export default function UserMaintenance() {
                                 </Grid>
                             ))}
                     </Grid>
-
-                    <Box mt={2} display="flex" justifyContent="flex-end">
-                        <Button variant="contained" onClick={() => setViewCourseModal(false)}>Close</Button>
-                    </Box>
                 </Box>
             </Modal>
 
