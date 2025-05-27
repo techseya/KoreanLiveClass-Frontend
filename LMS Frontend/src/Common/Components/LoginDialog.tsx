@@ -55,7 +55,7 @@ export default function LoginDialogbox({ open, onAgree, onClose }: LoginDialogbo
                     navigate("/dashboard")
                 } else {
                     sessionStorage.setItem("deviceId", deviceId)
-                    alert("Login Success")
+                    alert(platform + " : Login Success")
                 }
 
             }
