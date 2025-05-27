@@ -35,16 +35,14 @@ export default function LoginDialogbox({ open, onAgree, onClose }: LoginDialogbo
     const id = sessionStorage.getItem("id")
 
     const handleLogin = async () => {
+        const platform = getDevicePlatform();
+        const loginDeviceId = platform === "IOS" ? "IOS" : deviceId;
+
         const body = {
             email,
             password,
-            deviceId
-        }
-
-        const platform = getDevicePlatform();
-        if (platform === "IOS"){
-            body.deviceId = "IOS";
-        }
+            deviceId: loginDeviceId
+        };
 
         try {
             const response = await login(body)
