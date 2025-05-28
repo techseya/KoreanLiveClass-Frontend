@@ -6,9 +6,9 @@ import {
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";
-import { LockReset, PhonelinkErase, Send } from "@mui/icons-material";
+import { Delete, LockReset, PhonelinkErase, Send } from "@mui/icons-material";
 import Dialogbox from "src/Common/Components/DialogBox";
-import { assignCourse, getUsers, resetDevice, resetPassword, updateUser } from "src/Services/user_api";
+import { assignCourse, deleteUser, getUsers, resetDevice, resetPassword, updateUser } from "src/Services/user_api";
 import { getAllCourses, getSectionByCourseId } from "src/Services/course_api";
 import { getCodeList } from "country-list";
 import { getCountryCallingCode, CountryCode } from "libphonenumber-js";
@@ -49,6 +49,7 @@ export default function UserMaintenance() {
     const [editingUser, setEditingUser] = useState<any | null>(null);
     const [changePwDialog, setChangePwDialog] = useState(false)
     const [changeDeviceDialog, setChangeDeviceDialog] = useState(false)
+    const [deleteUserDialog, setDeleteUserDialog] = useState(false)
     const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
     const [country, setCountry] = useState<CountryOption>(countryOptions[0]);
     const [allCourses, setAllCourses] = useState<any[]>([]);
@@ -106,9 +107,19 @@ export default function UserMaintenance() {
         setChangeDeviceDialog(false)
     }
 
+    const handleUserDeleteDialog = () => {
+        setDeleteUserDialog(false)
+    }
+
     const handleEditClick = (user: any) => {
         setEditingUser(user);
         setVisible(true);
+    };    
+
+    const handleDeleteClick = (user: any) => {
+        setEditingUser(user);
+        setSelectedUserId(user.id);
+        setDeleteUserDialog(true);
     };
 
     const handleViewClick = (user: any) => {
@@ -206,6 +217,17 @@ export default function UserMaintenance() {
         setChangeDeviceDialog(false);
     };
 
+    const handleDeleteUser = async () => {
+        try {
+            const res = await deleteUser(selectedUserId, token)
+            alert(res.data.message)
+        } catch (error:any) {
+            alert(error.response.message)
+        }
+
+        window.location.reload();
+    }
+
     const handleCourseChange = (course: any, checked: boolean) => {
         if (!editingUser) return;
         setEditingUser((prev: any) => {
@@ -274,6 +296,9 @@ export default function UserMaintenance() {
                     <IconButton sx={{ color: 'black' }} aria-label="edit" onClick={() => handleEditClick(params.row)}>
                         <EditIcon />
                     </IconButton>
+                    <IconButton sx={{ color: 'red' }} aria-label="edit" onClick={() => handleDeleteClick(params.row)}>
+                        <Delete />
+                    </IconButton>
                     <IconButton
                         sx={{ color: 'grey' }}
                         aria-label="reset password"
@@ -322,6 +347,18 @@ export default function UserMaintenance() {
                 onDisagree={handleCancelChangeDeviceDialog}
                 onClose={handleCancelChangeDeviceDialog}
             />
+
+            <Dialogbox
+                open={deleteUserDialog}
+                title="Delete Confirmation"
+                content="Are you sure you want to delete this user?"
+                agreeButtonText="Yes, Delete"
+                disagreeButtonText="No"
+                onAgree={handleDeleteUser}
+                onDisagree={handleUserDeleteDialog}
+                onClose={handleUserDeleteDialog}
+            />
+
             {!visible && (
                 <Paper sx={{ height: 'auto', width: '100%', marginTop: 2, overflowX: 'auto' }}>
                     <DataGrid

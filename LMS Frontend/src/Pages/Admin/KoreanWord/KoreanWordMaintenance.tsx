@@ -1,4 +1,4 @@
-import { Edit } from "@mui/icons-material";
+import { Delete, Edit } from "@mui/icons-material";
 import {
   Backdrop,
   Box,
@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
+import Dialogbox from "src/Common/Components/DialogBox";
 import CommanLayout from "src/Layout/CommanLayout";
 import { deleteNotice } from "src/Services/notice_api";
 import { addWord, getAllWords } from "src/Services/word_api";
@@ -43,6 +44,7 @@ export default function KoreanWordMaintenance() {
   const [id, setId] = useState("")
   const [baseD, setBaseD] = useState("")
   const [loading, setLoading] = useState(false);
+    const [deleteUserDialog, setDeleteUserDialog] = useState(false)
 
   useEffect(() => {
     handleGetAllWords();
@@ -83,6 +85,12 @@ export default function KoreanWordMaintenance() {
     setVisible(true);
   };
 
+  const handleDeleteClick = (c: any) => {
+    setEditing(c);
+    setId(c.id)
+    setDeleteUserDialog(true);
+  };
+
   const handleDelete = async () => {
     try {
       const response = await deleteNotice(id)
@@ -114,6 +122,9 @@ export default function KoreanWordMaintenance() {
         <Box>
           <IconButton sx={{ color: 'black' }} aria-label="edit" onClick={() => handleEditClick(params.row)}>
             <Edit />
+          </IconButton>
+          <IconButton sx={{ color: 'red' }} aria-label="delete" onClick={() => handleDeleteClick(params.row)}>
+            <Delete />
           </IconButton>
         </Box>
       ),
@@ -155,8 +166,23 @@ export default function KoreanWordMaintenance() {
     setEditing((prev: any) => ({ ...prev, [field]: value }));
   };
 
+  
+    const handleDeleteDialog = () => {
+        setDeleteUserDialog(false)
+    }
+
   return (
     <CommanLayout name="Korean Lesson Maintenance" path="k-lesson">
+      <Dialogbox
+        open={deleteUserDialog}
+        title="Delete Confirmation"
+        content="Are you sure you want to delete this record?"
+        agreeButtonText="Yes, Delete"
+        disagreeButtonText="No"
+        onAgree={handleDelete}
+        onDisagree={handleDeleteDialog}
+        onClose={handleDeleteDialog}
+      />
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={loading}

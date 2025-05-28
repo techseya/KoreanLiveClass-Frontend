@@ -38,3 +38,17 @@ export const addNotice = async (token:any, body:any) => {
         throw error;
     }
 }
+
+export const updateNotice = async (token:any, body:any) => {
+    try {
+        const response = await axios.post(`${api}today-lesson-notification`,body, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+                'Content-Type': 'multipart/form-data'
+            }
+        });
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}

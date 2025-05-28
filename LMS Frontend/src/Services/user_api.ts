@@ -16,6 +16,19 @@ export const getUsers = async (token: any) => {
     }
 };
 
+export const deleteUser = async (id:any, token: any) => {
+    try {
+        const response = await axios.delete(`${api}admin?userId=${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response;
+    } catch (error) {
+        throw error;
+    }
+};
+
 export const updateUser = async (body:any, token: any) => {
     try {
         const response = await axios.post(`${api}admin/manage-user`,body,{
