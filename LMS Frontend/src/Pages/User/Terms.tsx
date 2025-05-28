@@ -12,12 +12,12 @@ export default function Terms() {
     }, []);
 
     return (
-        <div className="p-outer">
+        <div className="p-outer11">
             <div className="courses-header" style={{ textAlign: "center", marginBottom: "1rem" }}>
                 <div className="bg"></div>
                 <h1 style={{ fontSize: "2rem", marginBottom: "0.5rem", zIndex: 10 }}>{t("Terms of Service")}</h1>
             </div>
-            <div className="p-inner">
+            <div className="p-inner11">
                 <h2>{t("terms-h1")}</h2>
                 <p>{t("terms-p1")}</p>
                 <br />
