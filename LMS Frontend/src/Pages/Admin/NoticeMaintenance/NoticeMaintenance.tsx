@@ -1,7 +1,9 @@
 import { Delete, Edit } from "@mui/icons-material";
 import {
+  Backdrop,
   Box,
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -13,10 +15,11 @@ import {
   Typography
 } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import { set } from "lodash";
 import { useEffect, useState } from "react";
 import Dialogbox from "src/Common/Components/DialogBox";
 import CommanLayout from "src/Layout/CommanLayout";
-import { addNotice, deleteNotice, getAllNotices } from "src/Services/notice_api";
+import { addNotice, deleteNotice, getAllNotices, updateNotice } from "src/Services/notice_api";
 import { addWord, getAllWords } from "src/Services/word_api";
 
 function CustomNoRowsOverlay() {
@@ -42,6 +45,7 @@ export default function NoticeMaintenance() {
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
   const [editing, setEditing] = useState<any | null>(null);
   const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     handleGetAllNotices();
@@ -98,6 +102,7 @@ export default function NoticeMaintenance() {
   };
 
   const handleAddWord = async () => {
+    setLoading(true);
     const formData = new FormData();
     formData.append("Korean", "");
     formData.append("Sinhala", "");
@@ -109,19 +114,24 @@ export default function NoticeMaintenance() {
     try {
       const response = await addNotice(token, formData)
       alert(response.data.message)
+      setLoading(false);
     } catch (error: any) {
       alert(error.response.message)
+      setLoading(false);
     }
 
     window.location.reload()
   };
 
   const handleDelete = async () => {
+    setLoading(true);
     try {
       const response = await deleteNotice(noticeId)
       alert(response.data.message)
+      setLoading(false);
     } catch (error: any) {
       alert(error.response.message)
+      setLoading(false);
     }
 
     handleClose()
@@ -129,14 +139,26 @@ export default function NoticeMaintenance() {
   }
 
   const handleUpdate = async () => {
-    try {
-      const response = await deleteNotice(noticeId)
-      alert(response.data.message)
-    } catch (error: any) {
-      alert(error.response.message)
+    setLoading(true);
+    const formData = new FormData();
+    formData.append("Id", noticeId);
+    formData.append("Title", editing?.title || '');
+    formData.append("Notification", editing?.notification || '');
+    if (thumb) {
+      formData.append("ImageUrl", thumb);
+    } else {
+      formData.append("ImageUrl", editing?.thumbnailUrl || '');
     }
 
-    handleClose()
+    try {
+      const response = await updateNotice(token, formData)
+      alert("Notice updated successfully")
+      setLoading(false);
+    } catch (error: any) {
+      alert(error.response.message)
+      setLoading(false);
+    }
+
     window.location.reload()
   }
 
@@ -148,6 +170,12 @@ export default function NoticeMaintenance() {
 
   return (
     <CommanLayout name="Notice Maintenance" path="notice">
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={loading}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
       <Dialogbox
         open={isOpen}
         title="Delete Confirmation"
@@ -245,7 +273,7 @@ export default function NoticeMaintenance() {
           </DialogContent>
           <DialogActions>
             <Button className="update-btn" variant="contained" onClick={(e) => setVisible(false)}>Cancel</Button>
-            <Button variant="contained" onClick={handleDelete}>
+            <Button variant="contained" onClick={handleUpdate} disabled={!editing?.title || !editing?.notification}>
               Update
             </Button>
           </DialogActions>

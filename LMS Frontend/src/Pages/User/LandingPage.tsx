@@ -345,6 +345,7 @@ export default function Landing() {
       {showModal1 && notice.length !== 0 &&(
         <CustomModal
           title={notice[0]?.title}
+          imageSrc={notice[0]?.thumbnailUrl}
           description={notice[0]?.notification}
           onClose={handleClose1}
         />

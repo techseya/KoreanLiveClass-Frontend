@@ -320,7 +320,6 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
       <div className="chat-outer" onClick={handleNavChats}>
         <div className="chat-i1">{isUnread && <img className="mail-icon" src={newMsgIcon} alt="" />}</div>
         <img className="chat-img" src={chatImg} alt="" />
-        Messages
 
       </div>
       <Dialogbox

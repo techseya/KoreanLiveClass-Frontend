@@ -18,7 +18,7 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import { useEffect, useState } from "react";
 import Dialogbox from "src/Common/Components/DialogBox";
 import CommanLayout from "src/Layout/CommanLayout";
-import { deleteNotice } from "src/Services/notice_api";
+import { deleteNotice, updateNotice } from "src/Services/notice_api";
 import { addWord, getAllWords } from "src/Services/word_api";
 
 function CustomNoRowsOverlay() {
@@ -44,7 +44,8 @@ export default function KoreanWordMaintenance() {
   const [id, setId] = useState("")
   const [baseD, setBaseD] = useState("")
   const [loading, setLoading] = useState(false);
-    const [deleteUserDialog, setDeleteUserDialog] = useState(false)
+  const [deleteUserDialog, setDeleteUserDialog] = useState(false)
+  const [thumb, setThumb] = useState<File | any>(null);
 
   useEffect(() => {
     handleGetAllWords();
@@ -166,10 +167,33 @@ export default function KoreanWordMaintenance() {
     setEditing((prev: any) => ({ ...prev, [field]: value }));
   };
 
-  
-    const handleDeleteDialog = () => {
-        setDeleteUserDialog(false)
+
+  const handleDeleteDialog = () => {
+    setDeleteUserDialog(false)
+  }
+
+  const handleUpdate = async () => {
+    setLoading(true);
+    const formData = new FormData();
+    formData.append("Id", id);
+    formData.append("Korean", editing?.korean || '');
+    formData.append("Sinhala", editing?.sinhala || '');
+    if (thumb) {
+      formData.append("ImageUrl", thumb);
+    } else {
+      formData.append("ImageUrl", editing?.imageUrl || '');
     }
+
+    try {
+      const response = await updateNotice(token, formData)
+      alert(response.data.message)
+      setLoading(false);
+    } catch (error: any) {
+      alert(error.response.message)
+      setLoading(false);
+    }
+    window.location.reload()
+  }
 
   return (
     <CommanLayout name="Korean Lesson Maintenance" path="k-lesson">
@@ -239,7 +263,6 @@ export default function KoreanWordMaintenance() {
                 label="Korean Word"
                 variant="outlined"
                 value={editing?.korean || ''}
-                disabled
                 onChange={(e) => handleFormChange("korean", e.target.value)}
                 fullWidth
               />
@@ -247,11 +270,25 @@ export default function KoreanWordMaintenance() {
                 label="Sinhala Meaning"
                 variant="outlined"
                 value={editing?.sinhala || ''}
-                disabled
                 onChange={(e) => handleFormChange("sinhala", e.target.value)}
                 fullWidth
               />
 
+              <Grid item xs={12} sm={12}>
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (file) {
+                      const url = URL.createObjectURL(file);
+                      handleFormChange("imageUrl", url);
+                      setThumb(file)
+                    }
+                  }}
+                />
+
+              </Grid>
               <Grid item xs={12} sm={3}>
                 {editing?.imageUrl && (
                   <img
@@ -264,9 +301,9 @@ export default function KoreanWordMaintenance() {
             </Box>
           </DialogContent>
           <DialogActions>
-            <Button style={{ color: "red" }} onClick={(e) => setVisible(false)}>Cancel</Button>
-            <Button variant="contained" style={{ backgroundColor: 'red' }} onClick={handleDelete}>
-              Delete
+            <Button className="update-btn" variant="contained" onClick={(e) => setVisible(false)}>Cancel</Button>
+            <Button variant="contained" onClick={handleUpdate} disabled={!editing?.korean || !editing?.sinhala}>
+              Update
             </Button>
           </DialogActions>
         </>

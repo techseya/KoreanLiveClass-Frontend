@@ -41,7 +41,7 @@ export const addNotice = async (token:any, body:any) => {
 
 export const updateNotice = async (token:any, body:any) => {
     try {
-        const response = await axios.post(`${api}today-lesson-notification`,body, {
+        const response = await axios.put(`${api}today-lesson-notification`,body, {
             headers: {
                 Authorization: `Bearer ${token}`,
                 'Content-Type': 'multipart/form-data'
