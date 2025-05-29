@@ -5,11 +5,11 @@ import {
 } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
-import { useEffect, useState } from "react";
-import { Delete, LockReset, PhonelinkErase, Send } from "@mui/icons-material";
+import { use, useEffect, useState } from "react";
+import { Delete, Filter, Filter1, FilterList, LockReset, PhonelinkErase, Send } from "@mui/icons-material";
 import Dialogbox from "src/Common/Components/DialogBox";
 import { assignCourse, deleteUser, getUsers, resetDevice, resetPassword, updateUser } from "src/Services/user_api";
-import { getAllCourses, getSectionByCourseId } from "src/Services/course_api";
+import { getAllCourses, getSectionByCourseId, getUsersByCourseId } from "src/Services/course_api";
 import { getCodeList } from "country-list";
 import { getCountryCallingCode, CountryCode } from "libphonenumber-js";
 import { EyeFilled, EyeOutlined } from "@ant-design/icons";
@@ -43,6 +43,7 @@ function CustomNoRowsOverlay() {
 
 export default function UserMaintenance() {
     const [visible, setVisible] = useState(false);
+    const [filterModalOpen, setFilterModalOpen] = useState(false);
     const [courseModalOpen, setCourseModalOpen] = useState(false);
     const [courseModalOpen2, setCourseModalOpen2] = useState(false);
     const [sectionModalOpen, setSectionModalOpen] = useState(false);
@@ -61,6 +62,8 @@ export default function UserMaintenance() {
     const [sectionIds, setSectionIds] = useState<any[]>([]);
     const [viewCourseModal, setViewCourseModal] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
+    const [courseId, setCourseId] = useState(0)
+    const [users, setUsers] = useState<any[]>([]);
 
     const token = sessionStorage.getItem("token")
 
@@ -114,7 +117,7 @@ export default function UserMaintenance() {
     const handleEditClick = (user: any) => {
         setEditingUser(user);
         setVisible(true);
-    };    
+    };
 
     const handleDeleteClick = (user: any) => {
         setEditingUser(user);
@@ -221,7 +224,7 @@ export default function UserMaintenance() {
         try {
             const res = await deleteUser(selectedUserId, token)
             alert(res.data.message)
-        } catch (error:any) {
+        } catch (error: any) {
             alert(error.response.message)
         }
 
@@ -262,6 +265,15 @@ export default function UserMaintenance() {
         }
 
         window.location.reload()
+    }
+
+    const handleGetUsersByCourse = async (courseId: number) => {
+        try {
+            const res = await getUsersByCourseId(courseId);
+            setUsers(res.data.userResponse);
+        } catch (error) {
+            console.error(error);            
+        }
     }
 
     const columns: GridColDef[] = [
@@ -361,6 +373,16 @@ export default function UserMaintenance() {
 
             {!visible && (
                 <Paper sx={{ height: 'auto', width: '100%', marginTop: 2, overflowX: 'auto' }}>
+                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: 2 }}>
+                        <div></div>
+                        <Button
+                            variant="contained"
+                            startIcon={<FilterList />}
+                            onClick={() => setFilterModalOpen(true)}
+                        >
+                            Filter
+                        </Button>
+                    </Box>
                     <DataGrid
                         rows={rows}
                         columns={columns}
@@ -377,6 +399,63 @@ export default function UserMaintenance() {
                     />
                 </Paper>
             )}
+
+            <Modal
+                open={filterModalOpen}
+                onClose={() => setFilterModalOpen(false)}
+            >
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: '40%',
+                        maxHeight: '80vh',
+                        bgcolor: 'background.paper',
+                        boxShadow: 24,
+                        p: 4,
+                        overflowY: 'auto',
+                        borderRadius: '10px'
+                    }}
+                >
+                    <Typography variant="h6" mb={2}>Filter Users By Course</Typography>
+                    <Grid item xs={12} sm={12} mb={2}>
+                        <FormControl fullWidth>
+                            <InputLabel>Course</InputLabel>
+                            <Select
+                                value={courseId}
+                                label="Course"
+                                onChange={(e) => {
+                                    setCourseId(Number(e.target.value))
+                                    handleGetUsersByCourse(Number(e.target.value));
+                                }}
+                                fullWidth
+                            >
+                                <MenuItem disabled value={0}>Select a course</MenuItem>
+                                {allCourses?.map((c: any, index) => (
+                                    <MenuItem key={index} value={c.id}>
+                                        {c.name}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Grid>
+
+                    <Grid item xs={12} sm={12} mb={2}>
+                        {users.length > 0 && (
+                            users.map((user: any) => (
+                                <Box key={user.id} display="flex" alignItems="center" justifyContent="space-between" bgcolor="#eef6ff" p="5px 10px" borderRadius="10px" mb={1}>
+                                    <span>{user.name} ({user.email})</span>
+                                </Box>
+                            ))
+                        )}
+                    </Grid>
+
+                    <Grid container spacing={1}>
+                    </Grid>
+                </Box>
+            </Modal>
 
             {visible && (
                 <>

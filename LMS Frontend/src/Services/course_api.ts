@@ -102,3 +102,12 @@ export const getCourseByUserId = async (userId: any, token: any) => {
     }
 };
 
+
+export const getUsersByCourseId = async (id:any) => {
+    try {
+        const response = await axios.get(api+`course/users?courseId=${id}`)
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
