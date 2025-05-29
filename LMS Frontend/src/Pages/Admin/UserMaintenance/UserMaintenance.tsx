@@ -524,9 +524,10 @@ export default function UserMaintenance() {
                 </Box>
             </Modal>
 
+            {/* Modal for course selection */}
             <Modal
-                open={courseModalOpen2}
-                onClose={() => setCourseModalOpen2(false)}
+                open={courseModalOpen}
+                onClose={() => setCourseModalOpen(false)}
             >
                 <Box
                     sx={{
@@ -534,7 +535,7 @@ export default function UserMaintenance() {
                         top: '50%',
                         left: '50%',
                         transform: 'translate(-50%, -50%)',
-                        width: '50%',
+                        width: '80%',
                         maxHeight: '80vh',
                         bgcolor: 'background.paper',
                         boxShadow: 24,
@@ -546,37 +547,35 @@ export default function UserMaintenance() {
                     <Typography variant="h6" mb={2}>Assign Courses : {editingUser?.userName}</Typography>
 
                     <Grid container spacing={1}>
-                        {editingUser?.courses.map((course: any) => (
-                            <Grid item xs={12} key={course.id}>
-                                <Box display="flex" alignItems="center" justifyContent="space-between" bgcolor="#eef6ff" p="5px 10px" borderRadius="10px">
-                                    <span>{course.name}</span>
-                                    <IconButton
-                                        size="small"
-                                        onClick={() => {
-                                            setSectionModalOpen(true);
-                                            setSelectedCourseId(course.id);
-                                            setSelectedUserId(editingUser?.id);
-                                            setSelectedCourseName(course.name);
-                                            handleGetSections(course.id);
+                        {allCourses
+                            .filter((course) => course.activeStatus === 1)
+                            .map((course) => {
+                                const isChecked = editingUser?.courses?.some((c: any) => c.id === course.id) || false;
 
-                                            const matchedCourse = editingUser?.courses?.find(
-                                                (c: any) => c.id === course.id
-                                            );
-                                            setSectionIds(matchedCourse?.sectionIds || []);
-                                        }}
-                                        sx={{ ml: 1 }}
-                                    >
-                                        <Send fontSize="small" color="primary" />
-                                    </IconButton>
-                                </Box>
-                            </Grid>
-                        ))}
-
-                        {editingUser?.courses.length === 0 && (
-                            <Grid item xs={12} sm={12}>No courses assign to this user. First you need to assign courses.</Grid>
-                        )}
+                                return (
+                                    <Grid item xs={12} sm={4} key={course.id}>
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={isChecked}
+                                                    onChange={(e) => handleCourseChange(course, e.target.checked)}
+                                                />
+                                            }
+                                            label={
+                                                <Box display="flex" alignItems="center">
+                                                    <span>{course.name}</span>
+                                                </Box>
+                                            }
+                                        />
+                                    </Grid>
+                                );
+                            })}
                     </Grid>
 
+
+                    <Box mt={2} display="flex" justifyContent="flex-end">
+                        <Button variant="contained" onClick={() => setCourseModalOpen(false)}>Done</Button>
+                    </Box>
                 </Box>
             </Modal>
 
