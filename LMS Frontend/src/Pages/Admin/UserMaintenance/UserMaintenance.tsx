@@ -5,14 +5,14 @@ import {
 } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
-import { use, useEffect, useState } from "react";
-import { Delete, Filter, Filter1, FilterList, LockReset, PhonelinkErase, Send } from "@mui/icons-material";
+import { useEffect, useState } from "react";
+import { Delete, FilterList, LockReset, PhonelinkErase, Send } from "@mui/icons-material";
 import Dialogbox from "src/Common/Components/DialogBox";
 import { assignCourse, deleteUser, getUsers, resetDevice, resetPassword, updateUser } from "src/Services/user_api";
 import { getAllCourses, getSectionByCourseId, getUsersByCourseId } from "src/Services/course_api";
 import { getCodeList } from "country-list";
 import { getCountryCallingCode, CountryCode } from "libphonenumber-js";
-import { EyeFilled, EyeOutlined } from "@ant-design/icons";
+import { EyeOutlined } from "@ant-design/icons";
 
 type CountryOption = {
     code: string;
