@@ -13,6 +13,7 @@ import { getAllCourses, getSectionByCourseId, getUsersByCourseId } from "src/Ser
 import { getCodeList } from "country-list";
 import { getCountryCallingCode, CountryCode } from "libphonenumber-js";
 import { EyeOutlined } from "@ant-design/icons";
+import { log } from "util";
 
 type CountryOption = {
     code: string;
@@ -161,7 +162,7 @@ export default function UserMaintenance() {
             location: editingUser.location,
             phoneNo: editingUser.phoneNo,
             duration: editingUser.duration || 0,
-            isHalfPayment: Boolean(editingUser.isHalfPayment),
+            isHalfPayment: editingUser.isHalfPayment === "true" ? true : false,
             activeStatus: editingUser.status,
             userCourses: editingUser.courses.map((c: any) => ({
                 courseId: c.id,
@@ -169,6 +170,9 @@ export default function UserMaintenance() {
                 courseDuration: c.duration || 0
             })),
         };
+
+        console.log(payload);
+        
 
         try {
             const response = await updateUser(payload, token);
@@ -183,7 +187,7 @@ export default function UserMaintenance() {
         setEditingUser(null);
         setVisible(false);
 
-        // window.location.reload();
+        window.location.reload();
     };
 
     const handleChangePassword = async () => {
