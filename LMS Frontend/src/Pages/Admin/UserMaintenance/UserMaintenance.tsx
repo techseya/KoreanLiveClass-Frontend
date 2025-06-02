@@ -544,8 +544,14 @@ export default function UserMaintenance() {
                                 label="Duration (Months)"
                                 type="number"
                                 fullWidth
-                                value={editingUser?.duration}
-                                onChange={(e) => handleFormChange("duration", e.target.value)}
+                                inputProps={{ min: 0 }}
+                                value={editingUser?.duration ?? ""}
+                                onChange={(e) => {
+                                    const value = e.target.value;
+                                    if (value === "" || parseInt(value, 10) >= 0) {
+                                        handleFormChange("duration", value);
+                                    }
+                                }}
                             />
                         </Grid>
 
