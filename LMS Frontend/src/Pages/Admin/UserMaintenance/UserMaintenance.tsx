@@ -115,7 +115,7 @@ export default function UserMaintenance() {
     }
 
     const handleEditClick = (user: any) => {
-        console.log("user", user);
+        user.isHalfPayment = user.isHalfPayment ? "true" : "false";
         setEditingUser(user);
         setVisible(true);
     };
@@ -183,7 +183,7 @@ export default function UserMaintenance() {
         setEditingUser(null);
         setVisible(false);
 
-        window.location.reload();
+        // window.location.reload();
     };
 
     const handleChangePassword = async () => {
@@ -538,8 +538,10 @@ export default function UserMaintenance() {
                                 </Select>
 
                             </FormControl>
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
+                        </Grid>                 
+
+                        { editingUser?.isHalfPayment === "true" && (
+                            <Grid item xs={12} sm={6}>
                             <TextField
                                 label="Duration (Months)"
                                 type="number"
@@ -554,6 +556,7 @@ export default function UserMaintenance() {
                                 }}
                             />
                         </Grid>
+                        )}
 
                         <Grid item xs={12} sm={6}>
                             <FormControl fullWidth>
