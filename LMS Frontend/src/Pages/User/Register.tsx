@@ -136,6 +136,7 @@ export default function Register() {
             email,
             location: country.name,
             phoneNo,
+            isHalfPayment: false,
             duration: Number(duration),
             activeStatus: 1
         };

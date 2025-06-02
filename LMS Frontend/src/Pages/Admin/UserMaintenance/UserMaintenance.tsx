@@ -115,6 +115,7 @@ export default function UserMaintenance() {
     }
 
     const handleEditClick = (user: any) => {
+        console.log("user", user);
         setEditingUser(user);
         setVisible(true);
     };
@@ -134,7 +135,7 @@ export default function UserMaintenance() {
         setVisible(false);
     };
 
-    const handleFormChange = (field: string, value: string) => {
+    const handleFormChange = (field: any, value: string) => {
         setEditingUser((prev: any) => ({ ...prev, [field]: value }));
     };
 
@@ -160,14 +161,14 @@ export default function UserMaintenance() {
             location: editingUser.location,
             phoneNo: editingUser.phoneNo,
             duration: editingUser.duration || 0,
+            isHalfPayment: Boolean(editingUser.isHalfPayment),
             activeStatus: editingUser.status,
             userCourses: editingUser.courses.map((c: any) => ({
                 courseId: c.id,
-                courseName: c.name
+                courseName: c.name,
+                courseDuration: c.duration || 0
             })),
         };
-
-        // console.log(payload);
 
         try {
             const response = await updateUser(payload, token);
@@ -181,6 +182,8 @@ export default function UserMaintenance() {
 
         setEditingUser(null);
         setVisible(false);
+
+        window.location.reload();
     };
 
     const handleChangePassword = async () => {
@@ -272,7 +275,7 @@ export default function UserMaintenance() {
             const res = await getUsersByCourseId(courseId);
             setUsers(res.data.userResponse);
         } catch (error) {
-            console.error(error);            
+            console.error(error);
         }
     }
 
@@ -518,6 +521,31 @@ export default function UserMaintenance() {
                                     }
                                 }}
                                 inputProps={{ inputMode: 'numeric' }}
+                            />
+                        </Grid>
+
+                        <Grid item xs={12} sm={6}>
+                            <FormControl fullWidth>
+                                <InputLabel id="is-paid-label">Is Paid</InputLabel>
+                                <Select
+                                    labelId="is-paid-label"
+                                    value={editingUser?.isHalfPayment}
+                                    label="Is Paid"
+                                    onChange={(e) => handleFormChange("isHalfPayment", e.target.value)}
+                                >
+                                    <MenuItem value="false">Full Payment</MenuItem>
+                                    <MenuItem value="true">Half Payment</MenuItem>
+                                </Select>
+
+                            </FormControl>
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                label="Duration (Months)"
+                                type="number"
+                                fullWidth
+                                value={editingUser?.duration}
+                                onChange={(e) => handleFormChange("duration", e.target.value)}
                             />
                         </Grid>
 

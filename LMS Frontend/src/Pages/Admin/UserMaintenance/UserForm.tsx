@@ -46,7 +46,7 @@ export default function UserForm() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState<any>("");
     const [status, setStatus] = useState("Active");
-    const [country, setCountry] = useState<CountryOption>(countryOptions[0]); // Default country
+    const [country, setCountry] = useState<CountryOption>(countryOptions[0]);
 
     useEffect(() => {
         const defaultCountry = countryOptions.find(c => c.name === "Sri Lanka") || countryOptions[0];
@@ -74,6 +74,7 @@ export default function UserForm() {
             email: email,
             location: location,
             phoneNo: phoneNo,
+            isHalfPayment: false,
             duration: 0,
             activeStatus: status === "Active" ? 1 : 2
         }
