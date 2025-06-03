@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes, useLocation, useMatch } from "react-router-dom";
 import Navbar from "./Layout/Navbar";
 import AdvancedNavbar from "./Layout/AdvancedNavbar";
 import Landing from "./Pages/User/LandingPage";
@@ -33,7 +33,7 @@ const App: React.FC = () => {
   const isCategory = location.pathname === "/categories"
   const isCategoryC = location.pathname === "/category-courses"
   const isMyCourses = location.pathname === "/my-courses"
-  const isCourse = location.pathname === "/course"
+  const isCourse = useMatch("/course/:id") !== null;
   const isMyCourse = location.pathname === "/my-course"
   const isRegister = location.pathname === "/register"
   const isPrivacy = location.pathname === "/privacy-policy"
@@ -66,7 +66,7 @@ const App: React.FC = () => {
             <Route path="/categories" element={<Category/>} />
             <Route path="/category-courses" element={<CategoryCourses/>} />
             <Route path="/my-courses" element={<MyCourses/>} />
-            <Route path="/course" element={<Course />} />
+            <Route path="/course/:id" element={<Course />} />
             <Route path="/my-course" element={<MyCourse />} />
             <Route path="/register" element={<Register />} />
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />

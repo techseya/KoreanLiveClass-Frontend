@@ -102,6 +102,18 @@ export const getCourseByUserId = async (userId: any, token: any) => {
     }
 };
 
+export const getCourseByCourseId = async (id: any, token: any) => {
+    try {
+        const response = await axios.get(`${api}course/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+        return response;
+    } catch (error) {
+        throw error;
+    }
+};
 
 export const getUsersByCourseId = async (id:any) => {
     try {

@@ -1,7 +1,7 @@
 import "../Common/styles/navbar.css";
 import { useEffect, useState } from "react";
 import lms_logo from "../Assets/Images/lms_logo.png"
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useMatch, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import LoginDialogbox from "src/Common/Components/LoginDialog";
 import userIcon from "../Assets/Images/man.png"
@@ -25,7 +25,7 @@ export default function Navbar({ children }: Readonly<Props>) {
     const isCourse = location.pathname === "/courses";
     const isCategory = location.pathname === "/categories";
     const isMyCourses = location.pathname === "/my-courses"
-    const isCourse1 = location.pathname === "/course";
+    const isCourse1 = useMatch("/course/:id") !== null;
     const isMyCourse = location.pathname === "/my-course"
     const isReg = location.pathname === "/register";
     const isCategoryC = location.pathname === "/category-courses"
@@ -42,7 +42,7 @@ export default function Navbar({ children }: Readonly<Props>) {
           window.location.reload();
         },
         enabled: token !== null,
-      });
+    });
 
     useEffect(() => {
         if (token === null) {
