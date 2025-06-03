@@ -24,7 +24,7 @@ export default function Course() {
     const [videoType, setVideoType] = useState<string | null>(null);
     const { t, i18n } = useTranslation();
 
-    const token = sessionStorage.getItem("token")
+    const token = localStorage.getItem("token")
 
     useEffect(() => {
         const pathSegments = location.pathname.split("/").filter(Boolean);
