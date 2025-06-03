@@ -28,7 +28,7 @@ export default function CategoryMaintenance() {
     const [isOpen, setIsOpen] = useState(false);
     const [id, setId] = useState("")
 
-    const token = sessionStorage.getItem("token")
+    const token = localStorage.getItem("token")
 
 
     const handleGetCategories = async () => {

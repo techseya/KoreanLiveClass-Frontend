@@ -61,8 +61,8 @@ export default function Register() {
         try {
             const response = await login(body)
             if (response.data.token !== null) {
-                sessionStorage.setItem("token", response.data.token)
-                sessionStorage.setItem("id", response.data.id)
+                localStorage.setItem("token", response.data.token)
+                localStorage.setItem("id", response.data.id)
                 if (response.data.type === "Admin") {
                     navigate("/dashboard")
                 } else {

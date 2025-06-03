@@ -25,7 +25,7 @@ export default function Dashboard() {
     const [usersCount, setUsersCount] = useState<any>()
     const [lessonsCount, setLessonsCount] = useState<any>()
 
-    const token = sessionStorage.getItem("token")
+    const token = localStorage.getItem("token")
 
     const COLORS = ['#1F95F8', '#FFC04D', '#FFA500', '#FF8C00', '#FF6700'];
 

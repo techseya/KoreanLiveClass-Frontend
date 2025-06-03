@@ -39,8 +39,8 @@ export default function MyCourse() {
     const [correctAnswersIndexMap, setCorrectAnswersIndexMap] = useState<Record<number, number>>({});
     const [sectionIds, setSectionIds] = useState<any[]>([])
 
-    const token = sessionStorage.getItem("token")
-    const id = sessionStorage.getItem("id")
+    const token = localStorage.getItem("token")
+    const id = localStorage.getItem("id")
     const navigate = useNavigate()
 
     useEffect(() => {

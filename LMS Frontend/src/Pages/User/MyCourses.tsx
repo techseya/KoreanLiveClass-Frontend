@@ -24,8 +24,8 @@ export default function MyCourses() {
     const [imageLoading, setImageLoading] = useState(true);
 
     const navigate = useNavigate();
-    const token = sessionStorage.getItem("token")
-    const id = sessionStorage.getItem("id")
+    const token = localStorage.getItem("token")
+    const id = localStorage.getItem("id")
 
     const handleOpenModal = () => {
         if (rows.length > 0) {

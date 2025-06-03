@@ -15,12 +15,12 @@ const CustomModal: React.FC<CustomModalProps> = ({
   onClose,
 }) => {
   const handleNeverShowAgain = () => {
-    sessionStorage.setItem("noticeToken", "never");
+    localStorage.setItem("noticeToken", "never");
     onClose();
   };
 
   const handleShowMeLater = () => {
-    sessionStorage.setItem("noticeToken", "later");
+    localStorage.setItem("noticeToken", "later");
     onClose();
   };
 

@@ -87,7 +87,7 @@ export default function Landing() {
     threshold: 0.3,
   });
 
-  const noticeToken = sessionStorage.getItem("noticeToken")
+  const noticeToken = localStorage.getItem("noticeToken")
 
   const handleClose1 = () => {
     setShowModal1(false);
@@ -170,14 +170,14 @@ export default function Landing() {
   ];
 
   useEffect(() => {
-    const hasRefreshed = sessionStorage.getItem("hasRefreshed");
+    const hasRefreshed = localStorage.getItem("hasRefreshed");
 
     if(!noticeToken){
       setShowModal1(true)
     }
 
     if (!hasRefreshed) {
-      sessionStorage.setItem("hasRefreshed", "true");
+      localStorage.setItem("hasRefreshed", "true");
       window.location.reload(); // Only once per session
       return;
     }

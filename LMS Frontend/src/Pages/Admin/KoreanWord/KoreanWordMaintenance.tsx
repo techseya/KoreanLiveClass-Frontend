@@ -30,7 +30,7 @@ function CustomNoRowsOverlay() {
 }
 
 export default function KoreanWordMaintenance() {
-  const token = sessionStorage.getItem("token");
+  const token = localStorage.getItem("token");
   const [rows, setRows] = useState<any[]>([]);
 
   // Modal state

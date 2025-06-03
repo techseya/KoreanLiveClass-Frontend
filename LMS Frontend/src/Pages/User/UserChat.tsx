@@ -20,7 +20,7 @@ export default function UserChat() {
 
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  const userId = Number(sessionStorage.getItem("id"));
+  const userId = Number(localStorage.getItem("id"));
   const instructorId = 1;
 
   // Scroll chat to bottom whenever messages change
@@ -44,7 +44,7 @@ export default function UserChat() {
       const actualThreadId = res.data?.data?.threadId;
 
       if (actualThreadId) {
-        sessionStorage.setItem("threadId", actualThreadId);
+        localStorage.setItem("threadId", actualThreadId);
         setThreadId(actualThreadId);
         await fetchMessages(actualThreadId);
         connectToHub(actualThreadId);
@@ -76,7 +76,7 @@ export default function UserChat() {
   };
 
   useEffect(() => {
-    const storedThreadId = sessionStorage.getItem("threadId");
+    const storedThreadId = localStorage.getItem("threadId");
 
     if (storedThreadId && storedThreadId !== "00000000-0000-0000-0000-000000000000") {
       setThreadId(storedThreadId);

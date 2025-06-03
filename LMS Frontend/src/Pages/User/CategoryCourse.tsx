@@ -17,7 +17,7 @@ export default function CategoryCourses() {
     const [searchTerm, setSearchTerm] = useState<string>("");
     const { t, i18n } = useTranslation();
 
-    const token = sessionStorage.getItem("token")
+    const token = localStorage.getItem("token")
 
     const location = useLocation();
     const course = location.state;

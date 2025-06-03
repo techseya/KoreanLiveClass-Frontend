@@ -33,12 +33,12 @@ export default function Navbar({ children }: Readonly<Props>) {
     const isTerms = location.pathname === "/terms-services"
     const isProfile = location.pathname === "/profile"
 
-    const token = sessionStorage.getItem("token")
+    const token = localStorage.getItem("token")
 
     useIdleTimer({
         timeout: env.TIME_OUT,
         onIdle: () => {
-          sessionStorage.clear();
+          localStorage.clear();
           window.location.reload();
         },
         enabled: token !== null,
@@ -90,7 +90,7 @@ export default function Navbar({ children }: Readonly<Props>) {
     };
 
     const handleLogout = () => {
-        sessionStorage.clear()
+        localStorage.clear()
         window.location.reload()
     }
 

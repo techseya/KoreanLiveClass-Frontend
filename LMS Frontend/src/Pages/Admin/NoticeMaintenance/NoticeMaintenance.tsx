@@ -31,7 +31,7 @@ function CustomNoRowsOverlay() {
 }
 
 export default function NoticeMaintenance() {
-  const token = sessionStorage.getItem("token");
+  const token = localStorage.getItem("token");
   const [rows, setRows] = useState<any[]>([]);
   const [isOpen, setIsOpen] = useState(false);
 

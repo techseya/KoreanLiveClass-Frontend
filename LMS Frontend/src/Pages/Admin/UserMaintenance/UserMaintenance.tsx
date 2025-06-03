@@ -66,7 +66,7 @@ export default function UserMaintenance() {
     const [courseId, setCourseId] = useState(0)
     const [users, setUsers] = useState<any[]>([]);
 
-    const token = sessionStorage.getItem("token")
+    const token = localStorage.getItem("token")
 
     const handleGetUsers = async () => {
         try {

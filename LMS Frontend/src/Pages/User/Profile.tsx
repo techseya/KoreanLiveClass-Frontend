@@ -41,8 +41,8 @@ function a11yProps(index: number) {
 }
 
 export default function Profile() {
-    const token = sessionStorage.getItem("token")
-    const id = sessionStorage.getItem("id")
+    const token = localStorage.getItem("token")
+    const id = localStorage.getItem("id")
 
     const { i18n, t } = useTranslation();
     const [user, setUser] = useState<any>()

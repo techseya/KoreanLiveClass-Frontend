@@ -32,7 +32,7 @@ export default function LoginDialogbox({ open, onAgree, onClose }: LoginDialogbo
     const [password, setPassword] = React.useState("")
     const [deviceId, setDeviceId] = React.useState("")
 
-    const id = sessionStorage.getItem("id")
+    const id = localStorage.getItem("id")
 
     const handleLogin = async () => {
         const platform = getDevicePlatform();
@@ -47,16 +47,26 @@ export default function LoginDialogbox({ open, onAgree, onClose }: LoginDialogbo
         try {
             const response = await login(body)
             if (response.data.token !== null) {
-                sessionStorage.setItem("token", response.data.token)
-                sessionStorage.setItem("id", response.data.id)
-                if (response.data.type === "Admin") {
-                    navigate("/dashboard")
-                } else {
-                    sessionStorage.setItem("deviceId", deviceId)
-                    alert(platform + " : Login Success")
-                }
+                localStorage.setItem("token", response.data.token);
+                localStorage.setItem("id", response.data.id);
 
+                if (response.data.type === "Admin") {
+                    localStorage.setItem("deviceId", deviceId);
+
+                    // Delay refresh by 100ms
+                    setTimeout(() => {
+                        window.location.href = "/dashboard"; // Hard reload but stays in same origin
+                    }, 100);
+                } else {
+                    localStorage.setItem("deviceId", deviceId);
+                    alert(platform + " : Login Success");
+
+                    setTimeout(() => {
+                        window.location.reload(); // Refresh current page
+                    }, 100);
+                }
             }
+
         } catch (error: any) {
             if (error.response.data.message === "Login not allowed from this device.") {
                 alert(error.response.data.message + " Please try again in different tab.")
@@ -65,7 +75,7 @@ export default function LoginDialogbox({ open, onAgree, onClose }: LoginDialogbo
             }
         }
 
-        window.location.reload()
+        // window.location.reload()
     }
 
     const getDeviceId = async () => {

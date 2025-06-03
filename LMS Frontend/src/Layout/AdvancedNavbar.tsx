@@ -140,7 +140,7 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
 
   const isVerySmallScreen = useMediaQuery("(max-width:376px)");
 
-  const token = sessionStorage.getItem("token")
+  const token = localStorage.getItem("token")
 
   const debouncedGetUnread = React.useMemo(
     () => debounce(() => handleGetUnread(), 2000), // 2 seconds debounce
@@ -217,7 +217,7 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
   const handleClose = () => setIsOpen(false);
   const handleLogout = () => {
     navigate("/");
-    sessionStorage.removeItem("token");
+    localStorage.removeItem("token");
   };
 
   React.useEffect(() => {
