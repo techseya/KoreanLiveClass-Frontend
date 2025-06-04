@@ -68,6 +68,19 @@ export const getAssignSections = async (courseId:any, userId:any, token: any) =>
     }
 };
 
+export const getAlertUsers = async (token: any) => {
+    try {
+        const response = await axios.get(`${api}admin/alert-users`,{
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response;
+    } catch (error) {
+        throw error;
+    }
+};
+
 export const resetPassword = async (body:any, token:any) =>{
     try {
         const response = await axios.post(`${api}admin/password-reset`,body, {

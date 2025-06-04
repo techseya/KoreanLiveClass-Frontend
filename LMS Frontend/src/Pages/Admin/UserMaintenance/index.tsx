@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import UserMaintenance from './UserMaintenance';
 import UserForm from './UserForm';
 import CommanLayout from 'src/Layout/CommanLayout';
+import AlertUsers from './AlertUsers';
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -49,6 +50,7 @@ export default function Users() {
                     <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                         <Tab label="Users" {...a11yProps(0)} />
                         <Tab label="Add User" {...a11yProps(1)} />
+                        <Tab label="Expiring Users in 14 Days" {...a11yProps(2)} />
                     </Tabs>
                 </Box>
                 <CustomTabPanel value={value} index={0}>
@@ -56,6 +58,9 @@ export default function Users() {
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={1}>
                     <UserForm />
+                </CustomTabPanel>
+                <CustomTabPanel value={value} index={2}>
+                    <AlertUsers />
                 </CustomTabPanel>
             </Box>
         </CommanLayout>

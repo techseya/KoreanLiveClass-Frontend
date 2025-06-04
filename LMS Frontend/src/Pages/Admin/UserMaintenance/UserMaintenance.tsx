@@ -8,7 +8,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";
 import { Delete, FilterList, LockReset, PhonelinkErase, Send } from "@mui/icons-material";
 import Dialogbox from "src/Common/Components/DialogBox";
-import { assignCourse, deleteUser, getUsers, resetDevice, resetPassword, updateUser } from "src/Services/user_api";
+import { assignCourse, deleteUser, getAlertUsers, getUsers, resetDevice, resetPassword, updateUser } from "src/Services/user_api";
 import { getAllCourses, getSectionByCourseId, getUsersByCourseId } from "src/Services/course_api";
 import { getCodeList } from "country-list";
 import { getCountryCallingCode, CountryCode } from "libphonenumber-js";
@@ -65,6 +65,7 @@ export default function UserMaintenance() {
     const [searchQuery, setSearchQuery] = useState("");
     const [courseId, setCourseId] = useState(0)
     const [users, setUsers] = useState<any[]>([]);
+    const [alertUsers, setAlertUsers] = useState<any[]>([]);
 
     const token = localStorage.getItem("token")
 
@@ -98,6 +99,15 @@ export default function UserMaintenance() {
             setAllCourses(res.data)
         } catch (error) {
             console.error(error);
+        }
+    }
+
+    const handleAlertUsers = async () => {
+        try {
+            const res = await getAlertUsers(token);
+            setAlertUsers(res.data);
+        } catch (error) {
+            console.error(error);            
         }
     }
 
