@@ -14,6 +14,7 @@ import { getCodeList } from "country-list";
 import { getCountryCallingCode, CountryCode } from "libphonenumber-js";
 import { EyeOutlined } from "@ant-design/icons";
 import { log } from "util";
+import React from "react";
 
 type CountryOption = {
     code: string;
@@ -107,7 +108,7 @@ export default function UserMaintenance() {
             const res = await getAlertUsers(token);
             setAlertUsers(res.data);
         } catch (error) {
-            console.error(error);            
+            console.error(error);
         }
     }
 
@@ -182,7 +183,6 @@ export default function UserMaintenance() {
         };
 
         console.log(payload);
-        
 
         try {
             const response = await updateUser(payload, token);
@@ -250,10 +250,12 @@ export default function UserMaintenance() {
 
     const handleCourseChange = (course: any, checked: boolean) => {
         if (!editingUser) return;
+
         setEditingUser((prev: any) => {
             const updatedCourses = checked
-                ? [...prev.courses, { id: course.id, name: course.name }]
+                ? [...prev.courses, { id: course.id, name: course.name, duration: 1 }]
                 : prev.courses.filter((c: any) => c.id !== course.id);
+
             return { ...prev, courses: updatedCourses };
         });
     };
@@ -552,24 +554,24 @@ export default function UserMaintenance() {
                                 </Select>
 
                             </FormControl>
-                        </Grid>                 
-
-                        { editingUser?.isHalfPayment === "true" && (
-                            <Grid item xs={12} sm={6}>
-                            <TextField
-                                label="Duration (Months)"
-                                type="number"
-                                fullWidth
-                                inputProps={{ min: 0 }}
-                                value={editingUser?.duration ?? ""}
-                                onChange={(e) => {
-                                    const value = e.target.value;
-                                    if (value === "" || parseInt(value, 10) >= 0) {
-                                        handleFormChange("duration", value);
-                                    }
-                                }}
-                            />
                         </Grid>
+
+                        {editingUser?.isHalfPayment === "true" && (
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    label="Duration (Months)"
+                                    type="number"
+                                    fullWidth
+                                    inputProps={{ min: 0 }}
+                                    value={editingUser?.duration ?? ""}
+                                    onChange={(e) => {
+                                        const value = e.target.value;
+                                        if (value === "" || parseInt(value, 10) >= 0) {
+                                            handleFormChange("duration", value);
+                                        }
+                                    }}
+                                />
+                            </Grid>
                         )}
 
                         <Grid item xs={12} sm={6}>
@@ -665,7 +667,7 @@ export default function UserMaintenance() {
                         top: '50%',
                         left: '50%',
                         transform: 'translate(-50%, -50%)',
-                        width: '80%',
+                        width: '40%',
                         maxHeight: '80vh',
                         bgcolor: 'background.paper',
                         boxShadow: 24,
@@ -678,29 +680,55 @@ export default function UserMaintenance() {
 
                     <Grid container spacing={1}>
                         {allCourses
-                            .filter((course) => course.activeStatus === 1)
-                            .map((course) => {
+                            .filter(course => course.activeStatus === 1)
+                            .map(course => {
                                 const isChecked = editingUser?.courses?.some((c: any) => c.id === course.id) || false;
 
                                 return (
-                                    <Grid item xs={12} sm={4} key={course.id}>
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox
-                                                    checked={isChecked}
-                                                    onChange={(e) => handleCourseChange(course, e.target.checked)}
-                                                />
-                                            }
-                                            label={
-                                                <Box display="flex" alignItems="center">
-                                                    <span>{course.name}</span>
-                                                </Box>
-                                            }
-                                        />
-                                    </Grid>
+                                    <React.Fragment key={course.id}>
+                                        <Grid item xs={12} sm={9}>
+                                            <FormControlLabel
+                                                control={
+                                                    <Checkbox
+                                                        checked={isChecked}
+                                                        onChange={(e) => handleCourseChange(course, e.target.checked)}
+                                                    />
+                                                }
+                                                label={<span>{course.name}</span>}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12} sm={3}>
+                                            <TextField
+                                                label="Duration (months)"
+                                                type="number"
+                                                fullWidth
+                                                size="small"
+                                                disabled={!isChecked}
+                                                value={
+                                                    editingUser?.courses?.find((c: any) => c.id === course.id)?.duration ?? ''
+                                                }
+                                                onChange={(e) => {
+                                                    const val = parseInt(e.target.value, 10);
+                                                    if (val > 0 || e.target.value === '') {
+                                                        setEditingUser((prev: any) => {
+                                                            const updatedCourses = prev.courses.map((c: any) =>
+                                                                c.id === course.id
+                                                                    ? { ...c, duration: e.target.value === '' ? '' : val }
+                                                                    : c
+                                                            );
+                                                            return { ...prev, courses: updatedCourses };
+                                                        });
+                                                    }
+                                                }}
+                                                inputProps={{ min: 1 }}
+                                            />
+                                        </Grid>
+                                    </React.Fragment>
                                 );
                             })}
+
                     </Grid>
+
 
 
                     <Box mt={2} display="flex" justifyContent="flex-end">
