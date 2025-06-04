@@ -15,6 +15,7 @@ import {
   Typography
 } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import dayjs, { Dayjs } from "dayjs";
 import { useEffect, useState } from "react";
 import Dialogbox from "src/Common/Components/DialogBox";
 import CommanLayout from "src/Layout/CommanLayout";
@@ -46,6 +47,7 @@ export default function KoreanWordMaintenance() {
   const [loading, setLoading] = useState(false);
   const [deleteUserDialog, setDeleteUserDialog] = useState(false)
   const [thumb, setThumb] = useState<File | any>(null);
+  const [selectedDate, setSelectedDate] = useState<Dayjs | null>(dayjs());
 
   useEffect(() => {
     handleGetAllWords();
@@ -215,8 +217,9 @@ export default function KoreanWordMaintenance() {
       </Backdrop>
       {!visible && (
         <>
-          <Grid container spacing={2}>
-            <Grid item xs={12} display="flex" justifyContent="flex-end">
+          <Grid container spacing={2} sx={{ marginTop: 2 }}>
+            <Grid item xs={12} display="flex" justifyContent="space-between" alignItems="center">              
+              //Date Picker
               <Button variant="contained" onClick={handleOpenModal}>
                 Add Lesson
               </Button>
