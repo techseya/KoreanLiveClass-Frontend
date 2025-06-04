@@ -38,8 +38,8 @@ export default function Navbar({ children }: Readonly<Props>) {
     useIdleTimer({
         timeout: env.TIME_OUT,
         onIdle: () => {
-          localStorage.clear();
-          window.location.reload();
+            localStorage.clear();
+            window.location.reload();
         },
         enabled: token !== null,
     });

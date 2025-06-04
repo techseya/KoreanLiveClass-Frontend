@@ -25,7 +25,7 @@ export default function LoginDialogbox({ open, onAgree, onClose }: LoginDialogbo
     const navigate = useNavigate()
 
     React.useEffect(() => {
-        getDeviceId()
+        //getDeviceId()
     }, [])
 
     const [email, setEmail] = React.useState("")
@@ -35,13 +35,13 @@ export default function LoginDialogbox({ open, onAgree, onClose }: LoginDialogbo
     const id = localStorage.getItem("id")
 
     const handleLogin = async () => {
-        const platform = getDevicePlatform();
-        const loginDeviceId = platform === "IOS" ? "IOS" : deviceId;
+        // const platform = getDevicePlatform();
+        // const loginDeviceId = platform === "IOS" ? "IOS" : deviceId;
 
         const body = {
             email,
             password,
-            deviceId: loginDeviceId
+            deviceId: "1"
         };
 
         try {
@@ -53,16 +53,15 @@ export default function LoginDialogbox({ open, onAgree, onClose }: LoginDialogbo
                 if (response.data.type === "Admin") {
                     localStorage.setItem("deviceId", deviceId);
 
-                    // Delay refresh by 100ms
                     setTimeout(() => {
-                        window.location.href = "/dashboard"; // Hard reload but stays in same origin
+                        window.location.href = "/dashboard";
                     }, 100);
                 } else {
                     localStorage.setItem("deviceId", deviceId);
-                    alert(platform + " : Login Success");
+                    alert("Login Success");
 
                     setTimeout(() => {
-                        window.location.reload(); // Refresh current page
+                        window.location.reload();
                     }, 100);
                 }
             }
@@ -78,56 +77,56 @@ export default function LoginDialogbox({ open, onAgree, onClose }: LoginDialogbo
         // window.location.reload()
     }
 
-    const getDeviceId = async () => {
-        const fp = await FingerprintJS.load();
+    // const getDeviceId = async () => {
+    //     const fp = await FingerprintJS.load();
 
-        let attempts = 0;
-        let stableId = '';
+    //     let attempts = 0;
+    //     let stableId = '';
 
-        while (attempts < 3) {
-            const result = await fp.get();
-            const id = result.visitorId;
+    //     while (attempts < 3) {
+    //         const result = await fp.get();
+    //         const id = result.visitorId;
 
-            console.log(`Attempt ${attempts + 1}: ${id}`);
+    //         console.log(`Attempt ${attempts + 1}: ${id}`);
 
-            // If this is not the first attempt and ID matches previous, consider it stable
-            if (stableId && id === stableId) {
-                break;
-            }
+    //         // If this is not the first attempt and ID matches previous, consider it stable
+    //         if (stableId && id === stableId) {
+    //             break;
+    //         }
 
-            stableId = id;
-            attempts++;
-            await new Promise(resolve => setTimeout(resolve, 300)); // wait a bit between attempts
-        }
+    //         stableId = id;
+    //         attempts++;
+    //         await new Promise(resolve => setTimeout(resolve, 300)); // wait a bit between attempts
+    //     }
 
-        setDeviceId(stableId)
+    //     setDeviceId(stableId)
 
-    };
+    // };
 
-    const getDevicePlatform = (): string => {
-        const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera;
+    // const getDevicePlatform = (): string => {
+    //     const userAgent = navigator.userAgent || navigator.vendor || (window as any).opera;
 
-        if (/windows phone/i.test(userAgent)) {
-            return "Windows Phone";
-        }
-        if (/android/i.test(userAgent)) {
-            return "Android";
-        }
-        if (/iPad|iPhone|iPod/.test(userAgent) && !(window as any).MSStream) {
-            return "IOS";
-        }
-        if (/Win(dows )?NT/.test(userAgent)) {
-            return "Windows";
-        }
-        if (/Macintosh/.test(userAgent)) {
-            return "Mac";
-        }
-        if (/Linux/.test(userAgent)) {
-            return "Linux";
-        }
+    //     if (/windows phone/i.test(userAgent)) {
+    //         return "Windows Phone";
+    //     }
+    //     if (/android/i.test(userAgent)) {
+    //         return "Android";
+    //     }
+    //     if (/iPad|iPhone|iPod/.test(userAgent) && !(window as any).MSStream) {
+    //         return "IOS";
+    //     }
+    //     if (/Win(dows )?NT/.test(userAgent)) {
+    //         return "Windows";
+    //     }
+    //     if (/Macintosh/.test(userAgent)) {
+    //         return "Mac";
+    //     }
+    //     if (/Linux/.test(userAgent)) {
+    //         return "Linux";
+    //     }
 
-        return "Unknown";
-    };
+    //     return "Unknown";
+    // };
 
 
     return (
