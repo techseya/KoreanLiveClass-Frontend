@@ -1,12 +1,7 @@
 import {
-    Paper, IconButton, Box, Chip, Typography,
-    TextField, Grid, FormControl, InputLabel, Select, MenuItem, Button
-} from "@mui/material";
+    Paper, IconButton, Box, Typography} from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
-import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";
-import { getAllCourses, updateCourse } from "src/Services/course_api";
-import { getCategories } from "src/Services/category_api";
 import { deleteVideo, getVideos } from "src/Services/videos_api";
 import { Delete } from "@mui/icons-material";
 import Dialogbox from "src/Common/Components/DialogBox";
