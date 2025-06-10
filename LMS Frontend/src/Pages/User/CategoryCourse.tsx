@@ -97,7 +97,6 @@ export default function CategoryCourses() {
                                 className="course-card"
                                 data-aos="fade-up"
                                 data-aos-delay="100"
-                                // onClick={() => handleCourseClick(course)}
                                 key={index}
                                 style={{ cursor: "pointer" }}
                             >
