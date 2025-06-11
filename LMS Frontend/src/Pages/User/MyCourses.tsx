@@ -162,14 +162,14 @@ export default function MyCourses() {
             </div>
 
             <Modal open={modalOpen} onClose={handleCloseModal}>
-                <div style={{
+                <div className="words-outer" style={{
                     position: 'absolute',
                     top: '50%',
                     left: '50%',
                     transform: 'translate(-50%, -50%)',
-                    width: '90%',
-                    maxWidth: '500px',
-                    backgroundColor: 'white',
+                    maxWidth: '90%',
+                    maxHeight: "90vh",
+                    backgroundColor: '#e5e7eb',
                     borderRadius: '12px',
                     padding: '2rem',
                     textAlign: 'center',
@@ -180,51 +180,35 @@ export default function MyCourses() {
                         <Close />
                     </IconButton>
 
-                    {rows.length > 0 && (
-                        <>
-                            {rows[currentIndex].imageUrl && (
-                                <div style={{ position: "relative", width: "100%", minHeight: "150px" }}>
-                                    {imageLoading && (
-                                        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100px" }}>
-                                            <span className="loader" /> {/* You can use a spinner or any loading icon here */}
+                    <div className="word-label">
+                        {t("extra")}
+                    </div>
+                    <div className="word-inner">
+                        {rows.length > 0 && rows.map((row) => (
+                            <div className="word-inner1" key={row.id} style={{ marginBottom: "2rem" }}>
+                                <div>
+                                    {row.imageUrl && (
+                                        <div style={{ position: "relative", width: "100%", minHeight: "150px" }}>
+                                            <img
+                                                src={row.imageUrl.replace("dl=0", "raw=1")}
+                                                alt="word"
+                                                style={{
+                                                    width: "50%",
+                                                    height: "auto",
+                                                    borderRadius: "8px",
+                                                    marginTop: "1rem"
+                                                }}
+                                            />
                                         </div>
                                     )}
-                                    <img
-                                        src={rows[currentIndex].imageUrl.replace("dl=0", "raw=1")}
-                                        alt="word"
-                                        onLoad={() => setImageLoading(false)}
-                                        style={{
-                                            width: "30%",
-                                            height: "auto",
-                                            borderRadius: "8px",
-                                            marginTop: "1rem",
-                                            display: imageLoading ? "none" : "inline-block"
-                                        }}
-                                    />
+                                    <h2>{row.korean}</h2>
+                                    <h3 style={{color: "gray"}}>{row.sinhala}</h3>
                                 </div>
-                            )}
-                            <h2>{rows[currentIndex].korean}</h2>
-                            <p>{rows[currentIndex].sinhala}</p>
-
-                            {/* Display index */}
-                            <p style={{ marginTop: "1rem", color: "#888" }}>
-                                {currentIndex + 1} / {rows.length}
-                            </p>
-
-                            <div style={{ marginTop: "1rem", display: "flex", justifyContent: "space-between" }}>
-                                <IconButton onClick={handlePrev}>
-                                    <ArrowBackIos />
-                                </IconButton>
-                                <IconButton onClick={handleNext}>
-                                    <ArrowForwardIos />
-                                </IconButton>
                             </div>
-                        </>
-                    )}
+                        ))}
+                    </div>
                 </div>
             </Modal>
-
-
             <Footer />
         </div>
     );
