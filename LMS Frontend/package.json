@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^5.6.1",
+    "@date-io/dayjs": "^3.2.0",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@fingerprintjs/fingerprintjs": "^4.6.2",

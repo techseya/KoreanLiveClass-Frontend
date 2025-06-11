@@ -12,6 +12,15 @@ export const getWord = async () => {
     }
 }
 
+export const getWordByDate = async (date:any) => {
+    try {
+        const response = await axios.get(api+`today-lesson-notification/${date}`)
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
 export const getAllWords = async (token:any) => {
     try {
         const response = await axios.get(`${api}today-lesson-notification/all`, {

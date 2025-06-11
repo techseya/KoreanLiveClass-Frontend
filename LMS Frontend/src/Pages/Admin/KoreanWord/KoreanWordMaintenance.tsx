@@ -20,7 +20,10 @@ import { useEffect, useState } from "react";
 import Dialogbox from "src/Common/Components/DialogBox";
 import CommanLayout from "src/Layout/CommanLayout";
 import { deleteNotice, updateNotice } from "src/Services/notice_api";
-import { addWord, getAllWords } from "src/Services/word_api";
+import { addWord, getAllWords, getWordByDate } from "src/Services/word_api";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import dayjs, { Dayjs } from "dayjs";
 
 function CustomNoRowsOverlay() {
   return (
@@ -47,40 +50,8 @@ export default function KoreanWordMaintenance() {
   const [loading, setLoading] = useState(false);
   const [deleteUserDialog, setDeleteUserDialog] = useState(false)
   const [thumb, setThumb] = useState<File | any>(null);
-  // const [selectedDate, setSelectedDate] = useState<Dayjs | null>(dayjs());
-
-  useEffect(() => {
-    handleGetAllWords();
-  }, []);
-
-  const handleGetAllWords = async () => {
-    try {
-      const response = await getAllWords(token);
-      const allWords = response.data;
-
-      if (allWords.length === 0) {
-        setRows([]);
-        return;
-      }
-
-      // Get base date from the first record
-      const baseDate = new Date(allWords[0].createdAt).toISOString().split("T")[0];
-      setBaseD(baseDate);
-
-      // Add 'active' flag to each word
-      const updatedWords = allWords.map((word: any) => {
-        const wordDate = new Date(word.createdAt).toISOString().split("T")[0];
-        return {
-          ...word,
-          active: wordDate === baseDate ? "Yes" : "No"
-        };
-      });
-
-      setRows(updatedWords);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const [selectedDate, setSelectedDate] = useState<Dayjs | null>(dayjs());
+  const [selectedDate1, setSelectedDate1] = useState<Dayjs | null>(dayjs());
 
   const handleEditClick = (c: any) => {
     setEditing(c);
@@ -105,16 +76,14 @@ export default function KoreanWordMaintenance() {
     window.location.reload()
   }
 
+  useEffect(() => {
+    handleGetWordsByDate(selectedDate1)
+  }, [])
+
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70 },
     { field: "korean", headerName: "Korean Word", flex: 1, minWidth: 130 },
     { field: "sinhala", headerName: "Sinhala Meaning", flex: 1, minWidth: 130 },
-    {
-      field: "active",
-      headerName: "Active",
-      width: 100,
-    }
-    ,
     {
       field: 'actions',
       headerName: 'Actions',
@@ -141,6 +110,35 @@ export default function KoreanWordMaintenance() {
     setSinhalaWord("");
   };
 
+  const handleGetWordsByDate = async (date: any) => {
+    try {
+      const response = await getWordByDate(date ? dayjs(date).format("YYYY-MM-DD") : "")
+      const allWords = response.data;
+
+      if (allWords.length === 0) {
+        setRows([]);
+        return;
+      }
+
+      // Get base date from the first record
+      const baseDate = new Date(allWords[0].createdAt).toISOString().split("T")[0];
+      setBaseD(baseDate);
+
+      // Add 'active' flag to each word
+      const updatedWords = allWords.map((word: any) => {
+        const wordDate = new Date(word.createdAt).toISOString().split("T")[0];
+        return {
+          ...word,
+          active: wordDate === baseDate ? "Yes" : "No"
+        };
+      });
+
+      setRows(updatedWords);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   const handleAddWord = async () => {
     setOpen(false)
     setLoading(true);
@@ -150,6 +148,7 @@ export default function KoreanWordMaintenance() {
     formData.append("Title", "");
     formData.append("Notification", "");
     formData.append("File", thumbnail);
+    formData.append("ScheduledDate", selectedDate ? dayjs(selectedDate).format("YYYY-MM-DD") : "");
     formData.append("TodayLessonNotification", "1");
 
     try {
@@ -218,8 +217,19 @@ export default function KoreanWordMaintenance() {
       {!visible && (
         <>
           <Grid container spacing={2} sx={{ marginTop: 2 }}>
-            <Grid item xs={12} display="flex" justifyContent="space-between" alignItems="center">              
-              
+            <Grid item xs={12} display="flex" justifyContent="space-between" alignItems="center">
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  sx={{ width: "20%" }}
+                  label="Select Date"
+                  value={selectedDate1}
+                  onChange={(newValue) => {
+                    setSelectedDate1(newValue)
+                    handleGetWordsByDate(newValue)
+                  }}
+                  slotProps={{ textField: { size: 'small', fullWidth: true } }}
+                />
+              </LocalizationProvider>
               <Button variant="contained" onClick={handleOpenModal}>
                 Add Lesson
               </Button>
@@ -239,9 +249,6 @@ export default function KoreanWordMaintenance() {
               sx={{
                 border: 0,
                 minWidth: 600,
-                "& .active-row": {
-                  backgroundColor: "#0b8df721",
-                },
                 "& .MuiDataGrid-columnHeaderTitle": {
                   fontWeight: "bold",
                   fontSize: "15px",
@@ -316,9 +323,21 @@ export default function KoreanWordMaintenance() {
       <Dialog open={open} onClose={handleCloseModal} fullWidth maxWidth="sm">
         <DialogTitle>Add New Word</DialogTitle>
         <DialogContent>
+
           <Box mt={1} display="flex" flexDirection="column" gap={2}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DatePicker
+                sx={{ width: "100%" }}
+                label="Select Date"
+                value={selectedDate}
+                minDate={dayjs()}
+                onChange={(newValue) => setSelectedDate(newValue)}
+                slotProps={{ textField: { size: 'small', fullWidth: true } }}
+              />
+            </LocalizationProvider>
             <TextField
               label="Korean Word"
+              size="small"
               variant="outlined"
               value={koreanWord}
               onChange={(e) => setKoreanWord(e.target.value)}
@@ -326,6 +345,7 @@ export default function KoreanWordMaintenance() {
             />
             <TextField
               label="Sinhala Meaning"
+              size="small"
               variant="outlined"
               value={sinhalaWord}
               onChange={(e) => setSinhalaWord(e.target.value)}
