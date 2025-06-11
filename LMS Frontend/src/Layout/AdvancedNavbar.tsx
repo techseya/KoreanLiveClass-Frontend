@@ -287,7 +287,7 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
     {
       name: "Quiz",
       icon: <PostAdd style={{ fontSize: "20px" }} />,
-      onClick: handleClickQuiz,
+      // onClick: handleClickQuiz,
     },
     {
       name: "Users",
