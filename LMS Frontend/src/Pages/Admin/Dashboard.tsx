@@ -10,7 +10,7 @@ import lessonsImg from "../../Assets/Images/calendar.png"
 import { getAllCourses } from "src/Services/course_api";
 import { getCategories } from "src/Services/category_api";
 import { getUsers } from "src/Services/user_api";
-import { getAllWords } from "src/Services/word_api";
+import { getAllWords, getWordByDate } from "src/Services/word_api";
 import {
     BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer,
     PieChart, Pie, Cell, Legend
@@ -79,29 +79,12 @@ export default function Dashboard() {
     }
 
     const handleGetLessons = async () => {
+        const baseDate = new Date().toISOString().split("T")[0];
         try {
-            const response = await getAllWords(token)
+            const response = await getWordByDate(baseDate)
             const allWords = response.data;
 
-            if (allWords.length === 0) {
-                setLessonsCount(0);
-                return;
-            }
-
-            const baseDate = new Date(allWords[0].createdAt).toISOString().split("T")[0];
-
-            const filteredWords = allWords
-                .map((word: any) => ({
-                    ...word,
-                    createdAtDate: new Date(word.createdAt).toISOString().split("T")[0]
-                }))
-                .filter((word: any) => word.createdAtDate === baseDate)
-                .map((word: any) => ({
-                    ...word,
-                    active: "Yes"
-                }));
-
-            setLessonsCount(filteredWords.length)
+            setLessonsCount(allWords.length)
         } catch (error) {
             console.error(error);
         }

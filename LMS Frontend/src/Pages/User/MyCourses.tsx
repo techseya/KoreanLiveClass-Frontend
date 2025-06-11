@@ -181,7 +181,7 @@ export default function MyCourses() {
                     </IconButton>
 
                     <div className="word-label">
-                        {t("extra")}
+                        {t("extra")} -{ new Date().toISOString().split("T")[0]}
                     </div>
                     <div className="word-inner">
                         {rows.length > 0 && rows.map((row) => (
