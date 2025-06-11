@@ -11,7 +11,7 @@ import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import Footer from "src/Layout/Footer";
 import thumb from "../../Assets/Images/klc-thumb.png"
-import { getAllWords } from "src/Services/word_api";
+import { getAllWords, getWordByDate } from "src/Services/word_api";
 import { ArrowBackIos, ArrowForwardIos, AutoStories, Book, Close } from "@mui/icons-material";
 
 export default function MyCourses() {
@@ -78,34 +78,15 @@ export default function MyCourses() {
     }, [currentIndex]);
 
     const handleGetLessons = async () => {
+        const baseDate = new Date().toISOString().split("T")[0];
         try {
-            const response = await getAllWords(token);
+            const response = await getWordByDate(baseDate);
             const allWords = response.data;
-
-            if (allWords.length === 0) {
-                setRows([]);
-                return;
-            }
-
-            const baseDate = new Date(allWords[0].createdAt).toISOString().split("T")[0];
-
-            const filteredWords = allWords
-                .map((word: any) => ({
-                    ...word,
-                    createdAtDate: new Date(word.createdAt).toISOString().split("T")[0]
-                }))
-                .filter((word: any) => word.createdAtDate === baseDate)
-                .map((word: any) => ({
-                    ...word,
-                    active: "Yes"
-                }));
-
-            setRows(filteredWords);
+            setRows(allWords);
         } catch (error: any) {
             console.error(error);
         }
     };
-
 
     const handleGetCourses = async () => {
         try {
