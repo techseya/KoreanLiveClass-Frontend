@@ -162,52 +162,52 @@ export default function MyCourses() {
 
             <Modal open={modalOpen} onClose={handleCloseModal}>
                 <div className="words-outer" style={{
-                    position: 'absolute',
-                    top: '50%',
-                    left: '50%',
-                    transform: 'translate(-50%, -50%)',
-                    maxWidth: '90%',
-                    maxHeight: "90vh",
-                    backgroundColor: '#e5e7eb',
-                    borderRadius: '12px',
-                    padding: '2rem',
-                    textAlign: 'center',
-                    outline: 'none',
-                    boxShadow: '0 4px 20px rgba(0,0,0,0.2)'
-                }}>
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          width: "auto",
+          transform: 'translate(-50%, -50%)',
+          backgroundColor: '#e5e7eb',
+          borderRadius: '12px',
+          padding: '2rem',
+          textAlign: 'center',
+          outline: 'none',
+          boxShadow: '0 4px 20px rgba(0,0,0,0.2)'
+        }}>
                     <IconButton onClick={handleCloseModal} style={{ position: 'absolute', top: 10, right: 10 }}>
                         <Close />
                     </IconButton>
 
                     <div className="word-label">
-                        {t("extra")} -{new Date().toISOString().split("T")[0]}
+            {t("extra")} -{new Date().toISOString().split("T")[0]}
+          </div>
+          <div className="word-inner">
+            {rows.length > 0 && rows.map((row) => (
+              <div className="word-inner1" key={row.id} style={{ marginBottom: "2rem" }}>                
+                  {row.imageUrl && (
+                    <div className="word-img" style={{ position: "relative", width: "50%", minHeight: "150px" }}>
+                      <img
+                        src={row.imageUrl.replace("dl=0", "raw=1")}
+                        alt="word"
+                        className="w-img"
+                        style={{
+                          width: "50%",
+                          height: "auto",
+                          borderRadius: "8px",
+                          marginTop: "1rem"
+                        }}
+                      />
                     </div>
-                    <div className="word-inner">
-                        {rows.length > 0 && rows.map((row) => (
-                            <div className="word-inner1" key={row.id} style={{ marginBottom: "2rem" }}>
-                                <div>
-                                    {row.imageUrl && (
-                                        <div style={{ position: "relative", width: "100%", minHeight: "150px" }}>
-                                            <img
-                                                src={row.imageUrl.replace("dl=0", "raw=1")}
-                                                alt="word"
-                                                style={{
-                                                    width: "50%",
-                                                    height: "auto",
-                                                    borderRadius: "8px",
-                                                    marginTop: "1rem"
-                                                }}
-                                            />
-                                        </div>
-                                    )}
-                                    {row.korean.split(',').map((word:any, index:any) => (
-                                        <h2 key={index}>{word.trim()}</h2>
-                                    ))}
+                  )}
+                  <div className="word-text">                    
+                  {row.korean.split(',').map((word: any, index: any) => (
+                    <h2 key={index}>{word.trim()}</h2>
+                  ))}
 
-                                </div>
-                            </div>
-                        ))}
-                    </div>
+                </div>
+              </div>
+            ))}
+          </div>
                 </div>
             </Modal>
             <Footer />

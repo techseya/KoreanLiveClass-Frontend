@@ -35,9 +35,9 @@
 }
 
 .word-inner1 {
-    width: 350px;
+    width: auto;
     height: auto;
-    padding: 15px 0;
+    padding: 15px;
     border: 1px solid gray;
     border-radius: 10px;
     display: flex;
@@ -59,6 +59,10 @@
     border-bottom-right-radius: 15px;
     border-top-left-radius: 10px;
     font-size: 18px;
+}
+
+.word-text{
+    width: 50%;
 }
 
 .cc {
@@ -354,4 +358,29 @@
         left: 0;
     }
 
+    .word-inner1{
+        display: block;
+    }
+
+    .word-img{
+        width: 100% !important;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .word-text{
+        width: 100%;
+    }
+}
+
+@media (max-width: 426px) {
+    .w-img{
+        width: 80% !important;
+    }
+
+    .words-outer{
+        width: 90% !important;
+    }
 }

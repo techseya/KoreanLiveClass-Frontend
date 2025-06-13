@@ -2,7 +2,7 @@ import "../../Common/styles/profile.css"
 import userIcon from "../../Assets/Images/man.png"
 import { useEffect, useState } from "react"
 import { changePassword, getUser, resetPassword } from "src/Services/user_api"
-import { Email, LocationCity, LocationOn, Phone } from "@mui/icons-material"
+import { Email, LocationCity, LocationOn, NotificationImportant, Phone } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { Box, Button, Modal, Tab, Tabs, TextField, Typography } from "@mui/material"
 import React from "react"
@@ -10,6 +10,8 @@ import Footer from "src/Layout/Footer"
 import { useNavigate } from "react-router-dom"
 import trophy from "../../Assets/Images/trophy-p.png"
 import UserChat from "./UserChat"
+import { BellFilled, BellOutlined, NotificationFilled } from "@ant-design/icons"
+import { getAllNotices } from "src/Services/notice_api"
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -53,6 +55,24 @@ export default function Profile() {
     const [newPassword, setNewPassword] = useState("")
     const [error, setError] = useState("")
     const [loading, setLoading] = useState(false)
+    const [notice, setNotice] = useState<any[]>([])
+    const [noticeModal, setNoticeModal] = useState(false)
+    const [imageErrors, setImageErrors] = useState<{ [key: string]: boolean }>({});
+
+    const handleImageError = (id: string | number) => {
+        setImageErrors(prev => ({ ...prev, [id]: true }));
+    };
+
+
+    const handleGetNotices = async () => {
+        try {
+            const response = await getAllNotices("")
+            setNotice(response.data)
+        } catch (error) {
+            setNotice([])
+            console.error(error);
+        }
+    }
 
     const handleOpen = () => {
         setEmail(user?.email || "")
@@ -104,6 +124,7 @@ export default function Profile() {
             navigate("/")
         }
         handleGetDetails()
+        handleGetNotices()
     }, [])
 
     const handleGetDetails = async () => {
@@ -117,6 +138,55 @@ export default function Profile() {
 
     return (
         <div className="profile-outer">
+
+            <Modal
+                open={noticeModal}
+                onClose={(e) => setNoticeModal(false)}
+                aria-labelledby="modal-title"
+                aria-describedby="modal-description"
+            >
+                <Box sx={{
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transform: 'translate(-50%, -50%)',
+                    width: '80%',
+                    maxHeight: '75vh',
+                    bgcolor: 'background.paper',
+                    boxShadow: 24,
+                    p: 4,
+                    borderRadius: 2,
+                    overflowY: "auto"
+                }}>
+                    <Typography id="modal-title" variant="h6" component="h2" gutterBottom>
+                        Notices
+                    </Typography>
+                    {notice.slice(0, 5).map((item) => (
+                        <Box key={item.id} sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                            {imageErrors[item.id] || !item.thumbnailUrl ? (
+                                <NotificationFilled style={{ fontSize: 30, color: '#1976d2', marginRight: 30 }} />
+                            ) : (
+                                <img
+                                    src={item.thumbnailUrl.replace("dl=0", "raw=1")}
+                                    alt={item.title}
+                                    style={{ width: 50, height: 50, objectFit: 'contain', marginRight: 10 }}
+                                    onError={() => handleImageError(item.id)}
+                                />
+                            )}
+                            <Box>
+                                <Typography variant="subtitle1" fontWeight="bold">
+                                    {item.title}
+                                </Typography>
+                                <Typography variant="body2" color="text.secondary">
+                                    {item.notification}
+                                </Typography>
+                            </Box>
+                        </Box>
+                    ))}
+
+
+                </Box>
+            </Modal>
 
             <Modal
                 open={openModal}
@@ -207,6 +277,7 @@ export default function Profile() {
                             <br />
 
                             <div className="i-outer">
+                                <BellFilled onClick={(e) => setNoticeModal(true)} style={{ cursor: "pointer" }} />
                                 <button className="btn signup" onClick={handleOpen}>
                                     {t('changeP')}
                                 </button>
@@ -240,7 +311,7 @@ export default function Profile() {
                             </CustomTabPanel>
 
                             <CustomTabPanel value={value} index={1}>
-                                <UserChat/>
+                                <UserChat />
                             </CustomTabPanel>
                         </Box>
                     </div>
