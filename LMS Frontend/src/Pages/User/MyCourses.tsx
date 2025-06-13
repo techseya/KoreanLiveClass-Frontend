@@ -30,7 +30,6 @@ export default function MyCourses() {
     const handleOpenModal = () => {
         if (rows.length > 0) {
             setModalOpen(true);
-            setCurrentIndex(0);
         }
     };
 

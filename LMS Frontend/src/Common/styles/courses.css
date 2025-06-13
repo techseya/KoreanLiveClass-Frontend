@@ -1,4 +1,4 @@
-.courses-main-outer{
+.courses-main-outer {
     width: 100%;
     height: auto;
 }
@@ -17,14 +17,14 @@
     position: relative;
 }
 
-.words-outer{
+.words-outer {
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.word-inner{
+.word-inner {
     width: 100%;
     max-height: 90vh;
     overflow-y: auto;
@@ -34,7 +34,7 @@
     flex-wrap: wrap;
 }
 
-.word-inner1{
+.word-inner1 {
     width: 350px;
     height: auto;
     padding: 15px 0;
@@ -42,10 +42,10 @@
     border-radius: 10px;
     display: flex;
     align-items: center;
-    justify-content: center;    
+    justify-content: center;
 }
 
-.word-label{
+.word-label {
     width: auto;
     position: absolute;
     padding: 5px 20px;
@@ -61,7 +61,7 @@
     font-size: 18px;
 }
 
-.cc{
+.cc {
     width: auto;
     height: auto;
     min-height: 200px;
@@ -71,7 +71,7 @@
     height: auto;
 }
 
-.c-board{
+.c-board {
     width: 100%;
     height: auto;
     padding: 5rem;
@@ -83,17 +83,17 @@
     display: none;
 }
 
-.visible{
+.visible {
     display: none !important;
 }
 
-.bg{
+.bg {
     position: absolute;
     background-color: #3131316a;
     inset: 0;
 }
 
-.courses-main-inner{
+.courses-main-inner {
     width: 95%;
     height: auto;
     display: flex;
@@ -102,7 +102,7 @@
     padding: 15px;
 }
 
-.cmi{
+.cmi {
     width: 100%;
     height: auto;
     display: flex;
@@ -110,7 +110,7 @@
     align-items: center;
 }
 
-.course-card{
+.course-card {
     width: 300px;
     display: flex;
     flex-direction: column;
@@ -136,11 +136,11 @@
     justify-content: center;
 }
 
-.space1{
+.space1 {
     height: 20px;
 }
 
-.c-inner{
+.c-inner {
     width: 100%;
     height: auto;
     padding-top: 10px;
@@ -149,7 +149,7 @@
     z-index: 10;
 }
 
-.c-inner1{
+.c-inner1 {
     width: 90%;
     height: auto;
     padding: 15px;
@@ -158,7 +158,7 @@
     z-index: 10;
 }
 
-.c-in{
+.c-in {
     width: 40%;
     height: 100%;
     display: flex;
@@ -166,25 +166,25 @@
     align-items: start;
 }
 
-.c-in1{
+.c-in1 {
     width: 60%;
     height: auto;
 }
 
-.c-thumb{
+.c-thumb {
     width: 80%;
     height: 100%;
     object-fit: cover;
 }
 
-.c-title{
+.c-title {
     padding-top: 25px;
     font-size: 40px;
     font-family: publicsans, sans-serif;
     color: white;
 }
 
-.c-desc{
+.c-desc {
     padding-top: 20px;
     font-size: 18px;
     padding-right: 10px;
@@ -192,7 +192,7 @@
     color: rgb(225, 224, 224);
 }
 
-.c-items-outer{
+.c-items-outer {
     padding-top: 20px;
     width: 100%;
     display: flex;
@@ -200,7 +200,7 @@
     align-items: end;
 }
 
-.c-label{
+.c-label {
     font-size: 12px;
     font-weight: 600;
     color: white;
@@ -213,7 +213,7 @@
     font-family: publicsans, sans-serif;
 }
 
-.c-label1{
+.c-label1 {
     font-size: 12px;
     font-weight: 600;
     display: flex;
@@ -229,13 +229,13 @@
     cursor: pointer;
 }
 
-.c-section-count{
-    font-size: 14px;   
+.c-section-count {
+    font-size: 14px;
     font-family: publicsans, sans-serif;
     color: rgb(239, 235, 235);
 }
 
-.c-price{
+.c-price {
     font-size: 30px;
 }
 
@@ -260,7 +260,7 @@
     background-color: #115293;
 }
 
-.tl-outer{
+.tl-outer {
     width: auto;
     padding: 10px 18px;
     height: auto;
@@ -282,43 +282,70 @@
     font-size: 16px;
 }
 
+.tl-outer1 {
+    width: auto;
+    padding: 10px 18px;
+    height: auto;
+    position: fixed;
+    background-color: #030b4a;
+    color: white;
+    right: 0;
+    top: 150px;
+    z-index: 900;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    border-bottom-left-radius: 15px;
+    border-top-left-radius: 15px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
 .loader {
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #3498db;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  animation: spin 1s linear infinite;
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    animation: spin 1s linear infinite;
 }
+
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 
-@media (max-width: 1025px){
+@media (max-width: 1025px) {
 
-    .c-inner1{
+    .c-inner1 {
         display: block;
     }
 
-    .c-in{
+    .c-in {
         display: none;
     }
 
-    .visible{
+    .visible {
         display: flex !important;
         width: 100%;
         height: auto;
     }
 
-    .c-in1{
+    .c-in1 {
         width: 100%;
     }
 }
 
-@media (max-width: 769px){
-    .ci{
+@media (max-width: 769px) {
+    .ci {
         display: block !important;
     }
 

@@ -6,7 +6,7 @@ import k1 from "../../Assets/Images/k1.jpg";
 import k2 from "../../Assets/Images/k2.jpg";
 import k3 from "../../Assets/Images/k3.jpeg";
 import logo from "../../Assets/Images/logo.jpeg"
-import { Facebook, Instagram, Verified, WhatsApp, YouTube } from "@mui/icons-material";
+import { AutoStories, Close, Facebook, Instagram, Verified, WhatsApp, YouTube } from "@mui/icons-material";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import phoneTemp from "../../Assets/Images/phone-template.png"
@@ -23,7 +23,7 @@ import b10 from "../../Assets/Images/b10.png"
 import b11 from "../../Assets/Images/b11.png"
 import insImg from "../../Assets/Images/ins.jpg";
 import { TikTokFilled } from "@ant-design/icons";
-import { Slide } from "@mui/material";
+import { IconButton, Modal, Slide } from "@mui/material";
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import Footer from "../../Layout/Footer";
@@ -31,7 +31,7 @@ import LoginDialogbox from "src/Common/Components/LoginDialog";
 import { useNavigate } from "react-router-dom";
 import { getCategories } from "src/Services/category_api";
 import { getTopCourses } from "src/Services/course_api";
-import { getWord } from "src/Services/word_api";
+import { getWord, getWordByDate } from "src/Services/word_api";
 import trophy from "../../Assets/Images/trophy.png"
 import CountUp from "react-countup";
 import { useInView } from "react-intersection-observer";
@@ -48,6 +48,7 @@ import book8 from "../../Assets/Images/b8.jpeg"
 import notificationIcon from "../../Assets/Images/notification.png"
 import { getAllNotices } from "src/Services/notice_api";
 import CustomModal from "src/Common/Components/CustomModal";
+import "../../Common/styles/courses.css";
 
 const Transition = forwardRef(function Transition(props: any, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -77,10 +78,21 @@ export default function Landing() {
   const [korean, setKorean] = useState("")
   const [sinhala, setSinhala] = useState("")
   const [modalOpen, setModalOpen] = useState(false);
+  const [modalOpen1, setModalOpen1] = useState(false);
   const [ref1, inView1] = useInView({ triggerOnce: true });
   const [currentIndex, setCurrentIndex] = useState(0);
   const [notice, setNotice] = useState<any[]>([])
   const [showModal1, setShowModal1] = useState(false);
+  const [rows, setRows] = useState<any[]>([]);
+  const handleOpenModal1 = () => {
+    if (rows.length > 0) {
+      setModalOpen1(true);
+    }
+  };
+
+  const handleCloseModal1 = () => {
+    setModalOpen1(false);
+  };
 
   const { ref, inView } = useInView({
     triggerOnce: true,
@@ -169,10 +181,23 @@ export default function Landing() {
     { count: 30, suffix: "+", label: t("kc") },
   ];
 
+
+
+  const handleGetLessons = async () => {
+    const baseDate = new Date().toISOString().split("T")[0];
+    try {
+      const response = await getWordByDate(baseDate);
+      const allWords = response.data;
+      setRows(allWords);
+    } catch (error: any) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     const hasRefreshed = localStorage.getItem("hasRefreshed");
 
-    if(!noticeToken){
+    if (!noticeToken) {
       setShowModal1(true)
     }
 
@@ -181,7 +206,7 @@ export default function Landing() {
       window.location.reload(); // Only once per session
       return;
     }
-
+    handleGetLessons()
     handleGetCategories();
     handleGetTopCourses();
     handleGetWord();
@@ -342,7 +367,7 @@ export default function Landing() {
       className="main-outer"
       style={{ backgroundImage: `url(${images[bgIndex]})` }}
     >
-      {showModal1 && notice.length !== 0 &&(
+      {showModal1 && notice.length !== 0 && (
         <CustomModal
           title={notice[0]?.title}
           imageSrc={notice[0]?.thumbnailUrl}
@@ -350,7 +375,7 @@ export default function Landing() {
           onClose={handleClose1}
         />
       )}
-      
+
       <LoginDialogbox
         open={loginOpen}
         onAgree={handleLogin}
@@ -360,9 +385,9 @@ export default function Landing() {
       <div className="bg-overlay0"></div>
       {noticeToken === "later" && (
         <div className="word-outer">
-        <img style={{width: "50px"}} src={notificationIcon} alt="" onClick={(e) => setShowModal1(true)} />
-      </div>
-      )}      
+          <img style={{ width: "50px" }} src={notificationIcon} alt="" onClick={(e) => setShowModal1(true)} />
+        </div>
+      )}
       {/* <div className="word-outer" onClick={() => setModalOpen(true)}>
         {t("word")}
       </div> */}
@@ -1009,6 +1034,63 @@ export default function Landing() {
         <a href="https://www.instagram.com/korean_live_class/" target="_blank" className="fab fab-icon instagram"><Instagram /></a>
         <a href="https://www.youtube.com/@koreanliveclassrev.mangala5996" target="_blank" className="fab fab-icon youtube"><YouTube /></a>
       </div>
+
+
+      <div className="tl-outer1" onClick={handleOpenModal1} style={{ cursor: "pointer" }}>
+        <AutoStories />
+        {t("extra")}
+      </div>
+
+      <Modal open={modalOpen1} onClose={handleCloseModal1}>
+        <div className="words-outer" style={{
+          position: 'absolute',
+          top: '50%',
+          left: '50%',
+          transform: 'translate(-50%, -50%)',
+          maxWidth: '90%',
+          maxHeight: "90vh",
+          backgroundColor: '#e5e7eb',
+          borderRadius: '12px',
+          padding: '2rem',
+          textAlign: 'center',
+          outline: 'none',
+          boxShadow: '0 4px 20px rgba(0,0,0,0.2)'
+        }}>
+          <IconButton onClick={handleCloseModal1} style={{ position: 'absolute', top: 10, right: 10 }}>
+            <Close />
+          </IconButton>
+
+          <div className="word-label">
+            {t("extra")} -{new Date().toISOString().split("T")[0]}
+          </div>
+          <div className="word-inner">
+            {rows.length > 0 && rows.map((row) => (
+              <div className="word-inner1" key={row.id} style={{ marginBottom: "2rem" }}>
+                <div>
+                  {row.imageUrl && (
+                    <div style={{ position: "relative", width: "100%", minHeight: "150px" }}>
+                      <img
+                        src={row.imageUrl.replace("dl=0", "raw=1")}
+                        alt="word"
+                        style={{
+                          width: "50%",
+                          height: "auto",
+                          borderRadius: "8px",
+                          marginTop: "1rem"
+                        }}
+                      />
+                    </div>
+                  )}
+                  {row.korean.split(',').map((word: any, index: any) => (
+                    <h2 key={index}>{word.trim()}</h2>
+                  ))}
+
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }
