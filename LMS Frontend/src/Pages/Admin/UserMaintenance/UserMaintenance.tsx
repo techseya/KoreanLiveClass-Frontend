@@ -1,7 +1,8 @@
 import {
     Paper, IconButton, Box, Chip, Typography,
     TextField, Grid, FormControl, InputLabel, Select, MenuItem, Button, Modal,
-    Checkbox, FormControlLabel
+    Checkbox, FormControlLabel,
+    Dialog
 } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
@@ -12,7 +13,7 @@ import { assignCourse, deleteUser, getAlertUsers, getUsers, resetDevice, resetPa
 import { getAllCourses, getSectionByCourseId, getUsersByCourseId } from "src/Services/course_api";
 import { getCodeList } from "country-list";
 import { getCountryCallingCode, CountryCode } from "libphonenumber-js";
-import { EyeOutlined } from "@ant-design/icons";
+import { CopyOutlined, EyeOutlined } from "@ant-design/icons";
 import { log } from "util";
 import React from "react";
 
@@ -68,6 +69,9 @@ export default function UserMaintenance() {
     const [courseId, setCourseId] = useState(0)
     const [users, setUsers] = useState<any[]>([]);
     const [alertUsers, setAlertUsers] = useState<any[]>([]);
+    const [generatedPassword, setGeneratedPassword] = useState<string | null>(null);
+    const [showPasswordDialog, setShowPasswordDialog] = useState(false);
+
 
     const token = localStorage.getItem("token")
 
@@ -205,10 +209,7 @@ export default function UserMaintenance() {
         if (!selectedUserId) return;
 
         const firstName = selectedUser?.split(" ")[0] || "User";
-
         const randomDigits = Math.floor(1000 + Math.random() * 9000);
-
-        // Combine
         const newPassword = `${firstName}${randomDigits}`;
 
         const body = {
@@ -218,14 +219,14 @@ export default function UserMaintenance() {
 
         try {
             const res = await resetPassword(body, token);
-            alert(`${res.data.message}`);
+            setGeneratedPassword(newPassword);
+            setShowPasswordDialog(true);
         } catch (error: any) {
             alert(error.response?.message || "Error resetting password");
         }
 
         setChangePwDialog(false);
     };
-
 
     const handleResetDevice = async () => {
 
@@ -366,6 +367,41 @@ export default function UserMaintenance() {
 
     return (
         <>
+            <Dialog open={showPasswordDialog} onClose={() => setShowPasswordDialog(false)}>
+                <Box p={3}>
+                    <Typography variant="h6" gutterBottom>Password Reset Successful</Typography>
+                    <Typography variant="body1">New Password:</Typography>
+                    <Box
+                        sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'space-between',
+                            mt: 1,
+                            mb: 2,
+                            p: 1,
+                            border: '1px solid #ccc',
+                            borderRadius: 1,
+                        }}
+                    >
+                        <Typography variant="body1">{generatedPassword}</Typography>
+                        <CopyOutlined
+                            onClick={() => {
+                                navigator.clipboard.writeText(generatedPassword || "");
+                                setShowPasswordDialog(false)
+                            }}
+                            style={{
+                                cursor: "pointer",
+                                color: "#555",
+                                transition: "color 0.2s ease",
+                            }}
+                            onMouseOver={(e) => (e.currentTarget.style.color = "#1976d2")}
+                            onMouseOut={(e) => (e.currentTarget.style.color = "#555")}
+                        />
+
+                    </Box>
+                </Box>
+            </Dialog>
+
             <Dialogbox
                 open={changePwDialog}
                 title="Password Reset Confirmation"
