@@ -284,10 +284,10 @@
 
 .tl-outer1 {
     width: auto;
-    padding: 10px 18px;
+    padding: 15px;
     height: auto;
     position: fixed;
-    background-color: #030b4a;
+    background-color: #0685e0;
     color: white;
     right: 0;
     top: 150px;
@@ -297,10 +297,11 @@
     gap: 10px;
     justify-content: center;
     align-items: center;
-    border-bottom-left-radius: 15px;
-    border-top-left-radius: 15px;
+    border-bottom-left-radius: 10px;
+    border-top-left-radius: 10px;
     cursor: pointer;
     font-size: 16px;
+    border: 1px solid black;
 }
 
 .loader {

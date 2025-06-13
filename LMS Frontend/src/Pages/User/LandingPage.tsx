@@ -381,13 +381,6 @@ export default function Landing() {
         onAgree={handleLogin}
         onClose={handleClose}
       />
-
-      <div className="bg-overlay0"></div>
-      {noticeToken === "later" && (
-        <div className="word-outer">
-          <img style={{ width: "50px" }} src={notificationIcon} alt="" onClick={(e) => setShowModal1(true)} />
-        </div>
-      )}
       {/* <div className="word-outer" onClick={() => setModalOpen(true)}>
         {t("word")}
       </div> */}
@@ -1036,10 +1029,16 @@ export default function Landing() {
       </div>
 
 
-      <div className="tl-outer1" onClick={handleOpenModal1} style={{ cursor: "pointer" }}>
-        <AutoStories />
-        {t("extra")}
-      </div>
+      {rows.length > 0 && (
+        <div
+          className="tl-outer1"
+          onClick={handleOpenModal1}
+          style={{ cursor: "pointer" }}
+          title={t("extra")}
+        >
+          <AutoStories />
+        </div>
+      )}
 
       <Modal open={modalOpen1} onClose={handleCloseModal1}>
         <div className="words-outer" style={{

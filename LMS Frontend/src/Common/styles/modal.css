@@ -19,6 +19,7 @@
 }
 
 .modal {
+  position: relative;
   background: white;
   padding: 2rem;
   border-radius: 16px;
@@ -37,6 +38,21 @@
   font-size: 1rem;
   margin-bottom: 2rem;
   color: #444;
+}
+
+.modal-close-iconX {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #aaa;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.modal-close-iconX:hover {
+  color: #000;
 }
 
 .modal-buttons {

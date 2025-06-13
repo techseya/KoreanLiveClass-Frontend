@@ -90,7 +90,7 @@ export default function Navbar({ children }: Readonly<Props>) {
     };
 
     const handleLogout = () => {
-        localStorage.clear()
+        localStorage.removeItem("token")
         window.location.reload()
     }
 
