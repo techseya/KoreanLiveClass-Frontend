@@ -54,6 +54,7 @@ export default function UserMaintenance() {
     const [changeDeviceDialog, setChangeDeviceDialog] = useState(false)
     const [deleteUserDialog, setDeleteUserDialog] = useState(false)
     const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
+    const [selectedUser, setSelectedUser] = useState<any>(null);
     const [country, setCountry] = useState<CountryOption>(countryOptions[0]);
     const [allCourses, setAllCourses] = useState<any[]>([]);
     const [sections, setSections] = useState<any[]>([]);
@@ -201,23 +202,30 @@ export default function UserMaintenance() {
     };
 
     const handleChangePassword = async () => {
-
         if (!selectedUserId) return;
+
+        const firstName = selectedUser?.split(" ")[0] || "User";
+
+        const randomDigits = Math.floor(1000 + Math.random() * 9000);
+
+        // Combine
+        const newPassword = `${firstName}${randomDigits}`;
 
         const body = {
             userId: selectedUserId,
-            newPassword: "abcd"
+            newPassword: newPassword
         };
 
         try {
-            const res = await resetPassword(body, token)
-            alert(res.data.message + ". New password is 'abcd'")
+            const res = await resetPassword(body, token);
+            alert(`${res.data.message}`);
         } catch (error: any) {
-            alert(error.response.message)
+            alert(error.response?.message || "Error resetting password");
         }
 
         setChangePwDialog(false);
     };
+
 
     const handleResetDevice = async () => {
 
@@ -335,6 +343,7 @@ export default function UserMaintenance() {
                         aria-label="reset password"
                         onClick={() => {
                             setSelectedUserId(params.row.id);
+                            setSelectedUser(params.row.userName)
                             setChangePwDialog(true);
                         }}
                     >
