@@ -181,7 +181,7 @@ export default function MyCourses() {
                     </IconButton>
 
                     <div className="word-label">
-                        {t("extra")} -{ new Date().toISOString().split("T")[0]}
+                        {t("extra")} -{new Date().toISOString().split("T")[0]}
                     </div>
                     <div className="word-inner">
                         {rows.length > 0 && rows.map((row) => (
@@ -201,8 +201,10 @@ export default function MyCourses() {
                                             />
                                         </div>
                                     )}
-                                    <h2>{row.korean}</h2>
-                                    <h3 style={{color: "gray"}}>{row.sinhala}</h3>
+                                    {row.korean.split(',').map((word:any, index:any) => (
+                                        <h2 key={index}>{word.trim()}</h2>
+                                    ))}
+
                                 </div>
                             </div>
                         ))}

@@ -82,8 +82,7 @@ export default function KoreanWordMaintenance() {
 
   const columns: GridColDef[] = [
     { field: "id", headerName: "ID", width: 70 },
-    { field: "korean", headerName: "Korean Word", flex: 1, minWidth: 130 },
-    { field: "sinhala", headerName: "Sinhala Meaning", flex: 1, minWidth: 130 },
+    { field: "korean", headerName: "Korean Words", flex: 1, minWidth: 330 },
     {
       field: 'actions',
       headerName: 'Actions',
@@ -270,17 +269,11 @@ export default function KoreanWordMaintenance() {
           <DialogContent>
             <Box mt={1} display="flex" flexDirection="column" gap={2}>
               <TextField
-                label="Korean Word"
+                label="Korean Words"
+                multiline
                 variant="outlined"
                 value={editing?.korean || ''}
                 onChange={(e) => handleFormChange("korean", e.target.value)}
-                fullWidth
-              />
-              <TextField
-                label="Sinhala Meaning"
-                variant="outlined"
-                value={editing?.sinhala || ''}
-                onChange={(e) => handleFormChange("sinhala", e.target.value)}
                 fullWidth
               />
 
@@ -312,7 +305,7 @@ export default function KoreanWordMaintenance() {
           </DialogContent>
           <DialogActions>
             <Button className="update-btn" variant="contained" onClick={(e) => setVisible(false)}>Cancel</Button>
-            <Button variant="contained" onClick={handleUpdate} disabled={!editing?.korean || !editing?.sinhala}>
+            <Button variant="contained" onClick={handleUpdate} disabled={!editing?.korean}>
               Update
             </Button>
           </DialogActions>
@@ -336,20 +329,14 @@ export default function KoreanWordMaintenance() {
               />
             </LocalizationProvider>
             <TextField
-              label="Korean Word"
+              label="Korean Words"
+              multiline
               size="small"
               variant="outlined"
               value={koreanWord}
               onChange={(e) => setKoreanWord(e.target.value)}
               fullWidth
-            />
-            <TextField
-              label="Sinhala Meaning"
-              size="small"
-              variant="outlined"
-              value={sinhalaWord}
-              onChange={(e) => setSinhalaWord(e.target.value)}
-              fullWidth
+              helperText="Use commas to separate words"
             />
             <Grid item xs={12} sm={12}>
               <input
@@ -381,7 +368,7 @@ export default function KoreanWordMaintenance() {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseModal}>Cancel</Button>
-          <Button disabled={!koreanWord || !sinhalaWord} variant="contained" onClick={handleAddWord}>
+          <Button disabled={!koreanWord} variant="contained" onClick={handleAddWord}>
             Add
           </Button>
         </DialogActions>
