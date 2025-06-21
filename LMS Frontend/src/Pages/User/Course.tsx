@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import "../../Common/styles/courses.css";
 import { useEffect, useState } from "react";
 import { getCourseByCourseId, getRecordingsBySectionId, getSectionByCourseId } from "src/Services/course_api";
@@ -25,21 +25,39 @@ export default function Course() {
     const { t, i18n } = useTranslation();
 
     const token = localStorage.getItem("token")
+    const [searchParams] = useSearchParams();
+
+    const navigate = useNavigate()
 
     useEffect(() => {
         const pathSegments = location.pathname.split("/").filter(Boolean);
         const lastPath = pathSegments[pathSegments.length - 1];
 
         handleGetCourse(lastPath);
+        console.log(lastPath);
+        
         if (lastPath) handleGetSections(lastPath);
         window.scrollTo(0, 0);
     }, []);
+
+    useEffect(() => {
+        const videoUrl = searchParams.get("video");
+        if (videoUrl) {
+            setPlayingVideoUrl(decodeURIComponent(videoUrl));
+            const isYouTube = videoUrl.includes("youtube") || videoUrl.includes("youtu.be");
+            const isVimeo = videoUrl.includes("vimeo");
+
+            if (isYouTube) setVideoType("YouTube");
+            else if (isVimeo) setVideoType("Vimeo");
+        }
+    }, [searchParams]);
+
 
     const scrollTop = () => {
         window.scrollTo(0, 0);
     }
 
-    const handleGetSections = async (id:any) => {
+    const handleGetSections = async (id: any) => {
         try {
             const response = await getSectionByCourseId(id);
             const filteredSections = (response.data || []).filter(
@@ -90,6 +108,8 @@ export default function Course() {
         scrollTop()
         setVideoType(rec.videoType);
         setPlayingVideoUrl(rec.recordLink);
+        const videoParam = encodeURIComponent(rec.recordLink); // assuming rec.id is unique
+        navigate(`${location.pathname}?video=${videoParam}`, { replace: false });
     };
 
     return (
