@@ -10,9 +10,10 @@ import {
     AccordionDetails,
     Modal,
     Button,
+    Paper,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { ArrowBackIos, ArrowForwardIos, AutoStories, PlayCircleFilled, Quiz } from "@mui/icons-material";
+import { ArrowBackIos, ArrowForwardIos, AutoStories, Description, DockOutlined, PlayCircleFilled, Quiz } from "@mui/icons-material";
 import Footer from "src/Layout/Footer";
 import { useTranslation } from "react-i18next";
 import thumb from "../../Assets/Images/klc-thumb.png"
@@ -353,7 +354,7 @@ export default function MyCourse() {
                         <div className="c-label">{course.level}</div>
                         {questions.length > 0 && (
                             <div className="c-label1" onClick={() => setOpenQuizModal(true)}>
-                                <Quiz />
+                                <Description />
                                 {t("quiz")}
                             </div>
                         )}
