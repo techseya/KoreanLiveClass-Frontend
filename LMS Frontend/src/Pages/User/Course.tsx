@@ -34,23 +34,49 @@ export default function Course() {
         const lastPath = pathSegments[pathSegments.length - 1];
 
         handleGetCourse(lastPath);
-        console.log(lastPath);
-        
         if (lastPath) handleGetSections(lastPath);
         window.scrollTo(0, 0);
     }, []);
 
+    // useEffect(() => {
+    //     const videoUrl = searchParams.get("video");
+    //     if (videoUrl) {
+    //         setPlayingVideoUrl(decodeURIComponent(videoUrl));
+    //         const isYouTube = videoUrl.includes("youtube") || videoUrl.includes("youtu.be");
+    //         const isVimeo = videoUrl.includes("vimeo");
+
+    //         if (isYouTube) setVideoType("YouTube");
+    //         else if (isVimeo) setVideoType("Vimeo");
+    //     }
+    // }, [searchParams]);
+
     useEffect(() => {
         const videoUrl = searchParams.get("video");
         if (videoUrl) {
-            setPlayingVideoUrl(decodeURIComponent(videoUrl));
-            const isYouTube = videoUrl.includes("youtube") || videoUrl.includes("youtu.be");
-            const isVimeo = videoUrl.includes("vimeo");
+            const decodedUrl = decodeURIComponent(videoUrl);
+            setPlayingVideoUrl(decodedUrl);
+            const isYouTube = decodedUrl.includes("youtube") || decodedUrl.includes("youtu.be");
+            const isVimeo = decodedUrl.includes("vimeo");
 
             if (isYouTube) setVideoType("YouTube");
             else if (isVimeo) setVideoType("Vimeo");
+
+            // Try to find and expand the section
+            (async () => {
+                for (const section of sections) {
+                    const response = await getRecordingsBySectionId(section.id);
+                    const recordings = response.data || [];
+                    const matching = recordings.find((rec: any) => rec.recordLink === decodedUrl);
+                    if (matching) {
+                        setExpandedSection(section.name);
+                        handleGetRecordings(section.id); // loads if not already loaded
+                        break;
+                    }
+                }
+            })();
         }
-    }, [searchParams]);
+    }, [searchParams, sections]);
+
 
 
     const scrollTop = () => {
