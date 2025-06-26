@@ -120,15 +120,25 @@ export default function Course() {
     };
 
 
-    const getVimeoEmbedUrl = (url: string) => {
-        const videoId = url.split("/").pop();
-        return `https://player.vimeo.com/video/${videoId}`;
-    };
+    // const getVimeoEmbedUrl = (url: string) => {
+    //     const videoId = url.split("/").pop();
+    //     return `https://player.vimeo.com/video/${videoId}`;
+    // };
 
-    const getYoutubeEmbedUrl = (url: string) => {
-        const videoId = url.split("/").pop();
-        return `https://www.youtube.com/embed/${videoId}`;
-    };
+    // const getYoutubeEmbedUrl = (url: string) => {
+    //     const videoId = url.split("/").pop();
+    //     return `https://www.youtube.com/embed/${videoId}`;
+    // };
+
+    const getVimeoEmbedUrl = (url: string) => {
+    const videoId = url.split("/").pop();
+    return `https://player.vimeo.com/video/${videoId}?autoplay=1`;
+};
+
+const getYoutubeEmbedUrl = (url: string) => {
+    const videoId = url.split("/").pop();
+    return `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+};
 
     const handleVideoSelection = (rec: any) => {
         scrollTop()
