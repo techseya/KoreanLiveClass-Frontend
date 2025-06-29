@@ -6,7 +6,7 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";
 import { getAllCourses } from "src/Services/course_api";
-import { deleteQuestion, getQuestions, updateQuestion } from "src/Services/quiz_api";
+import { deleteQuestion, getQuestions, getQuiz, updateQuestion } from "src/Services/quiz_api";
 import { Delete } from "@mui/icons-material";
 import Dialogbox from "src/Common/Components/DialogBox";
 
@@ -26,10 +26,11 @@ export default function QuizMaintenance() {
     const [rows, setRows] = useState<any[]>([]);
     const [isOpen, setIsOpen] = useState(false);
     const [quizId, setQuizId] = useState("")
+    const [thumb, setThumb] = useState<File | any>(null);
 
     useEffect(() => {
         handleGetCourses();
-        handleGetQuestions(courseId);
+        handleGetQuizes(courseId);
     }, []);
 
     const handleGetCourses = async () => {
@@ -42,18 +43,10 @@ export default function QuizMaintenance() {
         }
     };
 
-    const handleGetQuestions = async (id: any) => {
+    const handleGetQuizes = async (id: any) => {
         try {
-            const res = await getQuestions(id, "admin");
-            const transformed = res.data.map((q: any) => ({
-                ...q,
-                answer1: q.answer.answer1,
-                answer2: q.answer.answer2,
-                answer3: q.answer.answer3,
-                answer4: q.answer.answer4,
-                isCorrectAnswers: q.answer.isCorrectAnswers
-            }));
-            setRows(transformed);
+            const res = await getQuiz(id);
+            setRows(res.data);
         } catch (error) {
             console.error(error);
         }
@@ -82,22 +75,7 @@ export default function QuizMaintenance() {
     };
 
     const handleUpdate = async () => {
-        const newCorrectAnswers = [0, 1, 2, 3].map(i => i === editingQuestion.correctAnswer);
-
-        const updatedQuestion = {
-            ...editingQuestion,
-            isCorrectAnswers: newCorrectAnswers
-        };
-
-        try {
-            const response = await updateQuestion(updatedQuestion)
-            alert(response.data.message)
-        } catch (error: any) {
-            alert(error.response.message)
-        }
-
-        setEditingQuestion(null);
-        setVisible(false);
+        
         window.location.reload()
     };
 
@@ -110,7 +88,7 @@ export default function QuizMaintenance() {
         try {
             const response = await deleteQuestion(quizId)
             alert(response.data.message)
-        } catch (error:any) {
+        } catch (error: any) {
             alert(error.response.message)
         }
 
@@ -122,11 +100,9 @@ export default function QuizMaintenance() {
 
     const columns: GridColDef[] = [
         { field: 'id', headerName: 'ID', width: 70 },
-        { field: 'questionText', headerName: 'Question', flex: 1, minWidth: 130 },
-        { field: 'answer1', headerName: 'Answer 1', flex: 1, minWidth: 130 },
-        { field: 'answer2', headerName: 'Answer 2', flex: 1, minWidth: 130 },
-        { field: 'answer3', headerName: 'Answer 3', flex: 1, minWidth: 130 },
-        { field: 'answer4', headerName: 'Answer 4', flex: 1, minWidth: 130 },
+        { field: 'name', headerName: 'Name', flex: 1, minWidth: 130 },
+        { field: 'attemptLimit', headerName: 'Attempts for student', flex: 1, minWidth: 130 },
+        { field: 'prize', headerName: 'Price', flex: 1, minWidth: 130 },
         {
             field: 'actions',
             headerName: 'Actions',
@@ -169,6 +145,7 @@ export default function QuizMaintenance() {
                                 label="Course"
                                 onChange={(e) => {
                                     setCourseId(Number(e.target.value));
+                                    handleGetQuizes(Number(e.target.value));
                                 }}
                                 fullWidth
                             >
@@ -199,42 +176,88 @@ export default function QuizMaintenance() {
             )}
 
             {visible && editingQuestion && (
-                <Grid container spacing={2} mt={2}>
+                <Grid container spacing={2} mt={1}>
+
                     <Grid item xs={12}>
                         <TextField
-                            label="Question"
+                            label="Name"
                             fullWidth
-                            value={editingQuestion.questionText || ''}
-                            onChange={(e) => handleFormChange("questionText", e.target.value)}
+                            value={editingQuestion.name || ''}
+                            onChange={(e) => handleFormChange("name", e.target.value)}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            label="Price"
+                            fullWidth
+                            value={editingQuestion.prize || ''}
+                            onChange={(e) => handleFormChange("prize", e.target.value)}
                         />
                     </Grid>
 
-                    {["answer1", "answer2", "answer3", "answer4"].map((field, index) => (
-                        <Grid item xs={12} sm={6} key={index}>
-                            <TextField
-                                label={`Answer ${index + 1}`}
-                                fullWidth
-                                value={editingQuestion[field] || ''}
-                                onChange={(e) => handleFormChange(field, e.target.value)}
-                            />
-                        </Grid>
-                    ))}
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            label="Attempts"
+                            fullWidth
+                            value={editingQuestion.attemptLimit || ''}
+                            onChange={(e) => handleFormChange("attemptLimit", e.target.value)}
+                        />
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            label="Duration (hours)"
+                            fullWidth
+                            value={editingQuestion.quizDuration || ''}
+                            onChange={(e) => handleFormChange("quizDuration", e.target.value)}
+                        />
+                    </Grid>
 
                     <Grid item xs={12} sm={6}>
                         <FormControl fullWidth>
-                            <InputLabel>Correct Answer</InputLabel>
+                            <InputLabel>Status</InputLabel>
                             <Select
-                                value={editingQuestion.correctAnswer}
-                                label="Correct Answer"
-                                onChange={(e) => handleFormChange("correctAnswer", Number(e.target.value))}
+                                value={editingQuestion.activeStatus || 'Active'}
+                                onChange={(e) => handleFormChange("activeStatus", e.target.value)}
+                                label="Status"
                             >
-                                <MenuItem value={0}>Answer 1</MenuItem>
-                                <MenuItem value={1}>Answer 2</MenuItem>
-                                <MenuItem value={2}>Answer 3</MenuItem>
-                                <MenuItem value={3}>Answer 4</MenuItem>
+                                <MenuItem value={1}>Active</MenuItem>
+                                <MenuItem value={2}>Inactive</MenuItem>
                             </Select>
                         </FormControl>
                     </Grid>
+
+                    <Grid item xs={12} sm={12}>
+                        <TextField
+                            label="Description"
+                            fullWidth
+                            multiline
+                            rows={3}
+                            value={editingQuestion.description || ''}
+                            onChange={(e) => handleFormChange("description", e.target.value)}
+                        />
+                    </Grid>
+                    <Grid item xs={12} sm={12}>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => {
+                                if (e.target.files && e.target.files[0]) {
+                                    const file = e.target.files[0];
+                                    handleFormChange("imageUrl", file);
+                                    setThumb(file);
+                                }
+                            }}
+                        />
+                    </Grid>
+
+                    <Grid item xs={12} sm={3}>
+                            <img
+                                style={{ width: "80%", border: '1px solid black', borderRadius: "8px" }}
+                                src={editingQuestion?.imageUrl?.replace("dl=0", "raw=1")}
+                                alt="Quiz Thumbnail"
+                            />
+                        </Grid>
 
                     <Grid item xs={12} display="flex" justifyContent="flex-end">
                         <Button variant="outlined" onClick={handleCancel} sx={{ mr: 2 }}>Cancel</Button>
