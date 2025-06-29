@@ -32,7 +32,11 @@ export const getAnswer = async (id:any) => {
 
 export const createQuiz = async (body:any) => {
     try {
-        const response = await axios.post(api+`quiz`, body)
+        const response = await axios.post(api+`quiz`,body,{
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
         return response;
     } catch (error) {
         throw error;

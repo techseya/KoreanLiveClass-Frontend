@@ -53,8 +53,8 @@ export default function Quizes() {
             <Box sx={{ width: '100%' }}>
                 <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                     <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                        <Tab label="Questions" {...a11yProps(0)} />
-                        <Tab label="Add Question" {...a11yProps(1)} />
+                        <Tab label="Quizes" {...a11yProps(0)} />
+                        <Tab label="Add Quiz" {...a11yProps(1)} />
                     </Tabs>
                 </Box>
                 <CustomTabPanel value={value} index={0}>

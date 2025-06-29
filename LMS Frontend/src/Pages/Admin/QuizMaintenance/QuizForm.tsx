@@ -10,36 +10,25 @@ import {
     Grid,
 } from "@mui/material";
 import "../../../Common/styles/user.css";
-import { useNavigate } from "react-router-dom";
 import { Add } from "@mui/icons-material";
 import { getAllCourses } from "src/Services/course_api";
-import { createSection } from "src/Services/section_api";
-import { createQuestion, createQuiz, getQuiz } from "src/Services/quiz_api";
+import { createQuiz } from "src/Services/quiz_api";
 
 export default function QuizForm() {
-    const navigate = useNavigate();
 
-    const [question, setQuestion] = useState("")
-    const [a1, setA1] = useState("")
-    const [a2, setA2] = useState("")
-    const [a3, setA3] = useState("")
-    const [a4, setA4] = useState("")
+    const [quizName, setQuizName] = useState("")
+    const [status, setStatus] = useState("Active")
+    const [description, setDescription] = useState("")
+    const [attempts, setAttempts] = useState("")
     const [price, setPrice] = useState("")
-    const [level, setLevel] = useState("Beginner")
-    const [type, setType] = useState(1)
     const [thumbnail, setThumbnail] = useState<File | any>(null);
     const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
-    const [correctAnswer, setCorrectAnswer] = useState(0)
-    const [categoryId, setCategoryId] = useState(1)
-    const [categories, setCategories] = useState<any[]>([]);
-
     const [courseId, setCourseId] = useState(1)
     const [courses, setCourses] = useState<any[]>([]);
-    const [quizId, setQuizId] = useState("")
+    const [duration, setDuration] = useState("");
 
     useEffect(() => {
         handleGetCourses()
-        handleCheckQuiz(courseId)
     }, [])
 
     const handleGetCourses = async () => {
@@ -53,61 +42,25 @@ export default function QuizForm() {
     }
 
     const handleSubmit = async () => {
-        const isCorrectAnswers = [0, 1, 2, 3].map(index => index === correctAnswer);
-    
-        const body = {
-            quizId: quizId,
-            questionText: question,
-            hint: "",
-            imageUrl: "",
-            answer1: a1,
-            answer2: a2,
-            answer3: a3,
-            answer4: a4,
-            isCorrectAnswers: isCorrectAnswers
-        };        
-    
+        const formData = new FormData();
+        formData.append("courseId", courseId.toString());
+        formData.append("name", quizName);
+        formData.append("prize", price);
+        formData.append("attemptLimit", attempts);
+        formData.append("description", description)
+        formData.append("quizDuration", duration === "" ? "0" : duration);
+        formData.append("image", thumbnail);
+        formData.append("activeStatus", status === "Active" ? "1" : "2");
+
         try {
-            const response = await createQuestion(body);
-            alert(response.data.message);
+            const response = await createQuiz(formData)
+            alert(response.data.message)
         } catch (error: any) {
-            alert(error.response.data.message);
+            alert(error.response?.data?.message || "An error occurred while creating the quiz.");
         }
-    
+
         window.location.reload();
     };
-    
-
-    const handleAddQuiz = async (id: any) => {
-
-        const body = {
-            courseId: id,
-            name: "Quiz",
-            activeStatus: 1,
-            description: ""
-        }
-
-        try {
-            const response = await createQuiz(body)
-            handleCheckQuiz(id)
-            console.log(response);
-        } catch (error) {
-            console.error(error);
-        }
-    }
-
-    const handleCheckQuiz = async (id: any) => {
-        try {
-            const response = await getQuiz(id)
-            if (response.data.length === 0) {
-                handleAddQuiz(id)
-            } else {
-                setQuizId(response.data[0].id)
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    }
 
     return (
         <div className="user-form-outer">
@@ -121,7 +74,6 @@ export default function QuizForm() {
                                 label="Course"
                                 onChange={(e) => {
                                     setCourseId(Number(e.target.value))
-                                    handleCheckQuiz(Number(e.target.value))
                                 }}
                                 fullWidth
                             >
@@ -133,65 +85,90 @@ export default function QuizForm() {
                             </Select>
                         </FormControl>
                     </Grid>
-                    <Grid item xs={12} sm={12}>
-                        <TextField
-                            label="Question"
-                            fullWidth
-                            value={question}
-                            onChange={(e) => setQuestion(e.target.value)}
-                        />
-                    </Grid>
-
                     <Grid item xs={12} sm={6}>
                         <TextField
-                            label="Answer 1"
+                            label="Quiz Name"
                             fullWidth
-                            value={a1}
-                            onChange={(e) => setA1(e.target.value)}
+                            value={quizName}
+                            onChange={(e) => setQuizName(e.target.value)}
                         />
                     </Grid>
-
+                    
                     <Grid item xs={12} sm={6}>
                         <TextField
-                            label="Answer 2"
+                            label="Price"
                             fullWidth
-                            value={a2}
-                            onChange={(e) => setA2(e.target.value)}
+                            value={price}
+                            onChange={(e) => setPrice(e.target.value)}
                         />
                     </Grid>
-
+                    
                     <Grid item xs={12} sm={6}>
                         <TextField
-                            label="Answer 3"
+                            label="Attempts"
                             fullWidth
-                            value={a3}
-                            onChange={(e) => setA3(e.target.value)}
+                            value={attempts}
+                            onChange={(e) => setAttempts(e.target.value)}
                         />
                     </Grid>
-
+                    
                     <Grid item xs={12} sm={6}>
                         <TextField
-                            label="Answer 4"
+                            label="Duration (hours)"
                             fullWidth
-                            value={a4}
-                            onChange={(e) => setA4(e.target.value)}
+                            value={duration}
+                            onChange={(e) => setDuration(e.target.value)}
                         />
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
                         <FormControl fullWidth>
-                            <InputLabel>Correct Answer</InputLabel>
+                            <InputLabel>Status</InputLabel>
                             <Select
-                                value={correctAnswer}
-                                onChange={(e) => setCorrectAnswer(Number(e.target.value))}
-                                label="Correct Answer"
+                                value={status}
+                                onChange={(e) => setStatus(e.target.value)}
+                                label="Status"
                             >
-                                <MenuItem value={0}>Answer 1</MenuItem>
-                                <MenuItem value={1}>Answer 2</MenuItem>
-                                <MenuItem value={2}>Answer 3</MenuItem>
-                                <MenuItem value={3}>Answer 4</MenuItem>
+                                <MenuItem value="Active">Active</MenuItem>
+                                <MenuItem value="Inactive">Inactive</MenuItem>
                             </Select>
                         </FormControl>
+                    </Grid>
+
+                    <Grid item xs={12} sm={12}>
+                        <TextField
+                            label="Description"
+                            fullWidth
+                            multiline
+                            rows={3}
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                        />
+                    </Grid><Grid item xs={12} sm={12}>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => {
+                                if (e.target.files && e.target.files[0]) {
+                                    const file = e.target.files[0];
+                                    setThumbnail(file);
+                                    setThumbnailPreview(URL.createObjectURL(file));
+                                }
+                            }}
+                        />
+                    </Grid>
+
+                    <Grid item xs={12} sm={3}>
+                    {thumbnailPreview && (
+                            <div>
+                                <p>Image Preview:</p>
+                                <img
+                                    src={thumbnailPreview}
+                                    alt="Thumbnail Preview"
+                                    style={{ width: "200px", height: "auto", marginTop: "10px" }}
+                                />
+                            </div>
+                        )}
                     </Grid>
 
                     <Grid item xs={12} display="flex" justifyContent="flex-end">
@@ -201,9 +178,9 @@ export default function QuizForm() {
                             startIcon={<Add />}
                             sx={{ textTransform: 'none' }}
                             onClick={handleSubmit}
-                            disabled={!question || !a1 || !a2 || !a3 || !a4}
+                            disabled={!quizName || !courseId || !description || !attempts || !price }
                         >
-                            Add Question
+                            Add Quiz
                         </Button>
                     </Grid>
                 </Grid>

@@ -13,7 +13,7 @@ import Dialogbox from "src/Common/Components/DialogBox";
 function CustomNoRowsOverlay() {
     return (
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%', padding: 2 }}>
-            <Typography variant="h6" color="text.secondary">No Questions Found</Typography>
+            <Typography variant="h6" color="text.secondary">No Quizes Found</Typography>
         </Box>
     );
 }
@@ -169,7 +169,6 @@ export default function QuizMaintenance() {
                                 label="Course"
                                 onChange={(e) => {
                                     setCourseId(Number(e.target.value));
-                                    handleGetQuestions(Number(e.target.value));
                                 }}
                                 fullWidth
                             >
