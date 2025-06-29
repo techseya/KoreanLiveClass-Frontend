@@ -534,7 +534,7 @@ export default function Landing() {
         <div className="space"></div>
         <div className="space"></div>
         <div className="top-courses-outer1" data-aos="fade-up" data-aos-delay="100">
-          {Array.isArray(categories) && categories.slice(visibleStartIndex, visibleStartIndex + 4).map((course, index) => (
+          {Array.isArray(categories) && categories.map((course, index) => (
             <div
               className="top-course-card"
               data-aos="fade-up" data-aos-delay="100"
@@ -554,27 +554,6 @@ export default function Landing() {
               </div>
             </div>
           ))}
-        </div>
-
-        {/* Arrow Button Row */}
-        <div className="arrow-buttons-row">
-          <div
-            className="arrow-button"
-            onClick={handlePrev}
-            style={{ visibility: visibleStartIndex === 0 ? "hidden" : "visible" }}
-          >
-            <ArrowBackIosIcon />
-          </div>
-
-          <div
-            className="arrow-button"
-            onClick={handleNext}
-            style={{
-              visibility: visibleStartIndex + 4 >= topCourses.length ? "hidden" : "visible",
-            }}
-          >
-            <ArrowForwardIosIcon />
-          </div>
         </div>
 
         <div className="space"></div>
