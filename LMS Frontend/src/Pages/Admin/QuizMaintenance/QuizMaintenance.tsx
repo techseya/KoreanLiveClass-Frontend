@@ -51,6 +51,14 @@ export default function QuizMaintenance() {
 
     const [qType, setQType] = useState(1);
     const [qTextFields, setQTextFields] = useState([{ key: "field01", value: "" }]);
+    const [questionImage, setQuestionImage] = useState<File | null>(null);
+
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            setQuestionImage(e.target.files[0]);
+        }
+    };
+
 
     const handleQTextChange = (index: number, field: string, value: string) => {
         const updatedFields = [...qTextFields];
@@ -287,6 +295,27 @@ export default function QuizMaintenance() {
                                             + Add Text Field
                                         </Button>
                                     </Grid>
+
+                                    <Grid item xs={12} sm={6}>
+                                        <Typography variant="subtitle1">Upload Image</Typography>
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={handleImageChange}
+                                            style={{ marginTop: "8px" }}
+                                        />
+                                    </Grid>
+
+                                    {questionImage && (
+                                        <Grid item xs={12} sm={6}>
+                                            <img
+                                                src={URL.createObjectURL(questionImage)}
+                                                alt="Preview"
+                                                style={{ width: "100%", maxHeight: "200px", objectFit: "contain", marginTop: "8px", border: "1px solid #ccc", borderRadius: "6px" }}
+                                            />
+                                        </Grid>
+                                    )}
+
 
                                 </Grid>
                             </div>
