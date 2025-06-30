@@ -1,0 +1,33 @@
+.q-outer{
+    width: 100%;
+    display: flex;
+}
+
+.q-inner{
+    width: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    padding: 5px;
+}
+
+.q-inner1{
+    width: 70%;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    padding: 5px;
+}
+
+.q-content-highlight-outer{
+    width: 95%;
+    height: auto;
+    border: 1px solid grey;
+}
+
+.q-content-outer{
+    width: 95%;
+    height: auto;
+    border: 1px solid grey;
+    padding: 10px 15px;
+}

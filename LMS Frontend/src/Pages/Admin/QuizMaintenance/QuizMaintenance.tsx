@@ -7,8 +7,20 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";
 import { getAllCourses } from "src/Services/course_api";
 import { deleteQuestion, deleteQuiz, getQuestions, getQuiz, updateQuestion, updateQuiz } from "src/Services/quiz_api";
-import { Delete } from "@mui/icons-material";
+import { AddCircle, Delete } from "@mui/icons-material";
 import Dialogbox from "src/Common/Components/DialogBox";
+import {
+    Dialog,
+    AppBar,
+    Toolbar,
+    Slide,
+    DialogContent
+} from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import { TransitionProps } from "@mui/material/transitions";
+import React from "react";
+import "../../../Common/styles/quiz.css"
+import { RadioGroup, FormControlLabel, Radio } from "@mui/material";
 
 function CustomNoRowsOverlay() {
     return (
@@ -18,6 +30,13 @@ function CustomNoRowsOverlay() {
     );
 }
 
+const Transition = React.forwardRef(function Transition(
+    props: TransitionProps & { children: React.ReactElement },
+    ref: React.Ref<unknown>
+) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
+
 export default function QuizMaintenance() {
     const [visible, setVisible] = useState(false);
     const [editingQuestion, setEditingQuestion] = useState<any | null>(null);
@@ -26,7 +45,36 @@ export default function QuizMaintenance() {
     const [rows, setRows] = useState<any[]>([]);
     const [isOpen, setIsOpen] = useState(false);
     const [quizId, setQuizId] = useState("")
+    const [quizName, setQuizName] = useState("");
     const [thumb, setThumb] = useState<File | any>(null);
+    const [openFullScreenModal, setOpenFullScreenModal] = useState(false);
+
+    const [qType, setQType] = useState(1);
+    const [qTextFields, setQTextFields] = useState([{ key: "field01", value: "" }]);
+
+    const handleQTextChange = (index: number, field: string, value: string) => {
+        const updatedFields = [...qTextFields];
+        updatedFields[index] = { ...updatedFields[index], [field]: value };
+        setQTextFields(updatedFields);
+    };
+
+    const handleAddQTextField = () => {
+        const nextFieldNumber = qTextFields.length + 1;
+        setQTextFields([...qTextFields, { key: `field${nextFieldNumber.toString().padStart(2, '0')}`, value: "" }]);
+    };
+
+    const handleRemoveQTextField = (index: number) => {
+        const updatedFields = [...qTextFields];
+        updatedFields.splice(index, 1);
+        setQTextFields(updatedFields);
+    };
+
+
+    const handleOpenFullScreenModal = (row: any) => {
+        setOpenFullScreenModal(true)
+        setQuizId(row.id);
+        setQuizName(row.name)
+    }
 
     useEffect(() => {
         handleGetCourses();
@@ -97,7 +145,7 @@ export default function QuizMaintenance() {
         window.location.reload()
     };
 
-    const handleDeleteClick = (c: any) => {       
+    const handleDeleteClick = (c: any) => {
         setQuizId(c.id)
         setIsOpen(true)
     };
@@ -124,7 +172,7 @@ export default function QuizMaintenance() {
         {
             field: 'actions',
             headerName: 'Actions',
-            width: 100,
+            width: 150,
             sortable: false,
             filterable: false,
             renderCell: (params) => (
@@ -134,6 +182,9 @@ export default function QuizMaintenance() {
                     </IconButton>
                     <IconButton sx={{ color: 'red' }} aria-label="edit" onClick={() => handleDeleteClick(params.row)}>
                         <Delete />
+                    </IconButton>
+                    <IconButton sx={{ color: '#1d6add' }} aria-label="edit" onClick={() => handleOpenFullScreenModal(params.row)}>
+                        <AddCircle />
                     </IconButton>
                 </Box>
 
@@ -153,6 +204,97 @@ export default function QuizMaintenance() {
                 onDisagree={handleClose}
                 onClose={handleClose}
             />
+            <Dialog
+                fullScreen
+                open={openFullScreenModal}
+                onClose={() => setOpenFullScreenModal(false)}
+                TransitionComponent={Transition}
+            >
+                <AppBar sx={{ position: "relative" }}>
+                    <Toolbar>
+                        <IconButton
+                            edge="start"
+                            color="inherit"
+                            onClick={() => setOpenFullScreenModal(false)}
+                            aria-label="close"
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                        <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+                            Add Quiz Content
+                        </Typography>
+                    </Toolbar>
+                </AppBar>
+                <DialogContent>
+                    <div className="q-outer">
+                        <div className="q-inner">
+                            <div className="q-content-highlight-outer">
+                                Content
+                            </div>
+                        </div>
+                        <div className="q-inner1">
+                            <div className="q-content-outer">
+                                <Grid container spacing={2}>
+                                    <Grid item xs={12} sm={12}>
+                                        <FormControl component="fieldset">
+                                            <Typography variant="subtitle1" gutterBottom>
+                                                Question Type
+                                            </Typography>
+                                            <RadioGroup
+                                                row
+                                                value={qType}
+                                                onChange={(e) => setQType(Number(e.target.value))}
+                                            >
+                                                <FormControlLabel value={1} control={<Radio />} label="MCQ" />
+                                                <FormControlLabel value={2} control={<Radio />} label="Fill In The Blanks" />
+                                                <FormControlLabel value={3} control={<Radio />} label="Short Answers" />
+                                            </RadioGroup>
+                                        </FormControl>
+                                    </Grid>
+                                    <Grid item xs={12}>
+                                        <Typography variant="subtitle1">Question Text Fields</Typography>
+                                    </Grid>
+
+                                    {qTextFields.map((field, index) => (
+                                        <Grid item xs={12} sm={12} key={index} container spacing={1} alignItems="center">
+                                            <Grid item xs={5}>
+                                                <TextField
+                                                    label="Field Name"
+                                                    fullWidth
+                                                    disabled
+                                                    value={field.key}
+                                                    onChange={(e) => handleQTextChange(index, "key", e.target.value)}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={6}>
+                                                <TextField
+                                                    label="Field Value"
+                                                    fullWidth
+                                                    value={field.value}
+                                                    onChange={(e) => handleQTextChange(index, "value", e.target.value)}
+                                                />
+                                            </Grid>
+                                            <Grid item xs={1}>
+                                                <IconButton onClick={() => handleRemoveQTextField(index)}>
+                                                    <Delete fontSize="small" />
+                                                </IconButton>
+                                            </Grid>
+                                        </Grid>
+                                    ))}
+
+                                    <Grid item xs={12}>
+                                        <Button variant="outlined" onClick={handleAddQTextField}>
+                                            + Add Text Field
+                                        </Button>
+                                    </Grid>
+
+                                </Grid>
+                            </div>
+                        </div>
+                    </div>
+                </DialogContent>
+            </Dialog>
+
             {!visible && (
                 <>
                     <Grid item xs={12}>
