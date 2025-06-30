@@ -6,7 +6,7 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";
 import { getAllCourses } from "src/Services/course_api";
-import { deleteQuestion, getQuestions, getQuiz, updateQuestion } from "src/Services/quiz_api";
+import { deleteQuestion, getQuestions, getQuiz, updateQuestion, updateQuiz } from "src/Services/quiz_api";
 import { Delete } from "@mui/icons-material";
 import Dialogbox from "src/Common/Components/DialogBox";
 
@@ -75,7 +75,25 @@ export default function QuizMaintenance() {
     };
 
     const handleUpdate = async () => {
-        
+        const formData = new FormData();
+        formData.append("id", editingQuestion.id);
+        formData.append("courseId", editingQuestion.courseId);
+        formData.append("name", editingQuestion.name);
+        formData.append("prize", editingQuestion.prize);
+        formData.append("attemptLimit", editingQuestion.attemptLimit);
+        formData.append("description", editingQuestion.description);
+        formData.append("quizDuration", editingQuestion.quizDuration);
+        formData.append("image", editingQuestion.imageUrl);
+        formData.append("activeStatus", editingQuestion.activeStatus);
+
+        console.log(formData);
+
+        try {
+            const res = await updateQuiz(formData);
+            alert(res.data.message);
+        } catch (error: any) {
+            alert(error.response?.data?.message || "An error occurred while updating the quiz.");
+        }
         window.location.reload()
     };
 
@@ -252,12 +270,18 @@ export default function QuizMaintenance() {
                     </Grid>
 
                     <Grid item xs={12} sm={3}>
-                            <img
-                                style={{ width: "80%", border: '1px solid black', borderRadius: "8px" }}
-                                src={editingQuestion?.imageUrl?.replace("dl=0", "raw=1")}
-                                alt="Quiz Thumbnail"
-                            />
-                        </Grid>
+                        <img
+                            style={{ width: "80%", border: '1px solid black', borderRadius: "8px" }}
+                            src={
+                                typeof editingQuestion.imageUrl === "string"
+                                    ? editingQuestion.imageUrl.replace("dl=0", "raw=1")
+                                    : thumb
+                                        ? URL.createObjectURL(thumb)
+                                        : ""
+                            }
+                            alt="Quiz Thumbnail"
+                        />
+                    </Grid>
 
                     <Grid item xs={12} display="flex" justifyContent="flex-end">
                         <Button variant="outlined" onClick={handleCancel} sx={{ mr: 2 }}>Cancel</Button>

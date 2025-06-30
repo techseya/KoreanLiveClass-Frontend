@@ -43,6 +43,19 @@ export const createQuiz = async (body:any) => {
     }
 }
 
+export const updateQuiz = async (body:any) => {
+    try {
+        const response = await axios.put(api+`quiz`,body,{
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
 export const createQuestion = async (body:any) => {
     try {
         const response = await axios.post(api+`question`, body)
