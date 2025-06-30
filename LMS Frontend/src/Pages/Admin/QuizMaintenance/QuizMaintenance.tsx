@@ -21,6 +21,7 @@ import { TransitionProps } from "@mui/material/transitions";
 import React from "react";
 import "../../../Common/styles/quiz.css"
 import { RadioGroup, FormControlLabel, Radio } from "@mui/material";
+import { AudioRecorder } from "src/Common/Components/AudioRecorder";
 
 function CustomNoRowsOverlay() {
     return (
@@ -52,6 +53,9 @@ export default function QuizMaintenance() {
     const [qType, setQType] = useState(1);
     const [qTextFields, setQTextFields] = useState([{ key: "field01", value: "" }]);
     const [questionImage, setQuestionImage] = useState<File | null>(null);
+    const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
+    const [answers, setAnswers] = useState(["", "", "", ""]);
+    const [correctAnswerIndex, setCorrectAnswerIndex] = useState(0); // default Answer 1 selected
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
@@ -59,6 +63,11 @@ export default function QuizMaintenance() {
         }
     };
 
+    const handleAnswerChange = (index: number, value: string) => {
+        const updated = [...answers];
+        updated[index] = value;
+        setAnswers(updated);
+    };
 
     const handleQTextChange = (index: number, field: string, value: string) => {
         const updatedFields = [...qTextFields];
@@ -200,6 +209,29 @@ export default function QuizMaintenance() {
         },
     ];
 
+    const qTextJson = JSON.stringify(
+        qTextFields.reduce((acc, curr) => {
+            if (curr.key.trim()) {
+                acc[curr.key] = curr.value;
+            }
+            return acc;
+        }, {} as Record<string, string>)
+    );
+
+    const handleSaveAnswers = async () => {
+        console.log(quizId);
+        console.log(qType);
+        console.log(qTextJson);
+        console.log(questionImage);
+        console.log(audioBlob);
+        console.log(answers);
+        console.log(correctAnswerIndex + 1);
+        
+
+        
+
+    }
+
     return (
         <>
             <Dialogbox
@@ -255,7 +287,6 @@ export default function QuizMaintenance() {
                                             >
                                                 <FormControlLabel value={1} control={<Radio />} label="MCQ" />
                                                 <FormControlLabel value={2} control={<Radio />} label="Fill In The Blanks" />
-                                                <FormControlLabel value={3} control={<Radio />} label="Short Answers" />
                                             </RadioGroup>
                                         </FormControl>
                                     </Grid>
@@ -265,19 +296,21 @@ export default function QuizMaintenance() {
 
                                     {qTextFields.map((field, index) => (
                                         <Grid item xs={12} sm={12} key={index} container spacing={1} alignItems="center">
-                                            <Grid item xs={5}>
+                                            <Grid item xs={3}>
                                                 <TextField
                                                     label="Field Name"
                                                     fullWidth
+                                                    size="small"
                                                     disabled
                                                     value={field.key}
                                                     onChange={(e) => handleQTextChange(index, "key", e.target.value)}
                                                 />
                                             </Grid>
-                                            <Grid item xs={6}>
+                                            <Grid item xs={8}>
                                                 <TextField
                                                     label="Field Value"
                                                     fullWidth
+                                                    size="small"
                                                     value={field.value}
                                                     onChange={(e) => handleQTextChange(index, "value", e.target.value)}
                                                 />
@@ -296,7 +329,7 @@ export default function QuizMaintenance() {
                                         </Button>
                                     </Grid>
 
-                                    <Grid item xs={12} sm={6}>
+                                    <Grid item xs={12} sm={12}>
                                         <Typography variant="subtitle1">Upload Image</Typography>
                                         <input
                                             type="file"
@@ -316,6 +349,73 @@ export default function QuizMaintenance() {
                                         </Grid>
                                     )}
 
+                                    <Grid item xs={12} sm={12}>
+                                        <AudioRecorder onRecordingComplete={(blob) => setAudioBlob(blob)} />
+                                    </Grid>
+
+
+                                    {audioBlob && (
+                                        <Grid item xs={12}>
+                                            <Typography variant="subtitle1">Audio Preview</Typography>
+                                            <Box display="flex" alignItems="center" gap={2}>
+                                                <audio controls src={URL.createObjectURL(audioBlob)} />
+                                                <Button
+                                                    variant="outlined"
+                                                    color="error"
+                                                    onClick={() => setAudioBlob(null)}
+                                                >
+                                                    Delete Audio
+                                                </Button>
+                                            </Box>
+                                        </Grid>
+                                    )}
+
+                                    <Grid item xs={12}>
+                                        <Typography variant="subtitle1" gutterBottom>
+                                            Answers
+                                        </Typography>
+                                    </Grid>
+
+                                    {[0, 1, 2, 3].map((i) => (
+                                        <Grid item xs={12} sm={6} key={i}>
+                                            <TextField
+                                                fullWidth
+                                                size="small"
+                                                label={`Answer ${i + 1}`}
+                                                value={answers[i]}
+                                                onChange={(e) => handleAnswerChange(i, e.target.value)}
+                                            />
+                                        </Grid>
+                                    ))}
+
+                                    <Grid item xs={12} sm={6}>
+                                        <FormControl fullWidth>
+                                            <InputLabel id="correct-answer-label">Correct Answer</InputLabel>
+                                            <Select
+                                                labelId="correct-answer-label"
+                                                size="small"
+                                                value={correctAnswerIndex}
+                                                label="Correct Answer"
+                                                onChange={(e) => setCorrectAnswerIndex(Number(e.target.value))}
+                                            >
+                                                {[0, 1, 2, 3].map((i) => (
+                                                    <MenuItem key={i} value={i}>
+                                                        Answer {i + 1}
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    </Grid>
+
+                                    <Grid item xs={12} display="flex" justifyContent="flex-end" mt={2}>
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            onClick={handleSaveAnswers}
+                                        >
+                                            Save Question
+                                        </Button>
+                                    </Grid>
 
                                 </Grid>
                             </div>
