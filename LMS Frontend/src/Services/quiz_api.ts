@@ -56,6 +56,15 @@ export const updateQuiz = async (body:any) => {
     }
 }
 
+export const deleteQuiz = async (id:any) => {
+    try {
+        const response = await axios.delete(api+`quiz/${id}`)
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
 export const createQuestion = async (body:any) => {
     try {
         const response = await axios.post(api+`question`, body)

@@ -6,7 +6,7 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";
 import { getAllCourses } from "src/Services/course_api";
-import { deleteQuestion, getQuestions, getQuiz, updateQuestion, updateQuiz } from "src/Services/quiz_api";
+import { deleteQuestion, deleteQuiz, getQuestions, getQuiz, updateQuestion, updateQuiz } from "src/Services/quiz_api";
 import { Delete } from "@mui/icons-material";
 import Dialogbox from "src/Common/Components/DialogBox";
 
@@ -97,14 +97,14 @@ export default function QuizMaintenance() {
         window.location.reload()
     };
 
-    const handleDeleteClick = (c: any) => {
+    const handleDeleteClick = (c: any) => {       
         setQuizId(c.id)
         setIsOpen(true)
     };
 
     const handleDelete = async () => {
         try {
-            const response = await deleteQuestion(quizId)
+            const response = await deleteQuiz(quizId)
             alert(response.data.message)
         } catch (error: any) {
             alert(error.response.message)
