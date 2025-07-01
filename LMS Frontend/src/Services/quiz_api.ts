@@ -67,7 +67,11 @@ export const deleteQuiz = async (id:any) => {
 
 export const createQuestion = async (body:any) => {
     try {
-        const response = await axios.post(api+`question`, body)
+        const response = await axios.post(api+`question`,body,{
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
         return response;
     } catch (error) {
         throw error;

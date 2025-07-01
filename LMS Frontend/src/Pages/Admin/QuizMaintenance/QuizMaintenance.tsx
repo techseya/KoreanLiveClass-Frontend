@@ -6,7 +6,7 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";
 import { getAllCourses } from "src/Services/course_api";
-import { deleteQuestion, deleteQuiz, getQuestions, getQuiz, updateQuestion, updateQuiz } from "src/Services/quiz_api";
+import { createQuestion, deleteQuestion, deleteQuiz, getQuestions, getQuiz, updateQuestion, updateQuiz } from "src/Services/quiz_api";
 import { AddCircle, Delete } from "@mui/icons-material";
 import Dialogbox from "src/Common/Components/DialogBox";
 import {
@@ -227,8 +227,25 @@ export default function QuizMaintenance() {
         console.log(answers);
         console.log(correctAnswerIndex + 1);
         
-
+        const formData = new FormData();
+        formData.append("quizId", quizId);
+        formData.append("type", qType.toString());
+        formData.append("questionText", `"${qTextJson}"`);
+        formData.append("image", questionImage ? questionImage : "");
+        formData.append("audio", audioBlob ? audioBlob : "");
+        formData.append("answer1", answers[0]);
+        formData.append("answer2", answers[1]);
+        formData.append("answer3",answers[2]);
+        formData.append("answer4", answers[3]);
+        formData.append("correctAnswerMcq", (correctAnswerIndex + 1).toString());
         
+
+        try {
+            const res = await createQuestion(formData)
+            console.log(res.data);            
+        } catch (error:any) {
+            alert(error.response.data.message)
+        }
 
     }
 
