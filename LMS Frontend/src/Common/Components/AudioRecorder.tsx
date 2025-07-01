@@ -1,56 +1,92 @@
-import { Box, Button, Typography } from "@mui/material";
-import { useRef, useState } from "react";
+// src/Common/Components/AudioRecorder.tsx
 
-export function AudioRecorder({ onRecordingComplete }: { onRecordingComplete: (blob: Blob) => void }) {
-    const [recording, setRecording] = useState(false);
-    const [audioURL, setAudioURL] = useState("");
-    const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-    const chunks = useRef<Blob[]>([]);
+import React, { useEffect, useRef, useState } from "react";
+import { IconButton, Box, Typography, Button } from "@mui/material";
+import MicIcon from "@mui/icons-material/Mic";
+import StopIcon from "@mui/icons-material/Stop";
+import DeleteIcon from "@mui/icons-material/Delete";
+import WaveSurfer from "wavesurfer.js";
+
+interface AudioRecorderProps {
+    onRecordingComplete: (blob: Blob) => void;
+}
+
+export const AudioRecorder: React.FC<AudioRecorderProps> = ({ onRecordingComplete }) => {
+    const [isRecording, setIsRecording] = useState(false);
+    const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
+    const [audioChunks, setAudioChunks] = useState<Blob[]>([]);
+    const waveRef = useRef<HTMLDivElement>(null);
+    const waveSurferRef = useRef<WaveSurfer | null>(null);
+
+    useEffect(() => {
+        if (waveRef.current && !waveSurferRef.current) {
+            waveSurferRef.current = WaveSurfer.create({
+                container: waveRef.current,
+                waveColor: "#cce5ff",
+                progressColor: "#2196f3",
+                height: 60,
+            });
+        }
+    }, []);
 
     const startRecording = async () => {
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            const mediaRecorder = new MediaRecorder(stream);
-            mediaRecorderRef.current = mediaRecorder;
-            chunks.current = [];
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const recorder = new MediaRecorder(stream);
+        const chunks: Blob[] = [];
 
-            mediaRecorder.ondataavailable = (e) => {
-                if (e.data.size > 0) {
-                    chunks.current.push(e.data);
-                }
-            };
+        recorder.ondataavailable = (e) => chunks.push(e.data);
+        recorder.onstop = () => {
+            const blob = new Blob(chunks, { type: "audio/wav" });
+            setAudioChunks([]);
+            onRecordingComplete(blob);
 
-            mediaRecorder.onstop = () => {
-                const blob = new Blob(chunks.current, { type: "audio/wav" });
-                const url = URL.createObjectURL(blob);
-                setAudioURL(url);
-                onRecordingComplete(blob);
-            };
+            // Load into wavesurfer for preview
+            waveSurferRef.current?.loadBlob(blob);
+        };
 
-            mediaRecorder.start();
-            setRecording(true);
-        } catch (err) {
-            alert("Microphone access denied or not supported.");
-            console.error(err);
-        }
+        recorder.start();
+        setIsRecording(true);
+        setMediaRecorder(recorder);
+        setAudioChunks(chunks);
     };
 
     const stopRecording = () => {
-        if (mediaRecorderRef.current) {
-            mediaRecorderRef.current.stop();
-            setRecording(false);
-        }
+        mediaRecorder?.stop();
+        setIsRecording(false);
+    };
+
+    const resetRecording = () => {
+        setAudioChunks([]);
+        waveSurferRef.current?.empty();
     };
 
     return (
-        <Box mt={2}>
-            <Button
-                variant="contained"
-                color={recording ? "error" : "primary"}
-                onClick={recording ? stopRecording : startRecording}
-            >
-                {recording ? "Stop Recording" : "Start Recording"}
-            </Button>
+        <Box sx={{ border: "1px solid #ccc", padding: 2, borderRadius: 2 }}>
+            <Typography variant="subtitle1" gutterBottom>
+                Audio Recorder
+            </Typography>
+
+            <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 2 }}>
+                {!isRecording ? (
+                    <IconButton color="primary" onClick={startRecording}>
+                        <MicIcon fontSize="large" />
+                    </IconButton>
+                ) : (
+                    <IconButton color="error" onClick={stopRecording}>
+                        <StopIcon fontSize="large" />
+                    </IconButton>
+                )}
+
+                <Typography variant="body2">
+                    {isRecording ? "Recording..." : "Click mic to start"}
+                </Typography>
+
+                {audioChunks.length > 0 && (
+                    <IconButton onClick={resetRecording}>
+                        <DeleteIcon />
+                    </IconButton>
+                )}
+            </Box>
         </Box>
     );
-}
+};

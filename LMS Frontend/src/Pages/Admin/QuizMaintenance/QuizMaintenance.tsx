@@ -1,6 +1,8 @@
 import {
     Paper, IconButton, Box, Typography, TextField,
-    Grid, FormControl, InputLabel, Select, MenuItem, Button
+    Grid, FormControl, InputLabel, Select, MenuItem, Button,
+    Backdrop,
+    CircularProgress
 } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
@@ -56,6 +58,7 @@ export default function QuizMaintenance() {
     const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
     const [answers, setAnswers] = useState(["", "", "", ""]);
     const [correctAnswerIndex, setCorrectAnswerIndex] = useState(0); // default Answer 1 selected
+    const [loading, setLoading] = useState(false);
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
@@ -219,38 +222,56 @@ export default function QuizMaintenance() {
     );
 
     const handleSaveAnswers = async () => {
-        console.log(quizId);
-        console.log(qType);
-        console.log(qTextJson);
-        console.log(questionImage);
-        console.log(audioBlob);
-        console.log(answers);
-        console.log(correctAnswerIndex + 1);
-        
+        setLoading(true)
+        // console.log(quizId);
+        // console.log(qType);
+        // console.log(qTextJson);
+        // console.log(questionImage);
+        // console.log(audioBlob);
+        // console.log(answers);
+        // console.log(correctAnswerIndex + 1);
+
         const formData = new FormData();
         formData.append("quizId", quizId);
-        formData.append("type", qType.toString());
+        formData.append("questionType", qType.toString());
         formData.append("questionText", `"${qTextJson}"`);
         formData.append("image", questionImage ? questionImage : "");
         formData.append("audio", audioBlob ? audioBlob : "");
         formData.append("answer1", answers[0]);
         formData.append("answer2", answers[1]);
-        formData.append("answer3",answers[2]);
+        formData.append("answer3", answers[2]);
         formData.append("answer4", answers[3]);
         formData.append("correctAnswerMcq", (correctAnswerIndex + 1).toString());
-        
+
 
         try {
             const res = await createQuestion(formData)
-            console.log(res.data);            
-        } catch (error:any) {
+            setLoading(false)
+            alert(res.data.message);
+        } catch (error: any) {
+            setLoading(false)
             alert(error.response.data.message)
         }
 
+        handleClearFields();
+    }
+
+    const handleClearFields = () => {
+        setQTextFields([{ key: "field01", value: "" }])
+        setQuestionImage(null)
+        setAudioBlob(null)
+        setAnswers(["", "", "", ""])
+        setCorrectAnswerIndex(0);
     }
 
     return (
         <>
+            <Backdrop
+                sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 10000 }}
+                open={loading}
+            >
+                <CircularProgress color="inherit" />
+            </Backdrop>
             <Dialogbox
                 open={isOpen}
                 title="Delete Confirmation"
