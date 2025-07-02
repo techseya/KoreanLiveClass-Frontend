@@ -6,7 +6,7 @@ import {
 } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getAllCourses } from "src/Services/course_api";
 import { createQuestion, deleteQuestion, deleteQuiz, getQuestions, getQuiz, updateQuestion, updateQuiz } from "src/Services/quiz_api";
 import { AddCircle, Delete } from "@mui/icons-material";
@@ -54,11 +54,14 @@ export default function QuizMaintenance() {
 
     const [qType, setQType] = useState(1);
     const [qTextFields, setQTextFields] = useState([{ key: "field01", value: "" }]);
+    const [qTextFieldsB, setQTextFieldsB] = useState([{ key: "field01", value: "" }]);
     const [questionImage, setQuestionImage] = useState<File | null>(null);
     const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
     const [answers, setAnswers] = useState(["", "", "", ""]);
     const [correctAnswerIndex, setCorrectAnswerIndex] = useState(0); // default Answer 1 selected
     const [loading, setLoading] = useState(false);
+    const [fillBlankAnswers, setFillBlankAnswers] = useState<string[]>([]);
+    const imageInputRef = useRef<HTMLInputElement>(null);
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
@@ -90,6 +93,25 @@ export default function QuizMaintenance() {
     };
 
 
+    const handleQTextChangeB = (index: number, field: string, value: string) => {
+        const updatedFields = [...qTextFieldsB];
+        updatedFields[index] = { ...updatedFields[index], [field]: value };
+        setQTextFieldsB(updatedFields);
+    };
+
+    const handleAddQTextFieldB = () => {
+        const nextFieldNumber = qTextFieldsB.length + 1;
+        setQTextFieldsB([...qTextFieldsB, { key: `field${nextFieldNumber.toString().padStart(2, '0')}`, value: "" }]);
+    };
+
+    const handleRemoveQTextFieldB = (index: number) => {
+        const updatedFields = [...qTextFieldsB];
+        updatedFields.splice(index, 1);
+        setQTextFieldsB(updatedFields);
+    };
+
+
+
     const handleOpenFullScreenModal = (row: any) => {
         setOpenFullScreenModal(true)
         setQuizId(row.id);
@@ -100,6 +122,31 @@ export default function QuizMaintenance() {
         handleGetCourses();
         handleGetQuizes(courseId);
     }, []);
+
+    useEffect(() => {
+        // Combine all question text
+        const combinedText = qTextFieldsB.map(f => f.value).join(" ");
+        const regex = /\[\[(\d+)\]\]/g;
+        const matches: RegExpExecArray[] = [];
+        let match;
+        while ((match = regex.exec(combinedText)) !== null) {
+            matches.push(match);
+        }
+
+        // Extract unique indexes
+        const uniqueIndexes = Array.from(new Set(matches.map(m => parseInt(m[1])))).sort((a, b) => a - b);
+
+        // Create/update answers array
+        const updatedAnswers = uniqueIndexes.map((idx) => fillBlankAnswers[idx] || "");
+        setFillBlankAnswers(updatedAnswers);
+    }, [qTextFieldsB]);
+
+    const handleFillBlankAnswerChange = (index: number, value: string) => {
+        const updated = [...fillBlankAnswers];
+        updated[index] = value;
+        setFillBlankAnswers(updated);
+    };
+
 
     const handleGetCourses = async () => {
         try {
@@ -221,6 +268,17 @@ export default function QuizMaintenance() {
         }, {} as Record<string, string>)
     );
 
+
+
+    const qTextJsonB = JSON.stringify(
+        qTextFieldsB.reduce((acc, curr) => {
+            if (curr.key.trim()) {
+                acc[curr.key] = curr.value;
+            }
+            return acc;
+        }, {} as Record<string, string>)
+    );
+
     const handleSaveAnswers = async () => {
         setLoading(true)
         // console.log(quizId);
@@ -230,39 +288,64 @@ export default function QuizMaintenance() {
         // console.log(audioBlob);
         // console.log(answers);
         // console.log(correctAnswerIndex + 1);
+        console.log(qTextJsonB);
+        console.log(JSON.stringify(fillBlankAnswers));
+
 
         const formData = new FormData();
         formData.append("quizId", quizId);
         formData.append("questionType", qType.toString());
-        formData.append("questionText", `"${qTextJson}"`);
+        formData.append("questionText", qType === 1 ? `"${qTextJson}"` : `"${qTextJsonB}"`);
         formData.append("image", questionImage ? questionImage : "");
         formData.append("audio", audioBlob ? audioBlob : "");
-        formData.append("answer1", answers[0]);
-        formData.append("answer2", answers[1]);
-        formData.append("answer3", answers[2]);
-        formData.append("answer4", answers[3]);
-        formData.append("correctAnswerMcq", (correctAnswerIndex + 1).toString());
-
+        formData.append("answer1", qType === 1 ? answers[0] : "");
+        formData.append("answer2", qType === 1 ? answers[1] : "");
+        formData.append("answer3", qType === 1 ? answers[2] : "");
+        formData.append("answer4", qType === 1 ? answers[3] : "");
+        formData.append("correctAnswerMcq", qType === 1 ? (correctAnswerIndex + 1).toString() : "");
+        formData.append("correctAnswerFillInBlanks", qType === 2 ? JSON.stringify(fillBlankAnswers) : "");
 
         try {
             const res = await createQuestion(formData)
             setLoading(false)
             alert(res.data.message);
+            handleClearFields();
         } catch (error: any) {
             setLoading(false)
             alert(error.response.data.message)
         }
-
-        handleClearFields();
     }
 
     const handleClearFields = () => {
         setQTextFields([{ key: "field01", value: "" }])
+        setQTextFieldsB([{ key: "field01", value: "" }])
+        setQType(1)
         setQuestionImage(null)
         setAudioBlob(null)
         setAnswers(["", "", "", ""])
         setCorrectAnswerIndex(0);
+        setFillBlankAnswers([]);
+        
+        if (imageInputRef.current) {
+            imageInputRef.current.value = "";
+        }
     }
+
+    const handleInsertBlank = (index: number) => {
+        const updatedFields = [...qTextFieldsB];
+        const field = updatedFields[index];
+
+        // Find max existing [[x]] index
+        const existingMatches = field.value.match(/\[\[(\d+)\]\]/g);
+        const nextIndex = existingMatches
+            ? Math.max(...existingMatches.map(m => parseInt(m.replace(/\D/g, '')))) + 1
+            : 0;
+
+        const newText = field.value + ` [[${nextIndex}]]`;
+        updatedFields[index].value = newText;
+        setQTextFieldsB(updatedFields);
+    };
+
 
     return (
         <>
@@ -331,47 +414,96 @@ export default function QuizMaintenance() {
                                     <Grid item xs={12}>
                                         <Typography variant="subtitle1">Question Text Fields</Typography>
                                     </Grid>
+                                    {qType === 1 && (
+                                        <>
+                                            {qTextFieldsB.map((field, index) => (
+                                                <Grid item xs={12} sm={12} key={index} container spacing={1} alignItems="center">
+                                                    <Grid item xs={3}>
+                                                        <TextField
+                                                            label="Field Name"
+                                                            fullWidth
+                                                            size="small"
+                                                            disabled
+                                                            value={field.key}
+                                                            onChange={(e) => handleQTextChange(index, "key", e.target.value)}
+                                                        />
+                                                    </Grid>
+                                                    <Grid item xs={8}>
+                                                        <TextField
+                                                            label="Field Value"
+                                                            fullWidth
+                                                            size="small"
+                                                            value={field.value}
+                                                            onChange={(e) => handleQTextChange(index, "value", e.target.value)}
+                                                        />
+                                                    </Grid>
+                                                    <Grid item xs={1}>
+                                                        <IconButton onClick={() => handleRemoveQTextField(index)}>
+                                                            <Delete fontSize="small" />
+                                                        </IconButton>
+                                                    </Grid>
+                                                </Grid>
+                                            ))}
 
-                                    {qTextFields.map((field, index) => (
-                                        <Grid item xs={12} sm={12} key={index} container spacing={1} alignItems="center">
-                                            <Grid item xs={3}>
-                                                <TextField
-                                                    label="Field Name"
-                                                    fullWidth
-                                                    size="small"
-                                                    disabled
-                                                    value={field.key}
-                                                    onChange={(e) => handleQTextChange(index, "key", e.target.value)}
-                                                />
+                                            <Grid item xs={12}>
+                                                <Button variant="outlined" onClick={handleAddQTextField}>
+                                                    + Add Text Field
+                                                </Button>
                                             </Grid>
-                                            <Grid item xs={8}>
-                                                <TextField
-                                                    label="Field Value"
-                                                    fullWidth
-                                                    size="small"
-                                                    value={field.value}
-                                                    onChange={(e) => handleQTextChange(index, "value", e.target.value)}
-                                                />
-                                            </Grid>
-                                            <Grid item xs={1}>
-                                                <IconButton onClick={() => handleRemoveQTextField(index)}>
-                                                    <Delete fontSize="small" />
-                                                </IconButton>
-                                            </Grid>
-                                        </Grid>
-                                    ))}
 
-                                    <Grid item xs={12}>
-                                        <Button variant="outlined" onClick={handleAddQTextField}>
-                                            + Add Text Field
-                                        </Button>
-                                    </Grid>
+                                        </>
+                                    )}
+
+                                    {qType === 2 && (
+                                        <>
+                                            {qTextFieldsB.map((field, index) => (
+                                                <Grid item xs={12} sm={12} key={index} container spacing={1} alignItems="center">
+                                                    <Grid item xs={3}>
+                                                        <TextField
+                                                            label="Field Name"
+                                                            fullWidth
+                                                            size="small"
+                                                            disabled
+                                                            value={field.key}
+                                                            onChange={(e) => handleQTextChangeB(index, "key", e.target.value)}
+                                                        />
+                                                    </Grid>
+                                                    <Grid item xs={7}>
+                                                        <TextField
+                                                            label="Field Value"
+                                                            fullWidth
+                                                            size="small"
+                                                            value={field.value}
+                                                            onChange={(e) => handleQTextChangeB(index, "value", e.target.value)}
+                                                        />
+                                                    </Grid>
+                                                    <Grid item xs={1}>
+                                                        <IconButton onClick={() => handleInsertBlank(index)} title="Insert Blank">
+                                                            <AddCircle />
+                                                        </IconButton>
+                                                    </Grid>
+                                                    <Grid item xs={1}>
+                                                        <IconButton onClick={() => handleRemoveQTextFieldB(index)} title="Remove">
+                                                            <Delete fontSize="small" />
+                                                        </IconButton>
+                                                    </Grid>
+                                                </Grid>
+                                            ))}
+
+                                            <Grid item xs={12}>
+                                                <Button variant="outlined" onClick={handleAddQTextFieldB}>
+                                                    + Add Text Field
+                                                </Button>
+                                            </Grid>
+                                        </>
+                                    )}
 
                                     <Grid item xs={12} sm={12}>
                                         <Typography variant="subtitle1">Upload Image</Typography>
                                         <input
                                             type="file"
                                             accept="image/*"
+                                            ref={imageInputRef}
                                             onChange={handleImageChange}
                                             style={{ marginTop: "8px" }}
                                         />
@@ -408,42 +540,65 @@ export default function QuizMaintenance() {
                                         </Grid>
                                     )}
 
-                                    <Grid item xs={12}>
-                                        <Typography variant="subtitle1" gutterBottom>
-                                            Answers
-                                        </Typography>
-                                    </Grid>
-
-                                    {[0, 1, 2, 3].map((i) => (
-                                        <Grid item xs={12} sm={6} key={i}>
-                                            <TextField
-                                                fullWidth
-                                                size="small"
-                                                label={`Answer ${i + 1}`}
-                                                value={answers[i]}
-                                                onChange={(e) => handleAnswerChange(i, e.target.value)}
-                                            />
+                                    {qType === 1 && (
+                                        <><Grid item xs={12}>
+                                            <Typography variant="subtitle1" gutterBottom>
+                                                Answers
+                                            </Typography>
                                         </Grid>
-                                    ))}
+                                            {[0, 1, 2, 3].map((i) => (
+                                                <Grid item xs={12} sm={6} key={i}>
+                                                    <TextField
+                                                        fullWidth
+                                                        size="small"
+                                                        label={`Answer ${i + 1}`}
+                                                        value={answers[i]}
+                                                        onChange={(e) => handleAnswerChange(i, e.target.value)}
+                                                    />
+                                                </Grid>
+                                            ))}
 
-                                    <Grid item xs={12} sm={6}>
-                                        <FormControl fullWidth>
-                                            <InputLabel id="correct-answer-label">Correct Answer</InputLabel>
-                                            <Select
-                                                labelId="correct-answer-label"
-                                                size="small"
-                                                value={correctAnswerIndex}
-                                                label="Correct Answer"
-                                                onChange={(e) => setCorrectAnswerIndex(Number(e.target.value))}
-                                            >
-                                                {[0, 1, 2, 3].map((i) => (
-                                                    <MenuItem key={i} value={i}>
-                                                        Answer {i + 1}
-                                                    </MenuItem>
-                                                ))}
-                                            </Select>
-                                        </FormControl>
-                                    </Grid>
+                                            <Grid item xs={12} sm={6}>
+                                                <FormControl fullWidth>
+                                                    <InputLabel id="correct-answer-label">Correct Answer</InputLabel>
+                                                    <Select
+                                                        labelId="correct-answer-label"
+                                                        size="small"
+                                                        value={correctAnswerIndex}
+                                                        label="Correct Answer"
+                                                        onChange={(e) => setCorrectAnswerIndex(Number(e.target.value))}
+                                                    >
+                                                        {[0, 1, 2, 3].map((i) => (
+                                                            <MenuItem key={i} value={i}>
+                                                                Answer {i + 1}
+                                                            </MenuItem>
+                                                        ))}
+                                                    </Select>
+                                                </FormControl>
+                                            </Grid>
+                                        </>
+                                    )}
+
+                                    {qType === 2 && fillBlankAnswers.length > 0 && (
+                                        <>
+                                            <Grid item xs={12}>
+                                                <Typography variant="subtitle1" gutterBottom>
+                                                    Fill in the Blanks - Correct Answers
+                                                </Typography>
+                                            </Grid>
+                                            {fillBlankAnswers.map((ans, index) => (
+                                                <Grid item xs={12} sm={6} key={index}>
+                                                    <TextField
+                                                        fullWidth
+                                                        size="small"
+                                                        label={`Answer for [[${index}]]`}
+                                                        value={ans}
+                                                        onChange={(e) => handleFillBlankAnswerChange(index, e.target.value)}
+                                                    />
+                                                </Grid>
+                                            ))}
+                                        </>
+                                    )}
 
                                     <Grid item xs={12} display="flex" justifyContent="flex-end" mt={2}>
                                         <Button
