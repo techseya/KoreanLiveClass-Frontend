@@ -82,20 +82,20 @@ export default function MyCourse() {
         try {
             const response = await getQuiz(course.id)
             setQuizId(response.data[0].id)
-            handleGetQuestions(response.data[0].id)
+            // handleGetQuestions(response.data[0].id)
         } catch (error) {
             console.error(error);
         }
     }
 
-    const handleGetQuestions = async (id: any) => {
-        try {
-            const response = await getQuestions(id, "user")
-            setQuestions(response.data);
-        } catch (error) {
-            console.error(error);
-        }
-    }
+    // const handleGetQuestions = async (id: any) => {
+    //     try {
+    //         const response = await getQuestions(id, "user")
+    //         setQuestions(response.data);
+    //     } catch (error) {
+    //         console.error(error);
+    //     }
+    // }
 
     const handleGetRecordings = async (sectionId: string) => {
         if (recordingsMap[sectionId]) return; // Avoid refetching

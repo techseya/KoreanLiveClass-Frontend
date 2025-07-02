@@ -62,6 +62,7 @@ export default function QuizMaintenance() {
     const [loading, setLoading] = useState(false);
     const [fillBlankAnswers, setFillBlankAnswers] = useState<string[]>([]);
     const imageInputRef = useRef<HTMLInputElement>(null);
+    const [questions, setQuestions] = useState<any[]>([]);
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
@@ -114,6 +115,7 @@ export default function QuizMaintenance() {
         setOpenFullScreenModal(true)
         setQuizId(row.id);
         setQuizName(row.name)
+        handleGetQuestions(row.id)
     }
 
     useEffect(() => {
@@ -145,6 +147,14 @@ export default function QuizMaintenance() {
         setFillBlankAnswers(updated);
     };
 
+    const handleGetQuestions = async (id: any) => {
+        try {
+            const res = await getQuestions(id);
+            setQuestions(res.data);
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     const handleGetCourses = async () => {
         try {
@@ -388,7 +398,20 @@ export default function QuizMaintenance() {
                     <div className="q-outer">
                         <div className="q-inner">
                             <div className="q-content-highlight-outer">
-                                Content
+                                {questions.length > 0 ? (
+                                    <Grid container spacing={2}>
+                                        {questions.map((question, index) => (
+                                            <Grid item xs={12} key={index}>
+                                                <Paper elevation={2} sx={{ padding: 2 }}>
+                                                    <Typography variant="h6">{`Question ${index + 1}: ${question.questionType === 1 ? 'MCQ' : 'Fill In The Blanks'}`}</Typography>
+                                                    <Typography style={{fontSize: "13px"}} variant="body1">{`Type: ${question.questionText.field01.length > 50 ? `${question.questionText.field01.substring(0, 50)}...` : `${question.questionText.field01}`}`}</Typography>
+                                                </Paper>
+                                            </Grid>
+                                        ))}
+                                    </Grid>
+                                ) : (
+                                    <Typography variant="body1">No questions available</Typography>
+                                )}
                             </div>
                         </div>
                         <div className="q-inner1">
@@ -402,7 +425,10 @@ export default function QuizMaintenance() {
                                             <RadioGroup
                                                 row
                                                 value={qType}
-                                                onChange={(e) => setQType(Number(e.target.value))}
+                                                onChange={(e) => {
+                                                    setQType(Number(e.target.value))
+                                                    handleClearFields();
+                                                }}
                                             >
                                                 <FormControlLabel value={1} control={<Radio />} label="MCQ" />
                                                 <FormControlLabel value={2} control={<Radio />} label="Fill In The Blanks" />
