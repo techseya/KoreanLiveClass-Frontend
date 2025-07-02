@@ -110,8 +110,6 @@ export default function QuizMaintenance() {
         setQTextFieldsB(updatedFields);
     };
 
-
-
     const handleOpenFullScreenModal = (row: any) => {
         setOpenFullScreenModal(true)
         setQuizId(row.id);
@@ -416,7 +414,7 @@ export default function QuizMaintenance() {
                                     </Grid>
                                     {qType === 1 && (
                                         <>
-                                            {qTextFieldsB.map((field, index) => (
+                                            {qTextFields.map((field, index) => (
                                                 <Grid item xs={12} sm={12} key={index} container spacing={1} alignItems="center">
                                                     <Grid item xs={3}>
                                                         <TextField
