@@ -63,6 +63,8 @@ export default function QuizMaintenance() {
     const [fillBlankAnswers, setFillBlankAnswers] = useState<string[]>([]);
     const imageInputRef = useRef<HTMLInputElement>(null);
     const [questions, setQuestions] = useState<any[]>([]);
+    const [audioUrl, setAudioUrl] = useState("")
+    const [imageUrl, setImageUrl] = useState("");
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
@@ -327,13 +329,12 @@ export default function QuizMaintenance() {
     const handleClearFields = () => {
         setQTextFields([{ key: "field01", value: "" }])
         setQTextFieldsB([{ key: "field01", value: "" }])
-        setQType(1)
         setQuestionImage(null)
         setAudioBlob(null)
         setAnswers(["", "", "", ""])
         setCorrectAnswerIndex(0);
         setFillBlankAnswers([]);
-        
+
         if (imageInputRef.current) {
             imageInputRef.current.value = "";
         }
@@ -354,6 +355,24 @@ export default function QuizMaintenance() {
         setQTextFieldsB(updatedFields);
     };
 
+    const handleQuestion = (question: any) => {
+        console.log(question);
+        
+        const newTextFields = Object.entries(question.questionText).map(([key, value]) => ({
+            key,
+            value: String(value)
+        }));
+
+        setQTextFields(newTextFields);
+
+        setQTextFieldsB(newTextFields)
+
+        setQType(question.questionType);
+        setAnswers([question.answer.answer1, question.answer.answer2, question.answer.answer3, question.answer.answer4]);
+        setCorrectAnswerIndex(question.answer.correctAnswer - 1); // Adjust for 0-based index
+        setAudioUrl(question.audioUrl !== null ? question.audioUrl.replace("dl=0", "raw=1") : "")
+        setImageUrl(question.imageUrl !== null ? question.imageUrl.replace("dl=0", "raw=1") : "")
+    }
 
     return (
         <>
@@ -402,9 +421,9 @@ export default function QuizMaintenance() {
                                     <Grid container spacing={2}>
                                         {questions.map((question, index) => (
                                             <Grid item xs={12} key={index}>
-                                                <Paper elevation={2} sx={{ padding: 2 }}>
+                                                <Paper elevation={2} sx={{ padding: 2 }} onClick={() => handleQuestion(question)}>
                                                     <Typography variant="h6">{`Question ${index + 1}: ${question.questionType === 1 ? 'MCQ' : 'Fill In The Blanks'}`}</Typography>
-                                                    <Typography style={{fontSize: "13px"}} variant="body1">{`Type: ${question.questionText.field01.length > 50 ? `${question.questionText.field01.substring(0, 50)}...` : `${question.questionText.field01}`}`}</Typography>
+                                                    <Typography style={{ fontSize: "13px" }} variant="body1">{`Type: ${question.questionText.field01.length > 50 ? `${question.questionText.field01.substring(0, 50)}...` : `${question.questionText.field01}`}`}</Typography>
                                                 </Paper>
                                             </Grid>
                                         ))}
@@ -533,6 +552,16 @@ export default function QuizMaintenance() {
                                         />
                                     </Grid>
 
+                                    {imageUrl !== "" && (
+                                        <Grid item xs={12} sm={6}>
+                                            <img
+                                                src={imageUrl}
+                                                alt="Preview"
+                                                style={{ width: "100%", maxHeight: "200px", objectFit: "contain", marginTop: "8px", border: "1px solid #ccc", borderRadius: "6px" }}
+                                            />
+                                        </Grid>
+                                    )}
+
                                     {questionImage && (
                                         <Grid item xs={12} sm={6}>
                                             <img
@@ -547,6 +576,9 @@ export default function QuizMaintenance() {
                                         <AudioRecorder onRecordingComplete={(blob) => setAudioBlob(blob)} />
                                     </Grid>
 
+                                    {audioUrl !== "" && (
+                                        <audio controls src={audioUrl} />
+                                    )}
 
                                     {audioBlob && (
                                         <Grid item xs={12}>
