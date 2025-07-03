@@ -357,7 +357,7 @@ export default function QuizMaintenance() {
 
     const handleQuestion = (question: any) => {
         console.log(question);
-        
+
         const newTextFields = Object.entries(question.questionText).map(([key, value]) => ({
             key,
             value: String(value)
@@ -372,6 +372,15 @@ export default function QuizMaintenance() {
         setCorrectAnswerIndex(question.answer.correctAnswer - 1); // Adjust for 0-based index
         setAudioUrl(question.audioUrl !== null ? question.audioUrl.replace("dl=0", "raw=1") : "")
         setImageUrl(question.imageUrl !== null ? question.imageUrl.replace("dl=0", "raw=1") : "")
+
+        const raw = question.answer.correctAnswersFillInBlanks?.[0];
+
+        if (raw) {
+            const parsedList = JSON.parse(raw); // e.g. ["Piduruthalagala", "longest", "Sri Lanka"]
+            console.log(parsedList); // Log full list
+            setFillBlankAnswers(parsedList); // ✅ set once
+        }
+
     }
 
     return (
@@ -577,7 +586,9 @@ export default function QuizMaintenance() {
                                     </Grid>
 
                                     {audioUrl !== "" && (
-                                        <audio controls src={audioUrl} />
+                                        <div style={{margin: "5px 15px"}}>
+                                            <audio controls src={audioUrl} />
+                                        </div>                                        
                                     )}
 
                                     {audioBlob && (
