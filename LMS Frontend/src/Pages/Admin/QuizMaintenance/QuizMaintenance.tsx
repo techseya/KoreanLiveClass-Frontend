@@ -65,6 +65,7 @@ export default function QuizMaintenance() {
     const [questions, setQuestions] = useState<any[]>([]);
     const [audioUrl, setAudioUrl] = useState("")
     const [imageUrl, setImageUrl] = useState("");
+    const [updateBtnVisible, setUpdateBtnVisible] = useState(false)
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
@@ -356,6 +357,7 @@ export default function QuizMaintenance() {
     };
 
     const handleQuestion = (question: any) => {
+        setUpdateBtnVisible(true)
         console.log(question);
 
         const newTextFields = Object.entries(question.questionText).map(([key, value]) => ({
@@ -444,6 +446,16 @@ export default function QuizMaintenance() {
                         </div>
                         <div className="q-inner1">
                             <div className="q-content-outer">
+                                <div className="reset-btn-outer">
+                                    <Button
+                                        className="reset-btn"
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={handleSaveAnswers}
+                                    >
+                                        Reset
+                                    </Button>
+                                </div>
                                 <Grid container spacing={2}>
                                     <Grid item xs={12} sm={12}>
                                         <FormControl component="fieldset">
@@ -586,9 +598,9 @@ export default function QuizMaintenance() {
                                     </Grid>
 
                                     {audioUrl !== "" && (
-                                        <div style={{margin: "5px 15px"}}>
+                                        <div style={{ margin: "5px 15px" }}>
                                             <audio controls src={audioUrl} />
-                                        </div>                                        
+                                        </div>
                                     )}
 
                                     {audioBlob && (
@@ -668,15 +680,24 @@ export default function QuizMaintenance() {
                                     )}
 
                                     <Grid item xs={12} display="flex" justifyContent="flex-end" mt={2}>
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            onClick={handleSaveAnswers}
-                                        >
-                                            Save Question
-                                        </Button>
+                                        {updateBtnVisible ? (
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                onClick={handleSaveAnswers}
+                                            >
+                                                Update Question
+                                            </Button>
+                                        ) : (
+                                            <Button
+                                                variant="contained"
+                                                color="primary"
+                                                onClick={handleSaveAnswers}
+                                            >
+                                                Save Question
+                                            </Button>
+                                        )}
                                     </Grid>
-
                                 </Grid>
                             </div>
                         </div>
