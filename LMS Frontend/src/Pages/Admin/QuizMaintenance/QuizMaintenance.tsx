@@ -66,6 +66,7 @@ export default function QuizMaintenance() {
     const [audioUrl, setAudioUrl] = useState("")
     const [imageUrl, setImageUrl] = useState("");
     const [updateBtnVisible, setUpdateBtnVisible] = useState(false)
+    const [id, setId] = useState("")
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
@@ -321,6 +322,7 @@ export default function QuizMaintenance() {
             setLoading(false)
             alert(res.data.message);
             handleClearFields();
+            handleGetQuestions(quizId)
         } catch (error: any) {
             setLoading(false)
             alert(error.response.data.message)
@@ -331,6 +333,52 @@ export default function QuizMaintenance() {
         setQTextFields([{ key: "field01", value: "" }])
         setQTextFieldsB([{ key: "field01", value: "" }])
         setQuestionImage(null)
+        setAudioBlob(null)
+        setImageUrl("")
+        setAudioUrl("")
+        setAnswers(["", "", "", ""])
+        setCorrectAnswerIndex(0);
+        setFillBlankAnswers([]);
+
+        if (imageInputRef.current) {
+            imageInputRef.current.value = "";
+        }
+    }
+
+    const handleUpdateQuestion = async () => {
+        setLoading(true)
+        const formData = new FormData();
+        formData.append("id", id)
+        formData.append("quizId", quizId);
+        formData.append("questionType", qType.toString());
+        formData.append("questionText", qType === 1 ? `"${qTextJson}"` : `"${qTextJsonB}"`);
+        formData.append("image", questionImage ? questionImage : "");
+        formData.append("audio", audioBlob ? audioBlob : "");
+        formData.append("answer1", qType === 1 ? answers[0] : "");
+        formData.append("answer2", qType === 1 ? answers[1] : "");
+        formData.append("answer3", qType === 1 ? answers[2] : "");
+        formData.append("answer4", qType === 1 ? answers[3] : "");
+        formData.append("correctAnswerMcq", qType === 1 ? (correctAnswerIndex + 1).toString() : "");
+        formData.append("correctAnswerFillInBlanks", qType === 2 ? JSON.stringify(fillBlankAnswers) : "");
+
+        try {
+            const res = await updateQuestion(formData)
+            setLoading(false)
+            alert(res.data.message);
+            handleClearFields();            
+            handleGetQuestions(quizId)
+        } catch (error: any) {
+            setLoading(false)
+            alert(error.response.data.message)
+        }
+    }
+
+    const handleReset = () => {
+        setQTextFields([{ key: "field01", value: "" }])
+        setQTextFieldsB([{ key: "field01", value: "" }])
+        setQuestionImage(null)
+        setImageUrl("")
+        setAudioUrl("")
         setAudioBlob(null)
         setAnswers(["", "", "", ""])
         setCorrectAnswerIndex(0);
@@ -359,6 +407,7 @@ export default function QuizMaintenance() {
     const handleQuestion = (question: any) => {
         setUpdateBtnVisible(true)
         console.log(question);
+        setId(question.id)
 
         const newTextFields = Object.entries(question.questionText).map(([key, value]) => ({
             key,
@@ -451,7 +500,10 @@ export default function QuizMaintenance() {
                                         className="reset-btn"
                                         variant="contained"
                                         color="primary"
-                                        onClick={handleSaveAnswers}
+                                        onClick={(e) => {
+                                            handleReset()
+                                            setUpdateBtnVisible(false)
+                                        }}
                                     >
                                         Reset
                                     </Button>
@@ -684,7 +736,7 @@ export default function QuizMaintenance() {
                                             <Button
                                                 variant="contained"
                                                 color="primary"
-                                                onClick={handleSaveAnswers}
+                                                onClick={handleUpdateQuestion}
                                             >
                                                 Update Question
                                             </Button>

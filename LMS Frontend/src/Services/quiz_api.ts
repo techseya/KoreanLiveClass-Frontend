@@ -80,7 +80,11 @@ export const createQuestion = async (body:any) => {
 
 export const updateQuestion = async (body:any) => {
     try {
-        const response = await axios.put(api+`question`, body)
+        const response = await axios.put(api+`question`,body,{
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        })
         return response;
     } catch (error) {
         throw error;
