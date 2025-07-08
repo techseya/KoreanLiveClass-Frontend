@@ -16,6 +16,7 @@ import { getCountryCallingCode, CountryCode } from "libphonenumber-js";
 import { CopyOutlined, EyeOutlined } from "@ant-design/icons";
 import { log } from "util";
 import React from "react";
+import { getQuiz } from "src/Services/quiz_api";
 
 type CountryOption = {
     code: string;
@@ -49,7 +50,9 @@ export default function UserMaintenance() {
     const [filterModalOpen, setFilterModalOpen] = useState(false);
     const [courseModalOpen, setCourseModalOpen] = useState(false);
     const [courseModalOpen2, setCourseModalOpen2] = useState(false);
+    const [courseModalOpen3, setCourseModalOpen3] = useState(false);
     const [sectionModalOpen, setSectionModalOpen] = useState(false);
+    const [quizModalOpen, setQuizModalOpen] = useState(false);
     const [editingUser, setEditingUser] = useState<any | null>(null);
     const [changePwDialog, setChangePwDialog] = useState(false)
     const [changeDeviceDialog, setChangeDeviceDialog] = useState(false)
@@ -59,11 +62,13 @@ export default function UserMaintenance() {
     const [country, setCountry] = useState<CountryOption>(countryOptions[0]);
     const [allCourses, setAllCourses] = useState<any[]>([]);
     const [sections, setSections] = useState<any[]>([]);
+    const [quizes, setQuizes] = useState<any[]>([]);
     const [location1, setLocation1] = useState("Sri Lanka");
     const [phoneNo, setPhoneNo] = useState<any>("");
     const [selectedCourseId, setSelectedCourseId] = useState<number | null>(null);
     const [selectedCourseName, setSelectedCourseName] = useState<any>();
     const [sectionIds, setSectionIds] = useState<any[]>([]);
+    const [quizIds, setQuizIds] = useState<any[]>([])
     const [viewCourseModal, setViewCourseModal] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const [courseId, setCourseId] = useState(0)
@@ -276,6 +281,19 @@ export default function UserMaintenance() {
         } catch (error) {
             console.error(error);
         }
+    }    
+
+    const handleGetQuizes = async (id: any) => {
+        try {
+            const response = await getQuiz(id)
+            setQuizes(response.data)
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    const handleAssignQuizes = async () => {
+        
     }
 
     const handleAssignSections = async () => {
@@ -634,14 +652,17 @@ export default function UserMaintenance() {
                         </Grid>
 
                         <Grid item xs={12}>
-                            <Button variant="outlined" onClick={() => setCourseModalOpen(true)}>
+                            <Button style={{ margin: "5px" }} variant="outlined" onClick={() => setCourseModalOpen(true)}>
                                 Manage Courses
+                            </Button>
+                            <Button style={{ margin: "5px" }} variant="outlined" onClick={() => setCourseModalOpen2(true)}>
+                                Assign Sections
+                            </Button>
+                            <Button style={{ margin: "5px" }} variant="outlined" onClick={() => setCourseModalOpen3(true)}>
+                                Assign Quizes
                             </Button>
                         </Grid>
                         <Grid item xs={12}>
-                            <Button variant="outlined" onClick={() => setCourseModalOpen2(true)}>
-                                Assign Sections
-                            </Button>
                         </Grid>
 
                         <Grid item xs={12} display="flex" justifyContent="flex-end">
@@ -801,7 +822,7 @@ export default function UserMaintenance() {
                         borderRadius: '10px'
                     }}
                 >
-                    <Typography variant="h6" mb={2}>Assign Courses : {editingUser?.userName}</Typography>
+                    <Typography variant="h6" mb={2}>Assign Sections : {editingUser?.userName}</Typography>
 
                     <Grid container spacing={1}>
                         {editingUser?.courses.map((course: any) => (
@@ -835,6 +856,127 @@ export default function UserMaintenance() {
                         )}
                     </Grid>
 
+                </Box>
+            </Modal>
+
+
+            <Modal
+                open={courseModalOpen3}
+                onClose={() => setCourseModalOpen3(false)}
+            >
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: '50%',
+                        maxHeight: '80vh',
+                        bgcolor: 'background.paper',
+                        boxShadow: 24,
+                        p: 4,
+                        overflowY: 'auto',
+                        borderRadius: '10px'
+                    }}
+                >
+                    <Typography variant="h6" mb={2}>Assign Quizes : {editingUser?.userName}</Typography>
+
+                    <Grid container spacing={1}>
+                        {editingUser?.courses.map((course: any) => (
+                            <Grid item xs={12} key={course.id}>
+                                <Box display="flex" alignItems="center" justifyContent="space-between" bgcolor="#eef6ff" p="5px 10px" borderRadius="10px">
+                                    <span>{course.name}</span>
+                                    <IconButton
+                                        size="small"
+                                        onClick={() => {
+                                            setQuizModalOpen(true);
+                                            setSelectedCourseId(course.id);
+                                            setSelectedUserId(editingUser?.id);
+                                            setSelectedCourseName(course.name);
+                                            handleGetQuizes(course.id);
+
+                                            const matchedCourse = editingUser?.courses?.find(
+                                                (c: any) => c.id === course.id
+                                            );
+                                            setQuizIds(matchedCourse?.quizIds || []);
+                                        }}
+                                        sx={{ ml: 1 }}
+                                    >
+                                        <Send fontSize="small" color="primary" />
+                                    </IconButton>
+                                </Box>
+                            </Grid>
+                        ))}
+
+                        {editingUser?.courses.length === 0 && (
+                            <Grid item xs={12} sm={12}>No courses assign to this user. First you need to assign courses.</Grid>
+                        )}
+                    </Grid>
+
+                </Box>
+            </Modal>
+
+            {/* Modal for section selection */}
+            <Modal
+                open={quizModalOpen}
+                onClose={() => setQuizModalOpen(false)}
+            >
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: '80%',
+                        maxHeight: '80vh',
+                        bgcolor: 'background.paper',
+                        boxShadow: 24,
+                        p: 4,
+                        overflowY: 'auto',
+                        borderRadius: '10px'
+                    }}
+                >
+                    <Typography variant="h6" mb={2}>Assign Quizes : {editingUser?.userName} | Course : {selectedCourseName}</Typography>
+                    <Grid container spacing={1}>
+
+                        <Grid container spacing={1} sx={{ mt: 2 }}>
+                            {quizes.filter((c) => c.activeStatus === 1).map((quiz) => {
+                                const isChecked = quizIds.includes(quiz.id);
+
+                                return (
+                                    <Grid item xs={12} sm={6} key={quiz.id}>
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={isChecked}
+                                                    onChange={(e) => {
+                                                        if (e.target.checked) {
+                                                            setQuizIds((prev) => [...prev, quiz.id]);
+                                                        } else {
+                                                            setQuizIds((prev) =>
+                                                                prev.filter((id) => id !== quiz.id)
+                                                            );
+                                                        }
+                                                    }}
+                                                />
+                                            }
+                                            label={quiz.name}
+                                        />
+                                    </Grid>
+                                );
+                            })}
+
+                            {quizes.length === 0 && (
+                                <Grid item xs={12} sm={12}>No Sections for this course</Grid>
+                            )}
+                        </Grid>
+                    </Grid>
+                    <Box mt={2} display="flex" justifyContent="flex-end">
+                        <Button variant="contained" disabled={quizes.length === 0} onClick={() => {
+                            setQuizModalOpen(false)
+                            handleAssignQuizes()
+                        }}>Update</Button>
+                    </Box>
                 </Box>
             </Modal>
 
@@ -892,7 +1034,6 @@ export default function UserMaintenance() {
                                 <Grid item xs={12} sm={12}>No Sections for this course</Grid>
                             )}
                         </Grid>
-
                     </Grid>
 
                     <Box mt={2} display="flex" justifyContent="flex-end">
