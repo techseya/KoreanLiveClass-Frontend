@@ -47,6 +47,7 @@ export default function QuizMaintenance() {
     const [courses, setCourses] = useState<any[]>([]);
     const [rows, setRows] = useState<any[]>([]);
     const [isOpen, setIsOpen] = useState(false);
+    const [isOpen1, setIsOpen1] = useState(false);
     const [quizId, setQuizId] = useState("")
     const [quizName, setQuizName] = useState("");
     const [thumb, setThumb] = useState<File | any>(null);
@@ -67,6 +68,7 @@ export default function QuizMaintenance() {
     const [imageUrl, setImageUrl] = useState("");
     const [updateBtnVisible, setUpdateBtnVisible] = useState(false)
     const [id, setId] = useState("")
+    const [questionId, setQuestionId] = useState("")
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
@@ -200,6 +202,10 @@ export default function QuizMaintenance() {
     const handleFormChange = (field: string, value: any) => {
         setEditingQuestion((prev: any) => ({ ...prev, [field]: value }));
     };
+
+    const handleClickDeleteQuestion = () => {
+        setIsOpen1(true)
+    }
 
     const handleUpdate = async () => {
         const formData = new FormData();
@@ -365,11 +371,22 @@ export default function QuizMaintenance() {
             const res = await updateQuestion(formData)
             setLoading(false)
             alert(res.data.message);
-            handleClearFields();            
+            handleClearFields();
             handleGetQuestions(quizId)
         } catch (error: any) {
             setLoading(false)
             alert(error.response.data.message)
+        }
+    }
+
+    const handleDeleteQuestion = async () => {
+        try {
+            const res = await deleteQuestion(id);
+            alert(res.data.message);
+            handleClearFields()
+            handleGetQuestions(quizId)
+        } catch (error: any) {
+            alert(error.response.data.message);
         }
     }
 
@@ -443,9 +460,19 @@ export default function QuizMaintenance() {
                 <CircularProgress color="inherit" />
             </Backdrop>
             <Dialogbox
-                open={isOpen}
+                open={isOpen1}
                 title="Delete Confirmation"
                 content="Are you sure you want to delete this question?"
+                agreeButtonText="Yes, Delete"
+                disagreeButtonText="No"
+                onAgree={handleDeleteQuestion}
+                onDisagree={() => setIsOpen1(false)}
+                onClose={() => setIsOpen1(false)}
+            />
+            <Dialogbox
+                open={isOpen}
+                title="Delete Confirmation"
+                content="Are you sure you want to delete this quiz?"
                 agreeButtonText="Yes, Delete"
                 disagreeButtonText="No"
                 onAgree={handleDelete}
@@ -733,13 +760,25 @@ export default function QuizMaintenance() {
 
                                     <Grid item xs={12} display="flex" justifyContent="flex-end" mt={2}>
                                         {updateBtnVisible ? (
-                                            <Button
-                                                variant="contained"
-                                                color="primary"
-                                                onClick={handleUpdateQuestion}
-                                            >
-                                                Update Question
-                                            </Button>
+                                            <>
+                                                <Button
+                                                style={{marginRight: "10px", backgroundColor: "red"}}
+                                                    variant="contained"
+                                                    color="primary"
+                                                    onClick={handleClickDeleteQuestion}
+                                                >
+                                                    Delete
+                                                </Button>
+
+                                                <Button
+                                                    variant="contained"
+                                                    color="primary"
+                                                    onClick={handleUpdateQuestion}
+                                                >
+                                                    Update Question
+                                                </Button>
+                                            </>
+
                                         ) : (
                                             <Button
                                                 variant="contained"
