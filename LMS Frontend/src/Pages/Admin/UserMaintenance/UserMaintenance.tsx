@@ -917,9 +917,10 @@ export default function UserMaintenance() {
                             <Grid container spacing={1} sx={{ mt: 2 }}>
                                 {quizes
                                     .filter((quiz) => quiz.activeStatus === 1)
-                                    .map((course: any) => (
-                                        <div key={course.id} style={{ display: 'flex', textAlign: "center", marginBottom: '10px', width: "250px", border: '1px solid #ccc', padding: '5px', borderRadius: '5px' }}>
-                                            <div style={{width: "100%" ,textAlign: "center"}}>{course.name}</div>
+                                    .map((paper: any) => (
+                                        <div key={paper.id} style={{ textAlign: "center", marginBottom: '10px', width: "250px", border: '1px solid #ccc', padding: '5px', borderRadius: '5px' }}>
+                                            <img style={{width: "230px", height: "auto"}} src={paper.imageUrl.replace("dl=0", "raw=1")} alt="" />
+                                            <div style={{width: "100%" ,textAlign: "center"}}>{paper.name}</div>
                                             {/* <IconButton
                                                 size="small"
                                                 onClick={() => {
