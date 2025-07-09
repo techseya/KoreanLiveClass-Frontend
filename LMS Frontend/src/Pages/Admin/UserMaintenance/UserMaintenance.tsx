@@ -9,7 +9,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";
 import { Delete, FilterList, LockReset, PhonelinkErase, Send } from "@mui/icons-material";
 import Dialogbox from "src/Common/Components/DialogBox";
-import { assignCourse, assignQuizes, deleteUser, getAlertUsers, getUsers, resetDevice, resetPassword, updateUser } from "src/Services/user_api";
+import { assignCourse, assignQuizes, deleteUser, getAlertUsers, GetAssignQuizes, getUsers, resetDevice, resetPassword, updateUser } from "src/Services/user_api";
 import { getAllCourses, getSectionByCourseId, getUsersByCourseId } from "src/Services/course_api";
 import { getCodeList } from "country-list";
 import { getCountryCallingCode, CountryCode } from "libphonenumber-js";
@@ -63,6 +63,7 @@ export default function UserMaintenance() {
     const [allCourses, setAllCourses] = useState<any[]>([]);
     const [sections, setSections] = useState<any[]>([]);
     const [quizes, setQuizes] = useState<any[]>([]);
+    const [assignedQuizes, setAssignedQuizes] = useState<any[]>([]);
     const [location1, setLocation1] = useState("Sri Lanka");
     const [phoneNo, setPhoneNo] = useState<any>("");
     const [selectedCourseId, setSelectedCourseId] = useState<any>("default");
@@ -322,8 +323,16 @@ export default function UserMaintenance() {
         }
     }
 
+    const handleGetAssignQuizes = async (userid: any, courseid: any) => {
+        try {
+            const res = await GetAssignQuizes(userid, courseid, token)
+            setAssignedQuizes(res.data)
+        } catch (error: any) {
+            console.log(error);
+        }
+    }
+
     const handleAssignQuizesForUsers = async (quizId: any, status: any) => {
-        
 
         const body = {
             courseId: selectedCourseId,
@@ -676,7 +685,9 @@ export default function UserMaintenance() {
                             <Button style={{ margin: "5px" }} variant="outlined" onClick={() => setCourseModalOpen2(true)}>
                                 Assign Sections
                             </Button>
-                            <Button style={{ margin: "5px" }} variant="outlined" onClick={() => setCourseModalOpen3(true)}>
+                            <Button style={{ margin: "5px" }} variant="outlined" onClick={() => {
+                                setCourseModalOpen3(true)
+                            }}>
                                 Assign Quizes
                             </Button>
                         </Grid>
@@ -914,6 +925,7 @@ export default function UserMaintenance() {
                                 setSelectedUserId(editingUser?.id);
                                 setSelectedCourseName(selectedCourse.name);
                                 handleGetQuizes(selectedId);
+                                handleGetAssignQuizes(editingUser?.id, selectedId);
 
                                 const matchedCourse = editingUser?.courses?.find(
                                     (c: any) => c.id === selectedId
@@ -937,68 +949,98 @@ export default function UserMaintenance() {
                             <>
                                 {quizes
                                     .filter((quiz) => quiz.activeStatus === 1)
-                                    .map((paper: any) => (
-                                        <div
-                                            key={paper.id}
-                                            style={{
-                                                textAlign: "center",
-                                                marginBottom: "10px",
-                                                width: "250px",
-                                                height: "auto",
-                                                border: "1px solid #ccc",
-                                                padding: "5px",
-                                                borderRadius: "5px",
-                                                cursor: "pointer",
-                                                display: "flex",
-                                                flexDirection: "column",
-                                                justifyContent: "space-between"
-                                            }}
-                                        >
-                                            <img
-                                                style={{ width: "100%", height: "auto", maxHeight: "150px", objectFit: "cover", borderRadius: "5px" }}
-                                                src={paper.imageUrl.replace("dl=0", "raw=1")}
-                                                alt=""
-                                            />
-                                            <div style={{ width: "100%", textAlign: "center" }}>{paper.name}</div>
-                                            <div className="btn-out" style={{ marginTop: "10px", display: "flex", justifyContent: "center", gap: "10px" }}>
-                                                {/* Assign Button */}
-                                                <button
+                                    .map((paper: any) => {
+                                        const assignedQuiz = assignedQuizes.find((aq) => aq.quizId === paper.id);
+                                        return (
+                                            <div
+                                                key={paper.id}
+                                                style={{
+                                                    textAlign: "center",
+                                                    marginBottom: "10px",
+                                                    width: "250px",
+                                                    height: "auto",
+                                                    border: "1px solid #ccc",
+                                                    padding: "5px",
+                                                    borderRadius: "5px",
+                                                    cursor: "pointer",
+                                                    display: "flex",
+                                                    flexDirection: "column",
+                                                    justifyContent: "space-between",
+                                                }}
+                                            >
+                                                <img
                                                     style={{
-                                                        backgroundColor: "#4caf50",
-                                                        color: "#fff",
-                                                        border: "none",
+                                                        width: "100%",
+                                                        height: "auto",
+                                                        maxHeight: "150px",
+                                                        objectFit: "cover",
                                                         borderRadius: "5px",
-                                                        padding: "5px 10px",
-                                                        display: "flex",
-                                                        alignItems: "center",
-                                                        gap: "5px",
-                                                        cursor: "pointer",
                                                     }}
-                                                    onClick={() => handleAssignQuizesForUsers(paper.id, 1)}
-                                                >
-                                                    <span role="img" aria-label="unlock">🔓</span> Assign
-                                                </button>
+                                                    src={paper.imageUrl.replace("dl=0", "raw=1")}
+                                                    alt=""
+                                                />
+                                                <div style={{ width: "100%", textAlign: "center" }}>{paper.name}</div>
 
-                                                {/* Unassign Button */}
-                                                <button
+                                                {/* Quiz Status Display */}
+                                                {assignedQuiz && (
+                                                    <div style={{ fontSize: "12px", color: "gray", marginTop: "4px" }}>
+                                                        Status: {assignedQuiz.quizStatus === 1 ? "Assigned" : "Unassigned"}
+                                                    </div>
+                                                )}
+
+                                                <div
+                                                    className="btn-out"
                                                     style={{
-                                                        backgroundColor: "#e0e0e0",
-                                                        color: "#555",
-                                                        border: "none",
-                                                        borderRadius: "5px",
-                                                        padding: "5px 10px",
+                                                        marginTop: "10px",
                                                         display: "flex",
-                                                        alignItems: "center",
-                                                        gap: "5px",
-                                                        cursor: "pointer",
+                                                        justifyContent: "center",
+                                                        gap: "10px",
                                                     }}
-                                                    onClick={() => handleAssignQuizesForUsers(paper.id, 2)}
                                                 >
-                                                    <span role="img" aria-label="lock">🔒</span> Unassign
-                                                </button>
+                                                    <button
+                                                        style={{
+                                                            backgroundColor: "#4caf50",
+                                                            color: "#fff",
+                                                            border: "none",
+                                                            borderRadius: "5px",
+                                                            padding: "5px 10px",
+                                                            display: "flex",
+                                                            alignItems: "center",
+                                                            gap: "5px",
+                                                            cursor: "pointer",
+                                                        }}
+                                                        onClick={() => handleAssignQuizesForUsers(paper.id, 1)}
+                                                    >
+                                                        <span role="img" aria-label="unlock">
+                                                            🔓
+                                                        </span>{" "}
+                                                        Assign
+                                                    </button>
+
+                                                    <button
+                                                        style={{
+                                                            backgroundColor: "#e0e0e0",
+                                                            color: "#555",
+                                                            border: "none",
+                                                            borderRadius: "5px",
+                                                            padding: "5px 10px",
+                                                            display: "flex",
+                                                            alignItems: "center",
+                                                            gap: "5px",
+                                                            cursor: "pointer",
+                                                        }}
+                                                        onClick={() => handleAssignQuizesForUsers(paper.id, 2)}
+                                                    >
+                                                        <span role="img" aria-label="lock">
+                                                            🔒
+                                                        </span>{" "}
+                                                        Unassign
+                                                    </button>
+                                                </div>
                                             </div>
-                                        </div>
-                                    ))}
+                                        );
+                                    })}
+
                             </>
                         )}
                     </Box>

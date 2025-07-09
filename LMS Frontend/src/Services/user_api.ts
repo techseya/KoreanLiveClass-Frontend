@@ -68,6 +68,23 @@ export const assignQuizes = async (body:any, token: any) => {
     }
 };
 
+export const GetAssignQuizes = async (UserId:any, CourseId:any, token: any) => {
+    try {
+        const response = await axios.get(`${api}admin/assign-quiz`,{
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            params: {
+                UserId,
+                CourseId
+            }
+        });
+        return response;
+    } catch (error) {
+        throw error;
+    }
+};
+
 export const getAssignSections = async (courseId:any, userId:any, token: any) => {
     try {
         const response = await axios.get(`${api}admin/assigned-sections?courseId=${courseId}&userId=${userId}`,{
