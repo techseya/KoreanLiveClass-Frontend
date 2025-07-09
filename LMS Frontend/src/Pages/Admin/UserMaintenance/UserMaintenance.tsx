@@ -912,13 +912,12 @@ export default function UserMaintenance() {
                         </Select>
                     </FormControl>
 
-                    <Box display="flex" flexWrap="wrap" gap="15px" alignItems="center" justifyContent="start" p="5px 10px" borderRadius="10px">
+                    <Box display="flex" flexWrap="wrap" gap="15px" justifyContent="start" p="15px 0" borderRadius="10px">
                         {selectedCourseId && (
-                            <Grid container spacing={1} sx={{ mt: 2 }}>
-                                {quizes
-                                    .filter((quiz) => quiz.activeStatus === 1)
+                            <>
+                                {quizes.filter((quiz) => quiz.activeStatus === 1)
                                     .map((paper: any) => (
-                                        <div key={paper.id} style={{ textAlign: "center", marginBottom: '10px', width: "250px", border: '1px solid #ccc', padding: '5px', borderRadius: '5px', cursor: 'pointer' }}>
+                                        <div key={paper.id} style={{ textAlign: "center", marginBottom: '10px', width: "250px", height:"auto", border: '1px solid #ccc', padding: '5px', borderRadius: '5px', cursor: 'pointer' }}>
                                             <img style={{width: "230px", height: "auto"}} src={paper.imageUrl.replace("dl=0", "raw=1")} alt="" />
                                             <div style={{width: "100%" ,textAlign: "center"}}>{paper.name}</div>
                                             {/* <IconButton
@@ -941,7 +940,7 @@ export default function UserMaintenance() {
                                             </IconButton> */}
                                         </div>
                                     ))}
-                            </Grid>
+                            </>
                         )}
                     </Box>
 
