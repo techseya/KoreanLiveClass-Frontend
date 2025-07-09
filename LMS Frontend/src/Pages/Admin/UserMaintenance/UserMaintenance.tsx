@@ -989,8 +989,8 @@ export default function UserMaintenance() {
 
                                                 {/* Quiz Status Display */}
                                                 {assignedQuiz && (
-                                                    <div style={{ fontSize: "12px", color: "white", marginTop: "4px", position: "absolute", top: "0px", right: "5px", backgroundColor: "#066dfc", padding: "5px 10px", borderRadius: "5px" }}>
-                                                        Status: {assignedQuiz.quizStatus === 1 ? "Assigned" : "Unassigned"}
+                                                    <div style={{ fontSize: "12px", color: "white", marginTop: "4px", position: "absolute", top: "0px", right: "5px", backgroundColor: assignedQuiz.quizStatus === 1 ? "#066dfc" : "#f44336", padding: "5px 10px", borderRadius: "5px" }}>
+                                                        {assignedQuiz.quizStatus === 1 ? "Assigned" : "Unassigned"}
                                                     </div>
                                                 )}
 
