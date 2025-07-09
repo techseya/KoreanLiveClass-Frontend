@@ -9,7 +9,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";
 import { Delete, FilterList, LockReset, PhonelinkErase, Send } from "@mui/icons-material";
 import Dialogbox from "src/Common/Components/DialogBox";
-import { assignCourse, deleteUser, getAlertUsers, getUsers, resetDevice, resetPassword, updateUser } from "src/Services/user_api";
+import { assignCourse, assignQuizes, deleteUser, getAlertUsers, getUsers, resetDevice, resetPassword, updateUser } from "src/Services/user_api";
 import { getAllCourses, getSectionByCourseId, getUsersByCourseId } from "src/Services/course_api";
 import { getCodeList } from "country-list";
 import { getCountryCallingCode, CountryCode } from "libphonenumber-js";
@@ -319,6 +319,24 @@ export default function UserMaintenance() {
             setUsers(res.data.userResponse);
         } catch (error) {
             console.error(error);
+        }
+    }
+
+    const handleAssignQuizesForUsers = async (quizId: any, status: any) => {
+        
+
+        const body = {
+            courseId: selectedCourseId,
+            userId: selectedUserId,
+            quizId: quizId,
+            activeStatus: status
+        }
+
+        try {
+            const response = await assignQuizes(body, token)
+            alert(response.data.message)
+        } catch (error: any) {
+            alert(error.response.message)
         }
     }
 
@@ -956,6 +974,7 @@ export default function UserMaintenance() {
                                                         gap: "5px",
                                                         cursor: "pointer",
                                                     }}
+                                                    onClick={() => handleAssignQuizesForUsers(paper.id, 1)}
                                                 >
                                                     <span role="img" aria-label="unlock">🔓</span> Assign
                                                 </button>
@@ -973,6 +992,7 @@ export default function UserMaintenance() {
                                                         gap: "5px",
                                                         cursor: "pointer",
                                                     }}
+                                                    onClick={() => handleAssignQuizesForUsers(paper.id, 2)}
                                                 >
                                                     <span role="img" aria-label="lock">🔒</span> Unassign
                                                 </button>
