@@ -344,6 +344,7 @@ export default function UserMaintenance() {
         try {
             const response = await assignQuizes(body, token)
             alert(response.data.message)
+            handleGetAssignQuizes(selectedUserId,selectedCourseId)
         } catch (error: any) {
             alert(error.response.message)
         }
@@ -997,45 +998,51 @@ export default function UserMaintenance() {
                                                         gap: "10px",
                                                     }}
                                                 >
-                                                    <button
-                                                        style={{
-                                                            backgroundColor: "#4caf50",
-                                                            color: "#fff",
-                                                            border: "none",
-                                                            borderRadius: "5px",
-                                                            padding: "5px 10px",
-                                                            display: "flex",
-                                                            alignItems: "center",
-                                                            gap: "5px",
-                                                            cursor: "pointer",
-                                                        }}
-                                                        onClick={() => handleAssignQuizesForUsers(paper.id, 1)}
-                                                    >
-                                                        <span role="img" aria-label="unlock">
-                                                            🔓
-                                                        </span>{" "}
-                                                        Assign
-                                                    </button>
 
-                                                    <button
-                                                        style={{
-                                                            backgroundColor: "#e0e0e0",
-                                                            color: "#555",
-                                                            border: "none",
-                                                            borderRadius: "5px",
-                                                            padding: "5px 10px",
-                                                            display: "flex",
-                                                            alignItems: "center",
-                                                            gap: "5px",
-                                                            cursor: "pointer",
-                                                        }}
-                                                        onClick={() => handleAssignQuizesForUsers(paper.id, 2)}
-                                                    >
-                                                        <span role="img" aria-label="lock">
-                                                            🔒
-                                                        </span>{" "}
-                                                        Unassign
-                                                    </button>
+                                                    {assignedQuiz.quizStatus === 1 ? (
+                                                        <button
+                                                            style={{
+                                                                backgroundColor: "#e0e0e0",
+                                                                color: "#555",
+                                                                border: "none",
+                                                                borderRadius: "5px",
+                                                                padding: "5px 10px",
+                                                                display: "flex",
+                                                                alignItems: "center",
+                                                                gap: "5px",
+                                                                cursor: "pointer",
+                                                            }}
+                                                            onClick={() => handleAssignQuizesForUsers(paper.id, 2)}
+                                                        >
+                                                            <span role="img" aria-label="lock">
+                                                                🔒
+                                                            </span>{" "}
+                                                            Unassign
+                                                        </button>
+                                                    ) : (
+                                                        <button
+                                                            style={{
+                                                                backgroundColor: "#4caf50",
+                                                                color: "#fff",
+                                                                border: "none",
+                                                                borderRadius: "5px",
+                                                                padding: "5px 10px",
+                                                                display: "flex",
+                                                                alignItems: "center",
+                                                                gap: "5px",
+                                                                cursor: "pointer",
+                                                            }}
+                                                            onClick={() => handleAssignQuizesForUsers(paper.id, 1)}
+                                                        >
+                                                            <span role="img" aria-label="unlock">
+                                                                🔓
+                                                            </span>{" "}
+                                                            Assign
+                                                        </button>
+                                                    )}
+
+
+
                                                 </div>
                                             </div>
                                         );
