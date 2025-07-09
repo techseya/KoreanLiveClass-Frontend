@@ -344,7 +344,7 @@ export default function UserMaintenance() {
         try {
             const response = await assignQuizes(body, token)
             alert(response.data.message)
-            handleGetAssignQuizes(selectedUserId,selectedCourseId)
+            handleGetAssignQuizes(selectedUserId, selectedCourseId)
         } catch (error: any) {
             alert(error.response.message)
         }
@@ -945,6 +945,10 @@ export default function UserMaintenance() {
                         </Select>
                     </FormControl>
 
+                    {selectedCourseId === "default" && (
+                        <><Typography style={{ width: "100%", height: "50%", display: "flex", alignItems: "center", justifyContent: "center" }} variant="body2" color="text.secondary">Please select a course to view quizzes.</Typography></>
+                    )}
+
                     <Box display="flex" flexWrap="wrap" gap="15px" justifyContent="start" p="15px 0" borderRadius="10px">
                         {selectedCourseId && (
                             <>
@@ -967,6 +971,7 @@ export default function UserMaintenance() {
                                                     display: "flex",
                                                     flexDirection: "column",
                                                     justifyContent: "space-between",
+                                                    position: "relative"
                                                 }}
                                             >
                                                 <img
@@ -984,7 +989,7 @@ export default function UserMaintenance() {
 
                                                 {/* Quiz Status Display */}
                                                 {assignedQuiz && (
-                                                    <div style={{ fontSize: "12px", color: "gray", marginTop: "4px" }}>
+                                                    <div style={{ fontSize: "12px", color: "white", marginTop: "4px", position: "absolute", top: "0px", right: "5px", backgroundColor: "#066dfc", padding: "5px 10px", borderRadius: "5px" }}>
                                                         Status: {assignedQuiz.quizStatus === 1 ? "Assigned" : "Unassigned"}
                                                     </div>
                                                 )}
@@ -999,7 +1004,7 @@ export default function UserMaintenance() {
                                                     }}
                                                 >
 
-                                                    {assignedQuiz.quizStatus === 1 ? (
+                                                    {assignedQuiz && assignedQuiz.quizStatus === 1 ? (
                                                         <button
                                                             style={{
                                                                 backgroundColor: "#e0e0e0",
@@ -1014,10 +1019,7 @@ export default function UserMaintenance() {
                                                             }}
                                                             onClick={() => handleAssignQuizesForUsers(paper.id, 2)}
                                                         >
-                                                            <span role="img" aria-label="lock">
-                                                                🔒
-                                                            </span>{" "}
-                                                            Unassign
+                                                            <span role="img" aria-label="lock">🔒</span> Unassign
                                                         </button>
                                                     ) : (
                                                         <button
@@ -1034,13 +1036,9 @@ export default function UserMaintenance() {
                                                             }}
                                                             onClick={() => handleAssignQuizesForUsers(paper.id, 1)}
                                                         >
-                                                            <span role="img" aria-label="unlock">
-                                                                🔓
-                                                            </span>{" "}
-                                                            Assign
+                                                            <span role="img" aria-label="unlock">🔓</span> Assign
                                                         </button>
                                                     )}
-
 
 
                                                 </div>
