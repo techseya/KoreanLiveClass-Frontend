@@ -918,7 +918,7 @@ export default function UserMaintenance() {
                                 {quizes
                                     .filter((quiz) => quiz.activeStatus === 1)
                                     .map((paper: any) => (
-                                        <div key={paper.id} style={{ textAlign: "center", marginBottom: '10px', width: "250px", border: '1px solid #ccc', padding: '5px', borderRadius: '5px' }}>
+                                        <div key={paper.id} style={{ textAlign: "center", marginBottom: '10px', width: "250px", border: '1px solid #ccc', padding: '5px', borderRadius: '5px', cursor: 'pointer' }}>
                                             <img style={{width: "230px", height: "auto"}} src={paper.imageUrl.replace("dl=0", "raw=1")} alt="" />
                                             <div style={{width: "100%" ,textAlign: "center"}}>{paper.name}</div>
                                             {/* <IconButton
