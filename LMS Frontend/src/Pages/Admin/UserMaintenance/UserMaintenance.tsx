@@ -65,7 +65,7 @@ export default function UserMaintenance() {
     const [quizes, setQuizes] = useState<any[]>([]);
     const [location1, setLocation1] = useState("Sri Lanka");
     const [phoneNo, setPhoneNo] = useState<any>("");
-    const [selectedCourseId, setSelectedCourseId] = useState<any>(null);
+    const [selectedCourseId, setSelectedCourseId] = useState<any>("default");
     const [selectedCourseName, setSelectedCourseName] = useState<any>();
     const [sectionIds, setSectionIds] = useState<any[]>([]);
     const [quizIds, setQuizIds] = useState<any[]>([])
@@ -883,11 +883,10 @@ export default function UserMaintenance() {
                     <Typography variant="h6" mb={2}>Assign Quizes : {editingUser?.userName}</Typography>
 
                     <FormControl fullWidth sx={{ mt: 2 }}>
-                        <InputLabel id="course-select-label">Select Course</InputLabel>
                         <Select
                             labelId="course-select-label"
                             value={selectedCourseId || ""}
-                            label="Select Course"
+                            size="small"
                             onChange={(e) => {
                                 const selectedId = e.target.value;
                                 const selectedCourse = allCourses.find((c: any) => c.id === selectedId);
@@ -904,6 +903,9 @@ export default function UserMaintenance() {
                                 setQuizIds(matchedCourse?.quizIds || []);
                             }}
                         >
+                            <MenuItem disabled value="default">
+                                <em>Select a course</em>
+                            </MenuItem>
                             {allCourses?.map((course: any) => (
                                 <MenuItem key={course.id} value={course.id}>
                                     {course.name}
@@ -915,34 +917,72 @@ export default function UserMaintenance() {
                     <Box display="flex" flexWrap="wrap" gap="15px" justifyContent="start" p="15px 0" borderRadius="10px">
                         {selectedCourseId && (
                             <>
-                                {quizes.filter((quiz) => quiz.activeStatus === 1)
+                                {quizes
+                                    .filter((quiz) => quiz.activeStatus === 1)
                                     .map((paper: any) => (
-                                        <div key={paper.id} style={{ textAlign: "center", marginBottom: '10px', width: "250px", height:"auto", border: '1px solid #ccc', padding: '5px', borderRadius: '5px', cursor: 'pointer' }}>
-                                            <img style={{width: "230px", height: "auto"}} src={paper.imageUrl.replace("dl=0", "raw=1")} alt="" />
-                                            <div style={{width: "100%" ,textAlign: "center"}}>{paper.name}</div>
-                                            {/* <IconButton
-                                                size="small"
-                                                onClick={() => {
-                                                    setQuizModalOpen(true);
-                                                    setSelectedCourseId(course.id);
-                                                    setSelectedUserId(editingUser?.id);
-                                                    setSelectedCourseName(course.name);
-                                                    handleGetQuizes(course.id);
+                                        <div
+                                            key={paper.id}
+                                            style={{
+                                                textAlign: "center",
+                                                marginBottom: "10px",
+                                                width: "250px",
+                                                height: "auto",
+                                                border: "1px solid #ccc",
+                                                padding: "5px",
+                                                borderRadius: "5px",
+                                                cursor: "pointer",
+                                                display: "flex",
+                                                flexDirection: "column",
+                                                justifyContent: "space-between"
+                                            }}
+                                        >
+                                            <img
+                                                style={{ width: "100%", height: "auto", maxHeight: "150px", objectFit: "cover", borderRadius: "5px" }}
+                                                src={paper.imageUrl.replace("dl=0", "raw=1")}
+                                                alt=""
+                                            />
+                                            <div style={{ width: "100%", textAlign: "center" }}>{paper.name}</div>
+                                            <div className="btn-out" style={{ marginTop: "10px", display: "flex", justifyContent: "center", gap: "10px" }}>
+                                                {/* Assign Button */}
+                                                <button
+                                                    style={{
+                                                        backgroundColor: "#4caf50",
+                                                        color: "#fff",
+                                                        border: "none",
+                                                        borderRadius: "5px",
+                                                        padding: "5px 10px",
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        gap: "5px",
+                                                        cursor: "pointer",
+                                                    }}
+                                                >
+                                                    <span role="img" aria-label="unlock">🔓</span> Assign
+                                                </button>
 
-                                                    const matchedCourse = editingUser?.courses?.find(
-                                                        (c: any) => c.id === course.id
-                                                    );
-                                                    setQuizIds(matchedCourse?.quizIds || []);
-                                                }}
-                                                sx={{ ml: 1 }}
-                                            >
-                                                <Send fontSize="small" color="primary" />
-                                            </IconButton> */}
+                                                {/* Unassign Button */}
+                                                <button
+                                                    style={{
+                                                        backgroundColor: "#e0e0e0",
+                                                        color: "#555",
+                                                        border: "none",
+                                                        borderRadius: "5px",
+                                                        padding: "5px 10px",
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        gap: "5px",
+                                                        cursor: "pointer",
+                                                    }}
+                                                >
+                                                    <span role="img" aria-label="lock">🔒</span> Unassign
+                                                </button>
+                                            </div>
                                         </div>
                                     ))}
                             </>
                         )}
                     </Box>
+
 
                 </Box>
             </Modal>
