@@ -912,16 +912,15 @@ export default function UserMaintenance() {
                         </Select>
                     </FormControl>
 
-                            
-                    {selectedCourseId && (
-                        <Grid container spacing={1} sx={{ mt: 2 }}>
-                            {quizes
-                                .filter((quiz) => quiz.activeStatus === 1)
-                                .map((course: any) => (
-                                    <Grid item xs={12} sm={12} key={course.id}>
-                                        <Box display="flex" alignItems="center" justifyContent="space-between" bgcolor="#eef6ff" p="5px 10px" borderRadius="10px">
-                                            <span>{course.name}</span>
-                                            <IconButton
+                    <Box display="flex" flexWrap="wrap" gap="15px" alignItems="center" justifyContent="start" p="5px 10px" borderRadius="10px">
+                        {selectedCourseId && (
+                            <Grid container spacing={1} sx={{ mt: 2 }}>
+                                {quizes
+                                    .filter((quiz) => quiz.activeStatus === 1)
+                                    .map((course: any) => (
+                                        <div key={course.id} style={{ display: 'flex', textAlign: "center", marginBottom: '10px', width: "250px", border: '1px solid #ccc', padding: '5px', borderRadius: '5px' }}>
+                                            <div style={{width: "100%" ,textAlign: "center"}}>{course.name}</div>
+                                            {/* <IconButton
                                                 size="small"
                                                 onClick={() => {
                                                     setQuizModalOpen(true);
@@ -938,12 +937,13 @@ export default function UserMaintenance() {
                                                 sx={{ ml: 1 }}
                                             >
                                                 <Send fontSize="small" color="primary" />
-                                            </IconButton>
-                                        </Box>
-                                    </Grid>
-                                ))}
-                        </Grid>
-                    )}
+                                            </IconButton> */}
+                                        </div>
+                                    ))}
+                            </Grid>
+                        )}
+                    </Box>
+
                 </Box>
             </Modal>
 
