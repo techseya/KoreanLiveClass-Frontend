@@ -65,7 +65,7 @@ export default function UserMaintenance() {
     const [quizes, setQuizes] = useState<any[]>([]);
     const [location1, setLocation1] = useState("Sri Lanka");
     const [phoneNo, setPhoneNo] = useState<any>("");
-    const [selectedCourseId, setSelectedCourseId] = useState<number | null>(null);
+    const [selectedCourseId, setSelectedCourseId] = useState<any>(null);
     const [selectedCourseName, setSelectedCourseName] = useState<any>();
     const [sectionIds, setSectionIds] = useState<any[]>([]);
     const [quizIds, setQuizIds] = useState<any[]>([])
@@ -281,7 +281,7 @@ export default function UserMaintenance() {
         } catch (error) {
             console.error(error);
         }
-    }    
+    }
 
     const handleGetQuizes = async (id: any) => {
         try {
@@ -293,7 +293,7 @@ export default function UserMaintenance() {
     }
 
     const handleAssignQuizes = async () => {
-        
+
     }
 
     const handleAssignSections = async () => {
@@ -870,49 +870,80 @@ export default function UserMaintenance() {
                         top: '50%',
                         left: '50%',
                         transform: 'translate(-50%, -50%)',
-                        width: '50%',
+                        width: '90%',
+                        height: '90vh',
                         maxHeight: '80vh',
+                        overflowY: 'auto',
                         bgcolor: 'background.paper',
                         boxShadow: 24,
                         p: 4,
-                        overflowY: 'auto',
                         borderRadius: '10px'
                     }}
                 >
                     <Typography variant="h6" mb={2}>Assign Quizes : {editingUser?.userName}</Typography>
 
-                    <Grid container spacing={1}>
-                        {editingUser?.courses.map((course: any) => (
-                            <Grid item xs={12} key={course.id}>
-                                <Box display="flex" alignItems="center" justifyContent="space-between" bgcolor="#eef6ff" p="5px 10px" borderRadius="10px">
-                                    <span>{course.name}</span>
-                                    <IconButton
-                                        size="small"
-                                        onClick={() => {
-                                            setQuizModalOpen(true);
-                                            setSelectedCourseId(course.id);
-                                            setSelectedUserId(editingUser?.id);
-                                            setSelectedCourseName(course.name);
-                                            handleGetQuizes(course.id);
+                    <FormControl fullWidth sx={{ mt: 2 }}>
+                        <InputLabel id="course-select-label">Select Course</InputLabel>
+                        <Select
+                            labelId="course-select-label"
+                            value={selectedCourseId || ""}
+                            label="Select Course"
+                            onChange={(e) => {
+                                const selectedId = e.target.value;
+                                const selectedCourse = allCourses.find((c: any) => c.id === selectedId);
+                                if (!selectedCourse) return;
 
-                                            const matchedCourse = editingUser?.courses?.find(
-                                                (c: any) => c.id === course.id
-                                            );
-                                            setQuizIds(matchedCourse?.quizIds || []);
-                                        }}
-                                        sx={{ ml: 1 }}
-                                    >
-                                        <Send fontSize="small" color="primary" />
-                                    </IconButton>
-                                </Box>
-                            </Grid>
-                        ))}
+                                setSelectedCourseId(selectedId);
+                                setSelectedUserId(editingUser?.id);
+                                setSelectedCourseName(selectedCourse.name);
+                                handleGetQuizes(selectedId);
 
-                        {editingUser?.courses.length === 0 && (
-                            <Grid item xs={12} sm={12}>No courses assign to this user. First you need to assign courses.</Grid>
-                        )}
-                    </Grid>
+                                const matchedCourse = editingUser?.courses?.find(
+                                    (c: any) => c.id === selectedId
+                                );
+                                setQuizIds(matchedCourse?.quizIds || []);
+                            }}
+                        >
+                            {allCourses?.map((course: any) => (
+                                <MenuItem key={course.id} value={course.id}>
+                                    {course.name}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
 
+                            
+                    {selectedCourseId && (
+                        <Grid container spacing={1} sx={{ mt: 2 }}>
+                            {quizes
+                                .filter((quiz) => quiz.activeStatus === 1)
+                                .map((course: any) => (
+                                    <Grid item xs={12} sm={12} key={course.id}>
+                                        <Box display="flex" alignItems="center" justifyContent="space-between" bgcolor="#eef6ff" p="5px 10px" borderRadius="10px">
+                                            <span>{course.name}</span>
+                                            <IconButton
+                                                size="small"
+                                                onClick={() => {
+                                                    setQuizModalOpen(true);
+                                                    setSelectedCourseId(course.id);
+                                                    setSelectedUserId(editingUser?.id);
+                                                    setSelectedCourseName(course.name);
+                                                    handleGetQuizes(course.id);
+
+                                                    const matchedCourse = editingUser?.courses?.find(
+                                                        (c: any) => c.id === course.id
+                                                    );
+                                                    setQuizIds(matchedCourse?.quizIds || []);
+                                                }}
+                                                sx={{ ml: 1 }}
+                                            >
+                                                <Send fontSize="small" color="primary" />
+                                            </IconButton>
+                                        </Box>
+                                    </Grid>
+                                ))}
+                        </Grid>
+                    )}
                 </Box>
             </Modal>
 
