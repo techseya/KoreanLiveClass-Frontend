@@ -299,13 +299,6 @@ export default function QuizMaintenance() {
 
     const handleSaveAnswers = async () => {
         setLoading(true)
-        // console.log(quizId);
-        // console.log(qType);
-        // console.log(qTextJson);
-        // console.log(questionImage);
-        // console.log(audioBlob);
-        // console.log(answers);
-        // console.log(correctAnswerIndex + 1);
         console.log(qTextJsonB);
         console.log(JSON.stringify(fillBlankAnswers));
 
