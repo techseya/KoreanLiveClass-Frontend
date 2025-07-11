@@ -2,9 +2,10 @@ import { useEffect, useState } from "react";
 import "../../Common/styles/courses.css";
 import "../../Common/styles/quiz.css";
 import { useTranslation } from "react-i18next";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { TextField, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import { getAllCourses } from "src/Services/course_api";
+import Footer from "src/Layout/Footer";
 
 export default function UserQuizes() {
     const navigate = useNavigate();
@@ -66,6 +67,45 @@ export default function UserQuizes() {
                     </Select>
                 </FormControl>
             </div>
+
+            <div className="cmi">
+
+                <div className="courses-main-inner">
+                    {/* {filteredCourses.length > 0 ? filteredCourses.map((course, index) => (
+                        <Link to={`/course/${course.id}`}
+                            style={{ textDecoration: "none" }}>
+                            <div
+                                className="course-card"
+                                data-aos="fade-up"
+                                data-aos-delay="100"
+                                key={index}
+                                style={{ cursor: "pointer" }}
+                            >
+                                <div className="course-thumbnail">
+                                    {course.thumbnail === null || course.thumbnail === "" ? (<img src={thumb} alt="Course Thumbnail" />)
+                                        : (<img src={course.thumbnail.replace("dl=0", "raw=1")} alt="Course Thumbnail" />)}
+                                    {course.transactionStatus === 1 ?
+                                        (<div className="price">Rs.{(course.price).toFixed(2)}</div>) :
+                                        (<div className="price">FREE</div>)}
+                                </div>
+
+                                <div className="course-info">
+                                    <span className="course-level">{course.level}</span>
+                                    <h3 className="course-title">{course.name}</h3>
+                                </div>
+                            </div>
+                        </Link>
+                    )) : (
+                        <p style={{ textAlign: "center", width: "100%" }}>No courses found.</p>
+                    )} */}
+                </div>
+            </div>
+
+            <div className="space1"></div>
+            <div className="space1"></div>
+            <div className="space1"></div>
+
+            <Footer />
         </div>
     );
 }
