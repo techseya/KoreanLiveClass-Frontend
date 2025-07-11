@@ -935,7 +935,7 @@ export default function UserMaintenance() {
                             }}
                         >
                             <MenuItem disabled value="default">
-                                <em>Select a course</em>
+                                Select a course
                             </MenuItem>
                             {allCourses?.map((course: any) => (
                                 <MenuItem key={course.id} value={course.id}>
@@ -950,7 +950,7 @@ export default function UserMaintenance() {
                     )}
 
                     <Box display="flex" flexWrap="wrap" gap="15px" justifyContent="start" p="15px 0" borderRadius="10px">
-                        {selectedCourseId && (
+                        {selectedCourseId && quizes.length > 0 && (
                             <>
                                 {quizes
                                     .filter((quiz) => quiz.activeStatus === 1)
@@ -967,11 +967,11 @@ export default function UserMaintenance() {
                                                     border: "1px solid #ccc",
                                                     padding: "5px",
                                                     borderRadius: "5px",
-                                                    cursor: "pointer",
                                                     display: "flex",
                                                     flexDirection: "column",
                                                     justifyContent: "space-between",
-                                                    position: "relative"
+                                                    position: "relative",
+                                                    cursor: assignedQuiz?.quizStatus === 1 ? "pointer" : "not-allowed",
                                                 }}
                                             >
                                                 <img
@@ -1049,6 +1049,10 @@ export default function UserMaintenance() {
                             </>
                         )}
                     </Box>
+
+                    {selectedCourseId !== "default" && quizes.length === 0 && (
+                        <Typography style={{ width: "100%", height: "50%", display: "flex", alignItems: "center", justifyContent: "center" }} variant="body2" color="text.secondary">No Quizzes Found</Typography>
+                    )}
 
 
                 </Box>
