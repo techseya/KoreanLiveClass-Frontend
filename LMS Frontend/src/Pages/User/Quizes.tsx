@@ -6,6 +6,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { TextField, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import { getAllCourses } from "src/Services/course_api";
 import Footer from "src/Layout/Footer";
+import { getQuiz } from "src/Services/quiz_api";
+import thumb from "../../Assets/Images/klc-thumb.png"
 
 export default function UserQuizes() {
     const navigate = useNavigate();
@@ -13,6 +15,7 @@ export default function UserQuizes() {
 
     const [courses, setCourses] = useState<any[]>([]);
     const [selectedCourse, setSelectedCourse] = useState("default");
+    const [quizzes, setQuizzes] = useState<any[]>([]);
 
     const token = localStorage.getItem("token");
 
@@ -32,6 +35,16 @@ export default function UserQuizes() {
 
     const handleSelectChange = (event: any) => {
         setSelectedCourse(event.target.value);
+    };
+
+    const handleGetQuizes = async (id: any) => {
+        try {
+            const res = await getQuiz(id);
+            const activeQuizzes = res.data.filter((quiz: any) => quiz.activeStatus === 1);
+            setQuizzes(activeQuizzes);
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     return (
@@ -54,11 +67,18 @@ export default function UserQuizes() {
                         labelId="course-select-label"
                         id="course-select"
                         value={selectedCourse}
-                        onChange={handleSelectChange}
+                        onChange={(e: any) => {
+                            handleSelectChange(e)
+                            if (e.target.value !== "default") {
+                                handleGetQuizes(e.target.value);
+                            } else {
+                                setQuizzes([]);
+                            }
+                        }}
                     >
                         <MenuItem value="default" disabled>
                             Select a course
-                            </MenuItem>
+                        </MenuItem>
                         {courses.map((course) => (
                             <MenuItem key={course.id} value={course.id}>
                                 {course.name}
@@ -71,8 +91,8 @@ export default function UserQuizes() {
             <div className="cmi">
 
                 <div className="courses-main-inner">
-                    {/* {filteredCourses.length > 0 ? filteredCourses.map((course, index) => (
-                        <Link to={`/course/${course.id}`}
+                    {quizzes.length > 0 ? quizzes.map((quiz, index) => (
+                        <Link to={`/quiz/${quiz.id}`}
                             style={{ textDecoration: "none" }}>
                             <div
                                 className="course-card"
@@ -82,22 +102,19 @@ export default function UserQuizes() {
                                 style={{ cursor: "pointer" }}
                             >
                                 <div className="course-thumbnail">
-                                    {course.thumbnail === null || course.thumbnail === "" ? (<img src={thumb} alt="Course Thumbnail" />)
-                                        : (<img src={course.thumbnail.replace("dl=0", "raw=1")} alt="Course Thumbnail" />)}
-                                    {course.transactionStatus === 1 ?
-                                        (<div className="price">Rs.{(course.price).toFixed(2)}</div>) :
-                                        (<div className="price">FREE</div>)}
+                                    {quiz.imageUrl === null || quiz.imageUrl === "" ? (<img src={thumb} alt="Course Thumbnail" />)
+                                        : (<img src={quiz.imageUrl.replace("dl=0", "raw=1")} alt="Course Thumbnail" />)}
+                                    <div className="price">Rs.{(quiz.prize).toFixed(2)}</div>
                                 </div>
 
                                 <div className="course-info">
-                                    <span className="course-level">{course.level}</span>
-                                    <h3 className="course-title">{course.name}</h3>
+                                    <h3 className="course-title">{quiz.name}</h3>
                                 </div>
                             </div>
                         </Link>
                     )) : (
                         <p style={{ textAlign: "center", width: "100%" }}>No courses found.</p>
-                    )} */}
+                    )}
                 </div>
             </div>
 
