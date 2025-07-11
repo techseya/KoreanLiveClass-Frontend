@@ -113,7 +113,7 @@ export default function UserQuizes() {
                             </div>
                         </Link>
                     )) : (
-                        <p style={{ textAlign: "center", width: "100%" }}>No courses found.</p>
+                        <p style={{ textAlign: "center", width: "100%" }}>No Quizess found.</p>
                     )}
                 </div>
             </div>
