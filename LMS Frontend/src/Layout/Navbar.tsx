@@ -32,6 +32,7 @@ export default function Navbar({ children }: Readonly<Props>) {
     const isPrivacy = location.pathname === "/privacy-policy"
     const isTerms = location.pathname === "/terms-services"
     const isProfile = location.pathname === "/profile"
+    const isQuiz = location.pathname === "/quizes";
 
     const token = localStorage.getItem("token")
 
@@ -66,8 +67,8 @@ export default function Navbar({ children }: Readonly<Props>) {
         setMenuOpen(false)
     }
 
-    const handleNavCategories = () => {
-        navigate("/categories")
+    const handleNavQuiz = () => {
+        navigate("/quizes")
     }
 
     const handleNavMyCourses = () => {
@@ -141,11 +142,12 @@ export default function Navbar({ children }: Readonly<Props>) {
 
                     <div className={`nav-links ${menuOpen ? 'active' : ''}`}>
                         <a href="" onClick={handleNavCourses}>{t('Courses')}</a>
-                        {!(isProfile || isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy || isTerms) && <a onClick={handleMenu} href="#korean-books">{t('kbooks')}</a>}
-                        {!(isProfile || isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy || isTerms) && <a onClick={handleMenu} href="#who">{t('who1')}</a>}
-                        {!(isProfile || isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy || isTerms) && <a onClick={handleMenu} href="#us">{t('what')}</a>}
+                        <a href="" onClick={handleNavQuiz}>{t("quiz")}</a>
+                        {!(isQuiz || isProfile || isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy || isTerms) && <a onClick={handleMenu} href="#korean-books">{t('kbooks')}</a>}
+                        {!(isQuiz || isProfile || isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy || isTerms) && <a onClick={handleMenu} href="#who">{t('who1')}</a>}
+                        {!(isQuiz || isProfile || isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy || isTerms) && <a onClick={handleMenu} href="#us">{t('what')}</a>}
                         {visible && (<a href="" onClick={handleNavMyCourses}>{t('myCourses')}</a>)}
-                        {!(isProfile || isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy || isTerms) && <a onClick={handleMenu} href="#contact">{t('Contact Us')}</a>}
+                        {!(isQuiz || isProfile || isCourse || isCourse1 || isReg || isMyCourses || isMyCourse || isCategory || isCategoryC || isPrivacy || isTerms) && <a onClick={handleMenu} href="#contact">{t('Contact Us')}</a>}
 
 
                         <select

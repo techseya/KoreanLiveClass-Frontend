@@ -25,6 +25,7 @@ import NoticeMaintenance from "./Pages/Admin/NoticeMaintenance/NoticeMaintenance
 import Quizes from "./Pages/Admin/QuizMaintenance";
 import Profile from "./Pages/User/Profile";
 import InstructorChat from "./Pages/Admin/Chat/InstructorChat";
+import UserQuizes from "./Pages/User/Quizes";
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -39,10 +40,11 @@ const App: React.FC = () => {
   const isPrivacy = location.pathname === "/privacy-policy"
   const isTerms = location.pathname === "/terms-services"
   const isProfile = location.pathname === "/profile"
+  const isQuiz = location.pathname === "/quizes";
 
   return (
     <>
-      {!isProfile && !isHomePage && !isCourses && !isCategory && !isCourse && !isRegister && !isMyCourses && !isMyCourse && !isCategoryC && !isPrivacy && !isTerms ?(
+      {!isQuiz && !isProfile && !isHomePage && !isCourses && !isCategory && !isCourse && !isRegister && !isMyCourses && !isMyCourse && !isCategoryC && !isPrivacy && !isTerms ?(
         <AdvancedNavbar>
           <Routes>
             <Route path="/dashboard" element={<Dashboard />} />
@@ -72,6 +74,7 @@ const App: React.FC = () => {
             <Route path="/privacy-policy" element={<PrivacyPolicy />} />
             <Route path="/terms-services" element={<Terms />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/quizes" element={<UserQuizes />} />
           </Routes>
         </Navbar>
       )}
