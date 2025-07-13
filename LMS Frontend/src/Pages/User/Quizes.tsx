@@ -9,6 +9,7 @@ import Footer from "src/Layout/Footer";
 import { getQuiz, getQuizById } from "src/Services/quiz_api";
 import thumb from "../../Assets/Images/klc-thumb.png"
 import { GetAssignQuizes } from "src/Services/user_api";
+import QuizModal from "src/Common/Components/QuizModal";
 
 export default function UserQuizes() {
     const navigate = useNavigate();
@@ -21,6 +22,7 @@ export default function UserQuizes() {
     const [checkBoxVisibility, setCheckBoxVisibility] = useState(false);
     const [assignedQuizes, setAssignedQuizes] = useState<any[]>([]);
     const [quiz, setQuiz] = useState<any>(null);
+    const [modalOpen, setModalOpen] = useState(false);
 
     const token = localStorage.getItem("token");
     const id = localStorage.getItem("id")
@@ -63,6 +65,7 @@ export default function UserQuizes() {
         try {
             const res = await getQuizById(id);
             setQuiz(res.data);
+            setModalOpen(true);
         } catch (error) {
             console.error(error);
         }
@@ -79,7 +82,10 @@ export default function UserQuizes() {
 
     return (
         <div className="courses-main-outer">
+
             <div className="courses-header" style={{ textAlign: "center", marginBottom: "1rem" }}>
+                <QuizModal open={modalOpen} onClose={() => setModalOpen(false)} quiz={quiz} buy={myQuizzesOnly} />
+
                 <div className="bg"></div>
                 <h1 style={{ fontSize: "2rem", marginBottom: "0.5rem", zIndex: 10 }}>{t("quiz")}</h1>
 
