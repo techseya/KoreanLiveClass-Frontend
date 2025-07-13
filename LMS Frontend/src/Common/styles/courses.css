@@ -351,6 +351,12 @@
 }
 
 @media (max-width: 769px) {
+
+    .checkbox-out{
+        justify-content: center !important;
+        margin-left: 0 !important;
+    }
+
     .ci {
         display: block !important;
     }

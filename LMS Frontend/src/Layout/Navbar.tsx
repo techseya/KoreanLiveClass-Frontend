@@ -168,7 +168,7 @@ export default function Navbar({ children }: Readonly<Props>) {
                             <div className="user-section">
                                 <img
                                     onClick={handleNavProfile}
-                                    style={{ width: "30px", marginRight: "10px", cursor: 'pointer' }}
+                                    style={{ width: "30px", marginRight: "0px", cursor: 'pointer' }}
                                     src={userIcon}
                                     alt="User"
                                 />
