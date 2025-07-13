@@ -12,6 +12,15 @@ export const getQuiz = async (id:any) => {
     }
 }
 
+export const getQuizById = async (id:any) => {
+    try {
+        const response = await axios.get(api+`quiz/by-id?quizId=${id}`)
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
 export const getQuestions = async (id:any) => {
     try {
         const response = await axios.get(api+`question/by-quizid?quizId=${id}`)

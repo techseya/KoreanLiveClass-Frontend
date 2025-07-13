@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { TextField, FormControl, InputLabel, Select, MenuItem, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { getAllCourses } from "src/Services/course_api";
 import Footer from "src/Layout/Footer";
-import { getQuiz } from "src/Services/quiz_api";
+import { getQuiz, getQuizById } from "src/Services/quiz_api";
 import thumb from "../../Assets/Images/klc-thumb.png"
 import { GetAssignQuizes } from "src/Services/user_api";
 
@@ -20,6 +20,7 @@ export default function UserQuizes() {
     const [myQuizzesOnly, setMyQuizzesOnly] = useState(false);
     const [checkBoxVisibility, setCheckBoxVisibility] = useState(false);
     const [assignedQuizes, setAssignedQuizes] = useState<any[]>([]);
+    const [quiz, setQuiz] = useState<any>(null);
 
     const token = localStorage.getItem("token");
     const id = localStorage.getItem("id")
@@ -57,6 +58,15 @@ export default function UserQuizes() {
             console.error(error);
         }
     };
+
+    const handleGetQuizById = async (id: any) => {
+        try {
+            const res = await getQuizById(id);
+            setQuiz(res.data);
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     const handleGetAssignQuizes = async (courseid: any) => {
         try {
@@ -164,6 +174,9 @@ export default function UserQuizes() {
                                     data-aos-delay="100"
                                     key={index}
                                     style={{ cursor: "pointer" }}
+                                    onClick={() => {
+                                        handleGetQuizById(quiz.quizId);
+                                    }}
                                 >
                                     <div className="course-thumbnail">
                                         {quiz.quizImageUrl === null || quiz.quizImageUrl === "" ? (<img src={thumb} alt="Course Thumbnail" />)
@@ -187,6 +200,9 @@ export default function UserQuizes() {
                                 data-aos-delay="100"
                                 key={index}
                                 style={{ cursor: "pointer" }}
+                                onClick={() => {
+                                    handleGetQuizById(quiz.id);
+                                }}
                             >
                                 <div className="course-thumbnail">
                                     {quiz.imageUrl === null || quiz.imageUrl === "" ? (<img src={thumb} alt="Course Thumbnail" />)
