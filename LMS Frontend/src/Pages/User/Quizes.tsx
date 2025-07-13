@@ -155,12 +155,9 @@ export default function UserQuizes() {
 
 
             <div className="cmi">
-
                 {myQuizzesOnly ? (
                     <div className="courses-main-inner">
                         {assignedQuizes.length > 0 ? assignedQuizes.map((quiz, index) => (
-                            <Link to={`/quiz/${quiz.id}`}
-                                style={{ textDecoration: "none" }}>
                                 <div
                                     className="course-card"
                                     data-aos="fade-up"
@@ -177,7 +174,6 @@ export default function UserQuizes() {
                                         <h3 className="course-title">{quiz.quizName}</h3>
                                     </div>
                                 </div>
-                            </Link>
                         )) : (
                             <p style={{ textAlign: "center", width: "100%" }}>No Purchased Papers found.</p>
                         )}
