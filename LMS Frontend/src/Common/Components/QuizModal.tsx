@@ -5,7 +5,8 @@ import {
   DialogContent,
   IconButton,
   Typography,
-  Box
+  Box,
+  Button
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
@@ -50,9 +51,21 @@ const QuizModal: React.FC<QuizModalProps> = ({ open, onClose, quiz, buy }) => {
         <Typography variant="subtitle2">
           🕒 Duration: {quiz.quizDuration} hour(s)
         </Typography>
-        <Typography variant="subtitle2">
+        {!buy ? (
+            <Typography variant="subtitle2">
           💰 Price: Rs. {quiz.prize.toFixed(2)}
         </Typography>
+        ) : (
+            <Button
+              variant="contained"
+              color="primary"
+            //   onClick={() => window.open(quiz.quizUrl, "_blank")}
+              style={{ marginTop: "1rem" }}
+            >
+              Start Quiz
+            </Button>
+        )}
+        
       </DialogContent>
     </Dialog>
   );
