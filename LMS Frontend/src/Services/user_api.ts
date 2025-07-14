@@ -162,3 +162,16 @@ export const getUser = async (id:any, token: any) => {
         throw error;
     }
 };
+
+export const getUserQuizDetails = async (userId:any, quizId:any, token: any) => {
+    try {
+        const response = await axios.get(`${api}user/user-quiz-details?userId=${userId}&quizId=${quizId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response;
+    } catch (error) {
+        throw error;
+    }
+};

@@ -8,7 +8,7 @@ import { getAllCourses } from "src/Services/course_api";
 import Footer from "src/Layout/Footer";
 import { getQuiz, getQuizById } from "src/Services/quiz_api";
 import thumb from "../../Assets/Images/klc-thumb.png"
-import { GetAssignQuizes } from "src/Services/user_api";
+import { GetAssignQuizes, getUserQuizDetails } from "src/Services/user_api";
 import QuizModal from "src/Common/Components/QuizModal";
 
 export default function UserQuizes() {
@@ -22,6 +22,7 @@ export default function UserQuizes() {
     const [checkBoxVisibility, setCheckBoxVisibility] = useState(false);
     const [assignedQuizes, setAssignedQuizes] = useState<any[]>([]);
     const [quiz, setQuiz] = useState<any>(null);
+    const [userQuizDetails, setUserQuizDetails] = useState<any>(null);
     const [modalOpen, setModalOpen] = useState(false);
 
     const token = localStorage.getItem("token");
@@ -71,6 +72,16 @@ export default function UserQuizes() {
         }
     }
 
+    const handleGetUserQuizDetails = async (quizId: any) => {
+        try {
+            const res = await getUserQuizDetails(id, quizId, token);
+            setUserQuizDetails(res.data);
+            handleGetQuizById(quizId);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     const handleGetAssignQuizes = async (courseid: any) => {
         try {
             const res = await GetAssignQuizes(id, courseid, token)
@@ -84,7 +95,7 @@ export default function UserQuizes() {
         <div className="courses-main-outer">
 
             <div className="courses-header" style={{ textAlign: "center", marginBottom: "1rem" }}>
-                <QuizModal open={modalOpen} onClose={() => setModalOpen(false)} quiz={quiz} buy={myQuizzesOnly} />
+                <QuizModal open={modalOpen} onClose={() => setModalOpen(false)} quiz={quiz} buy={myQuizzesOnly} usedAttempts={userQuizDetails?.attempts} marks={userQuizDetails?.marks} />
 
                 <div className="bg"></div>
                 <h1 style={{ fontSize: "2rem", marginBottom: "0.5rem", zIndex: 10 }}>{t("quiz")}</h1>
@@ -181,7 +192,7 @@ export default function UserQuizes() {
                                     key={index}
                                     style={{ cursor: "pointer" }}
                                     onClick={() => {
-                                        handleGetQuizById(quiz.quizId);
+                                        handleGetUserQuizDetails(quiz.quizId);
                                     }}
                                 >
                                     <div className="course-thumbnail">
@@ -208,6 +219,7 @@ export default function UserQuizes() {
                                 style={{ cursor: "pointer" }}
                                 onClick={() => {
                                     handleGetQuizById(quiz.id);
+                                    setUserQuizDetails(null);
                                 }}
                             >
                                 <div className="course-thumbnail">
