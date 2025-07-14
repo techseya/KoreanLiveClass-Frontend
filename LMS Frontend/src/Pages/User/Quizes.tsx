@@ -95,7 +95,7 @@ export default function UserQuizes() {
         <div className="courses-main-outer">
 
             <div className="courses-header" style={{ textAlign: "center", marginBottom: "1rem" }}>
-                <QuizModal open={modalOpen} onClose={() => setModalOpen(false)} quiz={quiz} buy={myQuizzesOnly} usedAttempts={userQuizDetails?.attempts} marks={userQuizDetails?.marks} />
+                <QuizModal open={modalOpen} onClose={() => setModalOpen(false)} quiz={quiz} buy={myQuizzesOnly} usedAttempts={userQuizDetails?.attempts} marks={userQuizDetails?.marks} userId={id} quizId={quiz?.id} />
 
                 <div className="bg"></div>
                 <h1 style={{ fontSize: "2rem", marginBottom: "0.5rem", zIndex: 10 }}>{t("quiz")}</h1>

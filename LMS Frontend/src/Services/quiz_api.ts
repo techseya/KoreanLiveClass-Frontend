@@ -30,6 +30,15 @@ export const getQuestions = async (id:any) => {
     }
 }
 
+export const getQuestionsForUser = async (id:any, userId:any) => {
+    try {
+        const response = await axios.get(api+`question?quizId=${id}&userType=1&userId=${userId}`)
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
 export const getAnswer = async (id:any) => {
     try {
         const response = await axios.get(api+`question/by-id?questionId=${id}`)

@@ -20,9 +20,11 @@ interface QuizModalProps {
     buy: boolean;
     usedAttempts?: number;
     marks?: number;
+    userId?: any;
+    quizId?: any;
 }
 
-const QuizModal: React.FC<QuizModalProps> = ({ open, onClose, quiz, buy, usedAttempts, marks }) => {
+const QuizModal: React.FC<QuizModalProps> = ({ open, onClose, quiz, buy, usedAttempts, marks,userId,quizId }) => {
     const { t } = useTranslation();
     if (!quiz) return null;
 
@@ -82,7 +84,9 @@ const QuizModal: React.FC<QuizModalProps> = ({ open, onClose, quiz, buy, usedAtt
                             className="q-info"
                             color="primary"
                             disabled={(usedAttempts ?? 0) >= quiz.attemptLimit}
-                            //   onClick={() => window.open(quiz.quizUrl, "_blank")}
+                            onClick={() => {
+                                alert(userId && quizId ? `Starting quiz for User ID: ${userId} and Quiz ID: ${quizId}` : "Starting quiz");
+                            }}
                         >
                             {t("start")}
                         </Button>
