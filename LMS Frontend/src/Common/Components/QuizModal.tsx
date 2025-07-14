@@ -11,6 +11,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import { AccessAlarm } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
+import "../styles/quiz.css"
 
 interface QuizModalProps {
     open: boolean;
@@ -54,30 +55,31 @@ const QuizModal: React.FC<QuizModalProps> = ({ open, onClose, quiz, buy, usedAtt
                     <AccessAlarm /> Duration: {quiz.quizDuration} hour(s)
                 </Typography>
 
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: "space-between", margin: '1rem 0' }}>
+                <div className="quiz-info-outer" style={{ display: 'flex', alignItems: 'center', justifyContent: "space-between", margin: '1rem 0', flex: "wrap" }}>
                     {usedAttempts === undefined && (
-                        <Typography variant="subtitle2">
+                        <Typography className="q-info" variant="subtitle2">
                             🎯 Attempt Limit: {quiz.attemptLimit}
                         </Typography>
                     )}
                     {usedAttempts !== undefined && (
-                        <Typography variant="subtitle2">
+                        <Typography className="q-info" variant="subtitle2">
                             📊 Used Attempts: {usedAttempts} / {quiz.attemptLimit}
                         </Typography>
                     )}
 
                     {marks !== undefined && (
-                        <Typography variant="subtitle2">
+                        <Typography className="q-info" variant="subtitle2">
                             🏆 Marks: {marks}%
                         </Typography>
                     )}
                     {!buy ? (
-                        <Typography variant="subtitle2">
+                        <Typography className="q-info" variant="subtitle2">
                             💰 Price: Rs. {quiz.prize.toFixed(2)}
                         </Typography>
                     ) : (
                         <Button
                             variant="contained"
+                            className="q-info"
                             color="primary"
                             disabled={(usedAttempts ?? 0) >= quiz.attemptLimit}
                             //   onClick={() => window.open(quiz.quizUrl, "_blank")}

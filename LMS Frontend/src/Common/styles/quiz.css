@@ -42,3 +42,15 @@
     padding: 10px 15px;
     position: relative;
 }
+
+@media (max-width: 426px) {
+    .quiz-info-outer{
+        display: block !important;
+    }
+
+    .q-info{
+        width: 100% !important;
+        text-align: center !important;
+        margin: 5px 0 !important;
+    }
+}
