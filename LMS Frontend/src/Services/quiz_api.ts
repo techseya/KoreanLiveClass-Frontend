@@ -117,3 +117,12 @@ export const deleteQuestion = async (id:any) => {
         throw error;
     }
 }
+
+export const submitQuiz = async (body:any) => {
+    try {
+        const response = await axios.post(api+`question/validate`,body)
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
