@@ -9,6 +9,17 @@
     width: 100%;
 }
 
+.warning-outer{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    background-color: rgba(255, 213, 0, 0.215);
+    border-radius: 5px;
+    margin: 20px 0 5px 0;
+}
+
 .q-inner{
     width: 30%;
     display: flex;

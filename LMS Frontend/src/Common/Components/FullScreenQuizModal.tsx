@@ -21,6 +21,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import MenuIcon from "@mui/icons-material/Menu";
 import { getQuestionsForUser, submitQuiz } from "src/Services/quiz_api";
 import "../styles/quiz.css"; // Adjust path if needed
+import { useTranslation } from "react-i18next";
 
 interface FullScreenQuizModalProps {
     open: boolean;
@@ -45,6 +46,7 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
     const [answers, setAnswers] = useState<Record<number, any>>({});
     const [timeLeft, setTimeLeft] = useState(duration * 60 * 3600);
     const [mobileSummaryOpen, setMobileSummaryOpen] = useState(false);
+    const { t } = useTranslation();
 
     const isSmall = useMediaQuery("(max-width:768px)");
 
@@ -123,6 +125,37 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
         ));
     };
 
+    useEffect(() => {
+        const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+            e.preventDefault();
+            e.returnValue = ""; // triggers browser warning
+        };
+
+        if (open) {
+            window.addEventListener("beforeunload", handleBeforeUnload);
+        }
+
+        return () => {
+            window.removeEventListener("beforeunload", handleBeforeUnload);
+        };
+    }, [open]);
+
+    useEffect(() => {
+        if (!open) return;
+
+        const blockBack = () => {
+            window.history.pushState(null, "", window.location.href);
+        };
+
+        blockBack(); // push initial
+        window.addEventListener("popstate", blockBack);
+
+        return () => {
+            window.removeEventListener("popstate", blockBack);
+        };
+    }, [open]);
+
+
     const currentQuestion = questions[currentIndex];
 
     const getSelectedIndex = (q: any, selected: string) => {
@@ -173,13 +206,13 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
             <DialogTitle sx={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "space-between", backgroundColor: "black", color: "white", padding: "16px 24px" }}>
                 {name || "Quiz"}
                 <div style={{ display: "flex", alignItems: "center", gap: "16px", marginRight: "35px" }}>
-                    <Typography style={{color: "white", fontSize: "15px"}} variant="subtitle2" color="text.secondary">
-                    ⏳ Time Left: {formatTime(timeLeft)}
-                </Typography>
-                <Button
+                    <Typography style={{ color: "white", fontSize: "15px" }} variant="subtitle2" color="text.secondary">
+                        ⏳ Time Left: {formatTime(timeLeft)}
+                    </Typography>
+                    <Button
                         variant="contained"
                         color="primary"
-                        
+
                         onClick={() => {
                             handleSubmit();
                             setMobileSummaryOpen(false);
@@ -188,7 +221,7 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
                         Submit Quiz
                     </Button>
                 </div>
-                
+
                 <IconButton
                     aria-label="close"
                     onClick={onClose}
@@ -206,9 +239,17 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
                 ) : questions.length === 0 ? (
                     <Typography>No questions available.</Typography>
                 ) : (
-                    <Grid container spacing={2}>
+                    <Grid container spacing={1}>
+                        <div className="warning-outer">
+                            <div className="">
+                                <p>
+                                    ⚠️ {t("warning")}
+                                </p>
+                            </div>
+
+                        </div>
                         {/* Main Quiz Area */}
-                        <Grid item xs={12} md={12} sx={{ overflowY: "auto", maxHeight: "calc(100vh - 100px)" }}>
+                        <Grid item xs={12} md={12} sx={{ overflowY: "auto", maxHeight: "calc(100vh - 200px)" }}>
                             <Box>
                                 <Typography variant="h6" mt={2}>
                                     Q{currentIndex + 1}.{" "}
@@ -223,15 +264,8 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
                                     </Typography>
                                 )}
 
-                                {currentQuestion.imageUrl && (
-                                    <img
-                                        src={currentQuestion.imageUrl.replace("dl=0", "raw=1")}
-                                        alt="Question"
-                                        style={{ maxWidth: "100%", borderRadius: 8, marginTop: 10 }}
-                                    />
-                                )}
-
-                                {currentQuestion.audioUrl && (
+                                <Grid container mt={1} mb={1}>
+                                    {currentQuestion.audioUrl && (
                                     <audio controls style={{ marginTop: 10 }}>
                                         <source
                                             src={currentQuestion.audioUrl.replace("dl=0", "raw=1")}
@@ -240,7 +274,18 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
                                     </audio>
                                 )}
 
-                                {/* MCQ Options */}
+                                </Grid>
+                                
+
+                                {currentQuestion.imageUrl && (
+                                    <img
+                                        src={currentQuestion.imageUrl.replace("dl=0", "raw=1")}
+                                        alt="Question"
+                                        style={{ maxWidth: "70%", minWidth: "280px", borderRadius: 8, marginTop: 10 }}
+                                    />
+                                )}
+
+,                                {/* MCQ Options */}
                                 {!isFillInTheBlank(currentQuestion) && (
                                     <RadioGroup
                                         name={`q-${currentQuestion.id}`}
@@ -263,7 +308,7 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
                                 )}
 
                                 {/* Pagination Controls */}
-                                <Box mt={3} display="flex" justifyContent="space-between" gap={2} flexWrap="wrap">
+                                <Box mt={3} mb={2} display="flex" justifyContent="space-between" gap={2} flexWrap="wrap">
                                     <Button
                                         variant="outlined"
                                         onClick={() => setCurrentIndex(0)}

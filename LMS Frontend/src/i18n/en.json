@@ -147,6 +147,7 @@
   "changeP": "Change Password",
   "chat": "Messages",
   "settings": "Settings",
-  "start": "Start"
+  "start": "Start",
+  "warning": "Do not refresh the page, press the back button, or close the browser tab/window during the exam. If you do, your exam will be automatically submitted and your attempt will be counted."
 }
   
