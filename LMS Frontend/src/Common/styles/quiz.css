@@ -3,6 +3,12 @@
     display: flex;
 }
 
+.quiz-summary-outer{
+    position: absolute;
+    background-color: white;
+    width: 100%;
+}
+
 .q-inner{
     width: 30%;
     display: flex;

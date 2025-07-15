@@ -20,6 +20,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import MenuIcon from "@mui/icons-material/Menu";
 import { getQuestionsForUser, submitQuiz } from "src/Services/quiz_api";
+import "../styles/quiz.css"; // Adjust path if needed
 
 interface FullScreenQuizModalProps {
     open: boolean;
@@ -169,18 +170,35 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
 
     return (
         <Dialog fullScreen open={open} onClose={onClose}>
-            <DialogTitle sx={{ position: "relative" }}>
+            <DialogTitle sx={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "space-between", backgroundColor: "black", color: "white", padding: "16px 24px" }}>
                 {name || "Quiz"}
+                <div style={{ display: "flex", alignItems: "center", gap: "16px", marginRight: "35px" }}>
+                    <Typography style={{color: "white", fontSize: "15px"}} variant="subtitle2" color="text.secondary">
+                    ⏳ Time Left: {formatTime(timeLeft)}
+                </Typography>
+                <Button
+                        variant="contained"
+                        color="primary"
+                        
+                        onClick={() => {
+                            handleSubmit();
+                            setMobileSummaryOpen(false);
+                        }}
+                    >
+                        Submit Quiz
+                    </Button>
+                </div>
+                
                 <IconButton
                     aria-label="close"
                     onClick={onClose}
-                    sx={{ position: "absolute", right: 16, top: 16 }}
+                    sx={{ position: "absolute", right: 16, top: 10 }}
                 >
-                    <CloseIcon />
+                    <CloseIcon sx={{ color: "white" }} />
                 </IconButton>
             </DialogTitle>
 
-            <DialogContent>
+            <DialogContent sx={{ padding: "24px", overflowY: "hidden" }}>
                 {loading ? (
                     <Box mt={4} textAlign="center">
                         <CircularProgress />
@@ -190,12 +208,8 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
                 ) : (
                     <Grid container spacing={2}>
                         {/* Main Quiz Area */}
-                        <Grid item xs={12} md={9}>
+                        <Grid item xs={12} md={12} sx={{ overflowY: "auto", maxHeight: "calc(100vh - 100px)" }}>
                             <Box>
-                                <Typography variant="subtitle2" color="text.secondary">
-                                    ⏳ Time Left: {formatTime(timeLeft)}
-                                </Typography>
-
                                 <Typography variant="h6" mt={2}>
                                     Q{currentIndex + 1}.{" "}
                                     {isFillInTheBlank(currentQuestion)
@@ -285,8 +299,8 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
                         </Grid>
 
                         {/* Right Sidebar (Desktop Only) */}
-                        {!isSmall && (
-                            <Grid item xs={12} md={3}>
+                        {/* {!isSmall && (
+                            <Grid item xs={12} md={3} sx={{ backgroundColor: "#f5f5f5", padding: 2, height: "100vh", overflowY: "auto", marginTop: "16px", borderLeft: "2px solid #ddd" }}>
                                 <Typography variant="subtitle1" gutterBottom>
                                     Summary
                                 </Typography>
@@ -316,74 +330,10 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
                                     Submit Quiz
                                 </Button>
                             </Grid>
-                        )}
+                        )} */}
                     </Grid>
                 )}
             </DialogContent>
-
-            {/* Floating Summary Button (Mobile Only) */}
-            {isSmall && (
-                <Box
-                    sx={{
-                        position: "fixed",
-                        bottom: 16,
-                        right: 16,
-                        zIndex: 1300
-                    }}
-                >
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        startIcon={<MenuIcon />}
-                        onClick={() => setMobileSummaryOpen(true)}
-                    >
-                        Summary
-                    </Button>
-                </Box>
-            )}
-
-            {/* Swipeable Drawer for Summary (Mobile Only) */}
-            <SwipeableDrawer
-                anchor="bottom"
-                open={mobileSummaryOpen}
-                onClose={() => setMobileSummaryOpen(false)}
-                onOpen={() => { }}
-            >
-                <Box p={2}>
-                    <Typography variant="h6" mb={2}>Summary</Typography>
-                    <Box display="flex" flexWrap="wrap" gap={1}>
-                        {questions.map((q, idx) => {
-                            const answered = answers[q.id] !== undefined;
-                            return (
-                                <Button
-                                    key={q.id}
-                                    size="small"
-                                    variant={idx === currentIndex ? "contained" : "outlined"}
-                                    color={answered ? "success" : "error"}
-                                    onClick={() => {
-                                        setCurrentIndex(idx);
-                                        setMobileSummaryOpen(false);
-                                    }}
-                                >
-                                    {idx + 1}
-                                </Button>
-                            );
-                        })}
-                    </Box>
-                    <Divider sx={{ my: 2 }} />
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        fullWidth
-                        onClick={() => {
-                            handleSubmit();
-                            setMobileSummaryOpen(false);
-                        }}
-                    >
-                        Submit Quiz
-                    </Button>
-                </Box>
-            </SwipeableDrawer>
         </Dialog>
     );
 };
