@@ -144,6 +144,7 @@ const QuizModal: React.FC<QuizModalProps> = ({
         open={startModalOpen}
         onClose={() => setStartModalOpen(false)}
         userId={userId}
+        name={quiz.name}
         quizId={quizId}
         duration={quiz.quizDuration}
       />

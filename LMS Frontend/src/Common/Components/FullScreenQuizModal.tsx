@@ -25,6 +25,7 @@ interface FullScreenQuizModalProps {
   open: boolean;
   onClose: () => void;
   userId: any;
+  name?: string;
   quizId: any;
   duration?: any; // hours
 }
@@ -33,6 +34,7 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
   open,
   onClose,
   userId,
+  name,
   quizId,
   duration
 }) => {
@@ -131,7 +133,7 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
   return (
     <Dialog fullScreen open={open} onClose={onClose}>
       <DialogTitle sx={{ position: "relative" }}>
-        Quiz Attempt
+        {name || "Quiz"}
         <IconButton
           aria-label="close"
           onClick={onClose}
