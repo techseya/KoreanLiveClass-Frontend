@@ -22,6 +22,8 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { getQuestionsForUser, submitQuiz, updateAttempt } from "src/Services/quiz_api";
 import "../styles/quiz.css"; // Adjust path if needed
 import { useTranslation } from "react-i18next";
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import { ArrowForwardIos, ArrowForwardIosOutlined } from "@mui/icons-material";
 
 interface FullScreenQuizModalProps {
   open: boolean;
@@ -47,6 +49,7 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
   const [timeLeft, setTimeLeft] = useState(duration * 60 * 3600);
   const [mobileSummaryOpen, setMobileSummaryOpen] = useState(false);
   const { t } = useTranslation();
+  const [warningVisible, setWarningVisible] = useState(true);
 
   const isSmall = useMediaQuery("(max-width:768px)");
 
@@ -202,16 +205,18 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
 
   return (
     <Dialog fullScreen open={open} onClose={onClose}>
-      <DialogTitle sx={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "space-between", backgroundColor: "black", color: "white", padding: "16px 24px" }}>
-        {name || "Quiz"}
-        <div style={{ display: "flex", alignItems: "center", gap: "16px", marginRight: "5px" }}>
-          <Typography style={{ color: "white", fontSize: "15px" }} variant="subtitle2" color="text.secondary">
+      <DialogTitle className="" sx={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "space-between", backgroundColor: "black", color: "white", padding: "16px 24px", flexWrap: "wrap" }}>
+        <div className="submit-btn-q1">
+          <Typography className="submit-btn-q" style={{ color: "white", fontSize: "15px" }} variant="subtitle2" color="text.secondary">
             ⏳ Time Left: {formatTime(timeLeft)}
           </Typography>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: "16px", marginRight: "5px" }}>
+
           <Button
             variant="contained"
             color="primary"
-
+            className="submit-btn-q"
             onClick={() => {
               handleSubmit();
               setMobileSummaryOpen(false);
@@ -231,14 +236,28 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
           <Typography>No questions available.</Typography>
         ) : (
           <Grid container spacing={1}>
-            <div className="warning-outer">
+            <div style={{ textAlign: "center", width: "100%", marginTop: "20px" }} className="quiz-title-outer">
+              <Typography variant="h5" className="quiz-title">
+                {name || "Quiz"}
+              </Typography>
+            </div>
+            {warningVisible && (
+              <div className="warning-outer">
               <div className="">
                 <p>
                   ⚠️ {t("warning")}
                 </p>
               </div>
+              <IconButton
+                aria-label="close"
+                
+                onClick={() => setWarningVisible(false)}
+                sx={{ position: "absolute", right: 0, top: 0, width: "30px", height: "30px", padding: 0 }}
+              >
+                <CloseIcon />
+              </IconButton>
             </div>
-
+            )}            
             <div className="summary-outer">
               <Box display="flex" flexWrap="wrap" gap={1} sx={{ overflow: "hidden" }}>
                 {questions.map((q, idx) => {
@@ -295,7 +314,7 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
                   />
                 )}
 
-                ,                                {/* MCQ Options */}
+                                                {/* MCQ Options */}
                 {!isFillInTheBlank(currentQuestion) && (
                   <RadioGroup
                     name={`q-${currentQuestion.id}`}
@@ -318,32 +337,36 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
                 )}
 
                 {/* Pagination Controls */}
-                <Box mt={3} mb={50} display="flex" justifyContent="space-between" gap={2} flexWrap="wrap">
+                <Box mt={3} mb={50} display="flex" justifyContent="center" gap={2} flexWrap="wrap">
                   <Button
-                    variant="outlined"
+                  style={{ minWidth: "30px", fontSize: "10px" }}
+                    variant="contained"
                     onClick={() => setCurrentIndex(0)}
                     disabled={currentIndex === 0}
                   >
                     First
                   </Button>
                   <Button
-                    variant="outlined"
+                  style={{ minWidth: "20px", fontSize: "10px" }}
+                    variant="contained"
                     onClick={() => setCurrentIndex((prev) => Math.max(prev - 1, 0))}
                     disabled={currentIndex === 0}
                   >
-                    Previous
+                    <ArrowBackIosNewIcon style={{fontSize: "12px"}} />
                   </Button>
                   <Button
-                    variant="outlined"
+                  style={{ minWidth: "20px", fontSize: "10px" }}
+                    variant="contained"
                     onClick={() =>
                       setCurrentIndex((prev) => Math.min(prev + 1, questions.length - 1))
                     }
                     disabled={currentIndex === questions.length - 1}
                   >
-                    Next
+                    <ArrowForwardIos  style={{fontSize: "12px"}}/>
                   </Button>
                   <Button
-                    variant="outlined"
+                  style={{ minWidth: "30px", fontSize: "10px" }}
+                    variant="contained"
                     onClick={() => setCurrentIndex(questions.length - 1)}
                     disabled={currentIndex === questions.length - 1}
                   >
