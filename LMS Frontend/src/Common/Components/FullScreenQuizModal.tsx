@@ -204,7 +204,7 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
         <Dialog fullScreen open={open} onClose={onClose}>
             <DialogTitle sx={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "space-between", backgroundColor: "black", color: "white", padding: "16px 24px" }}>
                 {name || "Quiz"}
-                <div style={{ display: "flex", alignItems: "center", gap: "16px", marginRight: "35px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "16px", marginRight: "5px" }}>
                     <Typography style={{ color: "white", fontSize: "15px" }} variant="subtitle2" color="text.secondary">
                         ⏳ Time Left: {formatTime(timeLeft)}
                     </Typography>
@@ -220,14 +220,6 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
                         Submit Quiz
                     </Button>
                 </div>
-
-                <IconButton
-                    aria-label="close"
-                    onClick={onClose}
-                    sx={{ position: "absolute", right: 16, top: 10 }}
-                >
-                    <CloseIcon sx={{ color: "white" }} />
-                </IconButton>
             </DialogTitle>
 
             <DialogContent sx={{ padding: "24px", overflowY: "hidden" }}>
