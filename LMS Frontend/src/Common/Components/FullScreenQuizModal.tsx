@@ -318,7 +318,7 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
                 )}
 
                 {/* Pagination Controls */}
-                <Box mt={3} mb={4} display="flex" justifyContent="space-between" gap={2} flexWrap="wrap">
+                <Box mt={3} mb={50} display="flex" justifyContent="space-between" gap={2} flexWrap="wrap">
                   <Button
                     variant="outlined"
                     onClick={() => setCurrentIndex(0)}
