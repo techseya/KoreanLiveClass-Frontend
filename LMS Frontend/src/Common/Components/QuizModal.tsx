@@ -13,6 +13,7 @@ import { AccessAlarm } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 import FullScreenQuizModal from "./FullScreenQuizModal"; // Adjust path if needed
 import "../styles/quiz.css";
+import { updateAttempt } from "src/Services/quiz_api";
 
 interface QuizModalProps {
   open: boolean;
@@ -37,6 +38,21 @@ const QuizModal: React.FC<QuizModalProps> = ({
 }) => {
   const { t } = useTranslation();
   const [startModalOpen, setStartModalOpen] = useState(false);
+
+  const handleUpdateAttempt = async () => {
+    const payload = {
+      quizId,
+      userId,
+    }
+
+    try {
+      const res = await updateAttempt(payload);
+    } catch (error) {
+      console.error("Error updating attempt:", error);
+      alert("Error updating attempt. Please try again.");
+
+    }
+  }
 
   if (!quiz) return null;
 
@@ -130,6 +146,7 @@ const QuizModal: React.FC<QuizModalProps> = ({
                 disabled={(usedAttempts ?? 0) >= quiz.attemptLimit}
                 onClick={() => {
                   setStartModalOpen(true);
+                  handleUpdateAttempt();
                 }}
               >
                 {t("start")}

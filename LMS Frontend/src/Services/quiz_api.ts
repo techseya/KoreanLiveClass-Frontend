@@ -126,3 +126,12 @@ export const submitQuiz = async (body:any) => {
         throw error;
     }
 }
+
+export const updateAttempt = async (body:any) => {
+    try {
+        const response = await axios.post(api+`question/attempt`,body)
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}

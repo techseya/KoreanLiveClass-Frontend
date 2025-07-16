@@ -19,7 +19,7 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import MenuIcon from "@mui/icons-material/Menu";
-import { getQuestionsForUser, submitQuiz } from "src/Services/quiz_api";
+import { getQuestionsForUser, submitQuiz, updateAttempt } from "src/Services/quiz_api";
 import "../styles/quiz.css"; // Adjust path if needed
 import { useTranslation } from "react-i18next";
 
@@ -199,7 +199,6 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
             alert("Error submitting quiz. Please try again.");
         }
     };
-
 
     return (
         <Dialog fullScreen open={open} onClose={onClose}>
