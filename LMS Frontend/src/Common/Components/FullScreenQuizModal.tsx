@@ -89,11 +89,15 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
     }
   };
 
-  const formatTime = (seconds: number) => {
-    const m = Math.floor(seconds / 60);
-    const s = seconds % 60;
-    return `${m}:${s < 10 ? "0" : ""}${s}`;
-  };
+const formatTime = (seconds: number) => {
+  const h = Math.floor(seconds / 3600);
+  const m = Math.floor((seconds % 3600) / 60);
+  const s = seconds % 60;
+
+  const pad = (n: number) => (n < 10 ? "0" + n : n);
+
+  return `${pad(h)}:${pad(m)}:${pad(s)}`;
+};
 
   const isFillInTheBlank = (q: any) => {
     const { answer1, answer2, answer3, answer4 } = q.answer;
