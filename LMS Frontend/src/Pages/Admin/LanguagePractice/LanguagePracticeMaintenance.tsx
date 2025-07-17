@@ -2,7 +2,10 @@ import {
     Paper, IconButton, Box, Typography, TextField,
     Grid, FormControl, InputLabel, Select, MenuItem, Button,
     Backdrop,
-    CircularProgress
+    CircularProgress,
+    StepLabel,
+    Stepper,
+    Step
 } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
@@ -24,9 +27,9 @@ import React from "react";
 import "../../../Common/styles/quiz.css"
 import { RadioGroup, FormControlLabel, Radio } from "@mui/material";
 import { AudioRecorder } from "src/Common/Components/AudioRecorder";
-import { get } from "lodash";
+import { get, set } from "lodash";
 import { t } from "i18next";
-import { deleteLanguagePractice, getLanguagePractices, updateLanguagePractice } from "src/Services/lang_practice_api";
+import { deleteLanguagePractice, getLanguagePracticeQuestions, getLanguagePractices, updateLanguagePractice } from "src/Services/lang_practice_api";
 import { h } from "framer-motion/dist/types.d-B50aGbjN";
 
 function CustomNoRowsOverlay() {
@@ -72,9 +75,31 @@ export default function LanguagePracticeMaintenance() {
     const [imageUrl, setImageUrl] = useState("");
     const [updateBtnVisible, setUpdateBtnVisible] = useState(false)
     const [id, setId] = useState("")
-    const [questionId, setQuestionId] = useState("")
+    const [stepComponent, setStepComponent] = useState<any>(1);
+
+    const steps = ["Select Language", "Add Practice Items", "Review & Submit"];
 
     const token = localStorage.getItem("token") || "";
+
+    const [activeStep, setActiveStep] = useState(0);
+
+    const getStepContent = (step: number) => {
+        if (step === 0) {
+            setStepComponent(1);
+        } else if (step === 1) {
+            setStepComponent(2);
+        } else if (step === 2) {
+            setStepComponent(3);
+        }
+    };
+
+    const handleNext = () => {
+        setActiveStep((prev) => prev + 1);
+    };
+
+    const handleBack = () => {
+        setActiveStep((prev) => prev - 1);
+    };
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
@@ -161,7 +186,7 @@ export default function LanguagePracticeMaintenance() {
 
     const handleGetQuestions = async (id: any) => {
         try {
-            const res = await getQuestions(id);
+            const res = await getLanguagePracticeQuestions(id, token);
             setQuestions(res.data);
         } catch (error) {
             console.error(error);
@@ -489,303 +514,37 @@ export default function LanguagePracticeMaintenance() {
                             <CloseIcon />
                         </IconButton>
                         <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                            Add Quiz Content
+                            Add Language Practice Content
                         </Typography>
                     </Toolbar>
                 </AppBar>
                 <DialogContent>
-                    <div className="q-outer">
-                        <div className="q-inner">
-                            <div className="q-content-highlight-outer">
-                                {questions.length > 0 ? (
-                                    <Grid container spacing={2}>
-                                        {questions.map((question, index) => (
-                                            <Grid item xs={12} key={index}>
-                                                <Paper elevation={2} sx={{ padding: 2 }} onClick={() => handleQuestion(question)}>
-                                                    <Typography variant="h6">{`Question ${index + 1}: ${question.questionType === 1 ? 'MCQ' : 'Fill In The Blanks'}`}</Typography>
-                                                    <Typography style={{ fontSize: "13px" }} variant="body1">{`Type: ${question.questionText.field01.length > 50 ? `${question.questionText.field01.substring(0, 50)}...` : `${question.questionText.field01}`}`}</Typography>
-                                                </Paper>
-                                            </Grid>
-                                        ))}
-                                    </Grid>
-                                ) : (
-                                    <Typography variant="body1">No questions available</Typography>
-                                )}
-                            </div>
-                        </div>
-                        <div className="q-inner1">
-                            <div className="q-content-outer">
-                                <div className="reset-btn-outer">
-                                    <Button
-                                        className="reset-btn"
-                                        variant="contained"
-                                        color="primary"
-                                        onClick={(e) => {
-                                            handleReset()
-                                            setUpdateBtnVisible(false)
-                                        }}
-                                    >
-                                        Reset
-                                    </Button>
-                                </div>
-                                <Grid container spacing={2}>
-                                    <Grid item xs={12} sm={12}>
-                                        <FormControl component="fieldset">
-                                            <Typography variant="subtitle1" gutterBottom>
-                                                Question Type
-                                            </Typography>
-                                            <RadioGroup
-                                                row
-                                                value={qType}
-                                                onChange={(e) => {
-                                                    setQType(Number(e.target.value))
-                                                    handleClearFields();
-                                                }}
-                                            >
-                                                <FormControlLabel value={1} control={<Radio />} label="MCQ" />
-                                                <FormControlLabel value={2} control={<Radio />} label="Fill In The Blanks" />
-                                            </RadioGroup>
-                                        </FormControl>
-                                    </Grid>
-                                    <Grid item xs={12}>
-                                        <Typography variant="subtitle1">Question Text Fields</Typography>
-                                    </Grid>
-                                    {qType === 1 && (
-                                        <>
-                                            {qTextFields.map((field, index) => (
-                                                <Grid item xs={12} sm={12} key={index} container spacing={1} alignItems="center">
-                                                    <Grid item xs={3}>
-                                                        <TextField
-                                                            label="Field Name"
-                                                            fullWidth
-                                                            size="small"
-                                                            disabled
-                                                            value={field.key}
-                                                            onChange={(e) => handleQTextChange(index, "key", e.target.value)}
-                                                        />
-                                                    </Grid>
-                                                    <Grid item xs={8}>
-                                                        <TextField
-                                                            label="Field Value"
-                                                            fullWidth
-                                                            size="small"
-                                                            value={field.value}
-                                                            onChange={(e) => handleQTextChange(index, "value", e.target.value)}
-                                                        />
-                                                    </Grid>
-                                                    <Grid item xs={1}>
-                                                        <IconButton onClick={() => handleRemoveQTextField(index)}>
-                                                            <Delete fontSize="small" />
-                                                        </IconButton>
-                                                    </Grid>
-                                                </Grid>
-                                            ))}
+                    <Stepper activeStep={activeStep} alternativeLabel>
+                        {steps.map((label) => (
+                            <Step key={label}>
+                                <StepLabel>{label}</StepLabel>
+                            </Step>
+                        ))}
+                    </Stepper>
 
-                                            <Grid item xs={12}>
-                                                <Button variant="outlined" onClick={handleAddQTextField}>
-                                                    + Add Text Field
-                                                </Button>
-                                            </Grid>
+                    {/* <Box sx={{ mt: 4 }}>
+                        {getStepContent(activeStep)}
+                    </Box> */}
 
-                                        </>
-                                    )}
-
-                                    {qType === 2 && (
-                                        <>
-                                            {qTextFieldsB.map((field, index) => (
-                                                <Grid item xs={12} sm={12} key={index} container spacing={1} alignItems="center">
-                                                    <Grid item xs={3}>
-                                                        <TextField
-                                                            label="Field Name"
-                                                            fullWidth
-                                                            size="small"
-                                                            disabled
-                                                            value={field.key}
-                                                            onChange={(e) => handleQTextChangeB(index, "key", e.target.value)}
-                                                        />
-                                                    </Grid>
-                                                    <Grid item xs={7}>
-                                                        <TextField
-                                                            label="Field Value"
-                                                            fullWidth
-                                                            size="small"
-                                                            value={field.value}
-                                                            onChange={(e) => handleQTextChangeB(index, "value", e.target.value)}
-                                                        />
-                                                    </Grid>
-                                                    <Grid item xs={1}>
-                                                        <IconButton onClick={() => handleInsertBlank(index)} title="Insert Blank">
-                                                            <AddCircle />
-                                                        </IconButton>
-                                                    </Grid>
-                                                    <Grid item xs={1}>
-                                                        <IconButton onClick={() => handleRemoveQTextFieldB(index)} title="Remove">
-                                                            <Delete fontSize="small" />
-                                                        </IconButton>
-                                                    </Grid>
-                                                </Grid>
-                                            ))}
-
-                                            <Grid item xs={12}>
-                                                <Button variant="outlined" onClick={handleAddQTextFieldB}>
-                                                    + Add Text Field
-                                                </Button>
-                                            </Grid>
-                                        </>
-                                    )}
-
-                                    <Grid item xs={12} sm={12}>
-                                        <Typography variant="subtitle1">Upload Image</Typography>
-                                        <input
-                                            type="file"
-                                            accept="image/*"
-                                            ref={imageInputRef}
-                                            onChange={handleImageChange}
-                                            style={{ marginTop: "8px" }}
-                                        />
-                                    </Grid>
-
-                                    {imageUrl !== "" && (
-                                        <Grid item xs={12} sm={6}>
-                                            <img
-                                                src={imageUrl}
-                                                alt="Preview"
-                                                style={{ width: "100%", maxHeight: "200px", objectFit: "contain", marginTop: "8px", border: "1px solid #ccc", borderRadius: "6px" }}
-                                            />
-                                        </Grid>
-                                    )}
-
-                                    {questionImage && (
-                                        <Grid item xs={12} sm={6}>
-                                            <img
-                                                src={URL.createObjectURL(questionImage)}
-                                                alt="Preview"
-                                                style={{ width: "100%", maxHeight: "200px", objectFit: "contain", marginTop: "8px", border: "1px solid #ccc", borderRadius: "6px" }}
-                                            />
-                                        </Grid>
-                                    )}
-
-                                    <Grid item xs={12} sm={12}>
-                                        <AudioRecorder onRecordingComplete={(blob) => setAudioBlob(blob)} />
-                                    </Grid>
-
-                                    {audioUrl !== "" && (
-                                        <div style={{ margin: "5px 15px" }}>
-                                            <audio controls src={audioUrl} />
-                                        </div>
-                                    )}
-
-                                    {audioBlob && (
-                                        <Grid item xs={12}>
-                                            <Typography variant="subtitle1">Audio Preview</Typography>
-                                            <Box display="flex" alignItems="center" gap={2}>
-                                                <audio controls src={URL.createObjectURL(audioBlob)} />
-                                                <Button
-                                                    variant="outlined"
-                                                    color="error"
-                                                    onClick={() => setAudioBlob(null)}
-                                                >
-                                                    Delete Audio
-                                                </Button>
-                                            </Box>
-                                        </Grid>
-                                    )}
-
-                                    {qType === 1 && (
-                                        <><Grid item xs={12}>
-                                            <Typography variant="subtitle1" gutterBottom>
-                                                Answers
-                                            </Typography>
-                                        </Grid>
-                                            {[0, 1, 2, 3].map((i) => (
-                                                <Grid item xs={12} sm={6} key={i}>
-                                                    <TextField
-                                                        fullWidth
-                                                        size="small"
-                                                        label={`Answer ${i + 1}`}
-                                                        value={answers[i]}
-                                                        onChange={(e) => handleAnswerChange(i, e.target.value)}
-                                                    />
-                                                </Grid>
-                                            ))}
-
-                                            <Grid item xs={12} sm={6}>
-                                                <FormControl fullWidth>
-                                                    <InputLabel id="correct-answer-label">Correct Answer</InputLabel>
-                                                    <Select
-                                                        labelId="correct-answer-label"
-                                                        size="small"
-                                                        value={correctAnswerIndex}
-                                                        label="Correct Answer"
-                                                        onChange={(e) => setCorrectAnswerIndex(Number(e.target.value))}
-                                                    >
-                                                        {[0, 1, 2, 3].map((i) => (
-                                                            <MenuItem key={i} value={i}>
-                                                                Answer {i + 1}
-                                                            </MenuItem>
-                                                        ))}
-                                                    </Select>
-                                                </FormControl>
-                                            </Grid>
-                                        </>
-                                    )}
-
-                                    {qType === 2 && fillBlankAnswers.length > 0 && (
-                                        <>
-                                            <Grid item xs={12}>
-                                                <Typography variant="subtitle1" gutterBottom>
-                                                    Fill in the Blanks - Correct Answers
-                                                </Typography>
-                                            </Grid>
-                                            {fillBlankAnswers.map((ans, index) => (
-                                                <Grid item xs={12} sm={6} key={index}>
-                                                    <TextField
-                                                        fullWidth
-                                                        size="small"
-                                                        label={`Answer for [[${index}]]`}
-                                                        value={ans}
-                                                        onChange={(e) => handleFillBlankAnswerChange(index, e.target.value)}
-                                                    />
-                                                </Grid>
-                                            ))}
-                                        </>
-                                    )}
-
-                                    <Grid item xs={12} display="flex" justifyContent="flex-end" mt={2}>
-                                        {updateBtnVisible ? (
-                                            <>
-                                                <Button
-                                                style={{marginRight: "10px", backgroundColor: "red"}}
-                                                    variant="contained"
-                                                    color="primary"
-                                                    onClick={handleClickDeleteQuestion}
-                                                >
-                                                    Delete
-                                                </Button>
-
-                                                <Button
-                                                    variant="contained"
-                                                    color="primary"
-                                                    onClick={handleUpdateQuestion}
-                                                >
-                                                    Update Question
-                                                </Button>
-                                            </>
-
-                                        ) : (
-                                            <Button
-                                                variant="contained"
-                                                color="primary"
-                                                onClick={handleSaveAnswers}
-                                            >
-                                                Save Question
-                                            </Button>
-                                        )}
-                                    </Grid>
-                                </Grid>
-                            </div>
-                        </div>
-                    </div>
+                    <Box sx={{ mt: 4, display: "flex", justifyContent: "space-between" }}>
+                        <Button disabled={activeStep === 0} onClick={handleBack}>
+                            Back
+                        </Button>
+                        {activeStep < steps.length - 1 ? (
+                            <Button variant="contained" onClick={handleNext}>
+                                Next
+                            </Button>
+                        ) : (
+                            <Button variant="contained" onClick={handleClose}>
+                                Submit
+                            </Button>
+                        )}
+                    </Box>
                 </DialogContent>
             </Dialog>
 
