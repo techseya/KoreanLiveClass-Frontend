@@ -16,7 +16,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { useMediaQuery } from "@mui/material";
 import "../Common/styles/style.css";
 import "../Common/styles/navbar.css";
-import { LogoutOutlined, Mail, MenuOutlined, NotificationsNone, OndemandVideo, PostAdd, WysiwygOutlined } from "@mui/icons-material";
+import { Language, LogoutOutlined, Mail, MenuOutlined, NotificationsNone, OndemandVideo, PostAdd, WysiwygOutlined } from "@mui/icons-material";
 import logo from "../Assets/Images/logo.jpeg";
 import man from "../Assets/Images/man.png";
 import Dialogbox from "../Common/Components/DialogBox";
@@ -206,11 +206,9 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
     }
   }
 
-  // Manual drawer toggle
   const handleDrawerOpen = () => {
     setOpen((prev) => !prev);
     console.log(open);
-
   };
 
   const handleOpen = () => setIsOpen(true);
@@ -242,6 +240,8 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
       setActive(9);
     } else if (path === "/video-maintenance") {
       setActive(10);
+    } else if (path === "/language-practice") {
+      setActive(11);
     } else {
       setActive(0);
     }
@@ -257,6 +257,7 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
   const handleClickNotice = () => navigate("/notice")
   const handleClickWord = () => navigate("/k-lesson")
   const handleClickVideos = () => navigate("/video-maintenance")
+  const handleClickLanguagePractice = () => navigate("/language-practice")
 
   const drawerItems = [
     {
@@ -308,6 +309,11 @@ export default function AdvancedNavbar({ children }: Readonly<Props>) {
       name: "Korean Videos",
       icon: <OndemandVideo style={{ fontSize: "20px" }} />,
       onClick: handleClickVideos,
+    },
+    {
+      name: "Language Practice",
+      icon: <Language style={{ fontSize: "20px" }} />,
+      onClick: handleClickLanguagePractice,
     },
   ];
 
