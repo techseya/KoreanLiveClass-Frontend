@@ -31,6 +31,7 @@ import { get, set } from "lodash";
 import { t } from "i18next";
 import { deleteLanguagePractice, getLanguagePracticeQuestions, getLanguagePractices, updateLanguagePractice } from "src/Services/lang_practice_api";
 import { h } from "framer-motion/dist/types.d-B50aGbjN";
+import "../../../Common/styles/lang.css"
 
 function CustomNoRowsOverlay() {
     return (
@@ -60,7 +61,7 @@ export default function LanguagePracticeMaintenance() {
     const [thumb, setThumb] = useState<File | any>(null);
     const [openFullScreenModal, setOpenFullScreenModal] = useState(false);
 
-    const [qType, setQType] = useState(1);
+    const [qType, setQType] = useState(0);
     const [qTextFields, setQTextFields] = useState([{ key: "field01", value: "" }]);
     const [qTextFieldsB, setQTextFieldsB] = useState([{ key: "field01", value: "" }]);
     const [questionImage, setQuestionImage] = useState<File | null>(null);
@@ -76,6 +77,10 @@ export default function LanguagePracticeMaintenance() {
     const [updateBtnVisible, setUpdateBtnVisible] = useState(false)
     const [id, setId] = useState("")
     const [stepComponent, setStepComponent] = useState<any>(1);
+    const [u1, setU1] = useState("")
+    const [u2, setU2] = useState("")
+    const [langDetailsOpen, setLangDetailsOpen] = useState(false)
+    const [audioUser, setAudioUser] = useState("default")
 
     const steps = ["Select Language", "Add Practice Items", "Review & Submit"];
 
@@ -519,32 +524,83 @@ export default function LanguagePracticeMaintenance() {
                     </Toolbar>
                 </AppBar>
                 <DialogContent>
-                    <Stepper activeStep={activeStep} alternativeLabel>
-                        {steps.map((label) => (
-                            <Step key={label}>
-                                <StepLabel>{label}</StepLabel>
-                            </Step>
-                        ))}
-                    </Stepper>
+                    <div className="selection-type-outer">
+                        {qType === 0 && (
+                            <div className="selection-type-outer">
+                                <div className="selection-type-inner">
+                                    <h3>Select Language Practice Type</h3>
+                                    <Grid container spacing={2}>
+                                        <Grid item sm={6}>
+                                            <Button variant="contained" onClick={() => { setQType(1) }}>
+                                                Dialogue
+                                            </Button>
+                                        </Grid>
+                                        <Grid item sm={6}>
+                                            <Button variant="contained" onClick={() => { setQType(2) }}>
+                                                Scramble Text
+                                            </Button>
+                                        </Grid>
+                                    </Grid>
+                                </div>
+                            </div>)}
+                        {qType === 1 && (
+                            <div className="dl-outer">
+                                {qType === 1 && !langDetailsOpen && (
+                                    <Grid container spacing={2} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                                        <Grid item sm={4}>
+                                            <TextField
+                                                label="User1"
+                                                fullWidth
+                                                size="small"
+                                                variant="outlined"
+                                                value={u1}
+                                                onChange={(e) => {
+                                                    setU1(e.target.value);
+                                                }}
+                                            />
+                                        </Grid>
+                                        <Grid item sm={4}>
+                                            <TextField
+                                                label="User2"
+                                                fullWidth
+                                                size="small"
+                                                variant="outlined"
+                                                value={u2}
+                                                onChange={(e) => {
+                                                    setU2(e.target.value);
+                                                }}
+                                            />
+                                        </Grid>
+                                        <Grid item sm={4}>
+                                            <Button variant="contained" onClick={() => { setLangDetailsOpen(true) }}>
+                                                Confirm Users
+                                            </Button>
+                                        </Grid>
+                                    </Grid>
+                                )}
 
-                    {/* <Box sx={{ mt: 4 }}>
-                        {getStepContent(activeStep)}
-                    </Box> */}
-
-                    <Box sx={{ mt: 4, display: "flex", justifyContent: "space-between" }}>
-                        <Button disabled={activeStep === 0} onClick={handleBack}>
-                            Back
-                        </Button>
-                        {activeStep < steps.length - 1 ? (
-                            <Button variant="contained" onClick={handleNext}>
-                                Next
-                            </Button>
-                        ) : (
-                            <Button variant="contained" onClick={handleClose}>
-                                Submit
-                            </Button>
+                                {qType === 1 && langDetailsOpen && (
+                                    <Grid container spacing={2}>
+                                        <Grid item sm={4}>
+                                            <Select
+                                            size="small"
+                                                value={audioUser}
+                                                onChange={(e) => {
+                                                    setAudioUser(e.target.value)
+                                                }}
+                                                fullWidth
+                                            >
+                                                <MenuItem value="default">Select User</MenuItem>
+                                                <MenuItem value={u1}>{u1}</MenuItem>
+                                                <MenuItem value={u2}>{u2}</MenuItem>
+                                            </Select>
+                                        </Grid>
+                                    </Grid>
+                                )}
+                            </div>
                         )}
-                    </Box>
+
+                    </div>
                 </DialogContent>
             </Dialog>
 
