@@ -4,6 +4,7 @@ import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
 import CommanLayout from 'src/Layout/CommanLayout';
 import LanguagePracticeForm from './LanguagePracticeForm';
+import LanguagePracticeMaintenance from './LanguagePracticeMaintenance';
 
 interface TabPanelProps {
     children?: React.ReactNode;
@@ -51,7 +52,7 @@ export default function LanguagePractice() {
                     </Tabs>
                 </Box>
                 <CustomTabPanel value={value} index={0}>
-                    
+                    <LanguagePracticeMaintenance />
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={1}>
                     <LanguagePracticeForm />
