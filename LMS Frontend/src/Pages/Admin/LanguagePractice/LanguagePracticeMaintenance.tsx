@@ -198,6 +198,9 @@ export default function LanguagePracticeMaintenance() {
             if (res.data.length > 0) {
                 if( res.data[0].originalSentence === "") {
                     setQType(1);
+                    setLangDetailsOpen(true);                    
+                    setU1(res.data[0].audioFilePaths[0].audioUserName.split(",")[0]);
+                    setU2(res.data[0].audioFilePaths[0].audioUserName.split(",")[1]);
                 }else {
                     setQType(2);
                 }
@@ -436,10 +439,15 @@ export default function LanguagePracticeMaintenance() {
         }
 
         const formdata = new FormData();
+        if(audioUser === u1){
+            formdata.append("audioUser", audioUser+`,${u2}`);
+        }else if(audioUser === u2){
+            formdata.append("audioUser", audioUser+`,${u1}`);
+        }
+
         formdata.append("languagePracticeId", langId);
         formdata.append("languagePracticeQuestionId", "1");
         formdata.append("languagePracticeType", qType.toString());
-        formdata.append("audioUserName", audioUser);
         formdata.append("subtitle", subtitle);
         formdata.append("audio", audioBlob ? audioBlob : "");
         formdata.append("originalSentence", "");
