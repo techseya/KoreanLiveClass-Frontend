@@ -159,11 +159,12 @@ export default function LanguagePracticeMaintenance() {
         setLangId(row.id);
         setQuizName(row.name)
         handleGetQuestions(row.id)
-    }
+    };
 
     useEffect(() => {
         handleGetCourses();
         handleGetLanguagePractices();
+        handleGetQuestions(1);
     }, []);
 
     useEffect(() => {
@@ -194,6 +195,15 @@ export default function LanguagePracticeMaintenance() {
         try {
             const res = await getLanguagePracticeQuestions(id, token);
             setQuestions(res.data);
+            if (res.data.length > 0) {
+                if( res.data[0].originalSentence === "") {
+                    setQType(1);
+                }else {
+                    setQType(2);
+                }
+            }else{
+                setQType(0);
+            }
         } catch (error) {
             console.error(error);
         }
