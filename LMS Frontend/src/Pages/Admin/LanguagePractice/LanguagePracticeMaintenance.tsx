@@ -66,8 +66,9 @@ export default function LanguagePracticeMaintenance() {
     const [qTextFieldsB, setQTextFieldsB] = useState([{ key: "field01", value: "" }]);
     const [questionImage, setQuestionImage] = useState<File | null>(null);
     const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
+    const [subtitle, setSubtitle] = useState("");
     const [answers, setAnswers] = useState(["", "", "", ""]);
-    const [correctAnswerIndex, setCorrectAnswerIndex] = useState(0); // default Answer 1 selected
+    const [correctAnswerIndex, setCorrectAnswerIndex] = useState(0);
     const [loading, setLoading] = useState(false);
     const [fillBlankAnswers, setFillBlankAnswers] = useState<string[]>([]);
     const imageInputRef = useRef<HTMLInputElement>(null);
@@ -580,22 +581,62 @@ export default function LanguagePracticeMaintenance() {
                                 )}
 
                                 {qType === 1 && langDetailsOpen && (
-                                    <Grid container spacing={2}>
-                                        <Grid item sm={4}>
-                                            <Select
-                                            size="small"
-                                                value={audioUser}
-                                                onChange={(e) => {
-                                                    setAudioUser(e.target.value)
-                                                }}
-                                                fullWidth
-                                            >
-                                                <MenuItem value="default">Select User</MenuItem>
-                                                <MenuItem value={u1}>{u1}</MenuItem>
-                                                <MenuItem value={u2}>{u2}</MenuItem>
-                                            </Select>
+                                    <div style={{ maxHeight: "90vh", overflowY: "auto" }}>
+                                        <Grid container spacing={2}>
+                                            <Grid item sm={4}>
+                                                <Select
+                                                    size="small"
+                                                    value={audioUser}
+                                                    onChange={(e) => {
+                                                        setAudioUser(e.target.value)
+                                                    }}
+                                                    fullWidth
+                                                >
+                                                    <MenuItem value="default">Select User</MenuItem>
+                                                    <MenuItem value={u1}>{u1}</MenuItem>
+                                                    <MenuItem value={u2}>{u2}</MenuItem>
+                                                </Select>
+                                            </Grid>
                                         </Grid>
-                                    </Grid>
+
+                                        <Grid item xs={12} sm={12} mt={2}>
+                                            <AudioRecorder onRecordingComplete={(blob) => setAudioBlob(blob)} />
+                                        </Grid>
+
+                                        {audioBlob && (
+                                            <Grid item xs={12}>
+                                                <Typography variant="subtitle1">Audio Preview</Typography>
+                                                <Box display="flex" alignItems="center" gap={2}>
+                                                    <audio controls src={URL.createObjectURL(audioBlob)} />
+                                                    <Button
+                                                        variant="outlined"
+                                                        color="error"
+                                                        onClick={() => setAudioBlob(null)}
+                                                    >
+                                                        Delete Audio
+                                                    </Button>
+                                                </Box>
+                                            </Grid>
+                                        )}
+
+                                        {audioUrl !== "" && (
+                                            <div style={{ margin: "5px 15px" }}>
+                                                <audio controls src={audioUrl} />
+                                            </div>
+                                        )}
+
+                                        <Grid item xs={12} sm={12} mt={2}>
+                                            <TextField
+                                                label="Subtitle"
+                                                fullWidth
+                                                multiline
+                                                rows={3}
+                                                value={subtitle}
+                                                onChange={(e) => setSubtitle(e.target.value)}
+                                            />
+                                        </Grid>
+
+                                    </div>
                                 )}
                             </div>
                         )}
