@@ -582,7 +582,7 @@ export default function LanguagePracticeMaintenance() {
 
                                 {qType === 1 && langDetailsOpen && (
                                     <div style={{ maxHeight: "90vh", overflowY: "auto" }}>
-                                        <Grid container spacing={2}>
+                                        <Grid container sm={12} spacing={2} sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                                             <Grid item sm={4}>
                                                 <Select
                                                     size="small"
@@ -592,10 +592,27 @@ export default function LanguagePracticeMaintenance() {
                                                     }}
                                                     fullWidth
                                                 >
-                                                    <MenuItem value="default">Select User</MenuItem>
+                                                    <MenuItem disabled value="default">Select User</MenuItem>
                                                     <MenuItem value={u1}>{u1}</MenuItem>
                                                     <MenuItem value={u2}>{u2}</MenuItem>
                                                 </Select>
+                                            </Grid>
+
+                                            <Grid item sm={2} sx={{ display: "flex", justifyContent: "flex-end" }}>
+                                                <Button
+                                                    variant="contained"
+                                                    onClick={() => {
+                                                        setQType(0);
+                                                        setLangDetailsOpen(false);
+                                                        setU1("");
+                                                        setU2("");
+                                                        setAudioUser("default");
+                                                        handleReset();
+                                                    }}
+                                                    disabled={!audioBlob || audioUser === "default"}
+                                                >
+                                                    Add
+                                                </Button>
                                             </Grid>
                                         </Grid>
 
