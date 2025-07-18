@@ -452,7 +452,7 @@ export default function LanguagePracticeMaintenance() {
         formdata.append("audio", audioBlob ? audioBlob : "");
         formdata.append("originalSentence", "");
         formdata.append("scrambledSentence", "");
-        formdata.append("order", (questions.length > 0 ? questions[0].audioFilePaths.length + 1 : 1).toString())        
+        formdata.append("order", (questions.length > 0 ? questions[0].audioFilePaths[questions[0].audioFilePaths.length - 1].order + 1 : 1).toString());
 
         try {
             const res = await createLanguagePracticeQuestion(formdata, token);
