@@ -29,7 +29,7 @@ import { RadioGroup, FormControlLabel, Radio } from "@mui/material";
 import { AudioRecorder } from "src/Common/Components/AudioRecorder";
 import { get, set } from "lodash";
 import { t } from "i18next";
-import { deleteLanguagePractice, getLanguagePracticeQuestions, getLanguagePractices, updateLanguagePractice } from "src/Services/lang_practice_api";
+import { createLanguagePracticeQuestion, deleteLanguagePractice, getLanguagePracticeQuestions, getLanguagePractices, updateLanguagePractice } from "src/Services/lang_practice_api";
 import { h } from "framer-motion/dist/types.d-B50aGbjN";
 import "../../../Common/styles/lang.css"
 
@@ -360,19 +360,8 @@ export default function LanguagePracticeMaintenance() {
     }
 
     const handleClearFields = () => {
-        setQTextFields([{ key: "field01", value: "" }])
-        setQTextFieldsB([{ key: "field01", value: "" }])
-        setQuestionImage(null)
         setAudioBlob(null)
-        setImageUrl("")
-        setAudioUrl("")
-        setAnswers(["", "", "", ""])
-        setCorrectAnswerIndex(0);
-        setFillBlankAnswers([]);
-
-        if (imageInputRef.current) {
-            imageInputRef.current.value = "";
-        }
+        setSubtitle("");
     }
 
     const handleUpdateQuestion = async () => {
@@ -427,6 +416,34 @@ export default function LanguagePracticeMaintenance() {
 
         if (imageInputRef.current) {
             imageInputRef.current.value = "";
+        }
+    }
+
+    const handleCreateQuestion = async () => {
+        if (qType === 0) {
+            alert("Please select a question type.");
+            return;
+        }
+
+        const formdata = new FormData();
+        formdata.append("languagePracticeId", langId);
+        formdata.append("languagePracticeQuestionId", "1");
+        formdata.append("languagePracticeType", qType.toString());
+        formdata.append("audioUserName", audioUser);
+        formdata.append("subtitle", subtitle);
+        formdata.append("audio", audioBlob ? audioBlob : "");
+        formdata.append("originalSentence", "");
+        formdata.append("scrambledSentence", "");
+        formdata.append("order", "1");
+
+        try {
+            const res = await createLanguagePracticeQuestion(formdata, token);
+            alert(res.data.message);
+            handleClearFields();
+            handleGetQuestions(langId);
+        } catch (error: any) {
+            console.error("Error creating question:", error);
+            alert(error.response?.data?.message || "An error occurred while creating the question.");
         }
     }
 
@@ -607,7 +624,7 @@ export default function LanguagePracticeMaintenance() {
                                                         setU1("");
                                                         setU2("");
                                                         setAudioUser("default");
-                                                        handleReset();
+                                                        handleCreateQuestion();
                                                     }}
                                                     disabled={!audioBlob || audioUser === "default"}
                                                 >
