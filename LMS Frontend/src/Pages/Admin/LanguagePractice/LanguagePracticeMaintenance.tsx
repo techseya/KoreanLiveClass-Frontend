@@ -12,7 +12,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { act, useEffect, useRef, useState } from "react";
 import { getAllCourses } from "src/Services/course_api";
 import { createQuestion, deleteQuestion, deleteQuiz, getQuestions, getQuiz, updateQuestion, updateQuiz } from "src/Services/quiz_api";
-import { AddCircle, Delete } from "@mui/icons-material";
+import { AddCircle, Delete, Man, Person } from "@mui/icons-material";
 import Dialogbox from "src/Common/Components/DialogBox";
 import {
     Dialog,
@@ -196,15 +196,15 @@ export default function LanguagePracticeMaintenance() {
             const res = await getLanguagePracticeQuestions(id, token);
             setQuestions(res.data);
             if (res.data.length > 0) {
-                if( res.data[0].originalSentence === "") {
+                if (res.data[0].originalSentence === "") {
                     setQType(1);
-                    setLangDetailsOpen(true);                    
+                    setLangDetailsOpen(true);
                     setU1(res.data[0].audioFilePaths[0].audioUserName.split(",")[0]);
                     setU2(res.data[0].audioFilePaths[0].audioUserName.split(",")[1]);
-                }else {
+                } else {
                     setQType(2);
                 }
-            }else{
+            } else {
                 setQType(0);
             }
         } catch (error) {
@@ -439,10 +439,10 @@ export default function LanguagePracticeMaintenance() {
         }
 
         const formdata = new FormData();
-        if(audioUser === u1){
-            formdata.append("audioUser", audioUser+`,${u2}`);
-        }else if(audioUser === u2){
-            formdata.append("audioUser", audioUser+`,${u1}`);
+        if (audioUser === u1) {
+            formdata.append("audioUser", audioUser + `,${u2}`);
+        } else if (audioUser === u2) {
+            formdata.append("audioUser", audioUser + `,${u1}`);
         }
 
         formdata.append("languagePracticeId", langId);
@@ -452,7 +452,7 @@ export default function LanguagePracticeMaintenance() {
         formdata.append("audio", audioBlob ? audioBlob : "");
         formdata.append("originalSentence", "");
         formdata.append("scrambledSentence", "");
-        formdata.append("order", "1");
+        formdata.append("order", questions.length + 1 + "");
 
         try {
             const res = await createLanguagePracticeQuestion(formdata, token);
@@ -686,6 +686,32 @@ export default function LanguagePracticeMaintenance() {
                                                 value={subtitle}
                                                 onChange={(e) => setSubtitle(e.target.value)}
                                             />
+                                        </Grid>
+
+                                        <Grid item xs={12} sm={12} mt={2}>
+                                            {questions.length > 0 ? (<>
+                                                {questions.map((q: any, qIdx: number) =>
+                                                    q.audioFilePaths?.map((question: any, index: any) => (
+                                                        (question?.audioUserName?.split(",")[0] === u1) ? (
+                                                            <div style={{ display: "flex", gap: "8px" }} key={`${qIdx}-${index}`}>
+                                                                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
+                                                                    <Person sx={{ fontSize: "40px", color: "#1d6add", padding: "4px", backgroundColor: "wheat", borderRadius: "40px" }} />
+                                                                    {question?.audioUserName?.split(",")[0] || "User1"}
+                                                                </div>
+                                                                <audio controls src={question?.audioFilePath ? question.audioFilePath.replace("dl=0", "raw=1") : ""} />
+                                                            </div>
+                                                        ) : (
+                                                            <div style={{ display: "flex", gap: "8px",  justifyContent: "flex-end" }} key={`${qIdx}-${index}`}>
+                                                                <audio controls src={question?.audioFilePath ? question.audioFilePath.replace("dl=0", "raw=1") : ""} />
+                                                                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
+                                                                    <Person sx={{ fontSize: "40px", color: "#1d6add", padding: "4px", backgroundColor: "wheat", borderRadius: "40px" }} />
+                                                                    {question?.audioUserName?.split(",")[0] || "User1"}
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    ))
+                                                )}
+                                            </>) : (<></>)}
                                         </Grid>
 
                                     </div>
