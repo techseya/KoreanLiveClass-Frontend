@@ -3,7 +3,6 @@
     height: auto !important;
     display: flex;
     justify-content: center;
-    max-height: 90vh;
 }
 
 .selection-type-inner{

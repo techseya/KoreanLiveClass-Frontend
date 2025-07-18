@@ -30,7 +30,7 @@ import { AudioRecorder } from "src/Common/Components/AudioRecorder";
 import { get, set } from "lodash";
 import { t } from "i18next";
 import { createLanguagePracticeQuestion, deleteLanguagePractice, getLanguagePracticeQuestions, getLanguagePractices, updateLanguagePractice } from "src/Services/lang_practice_api";
-import { h } from "framer-motion/dist/types.d-B50aGbjN";
+import { a, h } from "framer-motion/dist/types.d-B50aGbjN";
 import "../../../Common/styles/lang.css"
 
 function CustomNoRowsOverlay() {
@@ -436,13 +436,13 @@ export default function LanguagePracticeMaintenance() {
         if (qType === 0) {
             alert("Please select a question type.");
             return;
-        }
-
+        } 
+        
         const formdata = new FormData();
         if (audioUser === u1) {
-            formdata.append("audioUser", audioUser + `,${u2}`);
+            formdata.append("audioUserName", audioUser + `,${u2}`);
         } else if (audioUser === u2) {
-            formdata.append("audioUser", audioUser + `,${u1}`);
+            formdata.append("audioUserName", audioUser + `,${u1}`);
         }
 
         formdata.append("languagePracticeId", langId);
@@ -452,7 +452,7 @@ export default function LanguagePracticeMaintenance() {
         formdata.append("audio", audioBlob ? audioBlob : "");
         formdata.append("originalSentence", "");
         formdata.append("scrambledSentence", "");
-        formdata.append("order", questions.length + 1 + "");
+        formdata.append("order", (questions.length > 0 ? questions[0].audioFilePaths.length + 1 : 1).toString())        
 
         try {
             const res = await createLanguagePracticeQuestion(formdata, token);
@@ -616,7 +616,7 @@ export default function LanguagePracticeMaintenance() {
                                 )}
 
                                 {qType === 1 && langDetailsOpen && (
-                                    <div style={{ maxHeight: "90vh", overflowY: "auto" }}>
+                                    <div >
                                         <Grid container sm={12} spacing={2} sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                                             <Grid item sm={4}>
                                                 <Select
@@ -637,11 +637,6 @@ export default function LanguagePracticeMaintenance() {
                                                 <Button
                                                     variant="contained"
                                                     onClick={() => {
-                                                        setQType(0);
-                                                        setLangDetailsOpen(false);
-                                                        setU1("");
-                                                        setU2("");
-                                                        setAudioUser("default");
                                                         handleCreateQuestion();
                                                     }}
                                                     disabled={!audioBlob || audioUser === "default"}
@@ -693,19 +688,36 @@ export default function LanguagePracticeMaintenance() {
                                                 {questions.map((q: any, qIdx: number) =>
                                                     q.audioFilePaths?.map((question: any, index: any) => (
                                                         (question?.audioUserName?.split(",")[0] === u1) ? (
-                                                            <div style={{ display: "flex", gap: "8px" }} key={`${qIdx}-${index}`}>
-                                                                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
-                                                                    <Person sx={{ fontSize: "40px", color: "#1d6add", padding: "4px", backgroundColor: "wheat", borderRadius: "40px" }} />
-                                                                    {question?.audioUserName?.split(",")[0] || "User1"}
+                                                            <div>
+                                                                <div style={{ display: "flex", gap: "8px" }} key={`${qIdx}-${index}`}>
+                                                                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
+                                                                        <Person sx={{ fontSize: "40px", color: "#1d6add", padding: "4px", backgroundColor: "wheat", borderRadius: "40px" }} />
+
+                                                                    </div>
+                                                                    <div style={{ display: "flex", flexDirection: "column", gap: "8px", padding: "8px 10px", backgroundColor: "#dfe6e9", borderRadius: "8px" }}>
+                                                                        {question?.audioUserName?.split(",")[0] || "User1"}
+                                                                        <audio controls src={question?.audioFilePath ? question.audioFilePath.replace("dl=0", "raw=1") : ""} />
+                                                                    </div>
                                                                 </div>
-                                                                <audio controls src={question?.audioFilePath ? question.audioFilePath.replace("dl=0", "raw=1") : ""} />
+                                                                <div style={{ padding: "4px 10px", borderRadius: "8px", margin: "8px" }}>
+                                                                    {question?.subtitle}
+                                                                </div>
+
                                                             </div>
+
                                                         ) : (
-                                                            <div style={{ display: "flex", gap: "8px",  justifyContent: "flex-end" }} key={`${qIdx}-${index}`}>
-                                                                <audio controls src={question?.audioFilePath ? question.audioFilePath.replace("dl=0", "raw=1") : ""} />
-                                                                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
-                                                                    <Person sx={{ fontSize: "40px", color: "#1d6add", padding: "4px", backgroundColor: "wheat", borderRadius: "40px" }} />
-                                                                    {question?.audioUserName?.split(",")[0] || "User1"}
+                                                            <div style={{ display: "flex",flexDirection: "column", alignItems: "flex-end" }}>
+                                                                <div style={{ display: "flex", gap: "8px" }} key={`${qIdx}-${index}`}>
+                                                                    <div style={{ display: "flex", flexDirection: "column", gap: "8px", padding: "8px 10px", backgroundColor: "#dfe6e9", borderRadius: "8px" }}>
+                                                                        {question?.audioUserName?.split(",")[0] || "User1"}
+                                                                        <audio controls src={question?.audioFilePath ? question.audioFilePath.replace("dl=0", "raw=1") : ""} />
+                                                                    </div>
+                                                                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
+                                                                        <Person sx={{ fontSize: "40px", color: "#1d6add", padding: "4px", backgroundColor: "wheat", borderRadius: "40px" }} />
+                                                                    </div>
+                                                                </div>
+                                                                <div style={{ padding: "4px 10px", borderRadius: "8px", margin: "8px" }}>
+                                                                    {question?.subtitle}
                                                                 </div>
                                                             </div>
                                                         )
