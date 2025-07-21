@@ -574,7 +574,7 @@ export default function Landing() {
           <div className="ins-inner1">
             <div className="ins-in">
               <div className="img14">
-                <img src={quizImg} alt="" />
+                <img style={{width: "100%", maxHeight: "400px", objectFit: "cover", borderRadius: "10px"}} src={quizImg} alt="" />
               </div>
             </div>
             <div className="ins-in" data-aos="fade-up" data-aos-delay="100">
