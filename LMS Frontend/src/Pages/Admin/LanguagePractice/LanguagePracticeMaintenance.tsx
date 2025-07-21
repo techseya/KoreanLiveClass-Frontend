@@ -29,7 +29,7 @@ import { RadioGroup, FormControlLabel, Radio } from "@mui/material";
 import { AudioRecorder } from "src/Common/Components/AudioRecorder";
 import { get, set } from "lodash";
 import { t } from "i18next";
-import { createLanguagePracticeQuestion, deleteLanguagePractice, getLanguagePracticeQuestions, getLanguagePractices, updateLanguagePractice } from "src/Services/lang_practice_api";
+import { createLanguagePracticeQuestion, deleteLanguagePractice, deleteLanguagePracticeAudioQuestion, getLanguagePracticeQuestions, getLanguagePractices, updateLanguagePractice, updateLanguagePracticeAudioQuestion } from "src/Services/lang_practice_api";
 import { a, h } from "framer-motion/dist/types.d-B50aGbjN";
 import "../../../Common/styles/lang.css"
 
@@ -82,6 +82,7 @@ export default function LanguagePracticeMaintenance() {
     const [u2, setU2] = useState("")
     const [langDetailsOpen, setLangDetailsOpen] = useState(false)
     const [audioUser, setAudioUser] = useState("default")
+    const [selectedAudioQuestionOrder, setSelectedAudioQuestionOrder] = useState<any>(null);
 
     const steps = ["Select Language", "Add Practice Items", "Review & Submit"];
 
@@ -416,19 +417,32 @@ export default function LanguagePracticeMaintenance() {
         }
     }
 
-    const handleReset = () => {
-        setQTextFields([{ key: "field01", value: "" }])
-        setQTextFieldsB([{ key: "field01", value: "" }])
-        setQuestionImage(null)
-        setImageUrl("")
-        setAudioUrl("")
-        setAudioBlob(null)
-        setAnswers(["", "", "", ""])
-        setCorrectAnswerIndex(0);
-        setFillBlankAnswers([]);
+    const handleUpdateAudioQuestion = async (order:any, audioUserName:any, subtitle:any) => {
+        const formData = new FormData();
+        formData.append("languagePracticeId", langId);
+        formData.append("order", order);
+        formData.append("audioUserName", audioUserName ? audioUserName : "");
+        formData.append("subtitle", subtitle);
+        formData.append("audio", audioBlob ? audioBlob : "");
 
-        if (imageInputRef.current) {
-            imageInputRef.current.value = "";
+        try {
+            const res = await updateLanguagePracticeAudioQuestion(formData, token);
+            alert(res.data);
+            handleClearFields();
+            handleGetQuestions(langId);
+        } catch (error: any) {
+            alert(error.response.data.message);
+        }
+    }
+
+    const handleDeleteAudioQuestion = async () => {
+        try {
+            const res = await deleteLanguagePracticeAudioQuestion(langId, selectedAudioQuestionOrder, token);
+            alert(res.data);
+            handleClearFields();
+            handleGetQuestions(langId);
+        } catch (error: any) {
+            alert(error.response.data.message);
         }
     }
 
@@ -465,51 +479,6 @@ export default function LanguagePracticeMaintenance() {
         }
     }
 
-    const handleInsertBlank = (index: number) => {
-        const updatedFields = [...qTextFieldsB];
-        const field = updatedFields[index];
-
-        // Find max existing [[x]] index
-        const existingMatches = field.value.match(/\[\[(\d+)\]\]/g);
-        const nextIndex = existingMatches
-            ? Math.max(...existingMatches.map(m => parseInt(m.replace(/\D/g, '')))) + 1
-            : 0;
-
-        const newText = field.value + ` [[${nextIndex}]]`;
-        updatedFields[index].value = newText;
-        setQTextFieldsB(updatedFields);
-    };
-
-    const handleQuestion = (question: any) => {
-        setUpdateBtnVisible(true)
-        console.log(question);
-        setId(question.id)
-
-        const newTextFields = Object.entries(question.questionText).map(([key, value]) => ({
-            key,
-            value: String(value)
-        }));
-
-        setQTextFields(newTextFields);
-
-        setQTextFieldsB(newTextFields)
-
-        setQType(question.questionType);
-        setAnswers([question.answer.answer1, question.answer.answer2, question.answer.answer3, question.answer.answer4]);
-        setCorrectAnswerIndex(question.answer.correctAnswer - 1); // Adjust for 0-based index
-        setAudioUrl(question.audioUrl !== null ? question.audioUrl.replace("dl=0", "raw=1") : "")
-        setImageUrl(question.imageUrl !== null ? question.imageUrl.replace("dl=0", "raw=1") : "")
-
-        const raw = question.answer.correctAnswersFillInBlanks?.[0];
-
-        if (raw) {
-            const parsedList = JSON.parse(raw); // e.g. ["Piduruthalagala", "longest", "Sri Lanka"]
-            console.log(parsedList); // Log full list
-            setFillBlankAnswers(parsedList); // ✅ set once
-        }
-
-    }
-
     return (
         <>
             <Backdrop
@@ -521,10 +490,10 @@ export default function LanguagePracticeMaintenance() {
             <Dialogbox
                 open={isOpen1}
                 title="Delete Confirmation"
-                content="Are you sure you want to delete this question?"
+                content="Are you sure you want to delete this audio question?"
                 agreeButtonText="Yes, Delete"
                 disagreeButtonText="No"
-                onAgree={handleDeleteQuestion}
+                onAgree={handleDeleteAudioQuestion}
                 onDisagree={() => setIsOpen1(false)}
                 onClose={() => setIsOpen1(false)}
             />
@@ -692,9 +661,15 @@ export default function LanguagePracticeMaintenance() {
                                                                 <div style={{ display: "flex", gap: "8px" }} key={`${qIdx}-${index}`}>
                                                                     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
                                                                         <Person sx={{ fontSize: "40px", color: "#1d6add", padding: "4px", backgroundColor: "wheat", borderRadius: "40px" }} />
-
                                                                     </div>
-                                                                    <div style={{ display: "flex", flexDirection: "column", gap: "8px", padding: "8px 10px", backgroundColor: "#dfe6e9", borderRadius: "8px" }}>
+                                                                    <div style={{ display: "flex", flexDirection: "column", gap: "8px", padding: "8px 10px", backgroundColor: "#dfe6e9", borderRadius: "8px", position: "relative" }}>
+                                                                        <div style={{ position: "absolute", top: "8px", right: "8px", display: "flex", gap: "8px" }}>
+                                                                            <EditIcon style={{ fontSize: "16px", cursor: "pointer" }}/>
+                                                                            <Delete style={{ fontSize: "16px", cursor: "pointer" }} onClick={() => {                                                                               
+                                                                                setSelectedAudioQuestionOrder(question.order);
+                                                                                setIsOpen1(true)
+                                                                            }}/>
+                                                                        </div>
                                                                         {question?.audioUserName?.split(",")[0] || "User1"}
                                                                         <audio controls src={question?.audioFilePath ? question.audioFilePath.replace("dl=0", "raw=1") : ""} />
                                                                     </div>
@@ -708,7 +683,14 @@ export default function LanguagePracticeMaintenance() {
                                                         ) : (
                                                             <div style={{ display: "flex",flexDirection: "column", alignItems: "flex-end" }}>
                                                                 <div style={{ display: "flex", gap: "8px" }} key={`${qIdx}-${index}`}>
-                                                                    <div style={{ display: "flex", flexDirection: "column", gap: "8px", padding: "8px 10px", backgroundColor: "#dfe6e9", borderRadius: "8px" }}>
+                                                                    <div style={{ display: "flex", flexDirection: "column", gap: "8px", padding: "8px 10px", backgroundColor: "#dfe6e9", borderRadius: "8px", position: "relative" }}>
+                                                                        <div style={{ position: "absolute", top: "8px", right: "8px", display: "flex", gap: "8px" }}>
+                                                                            <EditIcon style={{ fontSize: "16px", cursor: "pointer" }}/>
+                                                                            <Delete style={{ fontSize: "16px", cursor: "pointer" }} onClick={() => {
+                                                                                setSelectedAudioQuestionOrder(question.order);
+                                                                                setIsOpen1(true);
+                                                                            }}/>
+                                                                        </div>
                                                                         {question?.audioUserName?.split(",")[0] || "User1"}
                                                                         <audio controls src={question?.audioFilePath ? question.audioFilePath.replace("dl=0", "raw=1") : ""} />
                                                                     </div>

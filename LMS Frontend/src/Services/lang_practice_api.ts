@@ -42,11 +42,12 @@ export const updateLanguagePractice = async (body: any, token: any) => {
     }
 }
 
-export const updateLanguagePracticeQuestion = async (body: any, token: any) => {
+export const updateLanguagePracticeAudioQuestion = async (body: any, token: any) => {
     try {
-        const response = await axios.put(api + `language-practice/question`, body, {
+        const response = await axios.put(api + `language-practice/question/audio`, body, {
             headers: {
                 "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${token}`,
             },
         });
         return response;
@@ -68,9 +69,9 @@ export const deleteLanguagePractice = async (id: any, token: any) => {
     }
 }
 
-export const deleteLanguagePracticeQuestion = async (id: any, token: any) => {
+export const deleteLanguagePracticeAudioQuestion = async (languageId: any, order: any, token: any) => {
     try {
-        const response = await axios.delete(api + `language-practice/question/${id}`, {
+        const response = await axios.delete(api + `language-practice/question/audio/${languageId}/${order}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -106,3 +107,4 @@ export const getLanguagePracticeQuestions = async (practiceId: any, token: any) 
         throw error;
     }
 }
+
