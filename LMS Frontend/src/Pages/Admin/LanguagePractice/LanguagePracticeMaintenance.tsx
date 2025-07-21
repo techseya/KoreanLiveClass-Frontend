@@ -8,7 +8,8 @@ import {
     Step,
     DialogTitle,
     DialogContentText,
-    DialogActions
+    DialogActions,
+    Divider
 } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
@@ -84,6 +85,8 @@ export default function LanguagePracticeMaintenance() {
     const [stepComponent, setStepComponent] = useState<any>(1);
     const [u1, setU1] = useState("")
     const [u2, setU2] = useState("")
+    const [scrambledSentence, setScrambledSentence] = useState("");
+    const [correctSentence, setCorrectSentence] = useState("");
     const [langDetailsOpen, setLangDetailsOpen] = useState(false)
     const [audioUser, setAudioUser] = useState("default")
     const [selectedAudioUser, setSelectedAudioUser] = useState("default")
@@ -91,76 +94,9 @@ export default function LanguagePracticeMaintenance() {
     const [selectedAudioQuestionOrder, setSelectedAudioQuestionOrder] = useState<any>(null);
     const [audioUpdateVisible, setAudioUpdateVisible] = useState(false);
 
-    const steps = ["Select Language", "Add Practice Items", "Review & Submit"];
-
     const token = localStorage.getItem("token") || "";
 
     const [activeStep, setActiveStep] = useState(0);
-
-    const getStepContent = (step: number) => {
-        if (step === 0) {
-            setStepComponent(1);
-        } else if (step === 1) {
-            setStepComponent(2);
-        } else if (step === 2) {
-            setStepComponent(3);
-        }
-    };
-
-    const handleNext = () => {
-        setActiveStep((prev) => prev + 1);
-    };
-
-    const handleBack = () => {
-        setActiveStep((prev) => prev - 1);
-    };
-
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
-            setQuestionImage(e.target.files[0]);
-        }
-    };
-
-    const handleAnswerChange = (index: number, value: string) => {
-        const updated = [...answers];
-        updated[index] = value;
-        setAnswers(updated);
-    };
-
-    const handleQTextChange = (index: number, field: string, value: string) => {
-        const updatedFields = [...qTextFields];
-        updatedFields[index] = { ...updatedFields[index], [field]: value };
-        setQTextFields(updatedFields);
-    };
-
-    const handleAddQTextField = () => {
-        const nextFieldNumber = qTextFields.length + 1;
-        setQTextFields([...qTextFields, { key: `field${nextFieldNumber.toString().padStart(2, '0')}`, value: "" }]);
-    };
-
-    const handleRemoveQTextField = (index: number) => {
-        const updatedFields = [...qTextFields];
-        updatedFields.splice(index, 1);
-        setQTextFields(updatedFields);
-    };
-
-
-    const handleQTextChangeB = (index: number, field: string, value: string) => {
-        const updatedFields = [...qTextFieldsB];
-        updatedFields[index] = { ...updatedFields[index], [field]: value };
-        setQTextFieldsB(updatedFields);
-    };
-
-    const handleAddQTextFieldB = () => {
-        const nextFieldNumber = qTextFieldsB.length + 1;
-        setQTextFieldsB([...qTextFieldsB, { key: `field${nextFieldNumber.toString().padStart(2, '0')}`, value: "" }]);
-    };
-
-    const handleRemoveQTextFieldB = (index: number) => {
-        const updatedFields = [...qTextFieldsB];
-        updatedFields.splice(index, 1);
-        setQTextFieldsB(updatedFields);
-    };
 
     const handleOpenFullScreenModal = (row: any) => {
         setOpenFullScreenModal(true)
@@ -192,12 +128,6 @@ export default function LanguagePracticeMaintenance() {
         const updatedAnswers = uniqueIndexes.map((idx) => fillBlankAnswers[idx] || "");
         setFillBlankAnswers(updatedAnswers);
     }, [qTextFieldsB]);
-
-    const handleFillBlankAnswerChange = (index: number, value: string) => {
-        const updated = [...fillBlankAnswers];
-        updated[index] = value;
-        setFillBlankAnswers(updated);
-    };
 
     const handleGetQuestions = async (id: any) => {
         try {
@@ -260,10 +190,6 @@ export default function LanguagePracticeMaintenance() {
     const handleFormChange = (field: string, value: any) => {
         seteditingLang((prev: any) => ({ ...prev, [field]: value }));
     };
-
-    const handleClickDeleteQuestion = () => {
-        setIsOpen1(true)
-    }
 
     const handleUpdate = async () => {
         const body = {
@@ -329,66 +255,17 @@ export default function LanguagePracticeMaintenance() {
         },
     ];
 
-    const qTextJson = JSON.stringify(
-        qTextFields.reduce((acc, curr) => {
-            if (curr.key.trim()) {
-                acc[curr.key] = curr.value;
-            }
-            return acc;
-        }, {} as Record<string, string>)
-    );
-
-
-
-    const qTextJsonB = JSON.stringify(
-        qTextFieldsB.reduce((acc, curr) => {
-            if (curr.key.trim()) {
-                acc[curr.key] = curr.value;
-            }
-            return acc;
-        }, {} as Record<string, string>)
-    );
-
-    const handleSaveAnswers = async () => {
-        setLoading(true)
-        console.log(qTextJsonB);
-        console.log(JSON.stringify(fillBlankAnswers));
-
-
-        const formData = new FormData();
-        formData.append("langId", langId);
-        formData.append("questionType", qType.toString());
-        formData.append("questionText", qType === 1 ? `"${qTextJson}"` : `"${qTextJsonB}"`);
-        formData.append("image", questionImage ? questionImage : "");
-        formData.append("audio", audioBlob ? audioBlob : "");
-        formData.append("answer1", qType === 1 ? answers[0] : "");
-        formData.append("answer2", qType === 1 ? answers[1] : "");
-        formData.append("answer3", qType === 1 ? answers[2] : "");
-        formData.append("answer4", qType === 1 ? answers[3] : "");
-        formData.append("correctAnswerMcq", qType === 1 ? (correctAnswerIndex + 1).toString() : "");
-        formData.append("correctAnswerFillInBlanks", qType === 2 ? JSON.stringify(fillBlankAnswers) : "");
-
-        try {
-            const res = await createQuestion(formData)
-            setLoading(false)
-            alert(res.data.message);
-            handleClearFields();
-            handleGetQuestions(langId)
-        } catch (error: any) {
-            setLoading(false)
-            alert(error.response.data.message)
-        }
-    }
-
     const handleClearFields = () => {
         setAudioBlob(null)
         setSubtitle("");
+        setScrambledSentence("");
+        setCorrectSentence("");
     }
 
     const handleUpdateAudioQuestion = async (order: any, audioUserName: any, subtitle: any) => {
-        if(audioUserName === u1) {
+        if (audioUserName === u1) {
             audioUserName = audioUserName + `,${u2}`;
-        }else if(audioUserName === u2) {
+        } else if (audioUserName === u2) {
             audioUserName = audioUserName + `,${u1}`;
         }
         const formData = new FormData();
@@ -425,22 +302,35 @@ export default function LanguagePracticeMaintenance() {
             alert("Please select a question type.");
             return;
         }
-
         const formdata = new FormData();
-        if (audioUser === u1) {
-            formdata.append("audioUserName", audioUser + `,${u2}`);
-        } else if (audioUser === u2) {
-            formdata.append("audioUserName", audioUser + `,${u1}`);
+        if (qType === 1) {
+            if (audioUser === u1) {
+                formdata.append("audioUserName", audioUser + `,${u2}`);
+            } else if (audioUser === u2) {
+                formdata.append("audioUserName", audioUser + `,${u1}`);
+            }
+
+            formdata.append("languagePracticeId", langId);
+            formdata.append("languagePracticeQuestionId", "1");
+            formdata.append("languagePracticeType", qType.toString());
+            formdata.append("subtitle", subtitle);
+            formdata.append("audio", audioBlob ? audioBlob : "");
+            formdata.append("originalSentence", "");
+            formdata.append("scrambledSentence", "");
+            formdata.append("order", (questions.length > 0 ? questions[0].audioFilePaths[questions[0].audioFilePaths.length - 1].order + 1 : 1).toString());
         }
 
-        formdata.append("languagePracticeId", langId);
-        formdata.append("languagePracticeQuestionId", "1");
-        formdata.append("languagePracticeType", qType.toString());
-        formdata.append("subtitle", subtitle);
-        formdata.append("audio", audioBlob ? audioBlob : "");
-        formdata.append("originalSentence", "");
-        formdata.append("scrambledSentence", "");
-        formdata.append("order", (questions.length > 0 ? questions[0].audioFilePaths[questions[0].audioFilePaths.length - 1].order + 1 : 1).toString());
+        if(qType === 2) {
+            formdata.append("languagePracticeId", langId);
+            formdata.append("languagePracticeQuestionId", "1");
+            formdata.append("languagePracticeType", qType.toString());
+            formdata.append("subtitle", "");
+            formdata.append("audio","");
+            formdata.append("audioUserName", "");
+            formdata.append("originalSentence", correctSentence);
+            formdata.append("scrambledSentence", scrambledSentence);
+            formdata.append("order", "1");
+        }
 
         try {
             const res = await createLanguagePracticeQuestion(formdata, token);
@@ -759,6 +649,61 @@ export default function LanguagePracticeMaintenance() {
 
                                     </div>
                                 )}
+                            </div>
+                        )}
+
+                        {qType === 2 && (
+                            <div className="dl-outer">
+                                <Grid container spacing={2} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                                    <Grid item sm={12}>
+                                        <TextField
+                                            label="Scrambled Sentence"
+                                            fullWidth
+                                            size="small"
+                                            multiline
+                                            rows={3}
+                                            variant="outlined"
+                                            value={scrambledSentence}
+                                            onChange={(e) => {
+                                                setScrambledSentence(e.target.value);
+                                            }}
+                                        />
+                                    </Grid>
+                                    <Grid item sm={12}>
+                                        <TextField
+                                            label="Correct Sentence"
+                                            fullWidth
+                                            size="small"
+                                            multiline
+                                            rows={3}
+                                            variant="outlined"
+                                            value={correctSentence}
+                                            onChange={(e) => {
+                                                setCorrectSentence(e.target.value);
+                                            }}
+                                        />
+                                    </Grid>
+                                    <Grid item sm={12}>
+                                        <Button variant="contained" onClick={() => handleCreateQuestion()} disabled={!correctSentence || !scrambledSentence}>
+                                            Add Sentence
+                                        </Button>
+                                    </Grid>
+                                </Grid>
+
+                                <Divider sx={{ my: 2 }} />
+
+                                <Grid item xs={12} sm={12} mt={2}>
+                                    {questions.length > 0 ? (
+                                        questions.map((q: any, qIdx: number) => (
+                                            <div key={qIdx} style={{ padding: "8px", backgroundColor: "#f0f0f0", borderRadius: "8px", marginBottom: "8px" }}>
+                                                <Typography variant="body1"><b>Scrambled Sentence :</b> {q.scrambledSentence}</Typography>
+                                                <Typography variant="body1" sx={{ marginTop: "8px" }}><b>Correct Sentence :</b> {q.originalSentence}</Typography>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <Typography variant="body2">No sentences added yet.</Typography>
+                                    )}
+                                </Grid>
                             </div>
                         )}
 
