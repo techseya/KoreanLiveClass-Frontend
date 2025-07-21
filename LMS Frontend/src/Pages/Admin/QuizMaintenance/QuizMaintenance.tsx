@@ -519,7 +519,7 @@ export default function QuizMaintenance() {
                                     <Button
                                         className="reset-btn"
                                         variant="contained"
-                                        color="primary"
+                                        style={{backgroundColor: "grey !important", color: "white"}}
                                         onClick={(e) => {
                                             handleReset()
                                             setUpdateBtnVisible(false)
