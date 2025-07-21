@@ -108,7 +108,6 @@ export default function LanguagePracticeMaintenance() {
     useEffect(() => {
         handleGetCourses();
         handleGetLanguagePractices();
-        handleGetQuestions(1);
     }, []);
 
     useEffect(() => {
