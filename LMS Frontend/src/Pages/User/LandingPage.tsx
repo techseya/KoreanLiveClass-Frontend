@@ -6,7 +6,7 @@ import k1 from "../../Assets/Images/k1.jpg";
 import k2 from "../../Assets/Images/k2.jpg";
 import k3 from "../../Assets/Images/k3.jpeg";
 import logo from "../../Assets/Images/logo.jpeg"
-import { AutoStories, Close, Facebook, Instagram, Verified, WhatsApp, YouTube } from "@mui/icons-material";
+import { AutoStories, Close, Facebook, Forward, Instagram, Verified, WhatsApp, YouTube } from "@mui/icons-material";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import phoneTemp from "../../Assets/Images/phone-template.png"
@@ -572,14 +572,20 @@ export default function Landing() {
         <div className="space"></div>
         <div className="ins-inner">
           <div className="ins-inner1">
-            <div className="ins-in">
+            <div className="ins-in14">
               <div className="img14">
-                <img style={{width: "100%", maxHeight: "400px", objectFit: "cover", borderRadius: "10px"}} src={quizImg} alt="" />
+                <img style={{width: "100%", maxHeight: "280px", objectFit: "cover", borderRadius: "10px"}} src={quizImg} alt="" />
               </div>
             </div>
-            <div className="ins-in" data-aos="fade-up" data-aos-delay="100">
+            <div className="ins-in14" data-aos="fade-up" data-aos-delay="100">
               <div className="ins-main-title" data-aos="fade-up" data-aos-delay="100">
                 {t("quiz")}
+              </div>              
+              <div className="ins-main-desc" data-aos="fade-up" data-aos-delay="200">
+                {t("quizDetails")}
+              </div>       
+              <div onClick={() => navigate("/quizes")} style={{color: "#0047aa", display: "flex", alignItems: "center !important", gap :"10px",  cursor: "pointer"}} className="ins-main-desc" data-aos="fade-up" data-aos-delay="200">
+                <Forward /> {t("quiz")}
               </div>
             </div>
           </div>
