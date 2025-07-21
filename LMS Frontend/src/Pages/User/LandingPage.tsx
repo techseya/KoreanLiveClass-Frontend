@@ -560,6 +560,39 @@ export default function Landing() {
         <div className="space"></div>
         <div className="space"></div>
       </div>
+      
+      <div id="korean-books" className="space"></div>
+      <div className="space"></div>
+      <div className="space"></div>
+      <div className="space"></div>
+
+      <div className="third-outer">
+        <div className="space"></div>
+        <div className="space"></div>
+        <div className="ins-inner">
+          <div className="ins-inner1">
+            <div className="ins-in">
+              <div className="img1">
+                <iframe
+                  className="video-embed"
+                  src="https://www.youtube.com/embed/fAjqo3VbHSc"
+                  title="YouTube video"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  data-aos="fade-up"
+                  data-aos-delay="500"
+                ></iframe>
+              </div>
+            </div>
+            <div className="ins-in" data-aos="fade-up" data-aos-delay="100">
+              <div className="ins-main-title" data-aos="fade-up" data-aos-delay="100">
+                {t("quiz")}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div id="korean-books" className="space"></div>
       <div className="space"></div>
