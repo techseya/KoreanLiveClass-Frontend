@@ -1412,7 +1412,7 @@ body {
   width: 30%;
   border-radius: 50%;
   z-index: 10;
-  padding-left: 15px;
+  margin-left: 15px;
 }
 
 .ins-info{
@@ -1520,10 +1520,6 @@ body {
 
   .carousel-card {
     width: 38%;
-  }
-
-  .ins-inner1{
-    display: block;
   }
 
   .ins-in{
@@ -1674,6 +1670,17 @@ body {
     width: 100%;
     height: auto;
     padding-bottom: 30px;
+  }
+  
+  .ins-in14 {
+    width: 100%;
+    height: auto;
+    padding-bottom: 30px;
+    text-align: center;
+  }
+
+  .img14{
+    width: 100%;
   }
 
   .img2 {

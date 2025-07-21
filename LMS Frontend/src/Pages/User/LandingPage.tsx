@@ -50,6 +50,7 @@ import { getAllNotices } from "src/Services/notice_api";
 import CustomModal from "src/Common/Components/CustomModal";
 import "../../Common/styles/courses.css";
 import quizImg from "../../Assets/Images/quiz.jpg"
+import langImg from "../../Assets/Images/lang.jpg"
 
 const Transition = forwardRef(function Transition(props: any, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -561,8 +562,7 @@ export default function Landing() {
         <div className="space"></div>
         <div className="space"></div>
       </div>
-      
-      <div id="korean-books" className="space"></div>
+
       <div className="space"></div>
       <div className="space"></div>
       <div className="space"></div>
@@ -590,6 +590,42 @@ export default function Landing() {
             </div>
           </div>
         </div>
+      </div>
+
+      <div className="space"></div>
+      <div className="space"></div>
+      <div className="space"></div>
+      <div className="space"></div>
+
+      <div className="third-outer bg-layer">
+
+        <div className="space"></div>
+        <div className="space"></div>        
+
+        <div className="ins-inner">
+          <div className="ins-inner1">
+            <div className="ins-in14" data-aos="fade-up" data-aos-delay="100">
+              <div className="ins-main-title" data-aos="fade-up" data-aos-delay="100">
+                {t("lang")}
+              </div>              
+              <div className="ins-main-desc" data-aos="fade-up" data-aos-delay="200">
+                {t("langDetails")}
+              </div>       
+              <div onClick={() => navigate("/quizes")} style={{color: "#0047aa", display: "flex", alignItems: "center !important", gap :"10px",  cursor: "pointer"}} className="ins-main-desc" data-aos="fade-up" data-aos-delay="200">
+                <Forward /> {t("lang")}
+              </div>
+            </div>
+            <div className="ins-in14">
+              <div className="img14">
+                <img style={{width: "100%", maxHeight: "280px", objectFit: "cover", borderRadius: "10px"}} src={langImg} alt="" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="space"></div>
+        <div className="space"></div>
+        <div className="space"></div>
       </div>
 
       <div id="korean-books" className="space"></div>
