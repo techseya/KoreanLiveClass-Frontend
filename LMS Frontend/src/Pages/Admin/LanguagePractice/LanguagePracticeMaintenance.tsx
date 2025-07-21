@@ -5,7 +5,10 @@ import {
     CircularProgress,
     StepLabel,
     Stepper,
-    Step
+    Step,
+    DialogTitle,
+    DialogContentText,
+    DialogActions
 } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
@@ -66,6 +69,7 @@ export default function LanguagePracticeMaintenance() {
     const [qTextFieldsB, setQTextFieldsB] = useState([{ key: "field01", value: "" }]);
     const [questionImage, setQuestionImage] = useState<File | null>(null);
     const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
+    const [newAudioBlob, setNewAudioBlob] = useState<Blob | null>(null);
     const [subtitle, setSubtitle] = useState("");
     const [answers, setAnswers] = useState(["", "", "", ""]);
     const [correctAnswerIndex, setCorrectAnswerIndex] = useState(0);
@@ -82,7 +86,10 @@ export default function LanguagePracticeMaintenance() {
     const [u2, setU2] = useState("")
     const [langDetailsOpen, setLangDetailsOpen] = useState(false)
     const [audioUser, setAudioUser] = useState("default")
+    const [selectedAudioUser, setSelectedAudioUser] = useState("default")
+    const [selectedSubtitle, setSelectedSubtitle] = useState("");
     const [selectedAudioQuestionOrder, setSelectedAudioQuestionOrder] = useState<any>(null);
+    const [audioUpdateVisible, setAudioUpdateVisible] = useState(false);
 
     const steps = ["Select Language", "Add Practice Items", "Review & Submit"];
 
@@ -378,56 +385,23 @@ export default function LanguagePracticeMaintenance() {
         setSubtitle("");
     }
 
-    const handleUpdateQuestion = async () => {
-        setLoading(true)
-        const formData = new FormData();
-        formData.append("id", id)
-        formData.append("langId", langId);
-        formData.append("questionType", qType.toString());
-        formData.append("questionText", qType === 1 ? `"${qTextJson}"` : `"${qTextJsonB}"`);
-        formData.append("image", questionImage ? questionImage : "");
-        formData.append("audio", audioBlob ? audioBlob : "");
-        formData.append("answer1", qType === 1 ? answers[0] : "");
-        formData.append("answer2", qType === 1 ? answers[1] : "");
-        formData.append("answer3", qType === 1 ? answers[2] : "");
-        formData.append("answer4", qType === 1 ? answers[3] : "");
-        formData.append("correctAnswerMcq", qType === 1 ? (correctAnswerIndex + 1).toString() : "");
-        formData.append("correctAnswerFillInBlanks", qType === 2 ? JSON.stringify(fillBlankAnswers) : "");
-
-        try {
-            const res = await updateQuestion(formData)
-            setLoading(false)
-            alert(res.data.message);
-            handleClearFields();
-            handleGetQuestions(langId)
-        } catch (error: any) {
-            setLoading(false)
-            alert(error.response.data.message)
+    const handleUpdateAudioQuestion = async (order: any, audioUserName: any, subtitle: any) => {
+        if(audioUserName === u1) {
+            audioUserName = audioUserName + `,${u2}`;
+        }else if(audioUserName === u2) {
+            audioUserName = audioUserName + `,${u1}`;
         }
-    }
-
-    const handleDeleteQuestion = async () => {
-        try {
-            const res = await deleteQuestion(id);
-            alert(res.data.message);
-            handleClearFields()
-            handleGetQuestions(langId)
-        } catch (error: any) {
-            alert(error.response.data.message);
-        }
-    }
-
-    const handleUpdateAudioQuestion = async (order:any, audioUserName:any, subtitle:any) => {
         const formData = new FormData();
         formData.append("languagePracticeId", langId);
         formData.append("order", order);
         formData.append("audioUserName", audioUserName ? audioUserName : "");
         formData.append("subtitle", subtitle);
-        formData.append("audio", audioBlob ? audioBlob : "");
+        formData.append("audio", newAudioBlob ? newAudioBlob : audioBlob ? audioBlob : "");
 
         try {
             const res = await updateLanguagePracticeAudioQuestion(formData, token);
             alert(res.data);
+            setAudioUpdateVisible(false);
             handleClearFields();
             handleGetQuestions(langId);
         } catch (error: any) {
@@ -450,8 +424,8 @@ export default function LanguagePracticeMaintenance() {
         if (qType === 0) {
             alert("Please select a question type.");
             return;
-        } 
-        
+        }
+
         const formdata = new FormData();
         if (audioUser === u1) {
             formdata.append("audioUserName", audioUser + `,${u2}`);
@@ -507,6 +481,71 @@ export default function LanguagePracticeMaintenance() {
                 onDisagree={handleClose}
                 onClose={handleClose}
             />
+
+            <Dialog
+                open={audioUpdateVisible}
+                onClose={() => setAudioUpdateVisible(false)}
+                fullWidth
+                maxWidth="md"
+                aria-labelledby="form-dialog-title"
+            >
+                <DialogTitle id="form-dialog-title">Update Audio Question</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        To update the audio question, please fill in the details below.
+                    </DialogContentText>
+                    <Select
+                        size="small"
+                        value={selectedAudioUser}
+                        onChange={(e) => {
+                            setSelectedAudioUser(e.target.value)
+                        }}
+                        fullWidth
+                    >
+                        <MenuItem disabled value="default">Select User</MenuItem>
+                        <MenuItem value={u1}>{u1}</MenuItem>
+                        <MenuItem value={u2}>{u2}</MenuItem>
+                    </Select>
+                    <TextField
+                        margin="dense"
+                        label="Subtitle"
+                        type="text"
+                        value={selectedSubtitle}
+                        onChange={(e) => setSelectedSubtitle(e.target.value)}
+                        fullWidth
+                        variant="outlined"
+                    />
+                    <Grid item xs={12} sm={12} mt={2}>
+                        <AudioRecorder onRecordingComplete={(blob) => setNewAudioBlob(blob)} />
+                    </Grid>
+
+                    {newAudioBlob && (
+                        <Grid item xs={12}>
+                            <Typography variant="subtitle1">Audio Preview</Typography>
+                            <Box display="flex" alignItems="center" gap={2}>
+                                <audio controls src={URL.createObjectURL(newAudioBlob)} />
+                                <Button
+                                    variant="outlined"
+                                    color="error"
+                                    onClick={() => setNewAudioBlob(null)}
+                                >
+                                    Delete Audio
+                                </Button>
+                            </Box>
+                        </Grid>
+                    )}
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setAudioUpdateVisible(false)} color="primary">
+                        Cancel
+                    </Button>
+                    <Button color="primary" onClick={() => {
+                        handleUpdateAudioQuestion(selectedAudioQuestionOrder, selectedAudioUser, selectedSubtitle);
+                    }}>
+                        Update
+                    </Button>
+                </DialogActions>
+            </Dialog>
             <Dialog
                 fullScreen
                 open={openFullScreenModal}
@@ -664,11 +703,16 @@ export default function LanguagePracticeMaintenance() {
                                                                     </div>
                                                                     <div style={{ display: "flex", flexDirection: "column", gap: "8px", padding: "8px 10px", backgroundColor: "#dfe6e9", borderRadius: "8px", position: "relative" }}>
                                                                         <div style={{ position: "absolute", top: "8px", right: "8px", display: "flex", gap: "8px" }}>
-                                                                            <EditIcon style={{ fontSize: "16px", cursor: "pointer" }}/>
-                                                                            <Delete style={{ fontSize: "16px", cursor: "pointer" }} onClick={() => {                                                                               
+                                                                            <EditIcon style={{ fontSize: "16px", cursor: "pointer" }} onClick={() => {
+                                                                                setSelectedAudioUser(question.audioUserName.split(",")[0]);
+                                                                                setSelectedSubtitle(question.subtitle);
+                                                                                setSelectedAudioQuestionOrder(question.order);
+                                                                                setAudioUpdateVisible(true);
+                                                                            }} />
+                                                                            <Delete style={{ fontSize: "16px", cursor: "pointer" }} onClick={() => {
                                                                                 setSelectedAudioQuestionOrder(question.order);
                                                                                 setIsOpen1(true)
-                                                                            }}/>
+                                                                            }} />
                                                                         </div>
                                                                         {question?.audioUserName?.split(",")[0] || "User1"}
                                                                         <audio controls src={question?.audioFilePath ? question.audioFilePath.replace("dl=0", "raw=1") : ""} />
@@ -681,15 +725,20 @@ export default function LanguagePracticeMaintenance() {
                                                             </div>
 
                                                         ) : (
-                                                            <div style={{ display: "flex",flexDirection: "column", alignItems: "flex-end" }}>
+                                                            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
                                                                 <div style={{ display: "flex", gap: "8px" }} key={`${qIdx}-${index}`}>
                                                                     <div style={{ display: "flex", flexDirection: "column", gap: "8px", padding: "8px 10px", backgroundColor: "#dfe6e9", borderRadius: "8px", position: "relative" }}>
                                                                         <div style={{ position: "absolute", top: "8px", right: "8px", display: "flex", gap: "8px" }}>
-                                                                            <EditIcon style={{ fontSize: "16px", cursor: "pointer" }}/>
+                                                                            <EditIcon style={{ fontSize: "16px", cursor: "pointer" }} onClick={() => {
+                                                                                setSelectedAudioUser(question.audioUserName.split(",")[0]);
+                                                                                setSelectedSubtitle(question.subtitle);
+                                                                                setSelectedAudioQuestionOrder(question.order);
+                                                                                setAudioUpdateVisible(true);
+                                                                            }} />
                                                                             <Delete style={{ fontSize: "16px", cursor: "pointer" }} onClick={() => {
                                                                                 setSelectedAudioQuestionOrder(question.order);
                                                                                 setIsOpen1(true);
-                                                                            }}/>
+                                                                            }} />
                                                                         </div>
                                                                         {question?.audioUserName?.split(",")[0] || "User1"}
                                                                         <audio controls src={question?.audioFilePath ? question.audioFilePath.replace("dl=0", "raw=1") : ""} />
