@@ -49,6 +49,7 @@ import notificationIcon from "../../Assets/Images/notification.png"
 import { getAllNotices } from "src/Services/notice_api";
 import CustomModal from "src/Common/Components/CustomModal";
 import "../../Common/styles/courses.css";
+import quizImg from "../../Assets/Images/quiz.jpg"
 
 const Transition = forwardRef(function Transition(props: any, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -573,16 +574,7 @@ export default function Landing() {
           <div className="ins-inner1">
             <div className="ins-in">
               <div className="img1">
-                <iframe
-                  className="video-embed"
-                  src="https://www.youtube.com/embed/fAjqo3VbHSc"
-                  title="YouTube video"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  data-aos="fade-up"
-                  data-aos-delay="500"
-                ></iframe>
+                <img src={quizImg} alt="" />
               </div>
             </div>
             <div className="ins-in" data-aos="fade-up" data-aos-delay="100">
