@@ -56,6 +56,20 @@ export const updateLanguagePracticeAudioQuestion = async (body: any, token: any)
     }
 }
 
+export const updateLanguagePracticeWordQuestion = async (body: any, token: any) => {
+    try {
+        const response = await axios.put(api + `language-practice/question/word`, body, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
 export const deleteLanguagePractice = async (id: any, token: any) => {
     try {
         const response = await axios.delete(api + `language-practice/${id}`, {
@@ -72,6 +86,19 @@ export const deleteLanguagePractice = async (id: any, token: any) => {
 export const deleteLanguagePracticeAudioQuestion = async (languageId: any, order: any, token: any) => {
     try {
         const response = await axios.delete(api + `language-practice/question/audio/${languageId}/${order}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const deleteLanguagePracticeWordQuestion = async (languageId: any, id: any, token: any) => {
+    try {
+        const response = await axios.delete(api + `language-practice/question/word/${languageId}/${id}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

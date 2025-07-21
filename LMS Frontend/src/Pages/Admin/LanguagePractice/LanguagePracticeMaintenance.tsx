@@ -33,7 +33,7 @@ import { RadioGroup, FormControlLabel, Radio } from "@mui/material";
 import { AudioRecorder } from "src/Common/Components/AudioRecorder";
 import { get, set } from "lodash";
 import { t } from "i18next";
-import { createLanguagePracticeQuestion, deleteLanguagePractice, deleteLanguagePracticeAudioQuestion, getLanguagePracticeQuestions, getLanguagePractices, updateLanguagePractice, updateLanguagePracticeAudioQuestion } from "src/Services/lang_practice_api";
+import { createLanguagePracticeQuestion, deleteLanguagePractice, deleteLanguagePracticeAudioQuestion, deleteLanguagePracticeWordQuestion, getLanguagePracticeQuestions, getLanguagePractices, updateLanguagePractice, updateLanguagePracticeAudioQuestion, updateLanguagePracticeWordQuestion } from "src/Services/lang_practice_api";
 import { a, h } from "framer-motion/dist/types.d-B50aGbjN";
 import "../../../Common/styles/lang.css"
 
@@ -60,6 +60,7 @@ export default function LanguagePracticeMaintenance() {
     const [rows, setRows] = useState<any[]>([]);
     const [isOpen, setIsOpen] = useState(false);
     const [isOpen1, setIsOpen1] = useState(false);
+    const [isOpen2, setIsOpen2] = useState(false);
     const [langId, setLangId] = useState("")
     const [quizName, setQuizName] = useState("");
     const [thumb, setThumb] = useState<File | any>(null);
@@ -93,10 +94,9 @@ export default function LanguagePracticeMaintenance() {
     const [selectedSubtitle, setSelectedSubtitle] = useState("");
     const [selectedAudioQuestionOrder, setSelectedAudioQuestionOrder] = useState<any>(null);
     const [audioUpdateVisible, setAudioUpdateVisible] = useState(false);
+    const [selectedId, setSelectedId] = useState("");
 
     const token = localStorage.getItem("token") || "";
-
-    const [activeStep, setActiveStep] = useState(0);
 
     const handleOpenFullScreenModal = (row: any) => {
         setOpenFullScreenModal(true)
@@ -286,9 +286,37 @@ export default function LanguagePracticeMaintenance() {
         }
     }
 
+    const handleUpdateWordQuestion = async () => {
+        const formData = new FormData();
+        formData.append("id", selectedId);
+        formData.append("scrambledSentence", scrambledSentence);
+        formData.append("originalSentence", correctSentence);
+
+        try {
+            const res = await updateLanguagePracticeWordQuestion(formData, token);
+            alert(res.data);
+            setUpdateBtnVisible(false);
+            handleClearFields();
+            handleGetQuestions(langId);
+        } catch (error: any) {
+            alert(error.response.data.message);
+        }
+    }
+
     const handleDeleteAudioQuestion = async () => {
         try {
-            const res = await deleteLanguagePracticeAudioQuestion(langId, selectedAudioQuestionOrder, token);
+            const res = await deleteLanguagePracticeAudioQuestion(langId, selectedId, token);
+            alert(res.data);
+            handleClearFields();
+            handleGetQuestions(langId);
+        } catch (error: any) {
+            alert(error.response.data.message);
+        }
+    }
+
+    const handleDeleteWordQuestion = async () => {
+        try {
+            const res = await deleteLanguagePracticeWordQuestion(langId, selectedId, token);
             alert(res.data);
             handleClearFields();
             handleGetQuestions(langId);
@@ -320,12 +348,12 @@ export default function LanguagePracticeMaintenance() {
             formdata.append("order", (questions.length > 0 ? questions[0].audioFilePaths[questions[0].audioFilePaths.length - 1].order + 1 : 1).toString());
         }
 
-        if(qType === 2) {
+        if (qType === 2) {
             formdata.append("languagePracticeId", langId);
             formdata.append("languagePracticeQuestionId", "1");
             formdata.append("languagePracticeType", qType.toString());
             formdata.append("subtitle", "");
-            formdata.append("audio","");
+            formdata.append("audio", "");
             formdata.append("audioUserName", "");
             formdata.append("originalSentence", correctSentence);
             formdata.append("scrambledSentence", scrambledSentence);
@@ -360,6 +388,16 @@ export default function LanguagePracticeMaintenance() {
                 onAgree={handleDeleteAudioQuestion}
                 onDisagree={() => setIsOpen1(false)}
                 onClose={() => setIsOpen1(false)}
+            />
+            <Dialogbox
+                open={isOpen2}
+                title="Delete Confirmation"
+                content="Are you sure you want to delete this word scramble question?"
+                agreeButtonText="Yes, Delete"
+                disagreeButtonText="No"
+                onAgree={handleDeleteWordQuestion}
+                onDisagree={() => setIsOpen2(false)}
+                onClose={() => setIsOpen2(false)}
             />
             <Dialogbox
                 open={isOpen}
@@ -684,9 +722,14 @@ export default function LanguagePracticeMaintenance() {
                                         />
                                     </Grid>
                                     <Grid item sm={12}>
-                                        <Button variant="contained" onClick={() => handleCreateQuestion()} disabled={!correctSentence || !scrambledSentence}>
-                                            Add Sentence
-                                        </Button>
+                                        {updateBtnVisible ? (
+                                            <Button variant="contained" onClick={() => handleUpdateWordQuestion()} disabled={!correctSentence || !scrambledSentence}>
+                                                Update Sentence
+                                            </Button>) : (
+                                            <Button variant="contained" onClick={() => handleCreateQuestion()} disabled={!correctSentence || !scrambledSentence}>
+                                                Add Sentence
+                                            </Button>
+                                        )}
                                     </Grid>
                                 </Grid>
 
@@ -695,7 +738,18 @@ export default function LanguagePracticeMaintenance() {
                                 <Grid item xs={12} sm={12} mt={2}>
                                     {questions.length > 0 ? (
                                         questions.map((q: any, qIdx: number) => (
-                                            <div key={qIdx} style={{ padding: "8px", backgroundColor: "#f0f0f0", borderRadius: "8px", marginBottom: "8px" }}>
+                                            <div key={qIdx} style={{ position: "relative", padding: "8px", backgroundColor: "#f0f0f0", borderRadius: "8px", marginBottom: "8px" }} onClick={() => {
+                                                setScrambledSentence(q.scrambledSentence);
+                                                setCorrectSentence(q.originalSentence);
+                                                setSelectedId(q.id);
+                                                setUpdateBtnVisible(true);
+                                            }}>
+                                                <div style={{ position: "absolute", top: "8px", right: "8px", cursor: "pointer", display: "flex", gap: "8px" }}>
+                                                    <Delete onClick={() => {
+                                                        setSelectedId(q.id);
+                                                        setIsOpen2(true);
+                                                    }} />
+                                                </div>
                                                 <Typography variant="body1"><b>Scrambled Sentence :</b> {q.scrambledSentence}</Typography>
                                                 <Typography variant="body1" sx={{ marginTop: "8px" }}><b>Correct Sentence :</b> {q.originalSentence}</Typography>
                                             </div>
