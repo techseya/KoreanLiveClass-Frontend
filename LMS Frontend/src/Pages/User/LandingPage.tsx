@@ -573,7 +573,7 @@ export default function Landing() {
         <div className="ins-inner">
           <div className="ins-inner1">
             <div className="ins-in">
-              <div className="img1">
+              <div className="img14">
                 <img src={quizImg} alt="" />
               </div>
             </div>
