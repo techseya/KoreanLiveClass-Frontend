@@ -611,7 +611,7 @@ export default function Landing() {
               <div className="ins-main-desc" data-aos="fade-up" data-aos-delay="200">
                 {t("langDetails")}
               </div>       
-              <div onClick={() => navigate("/quizes")} style={{color: "#0047aa", display: "flex", alignItems: "center !important", gap :"10px",  cursor: "pointer"}} className="ins-main-desc" data-aos="fade-up" data-aos-delay="200">
+              <div onClick={() => navigate("/user-language-practice")} style={{color: "#0047aa", display: "flex", alignItems: "center !important", gap :"10px",  cursor: "pointer"}} className="ins-main-desc" data-aos="fade-up" data-aos-delay="200">
                 <Forward /> {t("lang")}
               </div>
             </div>

@@ -27,6 +27,7 @@ import Profile from "./Pages/User/Profile";
 import InstructorChat from "./Pages/Admin/Chat/InstructorChat";
 import UserQuizes from "./Pages/User/Quizes";
 import LanguagePractice from "./Pages/Admin/LanguagePractice";
+import UserLanguagePractice from "./Pages/User/UserLanguagePractice";
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -42,10 +43,11 @@ const App: React.FC = () => {
   const isTerms = location.pathname === "/terms-services"
   const isProfile = location.pathname === "/profile"
   const isQuiz = location.pathname === "/quizes";
+  const isUserLanguagePractice = location.pathname === "/user-language-practice";
 
   return (
     <>
-      {!isQuiz && !isProfile && !isHomePage && !isCourses && !isCategory && !isCourse && !isRegister && !isMyCourses && !isMyCourse && !isCategoryC && !isPrivacy && !isTerms ?(
+      {!isQuiz && !isProfile && !isHomePage && !isCourses && !isCategory && !isCourse && !isRegister && !isMyCourses && !isMyCourse && !isCategoryC && !isPrivacy && !isTerms && !isUserLanguagePractice ? (
         <AdvancedNavbar>
           <Routes>
             <Route path="/dashboard" element={<Dashboard />} />
@@ -77,6 +79,7 @@ const App: React.FC = () => {
             <Route path="/terms-services" element={<Terms />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/quizes" element={<UserQuizes />} />
+            <Route path="/user-language-practice" element={<UserLanguagePractice />} />
           </Routes>
         </Navbar>
       )}
