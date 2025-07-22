@@ -3,7 +3,7 @@ import "../../Common/styles/courses.css";
 import "../../Common/styles/home.css";
 import { getAllCourses } from "src/Services/course_api";
 import { ClockCircleOutlined } from "@ant-design/icons";
-import { Tooltip, TextField, Grid } from "@mui/material";
+import { Tooltip, TextField, Grid, Button, Typography, Divider, Box } from "@mui/material";
 import insImg from "../../Assets/Images/ins.jpg";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
@@ -21,9 +21,37 @@ export default function UserLanguagePracticeDemo() {
     const { t, i18n } = useTranslation();
     const location = useLocation();
     const [questions, setQuestions] = useState<any[]>([]);
+    const [userAnswers, setUserAnswers] = useState<string[]>([]);
+    const [correctAnswers, setCorrectAnswers] = useState<boolean[]>([]);
+
+    useEffect(() => {
+        setUserAnswers(Array(questions.length).fill(""));
+        setCorrectAnswers(Array(questions.length).fill(false));
+    }, [questions]);
+
+    const handleInputChange = (index: number, value: string) => {
+        const updatedAnswers = [...userAnswers];
+        updatedAnswers[index] = value;
+        setUserAnswers(updatedAnswers);
+    };
+
+    const handleCheckAnswer = (index: number) => {
+        const userAnswer = userAnswers[index].trim().toLowerCase();
+        const correctAnswer = questions[index].originalSentence.trim().toLowerCase();
+
+        const updatedCorrect = [...correctAnswers];
+        updatedCorrect[index] = userAnswer === correctAnswer;
+        setCorrectAnswers(updatedCorrect);
+    };
 
     const navigate = useNavigate();
     const token = localStorage.getItem("token") || "";
+
+    useEffect(() => {
+        if (questions.length) {
+            setUserAnswers(Array(questions.length).fill(""));
+        }
+    }, [questions]);
 
     const handleCourseClick = (course: any) => {
 
@@ -122,7 +150,66 @@ export default function UserLanguagePracticeDemo() {
                                             )
                                         ))
                                     )}
-                                </>) : (<></>)}
+                                </>) : (<>
+                                    No questions found
+                                </>)}
+                            </Grid>
+                        </div>
+                    )}
+
+                    {type === "2" && (
+                        <div className="lang-card" data-aos="fade-up" data-aos-delay="100">
+                            <Grid item xs={12} sm={12} mt={2}>
+                                <h2>{t("scramble")}</h2>
+                                {questions.length > 0 ? (
+                                    <>
+                                        {questions.map((q, idx) => (
+                                            <Box key={q.id} sx={{ mb: 3 }}>
+                                                <Typography variant="h6" gutterBottom>
+                                                    {idx + 1} ) {q.scrambledSentence.split(" ").join(" / ")}
+                                                </Typography>
+                                                <TextField
+                                                    fullWidth
+                                                    placeholder="Enter the correct sentence"
+                                                    value={userAnswers[idx]}
+                                                    onChange={(e) => handleInputChange(idx, e.target.value)}
+                                                    size="small"
+                                                    sx={{
+                                                        "& .MuiOutlinedInput-root": {
+                                                            "& fieldset": {
+                                                                borderColor: correctAnswers[idx] ? "green" : "rgba(0, 0, 0, 0.23)",
+                                                            },
+                                                            "&:hover fieldset": {
+                                                                borderColor: correctAnswers[idx] ? "green" : "#000",
+                                                            },
+                                                            "&.Mui-focused fieldset": {
+                                                                borderColor: correctAnswers[idx] ? "green" : "#1976d2",
+                                                            },
+                                                        },
+                                                    }}
+                                                />
+                                                <Box sx={{ mt: 1 }}>
+                                                    <Button variant="outlined" onClick={() => handleCheckAnswer(idx)}>
+                                                        Check
+                                                    </Button>
+                                                </Box>
+                                                {correctAnswers[idx] && (
+                                                    <Typography sx={{ mt: 1, color: "green" }}>
+                                                        ✅ Correct!
+                                                    </Typography>
+                                                )}
+                                                {!correctAnswers[idx] && userAnswers[idx] && (
+                                                    <Typography sx={{ mt: 1, color: "red" }}>
+                                                        ❌ Incorrect.
+                                                    </Typography>
+                                                )}
+                                                <Divider sx={{ mt: 2 }} />
+                                            </Box>
+                                        ))}
+                                    </>
+                                ) : (
+                                    <>No questions found</>
+                                )}
                             </Grid>
                         </div>
                     )}
