@@ -92,10 +92,10 @@ export default function UserLanguagePracticeDemo() {
                                                         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
                                                             <Person sx={{ fontSize: "40px", color: "#1d6add", padding: "4px", backgroundColor: "wheat", borderRadius: "40px" }} />
                                                         </div>
-                                                        <div style={{ display: "flex", flexDirection: "column", gap: "8px", padding: "8px 10px", backgroundColor: "#dfe6e9", borderRadius: "8px", position: "relative" }}>
+                                                        <div className="audio-outer" style={{ display: "flex", flexDirection: "column", gap: "8px", padding: "8px 10px", backgroundColor: "#dfe6e9", borderRadius: "8px", position: "relative" }}>
 
                                                             {question?.audioUserName?.split(",")[0] || "User1"}
-                                                            <audio controls src={question?.audioFilePath ? question.audioFilePath.replace("dl=0", "raw=1") : ""} />
+                                                            <audio className="audio-player" controls src={question?.audioFilePath ? question.audioFilePath.replace("dl=0", "raw=1") : ""} />
                                                         </div>
                                                     </div>
                                                     <div style={{ padding: "4px 10px", borderRadius: "8px", margin: "8px" }}>
@@ -107,10 +107,10 @@ export default function UserLanguagePracticeDemo() {
                                             ) : (
                                                 <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
                                                     <div style={{ display: "flex", gap: "8px" }} key={`${qIdx}-${index}`}>
-                                                        <div style={{ display: "flex", flexDirection: "column", gap: "8px", padding: "8px 10px", backgroundColor: "#dfe6e9", borderRadius: "8px", position: "relative", alignItems: "flex-end" }}>
+                                                        <div className="audio-outer" style={{ display: "flex", flexDirection: "column", gap: "8px", padding: "8px 10px", backgroundColor: "#dfe6e9", borderRadius: "8px", position: "relative", alignItems: "flex-end" }}>
 
                                                             {question?.audioUserName?.split(",")[0] || "User1"}
-                                                            <audio controls src={question?.audioFilePath ? question.audioFilePath.replace("dl=0", "raw=1") : ""} />
+                                                            <audio className="audio-player" controls src={question?.audioFilePath ? question.audioFilePath.replace("dl=0", "raw=1") : ""} />
                                                         </div>
                                                         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
                                                             <Person sx={{ fontSize: "40px", color: "#1d6add", padding: "4px", backgroundColor: "wheat", borderRadius: "40px" }} />

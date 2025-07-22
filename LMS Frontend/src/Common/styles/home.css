@@ -692,3 +692,9 @@
         transform: translateY(-50%);
     }
 }
+
+@media (max-width: 426px) {
+    .lang-card{
+        width: 92%;
+    }
+}

@@ -387,7 +387,16 @@
         width: 80% !important;
     }
 
+    .audio-outer{
+        width: 200px !important;
+        padding: 10px !important;
+    }
+    .audio-player{
+        width: 100% !important;
+    }
+
     .words-outer{
         width: 90% !important;
     }
+    
 }
