@@ -78,7 +78,6 @@ export default function UserLanguagePracticeDemo() {
             </div>
 
             <div className="cmi">
-
                 <div className="courses-main-inner">
                     {type === "1" && (
                         <div className="lang-card" data-aos="fade-up" data-aos-delay="100">
