@@ -403,6 +403,20 @@
     color: #fcd34d;
 }
 
+.lang-card {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    /* Full height */
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    padding: 12px;
+    transition: 0.3s;
+}
+
 /* Hover effect */
 .top-course-card:hover {
     background-color: #e7e3e3;

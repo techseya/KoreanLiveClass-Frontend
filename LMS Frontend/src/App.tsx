@@ -1,4 +1,4 @@
-import React from "react";
+import React, { use } from "react";
 import { Route, Routes, useLocation, useMatch } from "react-router-dom";
 import Navbar from "./Layout/Navbar";
 import AdvancedNavbar from "./Layout/AdvancedNavbar";
@@ -28,6 +28,7 @@ import InstructorChat from "./Pages/Admin/Chat/InstructorChat";
 import UserQuizes from "./Pages/User/Quizes";
 import LanguagePractice from "./Pages/Admin/LanguagePractice";
 import UserLanguagePractice from "./Pages/User/UserLanguagePractice";
+import UserLanguagePracticeDemo from "./Pages/User/UserLanguagePracticeDemo";
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -44,10 +45,11 @@ const App: React.FC = () => {
   const isProfile = location.pathname === "/profile"
   const isQuiz = location.pathname === "/quizes";
   const isUserLanguagePractice = location.pathname === "/user-language-practice";
+  const isUserLanguagePracticeDemo = useMatch("/language-practice-demo/:id") !== null;
 
   return (
     <>
-      {!isQuiz && !isProfile && !isHomePage && !isCourses && !isCategory && !isCourse && !isRegister && !isMyCourses && !isMyCourse && !isCategoryC && !isPrivacy && !isTerms && !isUserLanguagePractice ? (
+      {!isQuiz && !isProfile && !isHomePage && !isCourses && !isCategory && !isCourse && !isRegister && !isMyCourses && !isMyCourse && !isCategoryC && !isPrivacy && !isTerms && !isUserLanguagePractice && !isUserLanguagePracticeDemo ? (
         <AdvancedNavbar>
           <Routes>
             <Route path="/dashboard" element={<Dashboard />} />
@@ -80,6 +82,7 @@ const App: React.FC = () => {
             <Route path="/profile" element={<Profile />} />
             <Route path="/quizes" element={<UserQuizes />} />
             <Route path="/user-language-practice" element={<UserLanguagePractice />} />
+            <Route path="/language-practice-demo/:id" element={<UserLanguagePracticeDemo />} />
           </Routes>
         </Navbar>
       )}

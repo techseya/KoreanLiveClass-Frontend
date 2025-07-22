@@ -75,7 +75,7 @@ export default function UserLanguagePractice() {
 
                 <div className="courses-main-inner">
                     {filteredLangs.length > 0 ? filteredLangs.map((lang, index) => (
-                        <Link to={`/course/${lang.id}`}
+                        <Link to={`/language-practice-demo/${lang.id}`}
                             style={{ textDecoration: "none" }}>
                             <div
                                 className="course-card"
