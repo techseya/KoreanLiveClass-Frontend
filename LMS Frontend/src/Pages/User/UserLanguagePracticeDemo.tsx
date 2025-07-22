@@ -107,7 +107,7 @@ export default function UserLanguagePracticeDemo() {
                                             ) : (
                                                 <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
                                                     <div style={{ display: "flex", gap: "8px" }} key={`${qIdx}-${index}`}>
-                                                        <div style={{ display: "flex", flexDirection: "column", gap: "8px", padding: "8px 10px", backgroundColor: "#dfe6e9", borderRadius: "8px", position: "relative" }}>
+                                                        <div style={{ display: "flex", flexDirection: "column", gap: "8px", padding: "8px 10px", backgroundColor: "#dfe6e9", borderRadius: "8px", position: "relative", alignItems: "flex-end" }}>
 
                                                             {question?.audioUserName?.split(",")[0] || "User1"}
                                                             <audio controls src={question?.audioFilePath ? question.audioFilePath.replace("dl=0", "raw=1") : ""} />
