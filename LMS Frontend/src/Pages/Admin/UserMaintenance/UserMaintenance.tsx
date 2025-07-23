@@ -191,6 +191,7 @@ export default function UserMaintenance() {
                 courseName: c.name,
                 courseDuration: c.duration || 0
             })),
+            points: editingUser.points || 0
         };
 
         console.log(payload);
@@ -664,6 +665,19 @@ export default function UserMaintenance() {
                                 />
                             </Grid>
                         )}
+
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                label="Points"
+                                fullWidth
+                                value={editingUser?.points || 0}
+                                onChange={(e) => {
+                                    const value = e.target.value;
+                                    handleFormChange("points", value)
+                                }}
+                                onFocus={(e) => e.target.select()}
+                            />
+                        </Grid>
 
                         <Grid item xs={12} sm={6}>
                             <FormControl fullWidth>
