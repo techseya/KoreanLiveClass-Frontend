@@ -47,6 +47,7 @@ export default function UserForm() {
     const [password, setPassword] = useState<any>("");
     const [status, setStatus] = useState("Active");
     const [country, setCountry] = useState<CountryOption>(countryOptions[0]);
+    const [promoCode, setPromoCode] = useState("");
 
     useEffect(() => {
         const defaultCountry = countryOptions.find(c => c.name === "Sri Lanka") || countryOptions[0];
@@ -76,7 +77,8 @@ export default function UserForm() {
             phoneNo: phoneNo,
             isHalfPayment: false,
             duration: 0,
-            activeStatus: status === "Active" ? 1 : 2
+            activeStatus: status === "Active" ? 1 : 2,
+            promoCode: promoCode || "",
         }
 
         try {
@@ -162,6 +164,15 @@ export default function UserForm() {
                             type="text"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
+                        />
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                        <TextField
+                            label="Promo Code"
+                            fullWidth
+                            value={promoCode}
+                            onChange={(e) => setPromoCode(e.target.value)}
                         />
                     </Grid>
 

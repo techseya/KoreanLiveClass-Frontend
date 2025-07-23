@@ -48,6 +48,7 @@ export default function Register() {
     const [status, setStatus] = useState("Active");
     const [password, setPassword] = useState("");
     const [cpassword, setCPassword] = useState("");
+    const [promoCode, setPromoCode] = useState("");
 
     const [deviceId, setDeviceId] = React.useState("")
 
@@ -138,7 +139,8 @@ export default function Register() {
             phoneNo,
             isHalfPayment: false,
             duration: Number(duration),
-            activeStatus: 1
+            activeStatus: 1,
+            promoCode
         };
 
         try {
@@ -234,6 +236,15 @@ export default function Register() {
                                 }}
                                 inputProps={{ inputMode: 'numeric' }}
                                 placeholder={`+${country.callingCode} XXXXXXXX`}
+                            />
+                        </Grid>
+
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                label="Promo Code"
+                                fullWidth
+                                value={promoCode}
+                                onChange={(e) => setPromoCode(e.target.value)}
                             />
                         </Grid>
 
