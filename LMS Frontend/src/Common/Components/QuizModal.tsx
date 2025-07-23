@@ -13,7 +13,7 @@ import { AccessAlarm } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
 import FullScreenQuizModal from "./FullScreenQuizModal"; // Adjust path if needed
 import "../styles/quiz.css";
-import { updateAttempt } from "src/Services/quiz_api";
+import { getPdf, updateAttempt } from "src/Services/quiz_api";
 
 interface QuizModalProps {
   open: boolean;
@@ -38,6 +38,7 @@ const QuizModal: React.FC<QuizModalProps> = ({
 }) => {
   const { t } = useTranslation();
   const [startModalOpen, setStartModalOpen] = useState(false);
+  const id = localStorage.getItem("id") || "";
 
   const handleUpdateAttempt = async () => {
     const payload = {
@@ -51,6 +52,19 @@ const QuizModal: React.FC<QuizModalProps> = ({
       console.error("Error updating attempt:", error);
       alert("Error updating attempt. Please try again.");
 
+    }
+  }
+  
+  const handleGetPdf = async () => {
+    const body = {
+      userId: id,
+      quizId: quizId
+    }
+
+    try {
+      const res = await getPdf(body);
+    } catch (error) {
+      alert("Error generating PDF. Please try again later.");
     }
   }
 
@@ -105,6 +119,26 @@ const QuizModal: React.FC<QuizModalProps> = ({
             }}
           >
             <AccessAlarm /> Duration: {quiz.quizDuration} hour(s)
+          </Typography>
+
+          <Typography
+            variant="subtitle2"
+            style={{
+              position: "absolute",
+              top: 60,
+              right: 25,
+              backgroundColor: "#01ad35ff",
+              color: "white",
+              padding: "5px 10px",
+              borderRadius: "5px",
+              display: "flex",
+              alignItems: "center",
+              gap: "5px",
+              cursor: "pointer"
+            }}
+            onClick={handleGetPdf}
+          >
+            Download Report
           </Typography>
 
           <div

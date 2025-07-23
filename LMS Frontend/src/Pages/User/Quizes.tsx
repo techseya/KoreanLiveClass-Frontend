@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { TextField, FormControl, InputLabel, Select, MenuItem, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { getAllCourses } from "src/Services/course_api";
 import Footer from "src/Layout/Footer";
-import { getQuiz, getQuizById } from "src/Services/quiz_api";
+import { getPdf, getQuiz, getQuizById } from "src/Services/quiz_api";
 import thumb from "../../Assets/Images/klc-thumb.png"
 import { GetAssignQuizes, getUserQuizDetails } from "src/Services/user_api";
 import QuizModal from "src/Common/Components/QuizModal";
@@ -37,6 +37,7 @@ export default function UserQuizes() {
             setCheckBoxVisibility(true);
         }
     }, []);
+
 
     const handleGetTopCourses = async () => {
         try {

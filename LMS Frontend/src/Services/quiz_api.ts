@@ -61,6 +61,26 @@ export const createQuiz = async (body:any) => {
     }
 }
 
+export const getPdf = async (body:any) => {
+    try {
+        const response = await axios.post(api+`question/pdf`,body)
+        if (response.data) {
+            const blob = new Blob([response.data], { type: 'application/pdf' });
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'quiz_report.pdf');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
+
 export const updateQuiz = async (body:any) => {
     try {
         const response = await axios.put(api+`quiz`,body,{
