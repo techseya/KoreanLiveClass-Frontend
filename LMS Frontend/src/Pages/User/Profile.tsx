@@ -2,7 +2,7 @@ import "../../Common/styles/profile.css"
 import userIcon from "../../Assets/Images/man.png"
 import { useEffect, useState } from "react"
 import { changePassword, getUser, getWallet, resetPassword } from "src/Services/user_api"
-import { Email, LocationCity, LocationOn, NotificationImportant, Phone, Wallet } from "@mui/icons-material"
+import { AccountBalanceTwoTone, AccountBalanceWalletTwoTone, Email, LocationCity, LocationOn, NotificationImportant, Phone, Wallet } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { Box, Button, Modal, Tab, Tabs, TextField, Typography } from "@mui/material"
 import React from "react"
@@ -274,7 +274,7 @@ export default function Profile() {
                             </div>
 
                             <div style={{width: "100%" , display: "flex", justifyContent: "center", alignItems: "center", margin: "10px 0"}}>
-                                <Wallet style={{marginRight: "5px"}}/> {wallet?.points || 0} <strong style={{marginLeft: "5px"}}> Points</strong>
+                                <AccountBalanceWalletTwoTone style={{marginRight: "5px"}}/> {wallet?.points || 0} <strong style={{marginLeft: "5px"}}> Points</strong>
                             </div>
 
                             <div className="i-outer">
