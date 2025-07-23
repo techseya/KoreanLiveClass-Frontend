@@ -72,7 +72,7 @@ const QuizModal: React.FC<QuizModalProps> = ({
       link.click();
       document.body.removeChild(link);
     } catch (error) {
-      alert("Error generating PDF. Please try again later.");
+      alert("Please Submit Minimum One Quiz Attempt to Download Report");
     }
   }
 
