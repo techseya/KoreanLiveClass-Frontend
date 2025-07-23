@@ -36,6 +36,8 @@ export default function UserQuizes() {
         } else {
             setCheckBoxVisibility(true);
         }
+
+        window.scrollTo(0, 0);
     }, []);
 
 
