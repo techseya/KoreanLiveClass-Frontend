@@ -89,7 +89,7 @@ const Footer: React.FC = () => {
                     </div>
                 </div>
                 <div className="footer-border">
-                    <p>&copy; {new Date().getFullYear()} Korean Live Class - Study Portal, All rights reserved</p>
+                    <p>&copy; {new Date().getFullYear()} Developed By <span style={{ cursor: "pointer", color: "#338fe4ff", fontWeight: "bold" }} onClick={() => window.open("https://techseya.lk", "_blank")}>Techseya (pvt) Ltd </span>, All rights reserved</p>
                 </div>
             </div>
         </footer>
