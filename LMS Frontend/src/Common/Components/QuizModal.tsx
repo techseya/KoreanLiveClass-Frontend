@@ -57,12 +57,20 @@ const QuizModal: React.FC<QuizModalProps> = ({
   
   const handleGetPdf = async () => {
     const body = {
-      userId: id,
+      userId: Number(id),
       quizId: quizId
     }
 
     try {
       const res = await getPdf(body);
+      const blob = new Blob([res.data], { type: 'application/pdf' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'report.pdf');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     } catch (error) {
       alert("Error generating PDF. Please try again later.");
     }
