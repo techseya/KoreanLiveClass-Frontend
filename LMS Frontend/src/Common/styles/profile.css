@@ -15,6 +15,21 @@
     justify-content: center;
 }
 
+.promo-code-label{
+    font-size: 13px;
+    font-family: 'Courier New', Courier, monospace !important;
+    background-color: rgba(250, 236, 114, 0.555);
+    border-radius: 5px;
+    border: 1px solid orange;
+    color: orange;
+    padding: 5px 10px;
+    width: fit-content;
+}
+
+.promo{
+    font-family: 'Courier New', Courier, monospace !important;
+}
+
 .profile-container {
     margin-top: 30px;
     padding: 15px 0;
@@ -56,7 +71,7 @@
     height: auto;
 }
 
-.username {
+.username1 {
     margin-top: 10px;
     font-size: 25px;
     font-weight: bold;

@@ -29,6 +29,20 @@ export const deleteUser = async (id:any, token: any) => {
     }
 };
 
+
+export const getWallet = async (email:any,token: any) => {
+    try {
+        const response = await axios.get(`${api}user/wallet?email=${email}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response;
+    } catch (error) {
+        throw error;
+    }
+};
+
 export const updateUser = async (body:any, token: any) => {
     try {
         const response = await axios.post(`${api}admin/manage-user`,body,{

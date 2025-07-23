@@ -1,8 +1,8 @@
 import "../../Common/styles/profile.css"
 import userIcon from "../../Assets/Images/man.png"
 import { useEffect, useState } from "react"
-import { changePassword, getUser, resetPassword } from "src/Services/user_api"
-import { Email, LocationCity, LocationOn, NotificationImportant, Phone } from "@mui/icons-material"
+import { changePassword, getUser, getWallet, resetPassword } from "src/Services/user_api"
+import { Email, LocationCity, LocationOn, NotificationImportant, Phone, Wallet } from "@mui/icons-material"
 import { useTranslation } from "react-i18next"
 import { Box, Button, Modal, Tab, Tabs, TextField, Typography } from "@mui/material"
 import React from "react"
@@ -58,6 +58,7 @@ export default function Profile() {
     const [notice, setNotice] = useState<any[]>([])
     const [noticeModal, setNoticeModal] = useState(false)
     const [imageErrors, setImageErrors] = useState<{ [key: string]: boolean }>({});
+    const [wallet, setWallet] = useState<any>(null)
 
     const handleImageError = (id: string | number) => {
         setImageErrors(prev => ({ ...prev, [id]: true }));
@@ -70,6 +71,15 @@ export default function Profile() {
             setNotice(response.data)
         } catch (error) {
             setNotice([])
+            console.error(error);
+        }
+    }
+
+    const handleGetWallet = async (email: any) => {
+        try {
+            const response = await getWallet(email, token)
+            setWallet(response.data)
+        } catch (error) {
             console.error(error);
         }
     }
@@ -131,6 +141,7 @@ export default function Profile() {
         try {
             const response = await getUser(id, token)
             setUser(response.data)
+            handleGetWallet(response.data.email)
         } catch (error) {
             console.error(error);
         }
@@ -253,9 +264,19 @@ export default function Profile() {
                     <div className="p-inner">
                         <div className="pi1">
                             <img className="userLogo" src={userIcon} alt="" />
-                            <div className="username">
-                                {user?.userName}
+                            <div className="username1">
+                               <strong>{user?.userName}</strong>
                             </div>
+                            <div style={{width: "100%" , display: "flex", justifyContent: "center", alignItems: "center"}}>
+                                <div className="promo-code-label">
+                                   <strong className="promo">Promo Code : {wallet?.promoCode || "N/A"}</strong>
+                                </div>
+                            </div>
+
+                            <div style={{width: "100%" , display: "flex", justifyContent: "center", alignItems: "center", margin: "10px 0"}}>
+                                <Wallet style={{marginRight: "5px"}}/> {wallet?.points || 0} <strong style={{marginLeft: "5px"}}> Points</strong>
+                            </div>
+
                             <div className="i-outer">
                                 <Email />
                                 <div className="txt0">
