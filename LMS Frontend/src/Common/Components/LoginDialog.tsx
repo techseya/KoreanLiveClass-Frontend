@@ -13,6 +13,8 @@ import { useNavigate } from "react-router-dom";
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 import { login } from "src/Services/auth_api";
 import { get } from "lodash";
+import { InputAdornment } from "@mui/material";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 interface LoginDialogboxProps {
     open: boolean;
@@ -31,6 +33,7 @@ export default function LoginDialogbox({ open, onAgree, onClose }: LoginDialogbo
     const [email, setEmail] = React.useState("")
     const [password, setPassword] = React.useState("")
     const [deviceId, setDeviceId] = React.useState("")
+    const [showPassword, setShowPassword] = React.useState(false);
 
     const id = localStorage.getItem("id")
 
@@ -170,16 +173,30 @@ export default function LoginDialogbox({ open, onAgree, onClose }: LoginDialogbo
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
+
                     <TextField
                         margin="normal"
                         fullWidth
                         placeholder="Password"
                         variant="outlined"
-                        type="password"
+                        type={showPassword ? "text" : "password"}
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        InputProps={{
+                            endAdornment: (
+                                <InputAdornment position="end">
+                                    <IconButton
+                                        aria-label="toggle password visibility"
+                                        onClick={() => setShowPassword(!showPassword)}
+                                        edge="end"
+                                    >
+                                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                                    </IconButton>
+                                </InputAdornment>
+                            ),
+                        }}
                     />
-
+                    
                     {/* Login Button */}
                     <Button
                         variant="contained"
