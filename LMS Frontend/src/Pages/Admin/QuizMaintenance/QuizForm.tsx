@@ -178,7 +178,7 @@ export default function QuizForm() {
                             startIcon={<Add />}
                             sx={{ textTransform: 'none' }}
                             onClick={handleSubmit}
-                            disabled={!quizName || !courseId || !description || !attempts || !price }
+                            disabled={!quizName || !courseId || !description || !attempts || !price || !thumbnail || !duration}
                         >
                             Add Quiz
                         </Button>
