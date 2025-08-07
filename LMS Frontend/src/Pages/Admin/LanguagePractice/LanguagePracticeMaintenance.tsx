@@ -191,12 +191,22 @@ export default function LanguagePracticeMaintenance() {
     };
 
     const handleUpdate = async () => {
+
+        if(editingLang.isPaid){
+            if (!editingLang.price || isNaN(editingLang.price) || editingLang.price <= 0) {
+                alert("Please enter a valid price.");
+                return;
+            }
+        }
+
         const body = {
             id: editingLang.id,
             name: editingLang.name,
             description: editingLang.descriptions,
             difficultyLevel: editingLang.difficultyLevel,
             activeStatus: editingLang.activeStatus,
+            isPaid: editingLang.isPaid,
+            price: editingLang.isPaid ? Number(editingLang.price) : 0, // default 0 if not paid
         }
 
         try {
@@ -811,6 +821,33 @@ export default function LanguagePracticeMaintenance() {
                             </Select>
                         </FormControl>
                     </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                        <FormControl fullWidth>
+                            <InputLabel>Is Paid</InputLabel>
+                            <Select
+                                value={editingLang.isPaid ? "Yes" : "No"}
+                                label="Is Paid"
+                                onChange={(e) => handleFormChange("isPaid", e.target.value === "Yes")}
+                            >
+                                <MenuItem value="No">No</MenuItem>
+                                <MenuItem value="Yes">Yes</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid>
+
+                    {editingLang.isPaid && (
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                label="Price"
+                                fullWidth
+                                type="number"
+                                value={editingLang.price || ''}
+                                onChange={(e) => handleFormChange("price", e.target.value)}
+                                inputProps={{ min: 0 }}
+                            />
+                        </Grid>
+                    )}
 
                     <Grid item xs={12} sm={12}>
                         <TextField
