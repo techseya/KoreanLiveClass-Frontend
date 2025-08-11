@@ -37,6 +37,15 @@ import { t } from "i18next";
 import { createLanguagePracticeQuestion, deleteLanguagePractice, deleteLanguagePracticeAudioQuestion, deleteLanguagePracticeWordQuestion, getLanguagePracticeQuestions, getLanguagePractices, updateLanguagePractice, updateLanguagePracticeAudioQuestion, updateLanguagePracticeWordQuestion } from "src/Services/lang_practice_api";
 import { a, h } from "framer-motion/dist/types.d-B50aGbjN";
 import "../../../Common/styles/lang.css"
+import av1 from "../../../Assets/Images/av1.jpg";
+import av2 from "../../../Assets/Images/av2.jpg";
+import av3 from "../../../Assets/Images/av3.jpg";
+import av4 from "../../../Assets/Images/av4.jpg";
+import av5 from "../../../Assets/Images/av5.jpg";
+import av6 from "../../../Assets/Images/av6.jpg";
+import av7 from "../../../Assets/Images/av7.jpg";
+import av8 from "../../../Assets/Images/av8.jpg";
+import av9 from "../../../Assets/Images/av9.jpg";
 
 function CustomNoRowsOverlay() {
     return (
@@ -47,16 +56,15 @@ function CustomNoRowsOverlay() {
 }
 
 const avatarOptions = [
-    "/avatars/a1.png",
-    "/avatars/a2.png",
-    "/avatars/a3.png",
-    "/avatars/a4.png",
-    "/avatars/a5.png",
-    "/avatars/a6.png",
-    "/avatars/a7.png",
-    "/avatars/a8.png",
-    "/avatars/a9.png",
-    "/avatars/a10.png",
+    av1,
+    av2,
+    av3,
+    av4,
+    av5,
+    av6,
+    av7,
+    av8,
+    av9
 ];
 
 const Transition = React.forwardRef(function Transition(
@@ -652,6 +660,21 @@ export default function LanguagePracticeMaintenance() {
                                         </Grid>
                                     </Grid>
                                 )}
+
+                                <Dialog open={openPicker} onClose={() => setOpenPicker(false)}>
+                                    <DialogTitle>Select Avatar</DialogTitle>
+                                    <DialogContent>
+                                        <Grid container spacing={2} sx={{ padding: 2, display: "flex", justifyContent: "center" }}>
+                                            {avatarOptions.map((src) => (
+                                                <Grid item xs={4} key={src} sx={{ display: "flex", justifyContent: "center" }}>
+                                                    <IconButton onClick={() => handleSelectAvatar(src)}>
+                                                        <Avatar src={src} sx={{ width: 66, height: 66 }} />
+                                                    </IconButton>
+                                                </Grid>
+                                            ))}
+                                        </Grid>
+                                    </DialogContent>
+                                </Dialog>
 
                                 {qType === 1 && langDetailsOpen && (
                                     <div >
