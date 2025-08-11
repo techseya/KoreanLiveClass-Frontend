@@ -35,7 +35,7 @@ import { AudioRecorder } from "src/Common/Components/AudioRecorder";
 import { get, set } from "lodash";
 import { t } from "i18next";
 import { createLanguagePracticeQuestion, deleteLanguagePractice, deleteLanguagePracticeAudioQuestion, deleteLanguagePracticeWordQuestion, getLanguagePracticeQuestions, getLanguagePractices, updateLanguagePractice, updateLanguagePracticeAudioQuestion, updateLanguagePracticeWordQuestion } from "src/Services/lang_practice_api";
-import { a, h } from "framer-motion/dist/types.d-B50aGbjN";
+import { a, h, u } from "framer-motion/dist/types.d-B50aGbjN";
 import "../../../Common/styles/lang.css"
 import av1 from "../../../Assets/Images/av1.jpg";
 import av2 from "../../../Assets/Images/av2.jpg";
@@ -66,6 +66,19 @@ const avatarOptions = [
     av8,
     av9
 ];
+
+// Map avatar names to their image sources
+const avatarMap: { [key: string]: string } = {
+    av1: av1,
+    av2: av2,
+    av3: av3,
+    av4: av4,
+    av5: av5,
+    av6: av6,
+    av7: av7,
+    av8: av8,
+    av9: av9,
+};
 
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & { children: React.ReactElement },
@@ -109,7 +122,9 @@ export default function LanguagePracticeMaintenance() {
     const [u1, setU1] = useState("")
     const [u2, setU2] = useState("")
     const [u1Avatar, setU1Avatar] = useState("")
+    const [u1AvatarName, setU1AvatarName] = useState("")
     const [u2Avatar, setU2Avatar] = useState("")
+    const [u2AvatarName, setU2AvatarName] = useState("")
     const [scrambledSentence, setScrambledSentence] = useState("");
     const [correctSentence, setCorrectSentence] = useState("");
     const [langDetailsOpen, setLangDetailsOpen] = useState(false)
@@ -130,8 +145,13 @@ export default function LanguagePracticeMaintenance() {
     };
 
     const handleSelectAvatar = (src: string) => {
-        if (activeUser === "u1") setU1Avatar(src);
-        else setU2Avatar(src);
+        if (activeUser === "u1") {
+            setU1Avatar(src);
+            setU1AvatarName(src.split("/").pop()?.split(".")[0] || "");
+        } else {
+            setU2Avatar(src);
+            setU2AvatarName(src.split("/").pop()?.split(".")[0] || "");
+        }
         setOpenPicker(false);
     };
 
@@ -380,8 +400,10 @@ export default function LanguagePracticeMaintenance() {
         if (qType === 1) {
             if (audioUser === u1) {
                 formdata.append("audioUserName", audioUser + `,${u2}`);
+                formdata.append("audioAvatar", u1AvatarName + `,${u2AvatarName}`);
             } else if (audioUser === u2) {
                 formdata.append("audioUserName", audioUser + `,${u1}`);
+                formdata.append("audioAvatar", u2AvatarName + `,${u1AvatarName}`);
             }
 
             formdata.append("languagePracticeId", langId);
@@ -654,7 +676,7 @@ export default function LanguagePracticeMaintenance() {
                                             />
                                         </Grid>
                                         <Grid item sm={12} sx={{ display: "flex", justifyContent: "flex-end", marginTop: "10px" }}>
-                                            <Button variant="contained" onClick={() => { setLangDetailsOpen(true) }}>
+                                            <Button disabled={!u1 || !u2 || !u1Avatar || !u2Avatar} variant="contained" onClick={() => { setLangDetailsOpen(true) }}>
                                                 Confirm Users
                                             </Button>
                                         </Grid>
@@ -752,7 +774,11 @@ export default function LanguagePracticeMaintenance() {
                                                             <div>
                                                                 <div style={{ display: "flex", gap: "8px" }} key={`${qIdx}-${index}`}>
                                                                     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
-                                                                        <Person sx={{ fontSize: "40px", color: "#1d6add", padding: "4px", backgroundColor: "wheat", borderRadius: "40px" }} />
+                                                                        <Avatar
+                                                                            src={avatarMap[question.audioAvatar?.split(",")[0]?.trim() || ""]}
+                                                                            sx={{ width: 66, height: 66 }}
+                                                                        />
+
                                                                     </div>
                                                                     <div style={{ display: "flex", flexDirection: "column", gap: "8px", padding: "8px 10px", backgroundColor: "#dfe6e9", borderRadius: "8px", position: "relative" }}>
                                                                         <div style={{ position: "absolute", top: "8px", right: "8px", display: "flex", gap: "8px" }}>
@@ -797,7 +823,10 @@ export default function LanguagePracticeMaintenance() {
                                                                         <audio controls src={question?.audioFilePath ? question.audioFilePath.replace("dl=0", "raw=1") : ""} />
                                                                     </div>
                                                                     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
-                                                                        <Person sx={{ fontSize: "40px", color: "#1d6add", padding: "4px", backgroundColor: "wheat", borderRadius: "40px" }} />
+                                                                        <Avatar
+                                                                            src={avatarMap[question.audioAvatar?.split(",")[0]?.trim() || ""]}
+                                                                            sx={{ width: 66, height: 66 }}
+                                                                        />
                                                                     </div>
                                                                 </div>
                                                                 <div style={{ padding: "4px 10px", borderRadius: "8px", margin: "8px" }}>
