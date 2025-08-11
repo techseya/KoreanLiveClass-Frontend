@@ -9,14 +9,15 @@ import {
     DialogTitle,
     DialogContentText,
     DialogActions,
-    Divider
+    Divider,
+    Avatar
 } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import { act, useEffect, useRef, useState } from "react";
 import { getAllCourses } from "src/Services/course_api";
 import { createQuestion, deleteQuestion, deleteQuiz, getQuestions, getQuiz, updateQuestion, updateQuiz } from "src/Services/quiz_api";
-import { AddCircle, Delete, Man, Person } from "@mui/icons-material";
+import { AddAPhoto, AddCircle, Delete, Man, Person } from "@mui/icons-material";
 import Dialogbox from "src/Common/Components/DialogBox";
 import {
     Dialog,
@@ -44,6 +45,19 @@ function CustomNoRowsOverlay() {
         </Box>
     );
 }
+
+const avatarOptions = [
+    "/avatars/a1.png",
+    "/avatars/a2.png",
+    "/avatars/a3.png",
+    "/avatars/a4.png",
+    "/avatars/a5.png",
+    "/avatars/a6.png",
+    "/avatars/a7.png",
+    "/avatars/a8.png",
+    "/avatars/a9.png",
+    "/avatars/a10.png",
+];
 
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & { children: React.ReactElement },
@@ -86,6 +100,8 @@ export default function LanguagePracticeMaintenance() {
     const [stepComponent, setStepComponent] = useState<any>(1);
     const [u1, setU1] = useState("")
     const [u2, setU2] = useState("")
+    const [u1Avatar, setU1Avatar] = useState("")
+    const [u2Avatar, setU2Avatar] = useState("")
     const [scrambledSentence, setScrambledSentence] = useState("");
     const [correctSentence, setCorrectSentence] = useState("");
     const [langDetailsOpen, setLangDetailsOpen] = useState(false)
@@ -95,8 +111,21 @@ export default function LanguagePracticeMaintenance() {
     const [selectedAudioQuestionOrder, setSelectedAudioQuestionOrder] = useState<any>(null);
     const [audioUpdateVisible, setAudioUpdateVisible] = useState(false);
     const [selectedId, setSelectedId] = useState("");
+    const [openPicker, setOpenPicker] = useState(false);
+    const [activeUser, setActiveUser] = useState<"u1" | "u2">("u1");
 
     const token = localStorage.getItem("token") || "";
+
+    const handleAvatarClick = (user: "u1" | "u2") => {
+        setActiveUser(user);
+        setOpenPicker(true);
+    };
+
+    const handleSelectAvatar = (src: string) => {
+        if (activeUser === "u1") setU1Avatar(src);
+        else setU2Avatar(src);
+        setOpenPicker(false);
+    };
 
     const handleOpenFullScreenModal = (row: any) => {
         setOpenFullScreenModal(true)
@@ -192,7 +221,7 @@ export default function LanguagePracticeMaintenance() {
 
     const handleUpdate = async () => {
 
-        if(editingLang.isPaid){
+        if (editingLang.isPaid) {
             if (!editingLang.price || isNaN(editingLang.price) || editingLang.price <= 0) {
                 alert("Please enter a valid price.");
                 return;
@@ -494,7 +523,11 @@ export default function LanguagePracticeMaintenance() {
                         <IconButton
                             edge="start"
                             color="inherit"
-                            onClick={() => setOpenFullScreenModal(false)}
+                            onClick={() => {
+                                setU1("")
+                                setU2("")
+                                setOpenFullScreenModal(false)
+                            }}
                             aria-label="close"
                         >
                             <CloseIcon />
@@ -528,7 +561,37 @@ export default function LanguagePracticeMaintenance() {
                             <div className="dl-outer">
                                 {qType === 1 && !langDetailsOpen && (
                                     <Grid container spacing={2} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                                        <Grid item sm={4}>
+                                        <Grid item sm={1} sx={{ display: "flex", justifyContent: "center" }}>
+                                            <Box
+                                                sx={{
+                                                    position: "relative",
+                                                    width: 56,
+                                                    height: 56,
+                                                    cursor: "pointer",
+                                                    "&:hover .overlay": { opacity: 1 },
+                                                }}
+                                                onClick={() => handleAvatarClick("u1")}
+                                            >
+                                                <Avatar src={u1Avatar} alt="User1 Avatar" sx={{ width: 56, height: 56 }} />
+                                                <Box
+                                                    className="overlay"
+                                                    sx={{
+                                                        position: "absolute",
+                                                        inset: 0,
+                                                        bgcolor: "rgba(0,0,0,0.5)",
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        justifyContent: "center",
+                                                        borderRadius: "50%",
+                                                        opacity: 0,
+                                                        transition: "opacity 0.3s",
+                                                    }}
+                                                >
+                                                    <AddAPhoto sx={{ color: "white" }} />
+                                                </Box>
+                                            </Box>
+                                        </Grid>
+                                        <Grid item sm={11}>
                                             <TextField
                                                 label="User1"
                                                 fullWidth
@@ -540,7 +603,37 @@ export default function LanguagePracticeMaintenance() {
                                                 }}
                                             />
                                         </Grid>
-                                        <Grid item sm={4}>
+                                        <Grid item sm={1} sx={{ display: "flex", justifyContent: "center" }}>
+                                            <Box
+                                                sx={{
+                                                    position: "relative",
+                                                    width: 56,
+                                                    height: 56,
+                                                    cursor: "pointer",
+                                                    "&:hover .overlay": { opacity: 1 },
+                                                }}
+                                                onClick={() => handleAvatarClick("u2")}
+                                            >
+                                                <Avatar src={u2Avatar} alt="User2 Avatar" sx={{ width: 56, height: 56 }} />
+                                                <Box
+                                                    className="overlay"
+                                                    sx={{
+                                                        position: "absolute",
+                                                        inset: 0,
+                                                        bgcolor: "rgba(0,0,0,0.5)",
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        justifyContent: "center",
+                                                        borderRadius: "50%",
+                                                        opacity: 0,
+                                                        transition: "opacity 0.3s",
+                                                    }}
+                                                >
+                                                    <AddAPhoto sx={{ color: "white" }} />
+                                                </Box>
+                                            </Box>
+                                        </Grid>
+                                        <Grid item sm={11}>
                                             <TextField
                                                 label="User2"
                                                 fullWidth
@@ -552,7 +645,7 @@ export default function LanguagePracticeMaintenance() {
                                                 }}
                                             />
                                         </Grid>
-                                        <Grid item sm={4}>
+                                        <Grid item sm={12} sx={{ display: "flex", justifyContent: "flex-end", marginTop: "10px" }}>
                                             <Button variant="contained" onClick={() => { setLangDetailsOpen(true) }}>
                                                 Confirm Users
                                             </Button>
