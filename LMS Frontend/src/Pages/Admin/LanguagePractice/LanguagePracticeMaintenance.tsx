@@ -343,7 +343,7 @@ export default function LanguagePracticeMaintenance() {
 
         try {
             const res = await updateLanguagePracticeAudioQuestion(formData, token);
-            alert(res.data);
+            alert("Audio question updated successfully.");
             setAudioUpdateVisible(false);
             handleClearFields();
             handleGetQuestions(langId);
@@ -360,7 +360,7 @@ export default function LanguagePracticeMaintenance() {
 
         try {
             const res = await updateLanguagePracticeWordQuestion(formData, token);
-            alert(res.data);
+            alert("Word question updated successfully.");
             setUpdateBtnVisible(false);
             handleClearFields();
             handleGetQuestions(langId);
