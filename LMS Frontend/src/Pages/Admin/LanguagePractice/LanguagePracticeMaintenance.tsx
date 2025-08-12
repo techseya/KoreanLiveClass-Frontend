@@ -46,6 +46,15 @@ import av6 from "../../../Assets/Images/av6.jpg";
 import av7 from "../../../Assets/Images/av7.jpg";
 import av8 from "../../../Assets/Images/av8.jpg";
 import av9 from "../../../Assets/Images/av9.jpg";
+import back1 from "../../../Assets/Images/back1.jpg";
+import back2 from "../../../Assets/Images/back2.jpg";
+import back3 from "../../../Assets/Images/back3.jpg";
+import back4 from "../../../Assets/Images/back4.jpg";
+import back5 from "../../../Assets/Images/back5.jpg";
+import back6 from "../../../Assets/Images/back6.jpg";
+import back7 from "../../../Assets/Images/back7.jpg";
+import back8 from "../../../Assets/Images/back8.jpg";
+import back9 from "../../../Assets/Images/back9.jpg";
 
 function CustomNoRowsOverlay() {
     return (
@@ -67,6 +76,18 @@ const avatarOptions = [
     av9
 ];
 
+const backgroundOptions = [
+    back1,
+    back2,
+    back3,
+    back4,
+    back5,
+    back6,
+    back7,
+    back8,
+    back9
+];
+
 // Map avatar names to their image sources
 const avatarMap: { [key: string]: string } = {
     av1: av1,
@@ -78,6 +99,18 @@ const avatarMap: { [key: string]: string } = {
     av7: av7,
     av8: av8,
     av9: av9,
+};
+
+const backgroundMap: { [key: string]: string } = {
+    back1: back1,
+    back2: back2,
+    back3: back3,
+    back4: back4,
+    back5: back5,
+    back6: back6,
+    back7: back7,
+    back8: back8,
+    back9: back9,
 };
 
 const Transition = React.forwardRef(function Transition(
@@ -135,6 +168,9 @@ export default function LanguagePracticeMaintenance() {
     const [audioUpdateVisible, setAudioUpdateVisible] = useState(false);
     const [selectedId, setSelectedId] = useState("");
     const [openPicker, setOpenPicker] = useState(false);
+    const [openPickerB, setOpenPickerB] = useState(false);
+    const [backgroundImage, setBackgroundImage] = useState("");
+    const [backgroundImageName, setBackgroundImageName] = useState("");
     const [activeUser, setActiveUser] = useState<"u1" | "u2">("u1");
 
     const token = localStorage.getItem("token") || "";
@@ -154,6 +190,16 @@ export default function LanguagePracticeMaintenance() {
         }
         setOpenPicker(false);
     };
+
+    const handleSelectBackground = (src: string) => {
+        const name = src.split("/").pop()?.split(".")[0] || "";
+        console.log(name);
+        
+        setBackgroundImage(name);
+        setBackgroundImageName(name);
+        setOpenPickerB(false);
+    };
+
 
     const handleOpenFullScreenModal = (row: any) => {
         setOpenFullScreenModal(true)
@@ -698,6 +744,21 @@ export default function LanguagePracticeMaintenance() {
                                     </DialogContent>
                                 </Dialog>
 
+                                <Dialog open={openPickerB} onClose={() => setOpenPickerB(false)}>
+                                    <DialogTitle>Select Background</DialogTitle>
+                                    <DialogContent>
+                                        <Grid container spacing={2} sx={{ padding: 2, display: "flex", justifyContent: "center" }}>
+                                            {backgroundOptions.map((src) => (
+                                                <Grid item xs={4} key={src} sx={{ display: "flex", justifyContent: "center" }}>
+                                                    <IconButton onClick={() => handleSelectBackground(src)}>
+                                                        <Avatar src={src} sx={{ width: 66, height: 66 }} />
+                                                    </IconButton>
+                                                </Grid>
+                                            ))}
+                                        </Grid>
+                                    </DialogContent>
+                                </Dialog>
+
                                 {qType === 1 && langDetailsOpen && (
                                     <div >
                                         <Grid container sm={12} spacing={2} sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -717,6 +778,16 @@ export default function LanguagePracticeMaintenance() {
                                             </Grid>
 
                                             <Grid item sm={2} sx={{ display: "flex", justifyContent: "flex-end" }}>
+                                                <Button
+                                                    style={{ marginRight: "10px" }}
+                                                    variant="contained"
+                                                    onClick={() => {
+                                                        setOpenPickerB(true);
+                                                    }}
+                                                >
+                                                    Background
+                                                </Button>
+
                                                 <Button
                                                     variant="contained"
                                                     onClick={() => {
@@ -766,7 +837,15 @@ export default function LanguagePracticeMaintenance() {
                                             />
                                         </Grid>
 
-                                        <Grid item xs={12} sm={12} mt={2}>
+                                        <Grid item xs={12} sm={12} mt={2} style={{
+                                            backgroundImage: `url(${backgroundMap[backgroundImage] || ""})`, // fallback to b1
+                                            backgroundSize: "cover",
+                                            backgroundPosition: "center",
+                                            maxHeight: "500px",
+                                            overflowY: "auto",
+                                            padding: "20px",
+                                            borderRadius: "8px"
+                                        }}>
                                             {questions.length > 0 ? (<>
                                                 {questions.map((q: any, qIdx: number) =>
                                                     q.audioFilePaths?.map((question: any, index: any) => (
