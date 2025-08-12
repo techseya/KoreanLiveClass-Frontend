@@ -175,6 +175,11 @@ export default function LanguagePracticeMaintenance() {
     const [backgroundImageName, setBackgroundImageName] = useState("");
     const [activeUser, setActiveUser] = useState<"u1" | "u2">("u1");
 
+    const [firstUser, setFirstUser] = useState("");
+    const [secondUser, setSecondUser] = useState("");
+    const [firstAvatar, setFirstAvatar] = useState("");
+    const [secondAvatar, setSecondAvatar] = useState("");
+
     const token = localStorage.getItem("token") || "";
 
     const handleAvatarClick = (user: "u1" | "u2") => {
@@ -242,7 +247,9 @@ export default function LanguagePracticeMaintenance() {
                     setLangDetailsOpen(true);
                     setB(res.data[0].audioFilePaths[0].backgroundImage);
                     setU1(res.data[0].audioFilePaths[0].audioUserName.split(",")[0]);
+                    setU1AvatarName(res.data[0].audioFilePaths[0].audioAvatar.split(",")[0]);
                     setU2(res.data[0].audioFilePaths[0].audioUserName.split(",")[1]);
+                    setU2AvatarName(res.data[0].audioFilePaths[0].audioAvatar.split(",")[1]);
                 } else {
                     setQType(2);
                 }
@@ -419,7 +426,7 @@ export default function LanguagePracticeMaintenance() {
 
     const handleDeleteAudioQuestion = async () => {
         try {
-            const res = await deleteLanguagePracticeAudioQuestion(langId, selectedId, token);
+            const res = await deleteLanguagePracticeAudioQuestion(langId, selectedAudioQuestionOrder, token);
             alert(res.data);
             handleClearFields();
             handleGetQuestions(langId);
