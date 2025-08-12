@@ -55,6 +55,7 @@ import back6 from "../../../Assets/Images/back6.jpg";
 import back7 from "../../../Assets/Images/back7.jpg";
 import back8 from "../../../Assets/Images/back8.jpg";
 import back9 from "../../../Assets/Images/back9.jpg";
+import background from "../../../Assets/Images/background.png";
 
 function CustomNoRowsOverlay() {
     return (
@@ -170,6 +171,7 @@ export default function LanguagePracticeMaintenance() {
     const [openPicker, setOpenPicker] = useState(false);
     const [openPickerB, setOpenPickerB] = useState(false);
     const [backgroundImage, setBackgroundImage] = useState("");
+    const [b, setB] = useState("");
     const [backgroundImageName, setBackgroundImageName] = useState("");
     const [activeUser, setActiveUser] = useState<"u1" | "u2">("u1");
 
@@ -193,7 +195,6 @@ export default function LanguagePracticeMaintenance() {
 
     const handleSelectBackground = (src: string) => {
         const name = src.split("/").pop()?.split(".")[0] || "";
-        console.log(name);
 
         setBackgroundImage(name);
         setBackgroundImageName(name);
@@ -239,6 +240,7 @@ export default function LanguagePracticeMaintenance() {
                 if (res.data[0].originalSentence === "") {
                     setQType(1);
                     setLangDetailsOpen(true);
+                    setB(res.data[0].audioFilePaths[0].backgroundImage);
                     setU1(res.data[0].audioFilePaths[0].audioUserName.split(",")[0]);
                     setU2(res.data[0].audioFilePaths[0].audioUserName.split(",")[1]);
                 } else {
@@ -452,6 +454,7 @@ export default function LanguagePracticeMaintenance() {
                 formdata.append("audioAvatar", u2AvatarName + `,${u1AvatarName}`);
             }
 
+            formdata.append("backgroundImage", backgroundImageName ? backgroundImageName : "");
             formdata.append("languagePracticeId", langId);
             formdata.append("languagePracticeQuestionId", "1");
             formdata.append("languagePracticeType", qType.toString());
@@ -602,6 +605,10 @@ export default function LanguagePracticeMaintenance() {
                             onClick={() => {
                                 setU1("")
                                 setU2("")
+                                setBackgroundImage("")
+                                setBackgroundImageName("")
+                                setU1Avatar("")
+                                setU2Avatar("")
                                 setOpenFullScreenModal(false)
                             }}
                             aria-label="close"
@@ -722,11 +729,11 @@ export default function LanguagePracticeMaintenance() {
                                             />
                                         </Grid>
                                         <Grid item sm={12} sx={{ display: "flex", justifyContent: "flex-end", marginTop: "10px" }}>
-                                            {/* <Avatar
-                                                src={backgroundMap[backgroundImage] || ""}
+                                            <Avatar
+                                                src={backgroundMap[backgroundImage] || background}
                                                 alt="Background"
-                                                sx={{ width: 66, height: 66, marginRight: "10px" }}
-                                            /> */}
+                                                sx={{ width: 40, height: 40, marginRight: "10px" }}
+                                            />
                                             <Button
                                                 style={{ marginRight: "10px" }}
                                                 variant="contained"
@@ -843,7 +850,7 @@ export default function LanguagePracticeMaintenance() {
                                         </Grid>
 
                                         <Grid item xs={12} sm={12} mt={2} style={{
-                                            backgroundImage: `url(${backgroundMap[backgroundImage] || ""})`, // fallback to b1
+                                            backgroundImage: `url(${backgroundMap[b] || ""})`, // fallback to b1
                                             backgroundSize: "cover",
                                             backgroundPosition: "center",
                                             maxHeight: "500px",
