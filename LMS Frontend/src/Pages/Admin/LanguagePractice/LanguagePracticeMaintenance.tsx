@@ -607,8 +607,8 @@ export default function LanguagePracticeMaintenance() {
                                 setU2("")
                                 setBackgroundImage("")
                                 setBackgroundImageName("")
-                                setU1Avatar("")
-                                setU2Avatar("")
+                                setB("")
+                                setQType(0)
                                 setOpenFullScreenModal(false)
                             }}
                             aria-label="close"
@@ -888,7 +888,7 @@ export default function LanguagePracticeMaintenance() {
                                                                         <audio controls src={question?.audioFilePath ? question.audioFilePath.replace("dl=0", "raw=1") : ""} />
                                                                     </div>
                                                                 </div>
-                                                                <div style={{ padding: "4px 10px", borderRadius: "8px", margin: "8px" }}>
+                                                                <div style={{ padding: "4px 10px", borderRadius: "8px", margin: "8px", backgroundColor: "#dfe6e9", width: "250px" }}>
                                                                     {question?.subtitle}
                                                                 </div>
 
@@ -920,7 +920,7 @@ export default function LanguagePracticeMaintenance() {
                                                                         />
                                                                     </div>
                                                                 </div>
-                                                                <div style={{ padding: "4px 10px", borderRadius: "8px", margin: "8px" }}>
+                                                                <div style={{ padding: "4px 10px", borderRadius: "8px", margin: "8px", backgroundColor: "#dfe6e9", width: "250px"  }}>
                                                                     {question?.subtitle}
                                                                 </div>
                                                             </div>
