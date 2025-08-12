@@ -194,7 +194,7 @@ export default function LanguagePracticeMaintenance() {
     const handleSelectBackground = (src: string) => {
         const name = src.split("/").pop()?.split(".")[0] || "";
         console.log(name);
-        
+
         setBackgroundImage(name);
         setBackgroundImageName(name);
         setOpenPickerB(false);
@@ -722,6 +722,21 @@ export default function LanguagePracticeMaintenance() {
                                             />
                                         </Grid>
                                         <Grid item sm={12} sx={{ display: "flex", justifyContent: "flex-end", marginTop: "10px" }}>
+                                            {/* <Avatar
+                                                src={backgroundMap[backgroundImage] || ""}
+                                                alt="Background"
+                                                sx={{ width: 66, height: 66, marginRight: "10px" }}
+                                            /> */}
+                                            <Button
+                                                style={{ marginRight: "10px" }}
+                                                variant="contained"
+                                                size="small"
+                                                onClick={() => {
+                                                    setOpenPickerB(true);
+                                                }}
+                                            >
+                                                Background
+                                            </Button>
                                             <Button disabled={!u1 || !u2 || !u1Avatar || !u2Avatar} variant="contained" onClick={() => { setLangDetailsOpen(true) }}>
                                                 Confirm Users
                                             </Button>
@@ -778,16 +793,6 @@ export default function LanguagePracticeMaintenance() {
                                             </Grid>
 
                                             <Grid item sm={2} sx={{ display: "flex", justifyContent: "flex-end" }}>
-                                                <Button
-                                                    style={{ marginRight: "10px" }}
-                                                    variant="contained"
-                                                    onClick={() => {
-                                                        setOpenPickerB(true);
-                                                    }}
-                                                >
-                                                    Background
-                                                </Button>
-
                                                 <Button
                                                     variant="contained"
                                                     onClick={() => {
