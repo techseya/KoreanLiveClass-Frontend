@@ -888,7 +888,10 @@ export default function LanguagePracticeMaintenance() {
                                                                         <audio controls src={question?.audioFilePath ? question.audioFilePath.replace("dl=0", "raw=1") : ""} />
                                                                     </div>
                                                                 </div>
-                                                                <div style={{ padding: "4px 10px", borderRadius: "8px", margin: "8px", backgroundColor: "#dfe6e9", width: "250px" }}>
+                                                                <div style={{
+                                                                    padding: "4px 10px", borderRadius: "8px", margin: "8px", backgroundColor: "#dfe6e9", width: "250px", wordWrap: "break-word", // ✅ forces breaking long words
+                                                                    whiteSpace: "normal"
+                                                                }}>
                                                                     {question?.subtitle}
                                                                 </div>
 
@@ -920,7 +923,7 @@ export default function LanguagePracticeMaintenance() {
                                                                         />
                                                                     </div>
                                                                 </div>
-                                                                <div style={{ padding: "4px 10px", borderRadius: "8px", margin: "8px", backgroundColor: "#dfe6e9", width: "250px"  }}>
+                                                                <div style={{ padding: "4px 10px", borderRadius: "8px", margin: "8px", backgroundColor: "#dfe6e9", width: "250px", wordWrap: "break-word", whiteSpace: "normal" }}>
                                                                     {question?.subtitle}
                                                                 </div>
                                                             </div>
