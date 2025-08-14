@@ -812,7 +812,7 @@ export default function LanguagePracticeMaintenance() {
                                                     onClick={() => {
                                                         handleCreateQuestion();
                                                     }}
-                                                    disabled={!audioBlob || audioUser === "default"}
+                                                    disabled={!audioBlob || audioUser === "default" || !subtitle}
                                                 >
                                                     Add
                                                 </Button>
