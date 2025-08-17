@@ -11,18 +11,45 @@ import { useTranslation } from "react-i18next";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import Footer from "src/Layout/Footer";
 import thumb from "../../Assets/Images/klc-thumb.png"
-import { getLanguagePracticeQuestions, getLanguagePractices } from "src/Services/lang_practice_api";
-import { Person } from "@mui/icons-material";
+import { getLanguagePracticeQuestions } from "src/Services/lang_practice_api";
+import av1 from "../../Assets/Images/av1.jpg";
+import av2 from "../../Assets/Images/av2.jpg";
+import av3 from "../../Assets/Images/av3.jpg";
+import av4 from "../../Assets/Images/av4.jpg";
+import av5 from "../../Assets/Images/av5.jpg";
+import av6 from "../../Assets/Images/av6.jpg";
+import av7 from "../../Assets/Images/av7.jpg";
+import av8 from "../../Assets/Images/av8.jpg";
+import av9 from "../../Assets/Images/av9.jpg";
+import back1 from "../../Assets/Images/back1.jpg";
+import back2 from "../../Assets/Images/back2.jpg";
+import back3 from "../../Assets/Images/back3.jpg";
+import back4 from "../../Assets/Images/back4.jpg";
+import back5 from "../../Assets/Images/back5.jpg";
+import back6 from "../../Assets/Images/back6.jpg";
+import back7 from "../../Assets/Images/back7.jpg";
+import back8 from "../../Assets/Images/back8.jpg";
+import back9 from "../../Assets/Images/back9.jpg";
+
+const avatarMap: { [key: string]: string } = {
+    av1, av2, av3, av4, av5, av6, av7, av8, av9
+};
+
+const backgroundMap: { [key: string]: string } = {
+    back1, back2, back3, back4, back5, back6, back7, back8, back9
+};
 
 export default function UserLanguagePracticeDemo() {
     const [langs, setLangs] = useState<any[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>("");
     const [type, setType] = useState<any>(null);
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const location = useLocation();
     const [questions, setQuestions] = useState<any[]>([]);
     const [userAnswers, setUserAnswers] = useState<string[]>([]);
     const [correctAnswers, setCorrectAnswers] = useState<boolean[]>([]);
+    const navigate = useNavigate();
+    const token = localStorage.getItem("token") || "";
 
     useEffect(() => {
         setUserAnswers(Array(questions.length).fill(""));
@@ -38,23 +65,12 @@ export default function UserLanguagePracticeDemo() {
     const handleCheckAnswer = (index: number) => {
         const userAnswer = userAnswers[index].trim().toLowerCase();
         const correctAnswer = questions[index].originalSentence.trim().toLowerCase();
-
         const updatedCorrect = [...correctAnswers];
         updatedCorrect[index] = userAnswer === correctAnswer;
         setCorrectAnswers(updatedCorrect);
     };
 
-    const navigate = useNavigate();
-    const token = localStorage.getItem("token") || "";
-
-    useEffect(() => {
-        if (questions.length) {
-            setUserAnswers(Array(questions.length).fill(""));
-        }
-    }, [questions]);
-
     const handleCourseClick = (course: any) => {
-
         navigate(`/course`, {
             state: {
                 id: course.id,
@@ -71,22 +87,14 @@ export default function UserLanguagePracticeDemo() {
     };
 
     useEffect(() => {
-        console.log("Location state:", location.pathname.split("/").pop());
-
         handleGetLangPractices(location.pathname.split("/").pop());
-
-        AOS.init({
-            duration: 1000,
-            once: true
-        });
-
+        AOS.init({ duration: 1000, once: true });
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }, []);
 
     const handleGetLangPractices = async (id: any) => {
         try {
             const response = await getLanguagePracticeQuestions(id, token);
-            console.log("Language Practice Questions:", response.data);
             if (response.data[0].originalSentence === "") {
                 setType("1");
             } else {
@@ -107,56 +115,100 @@ export default function UserLanguagePracticeDemo() {
 
             <div className="cmi">
                 <div className="courses-main-inner">
-                    {type === "1" && (
-                        <div className="lang-card" data-aos="fade-up" data-aos-delay="100">
-                            <Grid item xs={12} sm={12} mt={2}>
-                                {questions.length > 0 ? (<>
-                                    {questions.map((q: any, qIdx: number) =>
-                                        q.audioFilePaths?.map((question: any, index: any) => (
-                                            (index % 2 === 0) ? (
-                                                <div>
-                                                    <div style={{ display: "flex", gap: "8px" }} key={`${qIdx}-${index}`}>
-                                                        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
-                                                            <Person sx={{ fontSize: "40px", color: "#1d6add", padding: "4px", backgroundColor: "wheat", borderRadius: "40px" }} />
-                                                        </div>
-                                                        <div className="audio-outer" style={{ display: "flex", flexDirection: "column", gap: "8px", padding: "8px 10px", backgroundColor: "#dfe6e9", borderRadius: "8px", position: "relative" }}>
 
-                                                            {question?.audioUserName?.split(",")[0] || "User1"}
-                                                            <audio className="audio-player" controls src={question?.audioFilePath ? question.audioFilePath.replace("dl=0", "raw=1") : ""} />
+                    {/* Type 1 - Audio Practice */}
+                    {type === "1" && questions.length > 0 && (
+                        <>
+                            {questions.map((q: any, qIdx: number) => {
+                                // Common background for all audios in this card
+                                const bgImage = q.audioFilePaths?.[0]?.backgroundImage
+                                    ? backgroundMap[q.audioFilePaths[0].backgroundImage.trim()]
+                                    : null;
+
+                                return (
+                                    <div
+                                        key={qIdx}
+                                        className="lang-card"
+                                        data-aos="fade-up"
+                                        data-aos-delay="100"
+                                        style={{
+                                            backgroundImage: bgImage ? `url(${bgImage})` : "none",
+                                            backgroundSize: "cover",
+                                            backgroundPosition: "center",
+                                            borderRadius: "12px",
+                                            padding: "16px",
+                                            marginBottom: "20px"
+                                        }}
+                                    >
+                                        <Grid item xs={12} sm={12} mt={2}>
+                                            {q.audioFilePaths?.map((question: any, index: number) => {
+                                                const avatars = question?.audioAvatar
+                                                    ? question.audioAvatar.split(",").map((av: string) => avatarMap[av.trim()])
+                                                    : [];
+                                                const isLeft = index % 2 === 0;
+
+                                                return (
+                                                    <div
+                                                        key={`${qIdx}-${index}`}
+                                                        style={{
+                                                            display: "flex",
+                                                            flexDirection: "column",
+                                                            alignItems: isLeft ? "flex-start" : "flex-end",
+                                                            marginBottom: "16px"
+                                                        }}
+                                                    >
+                                                        <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                                                            {isLeft && avatars[0] && (
+                                                                <img src={avatars[0]} alt="avatar"
+                                                                    style={{
+                                                                        width: 40, height: 40,
+                                                                        borderRadius: "50%", objectFit: "cover"
+                                                                    }} />
+                                                            )}
+
+                                                            <div
+                                                                className="audio-outer"
+                                                                style={{
+                                                                    display: "flex",
+                                                                    flexDirection: "column",
+                                                                    gap: "8px",
+                                                                    padding: "8px 10px",
+                                                                    backgroundColor: "#dfe6e9cc",
+                                                                    borderRadius: "8px",
+                                                                    position: "relative"
+                                                                }}
+                                                            >
+                                                                {question?.audioUserName?.split(",")[0] || "User"}
+                                                                <audio
+                                                                    className="audio-player"
+                                                                    controls
+                                                                    src={question?.audioFilePath ? question.audioFilePath.replace("dl=0", "raw=1") : ""}
+                                                                />
+                                                            </div>
+
+                                                            {!isLeft && avatars[1] && (
+                                                                <img src={avatars[1]} alt="avatar"
+                                                                    style={{
+                                                                        width: 40, height: 40,
+                                                                        borderRadius: "50%", objectFit: "cover"
+                                                                    }} />
+                                                            )}
+                                                        </div>
+
+                                                        <div style={{ padding: "4px 10px", borderRadius: "8px", marginTop: "8px" }}>
+                                                            {question?.subtitle}
                                                         </div>
                                                     </div>
-                                                    <div style={{ padding: "4px 10px", borderRadius: "8px", margin: "8px" }}>
-                                                        {question?.subtitle}
-                                                    </div>
-
-                                                </div>
-
-                                            ) : (
-                                                <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
-                                                    <div style={{ display: "flex", gap: "8px" }} key={`${qIdx}-${index}`}>
-                                                        <div className="audio-outer" style={{ display: "flex", flexDirection: "column", gap: "8px", padding: "8px 10px", backgroundColor: "#dfe6e9", borderRadius: "8px", position: "relative", alignItems: "flex-end" }}>
-
-                                                            {question?.audioUserName?.split(",")[0] || "User1"}
-                                                            <audio className="audio-player" controls src={question?.audioFilePath ? question.audioFilePath.replace("dl=0", "raw=1") : ""} />
-                                                        </div>
-                                                        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
-                                                            <Person sx={{ fontSize: "40px", color: "#1d6add", padding: "4px", backgroundColor: "wheat", borderRadius: "40px" }} />
-                                                        </div>
-                                                    </div>
-                                                    <div style={{ padding: "4px 10px", borderRadius: "8px", margin: "8px" }}>
-                                                        {question?.subtitle}
-                                                    </div>
-                                                </div>
-                                            )
-                                        ))
-                                    )}
-                                </>) : (<>
-                                    No questions found
-                                </>)}
-                            </Grid>
-                        </div>
+                                                );
+                                            })}
+                                        </Grid>
+                                    </div>
+                                );
+                            })}
+                        </>
                     )}
 
+                    {/* Type 2 - Sentence Scramble */}
                     {type === "2" && (
                         <div className="lang-card" data-aos="fade-up" data-aos-delay="100">
                             <Grid item xs={12} sm={12} mt={2}>
@@ -166,7 +218,7 @@ export default function UserLanguagePracticeDemo() {
                                         {questions.map((q, idx) => (
                                             <Box key={q.id} sx={{ mb: 3 }}>
                                                 <Typography variant="h6" gutterBottom>
-                                                    {idx + 1} ) {q.scrambledSentence.split(" ").join(" / ")}
+                                                    {idx + 1}) {q.scrambledSentence.split(" ").join(" / ")}
                                                 </Typography>
                                                 <TextField
                                                     fullWidth
@@ -219,7 +271,6 @@ export default function UserLanguagePracticeDemo() {
             <div className="space1"></div>
             <div className="space1"></div>
             <div className="space1"></div>
-
             <Footer />
         </div>
     );

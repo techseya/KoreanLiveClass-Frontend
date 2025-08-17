@@ -29,6 +29,7 @@ import UserQuizes from "./Pages/User/Quizes";
 import LanguagePractice from "./Pages/Admin/LanguagePractice";
 import UserLanguagePractice from "./Pages/User/UserLanguagePractice";
 import UserLanguagePracticeDemo from "./Pages/User/UserLanguagePracticeDemo";
+import MyLanguagePracticeDemo from "./Pages/User/MyLanguagePracticeDemo";
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -46,10 +47,11 @@ const App: React.FC = () => {
   const isQuiz = location.pathname === "/quizes";
   const isUserLanguagePractice = location.pathname === "/user-language-practice";
   const isUserLanguagePracticeDemo = useMatch("/language-practice-demo/:id") !== null;
+  const isMyLanguagePracticeDemo = useMatch("/my-language-practice-demo/:id") !== null;
 
   return (
     <>
-      {!isQuiz && !isProfile && !isHomePage && !isCourses && !isCategory && !isCourse && !isRegister && !isMyCourses && !isMyCourse && !isCategoryC && !isPrivacy && !isTerms && !isUserLanguagePractice && !isUserLanguagePracticeDemo ? (
+      {!isQuiz && !isProfile && !isHomePage && !isCourses && !isCategory && !isCourse && !isRegister && !isMyCourses && !isMyCourse && !isCategoryC && !isPrivacy && !isTerms && !isUserLanguagePractice && !isUserLanguagePracticeDemo && !isMyLanguagePracticeDemo ? (
         <AdvancedNavbar>
           <Routes>
             <Route path="/dashboard" element={<Dashboard />} />
@@ -83,6 +85,7 @@ const App: React.FC = () => {
             <Route path="/quizes" element={<UserQuizes />} />
             <Route path="/user-language-practice" element={<UserLanguagePractice />} />
             <Route path="/language-practice-demo/:id" element={<UserLanguagePracticeDemo />} />
+            <Route path="/my-language-practice-demo/:id" element={<MyLanguagePracticeDemo />} />            
           </Routes>
         </Navbar>
       )}

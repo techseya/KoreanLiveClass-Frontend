@@ -383,19 +383,19 @@ export default function QuizMaintenance() {
         formData.append("answer3", qType === 1 ? answers[2] : "");
         formData.append("answer4", qType === 1 ? answers[3] : "");
         if (qType === 1 && isImageAnswer === 1) {
-  if (imgs[0] instanceof File) {
-    formData.append("imageAnswer1", imgs[0]);
-  }
-  if (imgs[1] instanceof File) {
-    formData.append("imageAnswer2", imgs[1]);
-  }
-  if (imgs[2] instanceof File) {
-    formData.append("imageAnswer3", imgs[2]);
-  }
-  if (imgs[3] instanceof File) {
-    formData.append("imageAnswer4", imgs[3]);
-  }
-}
+            if (imgs[0] instanceof File) {
+                formData.append("imageAnswer1", imgs[0]);
+            }
+            if (imgs[1] instanceof File) {
+                formData.append("imageAnswer2", imgs[1]);
+            }
+            if (imgs[2] instanceof File) {
+                formData.append("imageAnswer3", imgs[2]);
+            }
+            if (imgs[3] instanceof File) {
+                formData.append("imageAnswer4", imgs[3]);
+            }
+        }
 
 
         formData.append("correctAnswerMcq", qType === 1 ? (correctAnswerIndex + 1).toString() : "");
