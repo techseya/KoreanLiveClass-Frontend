@@ -115,12 +115,9 @@ export default function UserLanguagePracticeDemo() {
                             >
                                 <Grid item xs={12} sm={12} mt={2}>
                                     {q.audioFilePaths?.map((question: any, index: number) => {
-                                        // Take only the first username and avatar
                                         const avatarKey = question.audioAvatar?.split(",")[0].trim();
                                         const userName = question.audioUserName?.split(",")[0].trim();
-
                                         const speakerAvatar = avatarMap[avatarKey] || null;
-
                                         const isLeft = index % 2 === 0;
 
                                         return (
@@ -130,36 +127,69 @@ export default function UserLanguagePracticeDemo() {
                                                     display: "flex",
                                                     flexDirection: "column",
                                                     marginBottom: "16px",
-                                                    alignItems: isLeft ? "flex-start" : "flex-end"
+                                                    alignItems: isLeft ? "flex-start" : "flex-end",
+                                                    width: "100%"
                                                 }}
                                             >
-                                                <div style={{ display: "flex", gap: "8px", alignItems: "center", flexDirection: isLeft ? "row" : "row-reverse" }}>
+                                                <div
+                                                    style={{
+                                                        display: "flex",
+                                                        flexDirection: isLeft ? "row" : "row-reverse",
+                                                        alignItems: "flex-start",
+                                                        gap: "8px",
+                                                        flexWrap: "wrap" // allow wrap on small screens
+                                                    }}
+                                                >
                                                     {speakerAvatar && (
                                                         <img
                                                             src={speakerAvatar}
                                                             alt={userName}
-                                                            style={{ width: 40, height: 40, borderRadius: "50%", objectFit: "cover" }}
+                                                            style={{
+                                                                width: 40,
+                                                                height: 40,
+                                                                borderRadius: "50%",
+                                                                objectFit: "cover",
+                                                                flexShrink: 0
+                                                            }}
                                                         />
                                                     )}
+
                                                     <div
                                                         className="audio-outer"
                                                         style={{
                                                             backgroundColor: "#dfe6e9cc",
                                                             padding: "8px 10px",
-                                                            borderRadius: "8px"
+                                                            borderRadius: "8px",
+                                                            display: "flex",
+                                                            flexDirection: "column",
+                                                            minWidth: "200px",
+                                                            maxWidth: "calc(100% - 48px)" // keep some spacing from avatar
                                                         }}
                                                     >
-                                                        {userName}
+                                                        <div
+                                                            style={{
+                                                                textAlign: isLeft ? "left" : "right",
+                                                                fontWeight: 600,
+                                                                marginBottom: "4px",
+                                                                wordBreak: "break-word"
+                                                            }}
+                                                        >
+                                                            {userName}
+                                                        </div>
+
                                                         <audio
                                                             controls
                                                             src={question.audioFilePath?.replace("dl=0", "raw=1") || ""}
+                                                            style={{ width: "100%", marginBottom: "4px" }}
                                                         />
-                                                        <div style={{ marginTop: "4px" }}>{question.subtitle}</div>
+                                                        <div style={{ wordBreak: "break-word" }}>{question.subtitle}</div>
                                                     </div>
                                                 </div>
                                             </div>
+
                                         );
                                     })}
+
 
                                 </Grid>
                             </div>
