@@ -162,8 +162,9 @@ export default function UserLanguagePracticeDemo() {
                                                             borderRadius: "8px",
                                                             display: "flex",
                                                             flexDirection: "column",
-                                                            minWidth: "200px",
-                                                            maxWidth: "calc(100% - 48px)" // keep some spacing from avatar
+                                                            width: "400px",          // Fixed width for PC
+                                                            maxWidth: "100%",        // Responsive fallback for mobile
+                                                            minWidth: "200px",  // keep some spacing from avatar
                                                         }}
                                                     >
                                                         <div
