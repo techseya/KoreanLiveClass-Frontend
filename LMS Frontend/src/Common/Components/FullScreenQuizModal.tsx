@@ -336,10 +336,32 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
                     name={`q-${currentQuestion.id}`}
                     value={answers[currentQuestion.id] || ""}
                     onChange={(e) => handleAnswer(currentQuestion.id, e.target.value)}
-                    sx={{ mt: 2 }}
+                    sx={{ mt: 2, display: "flex", gap: 2, flexWrap: "wrap" }}
                   >
                     {[1, 2, 3, 4].map((num) => {
                       const opt = currentQuestion.answer[`answer${num}`];
+                      if (!opt) return null;
+
+                      // If answerType == 1, opt is an image URL
+                      if (currentQuestion.answer.answerType === 1) {
+                        return (
+                          <FormControlLabel
+                            key={num}
+                            value={opt}
+                            control={<Radio />}
+                            label={
+                              <img
+                                src={opt.replace("dl=0", "raw=1")}
+                                alt={`Option ${num}`}
+                                style={{ maxWidth: 320, borderRadius: 8 }}
+                              />
+                            }
+                            sx={{ flexDirection: "column" }}
+                          />
+                        );
+                      }
+
+                      // Default text option
                       return (
                         <FormControlLabel
                           key={num}
@@ -351,6 +373,7 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
                     })}
                   </RadioGroup>
                 )}
+
 
                 {/* Pagination Controls */}
                 <Box mt={3} mb={50} display="flex" justifyContent="center" gap={2} flexWrap="wrap">
