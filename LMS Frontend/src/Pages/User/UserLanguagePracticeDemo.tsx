@@ -1,17 +1,14 @@
 import { useEffect, useState } from "react";
 import "../../Common/styles/courses.css";
 import "../../Common/styles/home.css";
-import { getAllCourses } from "src/Services/course_api";
-import { ClockCircleOutlined } from "@ant-design/icons";
-import { Tooltip, TextField, Grid, Button, Typography, Divider, Box } from "@mui/material";
-import insImg from "../../Assets/Images/ins.jpg";
+import { getLanguagePracticeQuestions } from "src/Services/lang_practice_api";
+import { TextField, Grid, Button, Typography, Divider, Box } from "@mui/material";
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { useTranslation } from "react-i18next";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Footer from "src/Layout/Footer";
-import thumb from "../../Assets/Images/klc-thumb.png"
-import { getLanguagePracticeQuestions } from "src/Services/lang_practice_api";
+import thumb from "../../Assets/Images/klc-thumb.png";
 import av1 from "../../Assets/Images/av1.jpg";
 import av2 from "../../Assets/Images/av2.jpg";
 import av3 from "../../Assets/Images/av3.jpg";
@@ -40,16 +37,20 @@ const backgroundMap: { [key: string]: string } = {
 };
 
 export default function UserLanguagePracticeDemo() {
-    const [langs, setLangs] = useState<any[]>([]);
-    const [searchTerm, setSearchTerm] = useState<string>("");
     const [type, setType] = useState<any>(null);
-    const { t } = useTranslation();
-    const location = useLocation();
     const [questions, setQuestions] = useState<any[]>([]);
     const [userAnswers, setUserAnswers] = useState<string[]>([]);
     const [correctAnswers, setCorrectAnswers] = useState<boolean[]>([]);
+    const { t } = useTranslation();
+    const location = useLocation();
     const navigate = useNavigate();
     const token = localStorage.getItem("token") || "";
+
+    useEffect(() => {
+        handleGetLangPractices(location.pathname.split("/").pop());
+        AOS.init({ duration: 1000, once: true });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, []);
 
     useEffect(() => {
         setUserAnswers(Array(questions.length).fill(""));
@@ -70,36 +71,11 @@ export default function UserLanguagePracticeDemo() {
         setCorrectAnswers(updatedCorrect);
     };
 
-    const handleCourseClick = (course: any) => {
-        navigate(`/course`, {
-            state: {
-                id: course.id,
-                name: course.name,
-                description: course.description,
-                thumbnail: (course.thumbnail === null || course.thumbnail === "") ? thumb : course.thumbnail,
-                level: course.level,
-                totalDuration: course.totalDuration,
-                price: course.price,
-                sectionCount: course.sectionCount,
-                transactionStatus: course.transactionStatus
-            }
-        });
-    };
-
-    useEffect(() => {
-        handleGetLangPractices(location.pathname.split("/").pop());
-        AOS.init({ duration: 1000, once: true });
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, []);
-
     const handleGetLangPractices = async (id: any) => {
         try {
             const response = await getLanguagePracticeQuestions(id, token);
-            if (response.data[0].originalSentence === "") {
-                setType("1");
-            } else {
-                setType("2");
-            }
+            if (response.data[0].originalSentence === "") setType("1");
+            else setType("2");
             setQuestions(response.data);
         } catch (error) {
             console.error(error);
@@ -117,154 +93,115 @@ export default function UserLanguagePracticeDemo() {
                 <div className="courses-main-inner">
 
                     {/* Type 1 - Audio Practice */}
-                    {type === "1" && questions.length > 0 && (
-                        <>
-                            {questions.map((q: any, qIdx: number) => {
-                                // Common background for all audios in this card
-                                const bgImage = q.audioFilePaths?.[0]?.backgroundImage
-                                    ? backgroundMap[q.audioFilePaths[0].backgroundImage.trim()]
-                                    : null;
+                    {type === "1" && questions.length > 0 && questions.map((q: any, qIdx: number) => {
+                        const bgImage = q.audioFilePaths?.[0]?.backgroundImage
+                            ? backgroundMap[q.audioFilePaths[0].backgroundImage.trim()]
+                            : null;
 
-                                return (
-                                    <div
-                                        key={qIdx}
-                                        className="lang-card"
-                                        data-aos="fade-up"
-                                        data-aos-delay="100"
-                                        style={{
-                                            backgroundImage: bgImage ? `url(${bgImage})` : "none",
-                                            backgroundSize: "cover",
-                                            backgroundPosition: "center",
-                                            borderRadius: "12px",
-                                            padding: "16px",
-                                            marginBottom: "20px"
-                                        }}
-                                    >
-                                        <Grid item xs={12} sm={12} mt={2}>
-                                            {q.audioFilePaths?.map((question: any, index: number) => {
-                                                const avatars = question?.audioAvatar
-                                                    ? question.audioAvatar.split(",").map((av: string) => avatarMap[av.trim()])
-                                                    : [];
-                                                const isLeft = index % 2 === 0;
+                        return (
+                            <div
+                                key={qIdx}
+                                className="lang-card"
+                                data-aos="fade-up"
+                                data-aos-delay="100"
+                                style={{
+                                    backgroundImage: bgImage ? `url(${bgImage})` : "none",
+                                    backgroundSize: "cover",
+                                    backgroundPosition: "center",
+                                    borderRadius: "12px",
+                                    padding: "16px",
+                                    marginBottom: "20px"
+                                }}
+                            >
+                                <Grid item xs={12} sm={12} mt={2}>
+                                    {q.audioFilePaths?.map((question: any, index: number) => {
+                                        // Take only the first username and avatar
+                                        const avatarKey = question.audioAvatar?.split(",")[0].trim();
+                                        const userName = question.audioUserName?.split(",")[0].trim();
 
-                                                return (
+                                        const speakerAvatar = avatarMap[avatarKey] || null;
+
+                                        const isLeft = index % 2 === 0;
+
+                                        return (
+                                            <div
+                                                key={index}
+                                                style={{
+                                                    display: "flex",
+                                                    flexDirection: "column",
+                                                    marginBottom: "16px",
+                                                    alignItems: isLeft ? "flex-start" : "flex-end"
+                                                }}
+                                            >
+                                                <div style={{ display: "flex", gap: "8px", alignItems: "center", flexDirection: isLeft ? "row" : "row-reverse" }}>
+                                                    {speakerAvatar && (
+                                                        <img
+                                                            src={speakerAvatar}
+                                                            alt={userName}
+                                                            style={{ width: 40, height: 40, borderRadius: "50%", objectFit: "cover" }}
+                                                        />
+                                                    )}
                                                     <div
-                                                        key={`${qIdx}-${index}`}
+                                                        className="audio-outer"
                                                         style={{
-                                                            display: "flex",
-                                                            flexDirection: "column",
-                                                            alignItems: isLeft ? "flex-start" : "flex-end",
-                                                            marginBottom: "16px"
+                                                            backgroundColor: "#dfe6e9cc",
+                                                            padding: "8px 10px",
+                                                            borderRadius: "8px"
                                                         }}
                                                     >
-                                                        <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
-                                                            {isLeft && avatars[0] && (
-                                                                <img src={avatars[0]} alt="avatar"
-                                                                    style={{
-                                                                        width: 40, height: 40,
-                                                                        borderRadius: "50%", objectFit: "cover"
-                                                                    }} />
-                                                            )}
-
-                                                            <div
-                                                                className="audio-outer"
-                                                                style={{
-                                                                    display: "flex",
-                                                                    flexDirection: "column",
-                                                                    gap: "8px",
-                                                                    padding: "8px 10px",
-                                                                    backgroundColor: "#dfe6e9cc",
-                                                                    borderRadius: "8px",
-                                                                    position: "relative"
-                                                                }}
-                                                            >
-                                                                {question?.audioUserName?.split(",")[0] || "User"}
-                                                                <audio
-                                                                    className="audio-player"
-                                                                    controls
-                                                                    src={question?.audioFilePath ? question.audioFilePath.replace("dl=0", "raw=1") : ""}
-                                                                />
-                                                            </div>
-
-                                                            {!isLeft && avatars[1] && (
-                                                                <img src={avatars[1]} alt="avatar"
-                                                                    style={{
-                                                                        width: 40, height: 40,
-                                                                        borderRadius: "50%", objectFit: "cover"
-                                                                    }} />
-                                                            )}
-                                                        </div>
-
-                                                        <div style={{ padding: "4px 10px", borderRadius: "8px", marginTop: "8px" }}>
-                                                            {question?.subtitle}
-                                                        </div>
+                                                        {userName}
+                                                        <audio
+                                                            controls
+                                                            src={question.audioFilePath?.replace("dl=0", "raw=1") || ""}
+                                                        />
+                                                        <div style={{ marginTop: "4px" }}>{question.subtitle}</div>
                                                     </div>
-                                                );
-                                            })}
-                                        </Grid>
-                                    </div>
-                                );
-                            })}
-                        </>
-                    )}
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+
+                                </Grid>
+                            </div>
+                        );
+                    })}
 
                     {/* Type 2 - Sentence Scramble */}
                     {type === "2" && (
                         <div className="lang-card" data-aos="fade-up" data-aos-delay="100">
                             <Grid item xs={12} sm={12} mt={2}>
                                 <h2>{t("scramble")}</h2>
-                                {questions.length > 0 ? (
-                                    <>
-                                        {questions.map((q, idx) => (
-                                            <Box key={q.id} sx={{ mb: 3 }}>
-                                                <Typography variant="h6" gutterBottom>
-                                                    {idx + 1}) {q.scrambledSentence.split(" ").join(" / ")}
-                                                </Typography>
-                                                <TextField
-                                                    fullWidth
-                                                    placeholder="Enter the correct sentence"
-                                                    value={userAnswers[idx]}
-                                                    onChange={(e) => handleInputChange(idx, e.target.value)}
-                                                    size="small"
-                                                    sx={{
-                                                        "& .MuiOutlinedInput-root": {
-                                                            "& fieldset": {
-                                                                borderColor: correctAnswers[idx] ? "green" : "rgba(0, 0, 0, 0.23)",
-                                                            },
-                                                            "&:hover fieldset": {
-                                                                borderColor: correctAnswers[idx] ? "green" : "#000",
-                                                            },
-                                                            "&.Mui-focused fieldset": {
-                                                                borderColor: correctAnswers[idx] ? "green" : "#1976d2",
-                                                            },
-                                                        },
-                                                    }}
-                                                />
-                                                <Box sx={{ mt: 1 }}>
-                                                    <Button variant="outlined" onClick={() => handleCheckAnswer(idx)}>
-                                                        Check
-                                                    </Button>
-                                                </Box>
-                                                {correctAnswers[idx] && (
-                                                    <Typography sx={{ mt: 1, color: "green" }}>
-                                                        ✅ Correct!
-                                                    </Typography>
-                                                )}
-                                                {!correctAnswers[idx] && userAnswers[idx] && (
-                                                    <Typography sx={{ mt: 1, color: "red" }}>
-                                                        ❌ Incorrect.
-                                                    </Typography>
-                                                )}
-                                                <Divider sx={{ mt: 2 }} />
-                                            </Box>
-                                        ))}
-                                    </>
-                                ) : (
-                                    <>No questions found</>
-                                )}
+                                {questions.length > 0 ? questions.map((q, idx) => (
+                                    <Box key={q.id} sx={{ mb: 3 }}>
+                                        <Typography variant="h6" gutterBottom>
+                                            {idx + 1}) {q.scrambledSentence.split(" ").join(" / ")}
+                                        </Typography>
+                                        <TextField
+                                            fullWidth
+                                            placeholder="Enter the correct sentence"
+                                            value={userAnswers[idx]}
+                                            onChange={(e) => handleInputChange(idx, e.target.value)}
+                                            size="small"
+                                            sx={{
+                                                "& .MuiOutlinedInput-root": {
+                                                    "& fieldset": { borderColor: correctAnswers[idx] ? "green" : "rgba(0,0,0,0.23)" },
+                                                    "&:hover fieldset": { borderColor: correctAnswers[idx] ? "green" : "#000" },
+                                                    "&.Mui-focused fieldset": { borderColor: correctAnswers[idx] ? "green" : "#1976d2" }
+                                                }
+                                            }}
+                                        />
+                                        <Box sx={{ mt: 1 }}>
+                                            <Button variant="outlined" onClick={() => handleCheckAnswer(idx)}>Check</Button>
+                                        </Box>
+                                        {correctAnswers[idx] && <Typography sx={{ mt: 1, color: "green" }}>✅ Correct!</Typography>}
+                                        {!correctAnswers[idx] && userAnswers[idx] && <Typography sx={{ mt: 1, color: "red" }}>❌ Incorrect.</Typography>}
+                                        <Divider sx={{ mt: 2 }} />
+                                    </Box>
+                                )) : <>No questions found</>}
                             </Grid>
                         </div>
                     )}
+
                 </div>
             </div>
 
