@@ -51,6 +51,10 @@ import CustomModal from "src/Common/Components/CustomModal";
 import "../../Common/styles/courses.css";
 import quizImg from "../../Assets/Images/quiz-hero.png"
 import langImg from "../../Assets/Images/lang-hero.png"
+import lang1 from "../../Assets/Images/counseling.png"
+import lang2 from "../../Assets/Images/hard-work.png"
+import lang3 from "../../Assets/Images/listen.png"
+import lang4 from "../../Assets/Images/practice.png"
 
 const Transition = forwardRef(function Transition(props: any, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -602,36 +606,6 @@ export default function Landing() {
         </div>
       </div>
 
-      {/* <div className="third-outer">
-        <div className="space"></div>
-        <div className="space"></div>
-        <div className="ins-inner">
-          <div className="ins-inner1">
-            <div className="ins-in14">
-              <div className="img14">
-                <img style={{width: "100%", maxHeight: "280px", objectFit: "cover", borderRadius: "10px"}} src={quizImg} alt="" />
-              </div>
-            </div>
-            <div className="ins-in14" data-aos="fade-up" data-aos-delay="100">
-              <div className="ins-main-title" data-aos="fade-up" data-aos-delay="100">
-                {t("quiz")}
-              </div>              
-              <div className="ins-main-desc" data-aos="fade-up" data-aos-delay="200">
-                {t("quizDetails")}
-              </div>       
-              <div onClick={() => navigate("/quizes")} style={{color: "#0047aa", display: "flex", alignItems: "center !important", gap :"10px",  cursor: "pointer"}} className="ins-main-desc" data-aos="fade-up" data-aos-delay="200">
-                <Forward /> {t("quiz")}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> */}
-
-      <div className="space"></div>
-      <div className="space"></div>
-      <div className="space"></div>
-      <div className="space"></div>
-
       <div className="third-outer bg-layer">
 
         <div className="space"></div>
@@ -649,6 +623,52 @@ export default function Landing() {
               <div onClick={() => navigate("/user-language-practice")} style={{ color: "#0047aa", display: "flex", alignItems: "center !important", gap: "10px", cursor: "pointer" }} className="ins-main-desc" data-aos="fade-up" data-aos-delay="200">
                 <Forward /> {t("lang")}
               </div>
+              <div className="lang-sub-cards-outer">
+                <div className="lang-sub-card">
+                  <div className="card-inner">
+                    <div className="card-front">
+                      <img className="lang-sub-img" src={lang1} alt="" />
+                    </div>
+                    <div className="card-back">
+                      <p>Speak with Confidence</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="lang-sub-card">
+                  <div className="card-inner">
+                    <div className="card-front">
+                      <img className="lang-sub-img" src={lang2} alt="" />
+                    </div>
+                    <div className="card-back">
+                      <p>Master Everyday Words</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="lang-sub-card">
+                  <div className="card-inner">
+                    <div className="card-front">
+                      <img className="lang-sub-img" src={lang3} alt="" />
+                    </div>
+                    <div className="card-back">
+                      <p>Train Your Listening</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="lang-sub-card">
+                  <div className="card-inner">
+                    <div className="card-front">
+                      <img className="lang-sub-img" src={lang4} alt="" />
+                    </div>
+                    <div className="card-back">
+                      <p>Practice Made Easy</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
             </div>
             <div className="ins-in14">
               <div className="img14">
