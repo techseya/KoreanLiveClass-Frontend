@@ -720,6 +720,13 @@
     gap: 30px;
 }
 
+.cin1{
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
 .quiz-img {
     width: 95%;
     height: auto;
