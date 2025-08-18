@@ -568,13 +568,13 @@ export default function Landing() {
       <div className="space"></div>
 
       <div className="content-main-out">
-        {/* <div className="floating-balls">
+        <div className="floating-balls">
           <span></span>
           <span></span>
           <span></span>
           <span></span>
           <span></span>
-        </div> */}
+        </div>
         <div className="content-in cin">
           <div className="content-highlights" data-aos="fade-up" data-aos-delay="100">
             🟢 Learn Korean the fun way!
