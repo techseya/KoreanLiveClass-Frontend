@@ -55,6 +55,7 @@ import lang1 from "../../Assets/Images/counseling.png"
 import lang2 from "../../Assets/Images/hard-work.png"
 import lang3 from "../../Assets/Images/listen.png"
 import lang4 from "../../Assets/Images/practice.png"
+import idea from "../../Assets/Images/idea.png";
 
 const Transition = forwardRef(function Transition(props: any, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -577,13 +578,13 @@ export default function Landing() {
         </div> */}
         <div className="content-in cin">
           <div className="content-highlights" data-aos="fade-up" data-aos-delay="100">
-            🟢 Learn Korean the fun way!
+            <img style={{width: "24px", marginRight: "8px"}} src={idea} alt="" /> Learn Korean the fun way!
           </div>
           <div className="content-highlights" data-aos="fade-up" data-aos-delay="120">
-            🟢 Quick quizzes, big results.
+            <img style={{width: "24px", marginRight: "8px"}} src={idea} alt="" /> Quick quizzes, big results.
           </div>
           <div className="content-highlights" data-aos="fade-up" data-aos-delay="140">
-            🟢 Master Korean, one quiz at a time.
+            <img style={{width: "24px", marginRight: "8px"}} src={idea} alt="" /> Master Korean, one quiz at a time.
           </div>
         </div>
         <div className="content-in">
@@ -609,8 +610,8 @@ export default function Landing() {
 
         <div className="ins-inner">
           <div className="ins-inner1">
-            <div className="ins-in14" data-aos="fade-up" data-aos-delay="100">
-              <div className="ins-main-title" data-aos="fade-up" data-aos-delay="100">
+            <div className="ins-in14" data-aos="fade-up" data-aos-delay="200">
+              <div className="ins-main-title" data-aos="fade-up" data-aos-delay="200">
                 {t("lang")}
               </div>
               <div className="ins-main-desc" data-aos="fade-up" data-aos-delay="200">
