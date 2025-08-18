@@ -24,6 +24,7 @@ import React from "react";
 import "../../../Common/styles/quiz.css"
 import { RadioGroup, FormControlLabel, Radio } from "@mui/material";
 import { AudioRecorder } from "src/Common/Components/AudioRecorder";
+import { set } from "lodash";
 
 function CustomNoRowsOverlay() {
     return (
@@ -59,6 +60,8 @@ export default function QuizMaintenance() {
     const [questionImage, setQuestionImage] = useState<File | null>(null);
     const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
     const [answers, setAnswers] = useState(["", "", "", ""]);
+    const [imageAnswers, setImageAnswers] = useState<any[]>([null, null, null, null]);
+    const [imgs, setImgs] = useState<any[]>([null, null, null, null]);
     const [correctAnswerIndex, setCorrectAnswerIndex] = useState(0); // default Answer 1 selected
     const [loading, setLoading] = useState(false);
     const [fillBlankAnswers, setFillBlankAnswers] = useState<string[]>([]);
@@ -69,11 +72,25 @@ export default function QuizMaintenance() {
     const [updateBtnVisible, setUpdateBtnVisible] = useState(false)
     const [id, setId] = useState("")
     const [questionId, setQuestionId] = useState("")
+    const [isImageAnswer, setIsImageAnswer] = useState(0);
+    const [isSelect, setIsSelect] = useState(false);
 
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             setQuestionImage(e.target.files[0]);
         }
+    };
+
+    const handleImageAnswerChange = (index: number, value: File | null) => {
+        const updated = [...imageAnswers];
+        updated[index] = value;
+        setImageAnswers(updated);
+    };
+
+    const handleImageAnswerChange1 = (index: number, value: File | null) => {
+        const updated = [...imgs];
+        updated[index] = value;
+        setImgs(updated);
     };
 
     const handleAnswerChange = (index: number, value: string) => {
@@ -309,10 +326,15 @@ export default function QuizMaintenance() {
         formData.append("questionText", qType === 1 ? `"${qTextJson}"` : `"${qTextJsonB}"`);
         formData.append("image", questionImage ? questionImage : "");
         formData.append("audio", audioBlob ? audioBlob : "");
+        formData.append("answerType", isImageAnswer.toString());
         formData.append("answer1", qType === 1 ? answers[0] : "");
         formData.append("answer2", qType === 1 ? answers[1] : "");
         formData.append("answer3", qType === 1 ? answers[2] : "");
         formData.append("answer4", qType === 1 ? answers[3] : "");
+        formData.append("imageAnswer1", qType === 1 && isImageAnswer === 1 ? (imageAnswers[0] ? imageAnswers[0] : "") : "");
+        formData.append("imageAnswer2", qType === 1 && isImageAnswer === 1 ? (imageAnswers[1] ? imageAnswers[1] : "") : "");
+        formData.append("imageAnswer3", qType === 1 && isImageAnswer === 1 ? (imageAnswers[2] ? imageAnswers[2] : "") : "");
+        formData.append("imageAnswer4", qType === 1 && isImageAnswer === 1 ? (imageAnswers[3] ? imageAnswers[3] : "") : "");
         formData.append("correctAnswerMcq", qType === 1 ? (correctAnswerIndex + 1).toString() : "");
         formData.append("correctAnswerFillInBlanks", qType === 2 ? JSON.stringify(fillBlankAnswers) : "");
 
@@ -336,6 +358,8 @@ export default function QuizMaintenance() {
         setImageUrl("")
         setAudioUrl("")
         setAnswers(["", "", "", ""])
+        setIsImageAnswer(0);
+        setImageAnswers([null, null, null, null]);
         setCorrectAnswerIndex(0);
         setFillBlankAnswers([]);
 
@@ -353,10 +377,27 @@ export default function QuizMaintenance() {
         formData.append("questionText", qType === 1 ? `"${qTextJson}"` : `"${qTextJsonB}"`);
         formData.append("image", questionImage ? questionImage : "");
         formData.append("audio", audioBlob ? audioBlob : "");
+        formData.append("answerType", isImageAnswer.toString());
         formData.append("answer1", qType === 1 ? answers[0] : "");
         formData.append("answer2", qType === 1 ? answers[1] : "");
         formData.append("answer3", qType === 1 ? answers[2] : "");
         formData.append("answer4", qType === 1 ? answers[3] : "");
+        if (qType === 1 && isImageAnswer === 1) {
+            if (imgs[0] instanceof File) {
+                formData.append("imageAnswer1", imgs[0]);
+            }
+            if (imgs[1] instanceof File) {
+                formData.append("imageAnswer2", imgs[1]);
+            }
+            if (imgs[2] instanceof File) {
+                formData.append("imageAnswer3", imgs[2]);
+            }
+            if (imgs[3] instanceof File) {
+                formData.append("imageAnswer4", imgs[3]);
+            }
+        }
+
+
         formData.append("correctAnswerMcq", qType === 1 ? (correctAnswerIndex + 1).toString() : "");
         formData.append("correctAnswerFillInBlanks", qType === 2 ? JSON.stringify(fillBlankAnswers) : "");
 
@@ -391,6 +432,8 @@ export default function QuizMaintenance() {
         setAudioUrl("")
         setAudioBlob(null)
         setAnswers(["", "", "", ""])
+        setIsImageAnswer(0);
+        setImageAnswers([null, null, null, null]);
         setCorrectAnswerIndex(0);
         setFillBlankAnswers([]);
 
@@ -429,7 +472,15 @@ export default function QuizMaintenance() {
         setQTextFieldsB(newTextFields)
 
         setQType(question.questionType);
-        setAnswers([question.answer.answer1, question.answer.answer2, question.answer.answer3, question.answer.answer4]);
+        if (question.answer.answerType === 1) {
+            setIsImageAnswer(1);
+            setIsSelect(true);
+            setImgs([question.answer.answer1?.replace("dl=0", "raw=1"), question.answer.answer2?.replace("dl=0", "raw=1"), question.answer.answer3?.replace("dl=0", "raw=1"), question.answer.answer4?.replace("dl=0", "raw=1")]);
+        } else {
+            setIsSelect(false);
+            setIsImageAnswer(0);
+            setAnswers([question.answer.answer1, question.answer.answer2, question.answer.answer3, question.answer.answer4]);
+        }
         setCorrectAnswerIndex(question.answer.correctAnswer - 1); // Adjust for 0-based index
         setAudioUrl(question.audioUrl !== null ? question.audioUrl.replace("dl=0", "raw=1") : "")
         setImageUrl(question.imageUrl !== null ? question.imageUrl.replace("dl=0", "raw=1") : "")
@@ -442,6 +493,12 @@ export default function QuizMaintenance() {
             setFillBlankAnswers(parsedList); // ✅ set once
         }
 
+    }
+
+    function handleRemoveImageAnswer(index: number): void {
+        const updatedAnswers = [...imageAnswers];
+        updatedAnswers[index] = null;
+        setImageAnswers(updatedAnswers);
     }
 
     return (
@@ -519,7 +576,7 @@ export default function QuizMaintenance() {
                                     <Button
                                         className="reset-btn"
                                         variant="contained"
-                                        style={{backgroundColor: "grey !important", color: "white"}}
+                                        style={{ backgroundColor: "grey !important", color: "white" }}
                                         onClick={(e) => {
                                             handleReset()
                                             setUpdateBtnVisible(false)
@@ -696,37 +753,134 @@ export default function QuizMaintenance() {
                                             <Typography variant="subtitle1" gutterBottom>
                                                 Answers
                                             </Typography>
-                                        </Grid>
-                                            {[0, 1, 2, 3].map((i) => (
-                                                <Grid item xs={12} sm={6} key={i}>
-                                                    <TextField
-                                                        fullWidth
-                                                        size="small"
-                                                        label={`Answer ${i + 1}`}
-                                                        value={answers[i]}
-                                                        onChange={(e) => handleAnswerChange(i, e.target.value)}
-                                                    />
-                                                </Grid>
-                                            ))}
 
-                                            <Grid item xs={12} sm={6}>
-                                                <FormControl fullWidth>
-                                                    <InputLabel id="correct-answer-label">Correct Answer</InputLabel>
-                                                    <Select
-                                                        labelId="correct-answer-label"
-                                                        size="small"
-                                                        value={correctAnswerIndex}
-                                                        label="Correct Answer"
-                                                        onChange={(e) => setCorrectAnswerIndex(Number(e.target.value))}
-                                                    >
-                                                        {[0, 1, 2, 3].map((i) => (
-                                                            <MenuItem key={i} value={i}>
-                                                                Answer {i + 1}
-                                                            </MenuItem>
+                                            <Select
+                                                fullWidth
+                                                value={isImageAnswer}
+                                                onChange={(e) => {
+                                                    setIsImageAnswer(Number(e.target.value));
+                                                    setImageAnswers([null, null, null, null]);
+                                                    setAnswers(["", "", "", ""]);
+                                                    setCorrectAnswerIndex(0);
+                                                }}
+                                                size="small"
+                                            >
+                                                <MenuItem value={0}>Text</MenuItem>
+                                                <MenuItem value={1}>Images</MenuItem>
+                                            </Select>
+                                        </Grid>
+
+                                            {isImageAnswer === 0 && (
+                                                <>
+                                                    {[0, 1, 2, 3].map((i) => (
+                                                        <Grid item xs={12} sm={6} key={i}>
+                                                            <TextField
+                                                                fullWidth
+                                                                size="small"
+                                                                label={`Answer ${i + 1}`}
+                                                                value={answers[i]}
+                                                                onChange={(e) => handleAnswerChange(i, e.target.value)}
+                                                            />
+                                                        </Grid>
+                                                    ))}
+
+                                                    <Grid item xs={12} sm={6}>
+                                                        <FormControl fullWidth>
+                                                            <InputLabel id="correct-answer-label">Correct Answer</InputLabel>
+                                                            <Select
+                                                                labelId="correct-answer-label"
+                                                                size="small"
+                                                                value={correctAnswerIndex}
+                                                                label="Correct Answer"
+                                                                onChange={(e) => setCorrectAnswerIndex(Number(e.target.value))}
+                                                            >
+                                                                {[0, 1, 2, 3].map((i) => (
+                                                                    <MenuItem key={i} value={i}>
+                                                                        Answer {i + 1}
+                                                                    </MenuItem>
+                                                                ))}
+                                                            </Select>
+                                                        </FormControl>
+                                                    </Grid>
+                                                </>
+                                            )}
+                                            {isImageAnswer === 1 && (
+                                                <>
+                                                    {/* upload images for answers */}
+                                                    <Grid container spacing={2}>
+                                                        {!isSelect && (
+                                                            imageAnswers.map((answer, index) => (
+                                                                <Grid item xs={12} sm={5} key={index} style={{ marginLeft: "20px", marginTop: "10px" }}>
+                                                                    <Typography variant="subtitle1" gutterBottom>
+                                                                        Answer {index + 1}
+                                                                    </Typography>
+                                                                    <input
+                                                                        type="file"
+                                                                        accept="image/*"
+                                                                        onChange={(e) => handleImageAnswerChange(index, e.target.files ? e.target.files[0] : null)}
+                                                                        style={{ marginBottom: "8px" }}
+                                                                    />
+                                                                    {answer && (
+                                                                        <img
+                                                                            src={URL.createObjectURL(answer)}
+                                                                            alt={`Answer ${index + 1}`}
+                                                                            style={{ maxWidth: "100%", maxHeight: "200px" }}
+                                                                        />
+                                                                    )}
+                                                                </Grid>
+                                                            ))
+                                                        )}
+
+
+                                                        {isSelect && imgs.map((img, index) => (
+                                                            <Grid item xs={12} sm={5} style={{ marginLeft: "20px", marginTop: "10px" }} key={index}>
+                                                                <Typography variant="subtitle1" gutterBottom>
+                                                                    Answer {index + 1}
+                                                                </Typography>
+                                                                <input
+                                                                    type="file"
+                                                                    accept="image/*"
+                                                                    onChange={(e) => handleImageAnswerChange1(index, e.target.files ? e.target.files[0] : null)}
+                                                                    style={{ marginBottom: "8px" }}
+                                                                />
+                                                                {/* display new */}
+                                                                <img
+                                                                    src={
+                                                                        typeof img === "string"
+                                                                            ? img
+                                                                            : img instanceof File
+                                                                                ? URL.createObjectURL(img) // file from input
+                                                                                : undefined
+                                                                    }
+                                                                    alt={`Answer ${index + 1}`}
+                                                                    style={{ maxWidth: "100%", maxHeight: "200px" }}
+                                                                />
+
+                                                            </Grid>
                                                         ))}
-                                                    </Select>
-                                                </FormControl>
-                                            </Grid>
+                                                    </Grid>
+
+                                                    <Grid item xs={12} sm={6}>
+                                                        <FormControl fullWidth>
+                                                            <InputLabel id="correct-answer-label">Correct Answer</InputLabel>
+                                                            <Select
+                                                                labelId="correct-answer-label"
+                                                                size="small"
+                                                                value={correctAnswerIndex}
+                                                                label="Correct Answer"
+                                                                onChange={(e) => setCorrectAnswerIndex(Number(e.target.value))}
+                                                            >
+                                                                {[0, 1, 2, 3].map((i) => (
+                                                                    <MenuItem key={i} value={i}>
+                                                                        Answer {i + 1}
+                                                                    </MenuItem>
+                                                                ))}
+                                                            </Select>
+                                                        </FormControl>
+                                                    </Grid>
+                                                </>
+                                            )}
+
                                         </>
                                     )}
 
@@ -755,7 +909,7 @@ export default function QuizMaintenance() {
                                         {updateBtnVisible ? (
                                             <>
                                                 <Button
-                                                style={{marginRight: "10px", backgroundColor: "red"}}
+                                                    style={{ marginRight: "10px", backgroundColor: "red" }}
                                                     variant="contained"
                                                     color="primary"
                                                     onClick={handleClickDeleteQuestion}

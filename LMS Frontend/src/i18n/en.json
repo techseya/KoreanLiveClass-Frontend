@@ -151,7 +151,9 @@
   "warning": "Do not refresh the page, press the back button, or close the browser tab/window during the exam. If you do, your exam will be automatically submitted and your attempt will be counted.",
   "quizDetails": "Visit to purchase question papers designed for each course related to everything you have learned in the Korean language.",
   "lang": "Korean Language Practice",
-  "langDetails" : "Access free Korean language training courses designed to include dialogues used in various situations and practical use of Korean.",
-  "scramble": "Let's make the sentence correct"
+  "langDetails" : "Access Korean language training courses designed to include dialogues used in various situations and practical use of Korean.",
+  "scramble": "Let's make the sentence correct",
+  "langall": "Language Practice",
+  "langpaid": "My Language Practice"
 }
   

@@ -9,7 +9,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useEffect, useState } from "react";
 import { Delete, FilterList, LockReset, PhonelinkErase, Send } from "@mui/icons-material";
 import Dialogbox from "src/Common/Components/DialogBox";
-import { assignCourse, assignQuizes, deleteUser, getAlertUsers, GetAssignQuizes, getUsers, resetDevice, resetPassword, updateUser } from "src/Services/user_api";
+import { assignCourse, assignLanguagePractice, assignQuizes, deleteUser, getAlertUsers, getAssignLanguagePractice, GetAssignQuizes, getUsers, resetDevice, resetPassword, updateUser } from "src/Services/user_api";
 import { getAllCourses, getSectionByCourseId, getUsersByCourseId } from "src/Services/course_api";
 import { getCodeList } from "country-list";
 import { getCountryCallingCode, CountryCode } from "libphonenumber-js";
@@ -17,6 +17,7 @@ import { CopyOutlined, EyeOutlined } from "@ant-design/icons";
 import { log } from "util";
 import React from "react";
 import { getQuiz } from "src/Services/quiz_api";
+import { getLanguagePractices } from "src/Services/lang_practice_api";
 
 type CountryOption = {
     code: string;
@@ -51,6 +52,7 @@ export default function UserMaintenance() {
     const [courseModalOpen, setCourseModalOpen] = useState(false);
     const [courseModalOpen2, setCourseModalOpen2] = useState(false);
     const [courseModalOpen3, setCourseModalOpen3] = useState(false);
+    const [courseModalOpen4, setCourseModalOpen4] = useState(false);
     const [sectionModalOpen, setSectionModalOpen] = useState(false);
     const [quizModalOpen, setQuizModalOpen] = useState(false);
     const [editingUser, setEditingUser] = useState<any | null>(null);
@@ -63,7 +65,9 @@ export default function UserMaintenance() {
     const [allCourses, setAllCourses] = useState<any[]>([]);
     const [sections, setSections] = useState<any[]>([]);
     const [quizes, setQuizes] = useState<any[]>([]);
+    const [langPractices, setLangPractices] = useState<any[]>([]);
     const [assignedQuizes, setAssignedQuizes] = useState<any[]>([]);
+    const [assignedLangPractices, setAssignedLangPractices] = useState<any[]>([]);
     const [location1, setLocation1] = useState("Sri Lanka");
     const [phoneNo, setPhoneNo] = useState<any>("");
     const [selectedCourseId, setSelectedCourseId] = useState<any>("default");
@@ -103,6 +107,8 @@ export default function UserMaintenance() {
     useEffect(() => {
         handleGetUsers()
         handleGetCourses()
+        handleGetLangPractices()
+
     }, [])
 
     const handleGetCourses = async () => {
@@ -294,6 +300,15 @@ export default function UserMaintenance() {
         }
     }
 
+    const handleGetLangPractices = async () => {
+        try {
+            const response = await getLanguagePractices(token);
+            setLangPractices(response.data);
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     const handleAssignQuizes = async () => {
 
     }
@@ -333,6 +348,15 @@ export default function UserMaintenance() {
         }
     }
 
+    const handleGetAssignLangPractices = async (userid: any) => {
+        try {
+            const res = await getAssignLanguagePractice(userid, token)
+            setAssignedLangPractices(res.data)
+        } catch (error: any) {
+            console.log(error);
+        }
+    }
+
     const handleAssignQuizesForUsers = async (quizId: any, status: any) => {
 
         const body = {
@@ -346,6 +370,22 @@ export default function UserMaintenance() {
             const response = await assignQuizes(body, token)
             alert(response.data.message)
             handleGetAssignQuizes(selectedUserId, selectedCourseId)
+        } catch (error: any) {
+            alert(error.response.message)
+        }
+    }
+
+    const handleAssignLanguagePracticeForUsers = async (langPracticeId: any, status: any) => {
+        const body = {
+            userId: selectedUserId,
+            languagePracticeId: langPracticeId,
+            activeStatus: status
+        }
+
+        try {
+            const response = await assignLanguagePractice(body, token)
+            alert(response.data.message)
+            handleGetAssignLangPractices(selectedUserId)
         } catch (error: any) {
             alert(error.response.message)
         }
@@ -704,6 +744,13 @@ export default function UserMaintenance() {
                                 setCourseModalOpen3(true)
                             }}>
                                 Assign Quizes
+                            </Button>
+                            <Button style={{ margin: "5px" }} variant="outlined" onClick={() => {
+                                setCourseModalOpen4(true)
+                                handleGetAssignLangPractices(editingUser?.id)
+                                setSelectedUserId(editingUser?.id)
+                            }}>
+                                Assign Lang Practices
                             </Button>
                         </Grid>
                         <Grid item xs={12}>
@@ -1069,6 +1116,131 @@ export default function UserMaintenance() {
                     )}
 
 
+                </Box>
+            </Modal>
+
+            <Modal
+                open={courseModalOpen4}
+                onClose={() => setCourseModalOpen4(false)}
+            >
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        top: '50%',
+                        left: '50%',
+                        transform: 'translate(-50%, -50%)',
+                        width: '90%',
+                        height: '90vh',
+                        maxHeight: '80vh',
+                        overflowY: 'auto',
+                        bgcolor: 'background.paper',
+                        boxShadow: 24,
+                        p: 4,
+                        borderRadius: '10px'
+                    }}
+                >
+                    <Typography variant="h6" mb={2}>Assign Language Practice : {editingUser?.userName}</Typography>
+
+                    <Box display="flex" flexWrap="wrap" gap="15px" justifyContent="start" p="15px 0" borderRadius="10px">
+                        {langPractices?.length > 0 && (
+                            <>
+                                {langPractices
+                                    .filter((practice) => practice.activeStatus === 1 && practice.isPaid)
+                                    .map((paper: any) => {
+                                        const assignedPractice = assignedLangPractices.find((ap) => ap.languagePracticeId === paper.id);
+                                        return (
+                                            <div
+                                                key={paper.id}
+                                                style={{
+                                                    textAlign: "center",
+                                                    marginBottom: "10px",
+                                                    width: "250px",
+                                                    height: "auto",
+                                                    border: "1px solid #ccc",
+                                                    padding: "5px",
+                                                    borderRadius: "5px",
+                                                    display: "flex",
+                                                    flexDirection: "column",
+                                                    justifyContent: "space-between",
+                                                    position: "relative",
+                                                    // cursor: assignedPractice?.practiceStatus === 1 ? "pointer" : "not-allowed",
+                                                }}
+                                            >
+                                                {/* <img
+                                                    style={{
+                                                        width: "100%",
+                                                        height: "auto",
+                                                        maxHeight: "150px",
+                                                        objectFit: "cover",
+                                                        borderRadius: "5px",
+                                                    }}
+                                                    src={paper.imageUrl.replace("dl=0", "raw=1")}
+                                                    alt=""
+                                                /> */}
+                                                <div style={{ width: "100%", textAlign: "center" }}>{paper.name}</div>
+
+                                                {/* Quiz Status Display */}
+                                                {/* {assignedPractice && (
+                                                    <div style={{ fontSize: "12px", color: "black", marginTop: "4px",   padding: "5px 10px", borderRadius: "5px" }}>
+                                                        {assignedPractice.languagePracticeStatus === 1 ? "Assigned" : "Unassigned"}
+                                                    </div>
+                                                )} */}
+
+                                                <div
+                                                    className="btn-out"
+                                                    style={{
+                                                        marginTop: "10px",
+                                                        display: "flex",
+                                                        justifyContent: "center",
+                                                        gap: "10px",
+                                                    }}
+                                                >
+
+                                                    {assignedPractice && assignedPractice.languagePracticeStatus === 1 ? (
+                                                        <button
+                                                            style={{
+                                                                backgroundColor: "#e0e0e0",
+                                                                color: "#555",
+                                                                border: "none",
+                                                                borderRadius: "5px",
+                                                                padding: "5px 10px",
+                                                                display: "flex",
+                                                                alignItems: "center",
+                                                                gap: "5px",
+                                                                cursor: "pointer",
+                                                            }}
+                                                            onClick={() => handleAssignLanguagePracticeForUsers(paper.id, 2)}
+                                                        >
+                                                            <span role="img" aria-label="lock">🔒</span> Unassign
+                                                        </button>
+                                                    ) : (
+                                                        <button
+                                                            style={{
+                                                                backgroundColor: "#4caf50",
+                                                                color: "#fff",
+                                                                border: "none",
+                                                                borderRadius: "5px",
+                                                                padding: "5px 10px",
+                                                                display: "flex",
+                                                                alignItems: "center",
+                                                                gap: "5px",
+                                                                cursor: "pointer",
+                                                            }}
+                                                            onClick={() => handleAssignLanguagePracticeForUsers(paper.id, 1)}
+                                                        >
+                                                            <span role="img" aria-label="unlock">🔓</span> Assign
+                                                        </button>
+                                                    )}
+
+
+                                                </div>
+                                             </div>
+                                         );
+                                    })}
+
+                            </>
+                        )}
+                    </Box>
                 </Box>
             </Modal>
 

@@ -89,15 +89,15 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
     }
   };
 
-const formatTime = (seconds: number) => {
-  const h = Math.floor(seconds / 3600);
-  const m = Math.floor((seconds % 3600) / 60);
-  const s = seconds % 60;
+  const formatTime = (seconds: number) => {
+    const h = Math.floor(seconds / 3600);
+    const m = Math.floor((seconds % 3600) / 60);
+    const s = seconds % 60;
 
-  const pad = (n: number) => (n < 10 ? "0" + n : n);
+    const pad = (n: number) => (n < 10 ? "0" + n : n);
 
-  return `${pad(h)}:${pad(m)}:${pad(s)}`;
-};
+    return `${pad(h)}:${pad(m)}:${pad(s)}`;
+  };
 
   const isFillInTheBlank = (q: any) => {
     const { answer1, answer2, answer3, answer4 } = q.answer;
@@ -211,9 +211,21 @@ const formatTime = (seconds: number) => {
     <Dialog fullScreen open={open} onClose={onClose}>
       <DialogTitle className="" sx={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "space-between", backgroundColor: "black", color: "white", padding: "16px 24px", flexWrap: "wrap" }}>
         <div className="submit-btn-q1">
-          <Typography className="submit-btn-q" style={{ color: "white", fontSize: "15px" }} variant="subtitle2" color="text.secondary">
-            ⏳ Time Left: {formatTime(timeLeft)}
-          </Typography>
+          <Box className="quiz-timer-box" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            <span style={{ fontSize: "20px", color: "#fff" }}>⏳</span>
+            <Typography
+              variant="h4"
+              sx={{
+                color: "#fff",
+                fontWeight: "bold",
+                fontFamily: "monospace",
+                letterSpacing: "1px",
+              }}
+            >
+              {formatTime(timeLeft)}
+            </Typography>
+          </Box>
+
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: "16px", marginRight: "5px" }}>
 
@@ -240,28 +252,28 @@ const formatTime = (seconds: number) => {
           <Typography>No questions available.</Typography>
         ) : (
           <Grid container spacing={1}>
-            <div style={{ textAlign: "center", width: "100%", marginTop: "20px" }} className="quiz-title-outer">
+            <div style={{ textAlign: "left", width: "100%", marginTop: "20px" }} className="quiz-title-outer">
               <Typography variant="h5" className="quiz-title">
                 {name || "Quiz"}
               </Typography>
             </div>
             {warningVisible && (
               <div className="warning-outer">
-              <div className="">
-                <p>
-                  ⚠️ {t("warning")}
-                </p>
+                <div className="">
+                  <p>
+                    ⚠️ {t("warning")}
+                  </p>
+                </div>
+                <IconButton
+                  aria-label="close"
+
+                  onClick={() => setWarningVisible(false)}
+                  sx={{ position: "absolute", right: 0, top: 0, width: "30px", height: "30px", padding: 0 }}
+                >
+                  <CloseIcon />
+                </IconButton>
               </div>
-              <IconButton
-                aria-label="close"
-                
-                onClick={() => setWarningVisible(false)}
-                sx={{ position: "absolute", right: 0, top: 0, width: "30px", height: "30px", padding: 0 }}
-              >
-                <CloseIcon />
-              </IconButton>
-            </div>
-            )}            
+            )}
             <div className="summary-outer">
               <Box display="flex" flexWrap="wrap" gap={1} sx={{ overflow: "hidden" }}>
                 {questions.map((q, idx) => {
@@ -318,16 +330,38 @@ const formatTime = (seconds: number) => {
                   />
                 )}
 
-                                                {/* MCQ Options */}
+                {/* MCQ Options */}
                 {!isFillInTheBlank(currentQuestion) && (
                   <RadioGroup
                     name={`q-${currentQuestion.id}`}
                     value={answers[currentQuestion.id] || ""}
                     onChange={(e) => handleAnswer(currentQuestion.id, e.target.value)}
-                    sx={{ mt: 2 }}
+                    sx={{ mt: 2, display: "flex", gap: 2, flexWrap: "wrap" }}
                   >
                     {[1, 2, 3, 4].map((num) => {
                       const opt = currentQuestion.answer[`answer${num}`];
+                      if (!opt) return null;
+
+                      // If answerType == 1, opt is an image URL
+                      if (currentQuestion.answer.answerType === 1) {
+                        return (
+                          <FormControlLabel
+                            key={num}
+                            value={opt}
+                            control={<Radio />}
+                            label={
+                              <img
+                                src={opt.replace("dl=0", "raw=1")}
+                                alt={`Option ${num}`}
+                                style={{ maxWidth: 320, borderRadius: 8 }}
+                              />
+                            }
+                            sx={{ flexDirection: "column" }}
+                          />
+                        );
+                      }
+
+                      // Default text option
                       return (
                         <FormControlLabel
                           key={num}
@@ -340,10 +374,11 @@ const formatTime = (seconds: number) => {
                   </RadioGroup>
                 )}
 
+
                 {/* Pagination Controls */}
                 <Box mt={3} mb={50} display="flex" justifyContent="center" gap={2} flexWrap="wrap">
                   <Button
-                  style={{ minWidth: "30px", fontSize: "10px" }}
+                    style={{ minWidth: "30px", fontSize: "10px" }}
                     variant="contained"
                     onClick={() => setCurrentIndex(0)}
                     disabled={currentIndex === 0}
@@ -351,25 +386,25 @@ const formatTime = (seconds: number) => {
                     First
                   </Button>
                   <Button
-                  style={{ minWidth: "20px", fontSize: "10px" }}
+                    style={{ minWidth: "20px", fontSize: "10px" }}
                     variant="contained"
                     onClick={() => setCurrentIndex((prev) => Math.max(prev - 1, 0))}
                     disabled={currentIndex === 0}
                   >
-                    <ArrowBackIosNewIcon style={{fontSize: "12px"}} />
+                    <ArrowBackIosNewIcon style={{ fontSize: "12px" }} />
                   </Button>
                   <Button
-                  style={{ minWidth: "20px", fontSize: "10px" }}
+                    style={{ minWidth: "20px", fontSize: "10px" }}
                     variant="contained"
                     onClick={() =>
                       setCurrentIndex((prev) => Math.min(prev + 1, questions.length - 1))
                     }
                     disabled={currentIndex === questions.length - 1}
                   >
-                    <ArrowForwardIos  style={{fontSize: "12px"}}/>
+                    <ArrowForwardIos style={{ fontSize: "12px" }} />
                   </Button>
                   <Button
-                  style={{ minWidth: "30px", fontSize: "10px" }}
+                    style={{ minWidth: "30px", fontSize: "10px" }}
                     variant="contained"
                     onClick={() => setCurrentIndex(questions.length - 1)}
                     disabled={currentIndex === questions.length - 1}

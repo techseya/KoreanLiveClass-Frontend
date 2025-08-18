@@ -9,14 +9,15 @@ import {
     DialogTitle,
     DialogContentText,
     DialogActions,
-    Divider
+    Divider,
+    Avatar
 } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
 import { act, useEffect, useRef, useState } from "react";
 import { getAllCourses } from "src/Services/course_api";
 import { createQuestion, deleteQuestion, deleteQuiz, getQuestions, getQuiz, updateQuestion, updateQuiz } from "src/Services/quiz_api";
-import { AddCircle, Delete, Man, Person } from "@mui/icons-material";
+import { AddAPhoto, AddCircle, Delete, Man, Person } from "@mui/icons-material";
 import Dialogbox from "src/Common/Components/DialogBox";
 import {
     Dialog,
@@ -34,8 +35,27 @@ import { AudioRecorder } from "src/Common/Components/AudioRecorder";
 import { get, set } from "lodash";
 import { t } from "i18next";
 import { createLanguagePracticeQuestion, deleteLanguagePractice, deleteLanguagePracticeAudioQuestion, deleteLanguagePracticeWordQuestion, getLanguagePracticeQuestions, getLanguagePractices, updateLanguagePractice, updateLanguagePracticeAudioQuestion, updateLanguagePracticeWordQuestion } from "src/Services/lang_practice_api";
-import { a, h } from "framer-motion/dist/types.d-B50aGbjN";
+import { a, h, u } from "framer-motion/dist/types.d-B50aGbjN";
 import "../../../Common/styles/lang.css"
+import av1 from "../../../Assets/Images/av1.jpg";
+import av2 from "../../../Assets/Images/av2.jpg";
+import av3 from "../../../Assets/Images/av3.jpg";
+import av4 from "../../../Assets/Images/av4.jpg";
+import av5 from "../../../Assets/Images/av5.jpg";
+import av6 from "../../../Assets/Images/av6.jpg";
+import av7 from "../../../Assets/Images/av7.jpg";
+import av8 from "../../../Assets/Images/av8.jpg";
+import av9 from "../../../Assets/Images/av9.jpg";
+import back1 from "../../../Assets/Images/back1.jpg";
+import back2 from "../../../Assets/Images/back2.jpg";
+import back3 from "../../../Assets/Images/back3.jpg";
+import back4 from "../../../Assets/Images/back4.jpg";
+import back5 from "../../../Assets/Images/back5.jpg";
+import back6 from "../../../Assets/Images/back6.jpg";
+import back7 from "../../../Assets/Images/back7.jpg";
+import back8 from "../../../Assets/Images/back8.jpg";
+import back9 from "../../../Assets/Images/back9.jpg";
+import background from "../../../Assets/Images/background.png";
 
 function CustomNoRowsOverlay() {
     return (
@@ -44,6 +64,55 @@ function CustomNoRowsOverlay() {
         </Box>
     );
 }
+
+const avatarOptions = [
+    av1,
+    av2,
+    av3,
+    av4,
+    av5,
+    av6,
+    av7,
+    av8,
+    av9
+];
+
+const backgroundOptions = [
+    back1,
+    back2,
+    back3,
+    back4,
+    back5,
+    back6,
+    back7,
+    back8,
+    back9
+];
+
+// Map avatar names to their image sources
+const avatarMap: { [key: string]: string } = {
+    av1: av1,
+    av2: av2,
+    av3: av3,
+    av4: av4,
+    av5: av5,
+    av6: av6,
+    av7: av7,
+    av8: av8,
+    av9: av9,
+};
+
+const backgroundMap: { [key: string]: string } = {
+    back1: back1,
+    back2: back2,
+    back3: back3,
+    back4: back4,
+    back5: back5,
+    back6: back6,
+    back7: back7,
+    back8: back8,
+    back9: back9,
+};
 
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & { children: React.ReactElement },
@@ -86,6 +155,10 @@ export default function LanguagePracticeMaintenance() {
     const [stepComponent, setStepComponent] = useState<any>(1);
     const [u1, setU1] = useState("")
     const [u2, setU2] = useState("")
+    const [u1Avatar, setU1Avatar] = useState("")
+    const [u1AvatarName, setU1AvatarName] = useState("")
+    const [u2Avatar, setU2Avatar] = useState("")
+    const [u2AvatarName, setU2AvatarName] = useState("")
     const [scrambledSentence, setScrambledSentence] = useState("");
     const [correctSentence, setCorrectSentence] = useState("");
     const [langDetailsOpen, setLangDetailsOpen] = useState(false)
@@ -95,8 +168,44 @@ export default function LanguagePracticeMaintenance() {
     const [selectedAudioQuestionOrder, setSelectedAudioQuestionOrder] = useState<any>(null);
     const [audioUpdateVisible, setAudioUpdateVisible] = useState(false);
     const [selectedId, setSelectedId] = useState("");
+    const [openPicker, setOpenPicker] = useState(false);
+    const [openPickerB, setOpenPickerB] = useState(false);
+    const [backgroundImage, setBackgroundImage] = useState("");
+    const [b, setB] = useState("");
+    const [backgroundImageName, setBackgroundImageName] = useState("");
+    const [activeUser, setActiveUser] = useState<"u1" | "u2">("u1");
+
+    const [firstUser, setFirstUser] = useState("");
+    const [secondUser, setSecondUser] = useState("");
+    const [firstAvatar, setFirstAvatar] = useState("");
+    const [secondAvatar, setSecondAvatar] = useState("");
 
     const token = localStorage.getItem("token") || "";
+
+    const handleAvatarClick = (user: "u1" | "u2") => {
+        setActiveUser(user);
+        setOpenPicker(true);
+    };
+
+    const handleSelectAvatar = (src: string) => {
+        if (activeUser === "u1") {
+            setU1Avatar(src);
+            setU1AvatarName(src.split("/").pop()?.split(".")[0] || "");
+        } else {
+            setU2Avatar(src);
+            setU2AvatarName(src.split("/").pop()?.split(".")[0] || "");
+        }
+        setOpenPicker(false);
+    };
+
+    const handleSelectBackground = (src: string) => {
+        const name = src.split("/").pop()?.split(".")[0] || "";
+
+        setBackgroundImage(name);
+        setBackgroundImageName(name);
+        setOpenPickerB(false);
+    };
+
 
     const handleOpenFullScreenModal = (row: any) => {
         setOpenFullScreenModal(true)
@@ -136,8 +245,11 @@ export default function LanguagePracticeMaintenance() {
                 if (res.data[0].originalSentence === "") {
                     setQType(1);
                     setLangDetailsOpen(true);
+                    setB(res.data[0].audioFilePaths[0].backgroundImage);
                     setU1(res.data[0].audioFilePaths[0].audioUserName.split(",")[0]);
+                    setU1AvatarName(res.data[0].audioFilePaths[0].audioAvatar.split(",")[0]);
                     setU2(res.data[0].audioFilePaths[0].audioUserName.split(",")[1]);
+                    setU2AvatarName(res.data[0].audioFilePaths[0].audioAvatar.split(",")[1]);
                 } else {
                     setQType(2);
                 }
@@ -191,12 +303,22 @@ export default function LanguagePracticeMaintenance() {
     };
 
     const handleUpdate = async () => {
+
+        if (editingLang.isPaid) {
+            if (!editingLang.price || isNaN(editingLang.price) || editingLang.price <= 0) {
+                alert("Please enter a valid price.");
+                return;
+            }
+        }
+
         const body = {
             id: editingLang.id,
             name: editingLang.name,
             description: editingLang.descriptions,
             difficultyLevel: editingLang.difficultyLevel,
             activeStatus: editingLang.activeStatus,
+            isPaid: editingLang.isPaid,
+            price: editingLang.isPaid ? Number(editingLang.price) : 0, // default 0 if not paid
         }
 
         try {
@@ -276,7 +398,7 @@ export default function LanguagePracticeMaintenance() {
 
         try {
             const res = await updateLanguagePracticeAudioQuestion(formData, token);
-            alert(res.data);
+            alert("Audio question updated successfully.");
             setAudioUpdateVisible(false);
             handleClearFields();
             handleGetQuestions(langId);
@@ -293,7 +415,7 @@ export default function LanguagePracticeMaintenance() {
 
         try {
             const res = await updateLanguagePracticeWordQuestion(formData, token);
-            alert(res.data);
+            alert("Word question updated successfully.");
             setUpdateBtnVisible(false);
             handleClearFields();
             handleGetQuestions(langId);
@@ -304,7 +426,7 @@ export default function LanguagePracticeMaintenance() {
 
     const handleDeleteAudioQuestion = async () => {
         try {
-            const res = await deleteLanguagePracticeAudioQuestion(langId, selectedId, token);
+            const res = await deleteLanguagePracticeAudioQuestion(langId, selectedAudioQuestionOrder, token);
             alert(res.data);
             handleClearFields();
             handleGetQuestions(langId);
@@ -333,10 +455,13 @@ export default function LanguagePracticeMaintenance() {
         if (qType === 1) {
             if (audioUser === u1) {
                 formdata.append("audioUserName", audioUser + `,${u2}`);
+                formdata.append("audioAvatar", u1AvatarName + `,${u2AvatarName}`);
             } else if (audioUser === u2) {
                 formdata.append("audioUserName", audioUser + `,${u1}`);
+                formdata.append("audioAvatar", u2AvatarName + `,${u1AvatarName}`);
             }
 
+            formdata.append("backgroundImage", backgroundImageName ? backgroundImageName : "");
             formdata.append("languagePracticeId", langId);
             formdata.append("languagePracticeQuestionId", "1");
             formdata.append("languagePracticeType", qType.toString());
@@ -484,7 +609,15 @@ export default function LanguagePracticeMaintenance() {
                         <IconButton
                             edge="start"
                             color="inherit"
-                            onClick={() => setOpenFullScreenModal(false)}
+                            onClick={() => {
+                                setU1("")
+                                setU2("")
+                                setBackgroundImage("")
+                                setBackgroundImageName("")
+                                setB("")
+                                setQType(0)
+                                setOpenFullScreenModal(false)
+                            }}
                             aria-label="close"
                         >
                             <CloseIcon />
@@ -518,7 +651,37 @@ export default function LanguagePracticeMaintenance() {
                             <div className="dl-outer">
                                 {qType === 1 && !langDetailsOpen && (
                                     <Grid container spacing={2} sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                                        <Grid item sm={4}>
+                                        <Grid item sm={1} sx={{ display: "flex", justifyContent: "center" }}>
+                                            <Box
+                                                sx={{
+                                                    position: "relative",
+                                                    width: 56,
+                                                    height: 56,
+                                                    cursor: "pointer",
+                                                    "&:hover .overlay": { opacity: 1 },
+                                                }}
+                                                onClick={() => handleAvatarClick("u1")}
+                                            >
+                                                <Avatar src={u1Avatar} alt="User1 Avatar" sx={{ width: 56, height: 56 }} />
+                                                <Box
+                                                    className="overlay"
+                                                    sx={{
+                                                        position: "absolute",
+                                                        inset: 0,
+                                                        bgcolor: "rgba(0,0,0,0.5)",
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        justifyContent: "center",
+                                                        borderRadius: "50%",
+                                                        opacity: 0,
+                                                        transition: "opacity 0.3s",
+                                                    }}
+                                                >
+                                                    <AddAPhoto sx={{ color: "white" }} />
+                                                </Box>
+                                            </Box>
+                                        </Grid>
+                                        <Grid item sm={11}>
                                             <TextField
                                                 label="User1"
                                                 fullWidth
@@ -530,7 +693,37 @@ export default function LanguagePracticeMaintenance() {
                                                 }}
                                             />
                                         </Grid>
-                                        <Grid item sm={4}>
+                                        <Grid item sm={1} sx={{ display: "flex", justifyContent: "center" }}>
+                                            <Box
+                                                sx={{
+                                                    position: "relative",
+                                                    width: 56,
+                                                    height: 56,
+                                                    cursor: "pointer",
+                                                    "&:hover .overlay": { opacity: 1 },
+                                                }}
+                                                onClick={() => handleAvatarClick("u2")}
+                                            >
+                                                <Avatar src={u2Avatar} alt="User2 Avatar" sx={{ width: 56, height: 56 }} />
+                                                <Box
+                                                    className="overlay"
+                                                    sx={{
+                                                        position: "absolute",
+                                                        inset: 0,
+                                                        bgcolor: "rgba(0,0,0,0.5)",
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                        justifyContent: "center",
+                                                        borderRadius: "50%",
+                                                        opacity: 0,
+                                                        transition: "opacity 0.3s",
+                                                    }}
+                                                >
+                                                    <AddAPhoto sx={{ color: "white" }} />
+                                                </Box>
+                                            </Box>
+                                        </Grid>
+                                        <Grid item sm={11}>
                                             <TextField
                                                 label="User2"
                                                 fullWidth
@@ -542,13 +735,58 @@ export default function LanguagePracticeMaintenance() {
                                                 }}
                                             />
                                         </Grid>
-                                        <Grid item sm={4}>
-                                            <Button variant="contained" onClick={() => { setLangDetailsOpen(true) }}>
+                                        <Grid item sm={12} sx={{ display: "flex", justifyContent: "flex-end", marginTop: "10px" }}>
+                                            <Avatar
+                                                src={backgroundMap[backgroundImage] || background}
+                                                alt="Background"
+                                                sx={{ width: 40, height: 40, marginRight: "10px" }}
+                                            />
+                                            <Button
+                                                style={{ marginRight: "10px" }}
+                                                variant="contained"
+                                                size="small"
+                                                onClick={() => {
+                                                    setOpenPickerB(true);
+                                                }}
+                                            >
+                                                Background
+                                            </Button>
+                                            <Button disabled={!u1 || !u2 || !u1Avatar || !u2Avatar} variant="contained" onClick={() => { setLangDetailsOpen(true) }}>
                                                 Confirm Users
                                             </Button>
                                         </Grid>
                                     </Grid>
                                 )}
+
+                                <Dialog open={openPicker} onClose={() => setOpenPicker(false)}>
+                                    <DialogTitle>Select Avatar</DialogTitle>
+                                    <DialogContent>
+                                        <Grid container spacing={2} sx={{ padding: 2, display: "flex", justifyContent: "center" }}>
+                                            {avatarOptions.map((src) => (
+                                                <Grid item xs={4} key={src} sx={{ display: "flex", justifyContent: "center" }}>
+                                                    <IconButton onClick={() => handleSelectAvatar(src)}>
+                                                        <Avatar src={src} sx={{ width: 66, height: 66 }} />
+                                                    </IconButton>
+                                                </Grid>
+                                            ))}
+                                        </Grid>
+                                    </DialogContent>
+                                </Dialog>
+
+                                <Dialog open={openPickerB} onClose={() => setOpenPickerB(false)}>
+                                    <DialogTitle>Select Background</DialogTitle>
+                                    <DialogContent>
+                                        <Grid container spacing={2} sx={{ padding: 2, display: "flex", justifyContent: "center" }}>
+                                            {backgroundOptions.map((src) => (
+                                                <Grid item xs={4} key={src} sx={{ display: "flex", justifyContent: "center" }}>
+                                                    <IconButton onClick={() => handleSelectBackground(src)}>
+                                                        <Avatar src={src} sx={{ width: 66, height: 66 }} />
+                                                    </IconButton>
+                                                </Grid>
+                                            ))}
+                                        </Grid>
+                                    </DialogContent>
+                                </Dialog>
 
                                 {qType === 1 && langDetailsOpen && (
                                     <div >
@@ -574,7 +812,7 @@ export default function LanguagePracticeMaintenance() {
                                                     onClick={() => {
                                                         handleCreateQuestion();
                                                     }}
-                                                    disabled={!audioBlob || audioUser === "default"}
+                                                    disabled={!audioBlob || audioUser === "default" || !subtitle}
                                                 >
                                                     Add
                                                 </Button>
@@ -618,7 +856,15 @@ export default function LanguagePracticeMaintenance() {
                                             />
                                         </Grid>
 
-                                        <Grid item xs={12} sm={12} mt={2}>
+                                        <Grid item xs={12} sm={12} mt={2} style={{
+                                            backgroundImage: `url(${backgroundMap[b] || ""})`, // fallback to b1
+                                            backgroundSize: "cover",
+                                            backgroundPosition: "center",
+                                            maxHeight: "500px",
+                                            overflowY: "auto",
+                                            padding: "20px",
+                                            borderRadius: "8px"
+                                        }}>
                                             {questions.length > 0 ? (<>
                                                 {questions.map((q: any, qIdx: number) =>
                                                     q.audioFilePaths?.map((question: any, index: any) => (
@@ -626,7 +872,11 @@ export default function LanguagePracticeMaintenance() {
                                                             <div>
                                                                 <div style={{ display: "flex", gap: "8px" }} key={`${qIdx}-${index}`}>
                                                                     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
-                                                                        <Person sx={{ fontSize: "40px", color: "#1d6add", padding: "4px", backgroundColor: "wheat", borderRadius: "40px" }} />
+                                                                        <Avatar
+                                                                            src={avatarMap[question.audioAvatar?.split(",")[0]?.trim() || ""]}
+                                                                            sx={{ width: 66, height: 66 }}
+                                                                        />
+
                                                                     </div>
                                                                     <div style={{ display: "flex", flexDirection: "column", gap: "8px", padding: "8px 10px", backgroundColor: "#dfe6e9", borderRadius: "8px", position: "relative" }}>
                                                                         <div style={{ position: "absolute", top: "8px", right: "8px", display: "flex", gap: "8px" }}>
@@ -645,7 +895,10 @@ export default function LanguagePracticeMaintenance() {
                                                                         <audio controls src={question?.audioFilePath ? question.audioFilePath.replace("dl=0", "raw=1") : ""} />
                                                                     </div>
                                                                 </div>
-                                                                <div style={{ padding: "4px 10px", borderRadius: "8px", margin: "8px" }}>
+                                                                <div style={{
+                                                                    padding: "4px 10px", borderRadius: "8px", margin: "8px", backgroundColor: "#dfe6e9", width: "250px", wordWrap: "break-word", // ✅ forces breaking long words
+                                                                    whiteSpace: "normal"
+                                                                }}>
                                                                     {question?.subtitle}
                                                                 </div>
 
@@ -671,10 +924,13 @@ export default function LanguagePracticeMaintenance() {
                                                                         <audio controls src={question?.audioFilePath ? question.audioFilePath.replace("dl=0", "raw=1") : ""} />
                                                                     </div>
                                                                     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
-                                                                        <Person sx={{ fontSize: "40px", color: "#1d6add", padding: "4px", backgroundColor: "wheat", borderRadius: "40px" }} />
+                                                                        <Avatar
+                                                                            src={avatarMap[question.audioAvatar?.split(",")[0]?.trim() || ""]}
+                                                                            sx={{ width: 66, height: 66 }}
+                                                                        />
                                                                     </div>
                                                                 </div>
-                                                                <div style={{ padding: "4px 10px", borderRadius: "8px", margin: "8px" }}>
+                                                                <div style={{ padding: "4px 10px", borderRadius: "8px", margin: "8px", backgroundColor: "#dfe6e9", width: "250px", wordWrap: "break-word", whiteSpace: "normal" }}>
                                                                     {question?.subtitle}
                                                                 </div>
                                                             </div>
@@ -811,6 +1067,33 @@ export default function LanguagePracticeMaintenance() {
                             </Select>
                         </FormControl>
                     </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                        <FormControl fullWidth>
+                            <InputLabel>Is Paid</InputLabel>
+                            <Select
+                                value={editingLang.isPaid ? "Yes" : "No"}
+                                label="Is Paid"
+                                onChange={(e) => handleFormChange("isPaid", e.target.value === "Yes")}
+                            >
+                                <MenuItem value="No">No</MenuItem>
+                                <MenuItem value="Yes">Yes</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid>
+
+                    {editingLang.isPaid && (
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                label="Price"
+                                fullWidth
+                                type="number"
+                                value={editingLang.price || ''}
+                                onChange={(e) => handleFormChange("price", e.target.value)}
+                                inputProps={{ min: 0 }}
+                            />
+                        </Grid>
+                    )}
 
                     <Grid item xs={12} sm={12}>
                         <TextField

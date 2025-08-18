@@ -19,6 +19,8 @@ export default function LanguagePracticeForm() {
     const [status, setStatus] = useState("Active")
     const [description, setDescription] = useState("")
     const [difficultyLevel, setDifficultyLevel] = useState(1); //Easy 1, Medium 2, Hard 3
+    const [isPaid, setIsPaid] = useState(false);
+    const [price, setPrice] = useState("");
 
     const token = localStorage.getItem("token") || "";
 
@@ -31,6 +33,8 @@ export default function LanguagePracticeForm() {
             description,
             difficultyLevel,
             activeStatus: status === "Active" ? 1 : 2,
+            isPaid: isPaid,
+            price: isPaid ? Number(price) : 0, // default 0 if not paid
         }
 
         try {
@@ -42,6 +46,7 @@ export default function LanguagePracticeForm() {
 
         window.location.reload();
     };
+
 
     return (
         <div className="user-form-outer">
@@ -70,17 +75,6 @@ export default function LanguagePracticeForm() {
                         </FormControl>
                     </Grid>
 
-                    <Grid item xs={12} sm={12}>
-                        <TextField
-                            label="Description"
-                            fullWidth
-                            multiline
-                            rows={3}
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                        />
-                    </Grid>
-
                     <Grid item xs={12} sm={6}>
                         <FormControl fullWidth>
                             <InputLabel>Status</InputLabel>
@@ -94,6 +88,43 @@ export default function LanguagePracticeForm() {
                             </Select>
                         </FormControl>
                     </Grid>
+                    <Grid item xs={12} sm={6}>
+                        <FormControl fullWidth>
+                            <InputLabel>Is Paid</InputLabel>
+                            <Select
+                                value={isPaid ? "Yes" : "No"}
+                                label="Is Paid"
+                                onChange={(e) => setIsPaid(e.target.value === "Yes")}
+                            >
+                                <MenuItem value="No">No</MenuItem>
+                                <MenuItem value="Yes">Yes</MenuItem>
+                            </Select>
+                        </FormControl>
+                    </Grid>
+
+                    {isPaid && (
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                label="Price"
+                                fullWidth
+                                type="number"
+                                value={price}
+                                onChange={(e) => setPrice(e.target.value)}
+                                inputProps={{ min: 0 }}
+                            />
+                        </Grid>
+                    )}
+
+                    <Grid item xs={12} sm={12}>
+                        <TextField
+                            label="Description"
+                            fullWidth
+                            multiline
+                            rows={3}
+                            value={description}
+                            onChange={(e) => setDescription(e.target.value)}
+                        />
+                    </Grid>
 
                     <Grid item xs={12} display="flex" justifyContent="flex-end">
                         <Button
@@ -102,7 +133,7 @@ export default function LanguagePracticeForm() {
                             startIcon={<Add />}
                             sx={{ textTransform: 'none' }}
                             onClick={handleSubmit}
-                            disabled={!name || !description || !difficultyLevel}
+                            disabled={!name || !description || !difficultyLevel || !status || (isPaid && !price)}
                         >
                             Add
                         </Button>

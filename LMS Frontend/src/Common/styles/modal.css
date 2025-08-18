@@ -84,3 +84,11 @@
 .modal-buttons button:hover {
   opacity: 0.9;
 }
+
+@media (max-width: 426px) {
+  .modal {
+    width: 85% !important;
+    padding: 0.5rem;
+    max-width: 85%;
+  }
+}

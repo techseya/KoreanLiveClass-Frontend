@@ -36,7 +36,7 @@ const backgroundMap: { [key: string]: string } = {
     back1, back2, back3, back4, back5, back6, back7, back8, back9
 };
 
-export default function UserLanguagePracticeDemo() {
+export default function MyLanguagePracticeDemo() {
     const [type, setType] = useState<any>(null);
     const [questions, setQuestions] = useState<any[]>([]);
     const [userAnswers, setUserAnswers] = useState<string[]>([]);
@@ -47,6 +47,11 @@ export default function UserLanguagePracticeDemo() {
     const token = localStorage.getItem("token") || "";
 
     useEffect(() => {
+
+        if (!token) {
+            navigate("/")
+        }
+
         handleGetLangPractices(location.pathname.split("/").pop());
         AOS.init({ duration: 1000, once: true });
         window.scrollTo({ top: 0, behavior: 'smooth' });

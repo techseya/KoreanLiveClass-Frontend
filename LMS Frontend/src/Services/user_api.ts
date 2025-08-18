@@ -82,6 +82,19 @@ export const assignQuizes = async (body:any, token: any) => {
     }
 };
 
+export const assignLanguagePractice = async (body:any, token: any) => {
+    try {
+        const response = await axios.post(`${api}admin/user-language-practice`,body,{
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
 export const GetAssignQuizes = async (UserId:any, CourseId:any, token: any) => {
     try {
         const response = await axios.get(`${api}admin/assign-quiz`,{
@@ -98,6 +111,19 @@ export const GetAssignQuizes = async (UserId:any, CourseId:any, token: any) => {
         throw error;
     }
 };
+
+export const getAssignLanguagePractice = async (id:any, token: any) => {
+    try {
+        const response = await axios.get(`${api}user/assign-language-practice?UserId=${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
 
 export const getAssignSections = async (courseId:any, userId:any, token: any) => {
     try {
