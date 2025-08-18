@@ -49,7 +49,7 @@ import notificationIcon from "../../Assets/Images/notification.png"
 import { getAllNotices } from "src/Services/notice_api";
 import CustomModal from "src/Common/Components/CustomModal";
 import "../../Common/styles/courses.css";
-import quizImg from "../../Assets/Images/quiz.jpg"
+import quizImg from "../../Assets/Images/quiz-hero.png"
 import langImg from "../../Assets/Images/lang.jpg"
 
 const Transition = forwardRef(function Transition(props: any, ref) {
@@ -567,7 +567,42 @@ export default function Landing() {
       <div className="space"></div>
       <div className="space"></div>
 
-      <div className="third-outer">
+      <div className="content-main-out">
+        {/* <div className="floating-balls">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div> */}
+        <div className="content-in cin">
+          <div className="content-highlights" data-aos="fade-up" data-aos-delay="100">
+            🟢 Learn Korean the fun way!
+          </div>
+          <div className="content-highlights" data-aos="fade-up" data-aos-delay="120">
+            🟢 Quick quizzes, big results.
+          </div>
+          <div className="content-highlights" data-aos="fade-up" data-aos-delay="140">
+            🟢 Master Korean, one quiz at a time.
+          </div>
+        </div>
+        <div className="content-in">
+          <img className="quiz-img" data-aos="fade-up" data-aos-delay="100" src={quizImg} alt="" />
+        </div>
+        <div className="content-in cin">
+          <div className="ins-main-title" data-aos="fade-up" data-aos-delay="100">
+            {t("quiz")}
+          </div>
+          <div className="ins-main-desc" data-aos="fade-up" data-aos-delay="200">
+            {t("quizDetails")}
+          </div>
+          <div onClick={() => navigate("/quizes")} style={{ color: "#0047aa", display: "flex", alignItems: "center !important", gap: "10px", cursor: "pointer" }} className="ins-main-desc" data-aos="fade-up" data-aos-delay="200">
+            <Forward /> {t("quiz")}
+          </div>
+        </div>
+      </div>
+
+      {/* <div className="third-outer">
         <div className="space"></div>
         <div className="space"></div>
         <div className="ins-inner">
@@ -590,7 +625,7 @@ export default function Landing() {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <div className="space"></div>
       <div className="space"></div>
@@ -600,24 +635,24 @@ export default function Landing() {
       <div className="third-outer bg-layer">
 
         <div className="space"></div>
-        <div className="space"></div>        
+        <div className="space"></div>
 
         <div className="ins-inner">
           <div className="ins-inner1">
             <div className="ins-in14" data-aos="fade-up" data-aos-delay="100">
               <div className="ins-main-title" data-aos="fade-up" data-aos-delay="100">
                 {t("lang")}
-              </div>              
+              </div>
               <div className="ins-main-desc" data-aos="fade-up" data-aos-delay="200">
                 {t("langDetails")}
-              </div>       
-              <div onClick={() => navigate("/user-language-practice")} style={{color: "#0047aa", display: "flex", alignItems: "center !important", gap :"10px",  cursor: "pointer"}} className="ins-main-desc" data-aos="fade-up" data-aos-delay="200">
+              </div>
+              <div onClick={() => navigate("/user-language-practice")} style={{ color: "#0047aa", display: "flex", alignItems: "center !important", gap: "10px", cursor: "pointer" }} className="ins-main-desc" data-aos="fade-up" data-aos-delay="200">
                 <Forward /> {t("lang")}
               </div>
             </div>
             <div className="ins-in14">
               <div className="img14">
-                <img style={{width: "100%", maxHeight: "280px", objectFit: "cover", borderRadius: "10px"}} src={langImg} alt="" />
+                <img style={{ width: "100%", maxHeight: "280px", objectFit: "cover", borderRadius: "10px" }} src={langImg} alt="" />
               </div>
             </div>
           </div>
@@ -1109,23 +1144,23 @@ export default function Landing() {
           </div>
           <div className="word-inner">
             {rows.length > 0 && rows.map((row) => (
-              <div className="word-inner1" key={row.id} style={{ marginBottom: "2rem" }}>                
-                  {row.imageUrl && (
-                    <div className="word-img" style={{ position: "relative", width: "50%", minHeight: "150px" }}>
-                      <img
-                        src={row.imageUrl.replace("dl=0", "raw=1")}
-                        alt="word"
-                        className="w-img"
-                        style={{
-                          width: "50%",
-                          height: "auto",
-                          borderRadius: "8px",
-                          marginTop: "1rem"
-                        }}
-                      />
-                    </div>
-                  )}
-                  <div className="word-text">                    
+              <div className="word-inner1" key={row.id} style={{ marginBottom: "2rem" }}>
+                {row.imageUrl && (
+                  <div className="word-img" style={{ position: "relative", width: "50%", minHeight: "150px" }}>
+                    <img
+                      src={row.imageUrl.replace("dl=0", "raw=1")}
+                      alt="word"
+                      className="w-img"
+                      style={{
+                        width: "50%",
+                        height: "auto",
+                        borderRadius: "8px",
+                        marginTop: "1rem"
+                      }}
+                    />
+                  </div>
+                )}
+                <div className="word-text">
                   {row.korean.split(',').map((word: any, index: any) => (
                     <h2 key={index}>{word.trim()}</h2>
                   ))}
