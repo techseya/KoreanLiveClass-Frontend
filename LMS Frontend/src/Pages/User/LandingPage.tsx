@@ -589,7 +589,7 @@ export default function Landing() {
         <div className="content-in">
           <img className="quiz-img" data-aos="fade-up" data-aos-delay="100" src={quizImg} alt="" />
         </div>
-        <div className="content-in cin">
+        <div className="content-in cin cin1">
           <div className="ins-main-title" data-aos="fade-up" data-aos-delay="100">
             {t("quiz")}
           </div>
