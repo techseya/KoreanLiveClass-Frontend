@@ -50,7 +50,7 @@ import { getAllNotices } from "src/Services/notice_api";
 import CustomModal from "src/Common/Components/CustomModal";
 import "../../Common/styles/courses.css";
 import quizImg from "../../Assets/Images/quiz-hero.png"
-import langImg from "../../Assets/Images/lang.jpg"
+import langImg from "../../Assets/Images/lang-hero.png"
 
 const Transition = forwardRef(function Transition(props: any, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -568,13 +568,13 @@ export default function Landing() {
       <div className="space"></div>
 
       <div className="content-main-out">
-        <div className="floating-balls">
+        {/* <div className="floating-balls">
           <span></span>
           <span></span>
           <span></span>
           <span></span>
           <span></span>
-        </div>
+        </div> */}
         <div className="content-in cin">
           <div className="content-highlights" data-aos="fade-up" data-aos-delay="100">
             🟢 Learn Korean the fun way!
@@ -652,7 +652,7 @@ export default function Landing() {
             </div>
             <div className="ins-in14">
               <div className="img14">
-                <img style={{ width: "100%", maxHeight: "280px", objectFit: "cover", borderRadius: "10px" }} src={langImg} alt="" />
+                <img style={{ width: "100%", objectFit: "cover", borderRadius: "10px" }} src={langImg} alt="" />
               </div>
             </div>
           </div>
