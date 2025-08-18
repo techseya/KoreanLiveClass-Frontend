@@ -567,10 +567,6 @@ export default function Landing() {
         <div className="space"></div>
       </div>
 
-      <div className="space"></div>
-      <div className="space"></div>
-      <div className="space"></div>
-
       <div className="content-main-out">
         {/* <div className="floating-balls">
           <span></span>

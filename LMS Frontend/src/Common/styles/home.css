@@ -701,10 +701,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 20px 0 80px 0;
+    padding: 80px 0 80px 0;
     position: relative;
     overflow: hidden;
     flex-wrap: wrap;
+    background: url("../../Assets/Images/flowers.jpg") no-repeat;
+    background-position: center;
+    background-size: cover;
 }
 
 .content-in {
