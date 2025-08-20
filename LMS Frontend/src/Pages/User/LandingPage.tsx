@@ -674,17 +674,9 @@ export default function Landing() {
             </div>
           </div>
         </div>
-
-        <div className="space"></div>
-        <div className="space"></div>
-        <div className="space"></div>
       </div>
 
-      <div id="korean-books" className="space"></div>
-      <div className="space"></div>
-      <div className="space"></div>
-      <div className="space"></div>
-
+      <div id="korean-books"></div>
       <div className="third-outer">
         <div className="third-inner">
           <div className="ti">
@@ -758,11 +750,7 @@ export default function Landing() {
         </div>
       </div>
 
-      <div id="who" className="space"></div>
-      <div className="space"></div>
-      <div className="space"></div>
-      <div className="space"></div>
-      <div className="space"></div>
+      <div id="who"></div>
 
       <div className="third-outer bg-layer">
         <div className="third-inner">
@@ -821,10 +809,6 @@ export default function Landing() {
             <ArrowForwardIosIcon />
           </div>
         </div>
-
-        <div className="space"></div>
-        <div className="space"></div>
-        <div className="space"></div>
       </div>
 
       <div className="third-outer">
@@ -875,12 +859,9 @@ export default function Landing() {
         </div>
       </div>
 
-      <div id="us" className="space"></div>
-      <div className="space"></div>
-      <div className="space"></div>
-      <div className="space"></div>
+      <div id="us"></div>
 
-      <div className="third-outer bg-layer1">
+      <div className="third-outer bg-layer">
         <div className="third-inner">
           <div className="ti">
             <div className="third-inner-title" data-aos="fade-up" data-aos-delay="100">
