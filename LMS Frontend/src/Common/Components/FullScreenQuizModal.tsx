@@ -21,6 +21,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import MenuIcon from "@mui/icons-material/Menu";
 import { getQuestionsForUser, submitQuiz, updateAttempt } from "src/Services/quiz_api";
 import "../styles/quiz.css"; // Adjust path if needed
+import "../styles/main.css"
 import { useTranslation } from "react-i18next";
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import { ArrowForwardIos, ArrowForwardIosOutlined } from "@mui/icons-material";
@@ -378,7 +379,7 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
                 {/* Pagination Controls */}
                 <Box mt={3} mb={50} display="flex" justifyContent="center" gap={2} flexWrap="wrap">
                   <Button
-                    style={{ minWidth: "30px", fontSize: "10px" }}
+                    style={{ minWidth: "20px", fontSize: "10px" }}
                     variant="contained"
                     onClick={() => setCurrentIndex(0)}
                     disabled={currentIndex === 0}
@@ -390,8 +391,7 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
                     variant="contained"
                     onClick={() => setCurrentIndex((prev) => Math.max(prev - 1, 0))}
                     disabled={currentIndex === 0}
-                  >
-                    <ArrowBackIosNewIcon style={{ fontSize: "12px" }} />
+                  >Back
                   </Button>
                   <Button
                     style={{ minWidth: "20px", fontSize: "10px" }}
@@ -400,11 +400,10 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
                       setCurrentIndex((prev) => Math.min(prev + 1, questions.length - 1))
                     }
                     disabled={currentIndex === questions.length - 1}
-                  >
-                    <ArrowForwardIos style={{ fontSize: "12px" }} />
+                  >Next
                   </Button>
                   <Button
-                    style={{ minWidth: "30px", fontSize: "10px" }}
+                    style={{ minWidth: "20px", fontSize: "10px" }}
                     variant="contained"
                     onClick={() => setCurrentIndex(questions.length - 1)}
                     disabled={currentIndex === questions.length - 1}
