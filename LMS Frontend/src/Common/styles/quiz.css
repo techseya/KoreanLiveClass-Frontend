@@ -3,6 +3,10 @@
     display: flex;
 }
 
+*{
+    border: 1px solid red;
+}
+
 .quiz-summary-outer{
     position: absolute;
     background-color: white;

@@ -258,7 +258,7 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
                 {name || "Quiz"}
               </Typography>
             </div>
-            {warningVisible && (
+            {/* {warningVisible && (
               <div className="warning-outer">
                 <div className="">
                   <p>
@@ -274,8 +274,8 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
                   <CloseIcon />
                 </IconButton>
               </div>
-            )}
-            <div className="summary-outer">
+            )} */}
+            {/* <div className="summary-outer">
               <Box display="flex" flexWrap="wrap" gap={1} sx={{ overflow: "hidden" }}>
                 {questions.map((q, idx) => {
                   const answered = answers[q.id] !== undefined;
@@ -293,12 +293,12 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
                   );
                 })}
               </Box>
-            </div>
+            </div> */}
             {/* Main Quiz Area */}
             <Grid item xs={12} md={12} sx={{ overflowY: "auto", maxHeight: "calc(100vh - 200px)" }}>
               <Box>
                 <Typography variant="h6" mt={2}>
-                  Q{currentIndex + 1}.{" "}
+                  {currentIndex + 1}.{" "}
                   {isFillInTheBlank(currentQuestion)
                     ? renderFIB(currentQuestion.questionText.field01, currentQuestion.id)
                     : currentQuestion.questionText.field01}
@@ -327,7 +327,7 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
                   <img
                     src={currentQuestion.imageUrl.replace("dl=0", "raw=1")}
                     alt="Question"
-                    style={{ maxWidth: "70%", minWidth: "280px", borderRadius: 8, marginTop: 10 }}
+                    style={{ maxWidth: "40%", minWidth: "280px", borderRadius: 8, marginTop: 10 }}
                   />
                 )}
 
