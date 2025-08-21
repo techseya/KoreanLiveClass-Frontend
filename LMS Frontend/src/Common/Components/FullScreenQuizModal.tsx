@@ -84,6 +84,15 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
     }
   }, [open, userId, quizId]);
 
+  const handleSubmitWithConfirmation = () => {
+    const confirmed = window.confirm("Are you sure you want to submit the quiz?");
+    if (confirmed) {
+      handleSubmit();
+      setMobileSummaryOpen(false);
+    }
+  };
+
+
   useEffect(() => {
     if (!open) return;
     const timer = setInterval(() => {
@@ -250,7 +259,7 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
             color="primary"
             className="submit-btn-q"
             onClick={() => {
-              handleSubmit();
+              handleSubmitWithConfirmation()
               setMobileSummaryOpen(false);
             }}
           >
@@ -492,7 +501,7 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
                   <MenuBookOutlined />
                 </IconButton>
 
-                <Box sx={{ mt: 4, mb: 2 }}>
+                <Box sx={{ mt: 5, mb: 2 }}>
                   <Typography variant="h6" mt={2}>
                     {currentIndex + 1}.{" "}
                     {isFillInTheBlank(currentQuestion)
