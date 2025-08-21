@@ -49,7 +49,7 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
   const [loading, setLoading] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<number, any>>({});
-  const [timeLeft, setTimeLeft] = useState(duration * 60 * 3600);
+  const [timeLeft, setTimeLeft] = useState(duration * 3600);
   const [mobileSummaryOpen, setMobileSummaryOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { t } = useTranslation();
@@ -59,28 +59,28 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
 
   useEffect(() => {
     if (open && userId && quizId) {
-      // fetchQuestions();
-      if (questions.length === 0 && open) {
-        const dummy = Array.from({ length: 50 }, (_, i) => ({
-          id: i + 1,
-          questionText: {
-            field01: `Sample Question ${i + 1}`,
-            field02: `Extra info for Question ${i + 1}`,
-          },
-          answer: {
-            answer1: "Option A",
-            answer2: "Option B",
-            answer3: "Option C",
-            answer4: "Option D",
-            answerType: 0, // 0 = text, 1 = image
-          },
-          imageUrl: null,
-          audioUrl: null,
-          courseId: 1,
-        }));
+      fetchQuestions();
+      // if (questions.length === 0 && open) {
+      //   const dummy = Array.from({ length: 50 }, (_, i) => ({
+      //     id: i + 1,
+      //     questionText: {
+      //       field01: `Sample Question ${i + 1}`,
+      //       field02: `Extra info for Question ${i + 1}`,
+      //     },
+      //     answer: {
+      //       answer1: "Option A",
+      //       answer2: "Option B",
+      //       answer3: "Option C",
+      //       answer4: "Option D",
+      //       answerType: 0, // 0 = text, 1 = image
+      //     },
+      //     imageUrl: null,
+      //     audioUrl: null,
+      //     courseId: 1,
+      //   }));
 
-        setQuestions(dummy);
-      }
+      //   setQuestions(dummy);
+      // }
     }
   }, [open, userId, quizId]);
 
