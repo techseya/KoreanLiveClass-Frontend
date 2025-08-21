@@ -59,28 +59,28 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
 
   useEffect(() => {
     if (open && userId && quizId) {
-      fetchQuestions();
-      // if (questions.length === 0 && open) {
-      //   const dummy = Array.from({ length: 50 }, (_, i) => ({
-      //     id: i + 1,
-      //     questionText: {
-      //       field01: `Sample Question ${i + 1}`,
-      //       field02: `Extra info for Question ${i + 1}`,
-      //     },
-      //     answer: {
-      //       answer1: "Option A",
-      //       answer2: "Option B",
-      //       answer3: "Option C",
-      //       answer4: "Option D",
-      //       answerType: 0, // 0 = text, 1 = image
-      //     },
-      //     imageUrl: null,
-      //     audioUrl: null,
-      //     courseId: 1,
-      //   }));
+      // fetchQuestions();
+      if (questions.length === 0 && open) {
+        const dummy = Array.from({ length: 50 }, (_, i) => ({
+          id: i + 1,
+          questionText: {
+            field01: `Sample Question ${i + 1}`,
+            field02: `Extra info for Question ${i + 1}`,
+          },
+          answer: {
+            answer1: "Option A",
+            answer2: "Option B",
+            answer3: "Option C",
+            answer4: "Option D",
+            answerType: 0, // 0 = text, 1 = image
+          },
+          imageUrl: null,
+          audioUrl: null,
+          courseId: 1,
+        }));
 
-      //   setQuestions(dummy);
-      // }
+        setQuestions(dummy);
+      }
     }
   }, [open, userId, quizId]);
 
@@ -234,7 +234,7 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
 
   return (
     <Dialog fullScreen open={open} onClose={onClose}>
-      <DialogTitle className="" sx={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "space-between", backgroundColor: "rgb(23, 143, 199)", color: "white", padding: "16px 24px", flexWrap: "wrap" }}>
+      <DialogTitle className="" sx={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "space-between", backgroundColor: "rgba(48, 54, 56, 1)", color: "white", padding: "16px 24px", flexWrap: "wrap" }}>
         <div className="submit-btn-q1">
           <Box className="quiz-timer-box" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
             <Typography variant="h5" className="quiz-title">
@@ -429,10 +429,7 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
                 </Box>
               </div>
               <div className="do-quiz-inner1">
-                <Typography variant="h6">Quiz Instructions</Typography>
-                <Typography variant="body2" style={{ textAlign: "center" }}>
-                  Please read each question carefully and select the best answer.
-                </Typography>
+                <Typography variant="h6">{t("quiz-summary")}</Typography>
                 <Typography
                   variant="h4"
                   sx={{
@@ -458,7 +455,7 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
                           color: "white",
                           backgroundColor:
                             idx === currentIndex
-                              ? "#ffa33bff" // 🔶 yellow
+                              ? "#9e5603ff" // 🔶 yellow
                               : answered
                                 ? "#4caf50" // ✅ green if answered
                                 : "#2298ce70", // 🔹 blue for default
@@ -648,11 +645,7 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
 
                 {/* Title */}
                 <Typography variant="h6" gutterBottom>
-                  Quiz Instructions
-                </Typography>
-
-                <Typography variant="body2" sx={{ mb: 2 }}>
-                  Please read each question carefully and select the best answer.
+                  {t("quiz-summary")}
                 </Typography>
 
                 {/* Timer */}
@@ -684,7 +677,7 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
                           color: "white",
                           backgroundColor:
                             idx === currentIndex
-                              ? "#ffa33bff" // yellow
+                              ? "#9e5603ff" // yellow
                               : answered
                                 ? "#4caf50" // green
                                 : "#2298ce70", // blue
