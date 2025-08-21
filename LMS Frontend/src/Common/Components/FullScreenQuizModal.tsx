@@ -57,6 +57,27 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
   useEffect(() => {
     if (open && userId && quizId) {
       fetchQuestions();
+      // if (questions.length === 0 && open) {
+      //   const dummy = Array.from({ length: 50 }, (_, i) => ({
+      //     id: i + 1,
+      //     questionText: {
+      //       field01: `Sample Question ${i + 1}`,
+      //       field02: `Extra info for Question ${i + 1}`,
+      //     },
+      //     answer: {
+      //       answer1: "Option A",
+      //       answer2: "Option B",
+      //       answer3: "Option C",
+      //       answer4: "Option D",
+      //       answerType: 0, // 0 = text, 1 = image
+      //     },
+      //     imageUrl: null,
+      //     audioUrl: null,
+      //     courseId: 1,
+      //   }));
+
+      //   setQuestions(dummy);
+      // }
     }
   }, [open, userId, quizId]);
 
@@ -210,20 +231,11 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
 
   return (
     <Dialog fullScreen open={open} onClose={onClose}>
-      <DialogTitle className="" sx={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "space-between", backgroundColor: "black", color: "white", padding: "16px 24px", flexWrap: "wrap" }}>
+      <DialogTitle className="" sx={{ position: "relative", display: "flex", alignItems: "center", justifyContent: "space-between", backgroundColor: "rgb(23, 143, 199)", color: "white", padding: "16px 24px", flexWrap: "wrap" }}>
         <div className="submit-btn-q1">
           <Box className="quiz-timer-box" sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <span style={{ fontSize: "20px", color: "#fff" }}>⏳</span>
-            <Typography
-              variant="h4"
-              sx={{
-                color: "#fff",
-                fontWeight: "bold",
-                fontFamily: "monospace",
-                letterSpacing: "1px",
-              }}
-            >
-              {formatTime(timeLeft)}
+            <Typography variant="h5" className="quiz-title">
+              {(name && name.length > 40) ? name.slice(0, 40) + "..." : (name || "")}
             </Typography>
           </Box>
 
@@ -254,9 +266,6 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
         ) : (
           <Grid container spacing={1}>
             <div style={{ textAlign: "left", width: "100%", marginTop: "20px" }} className="quiz-title-outer">
-              <Typography variant="h5" className="quiz-title">
-                {name || "Quiz"}
-              </Typography>
             </div>
             {/* {warningVisible && (
               <div className="warning-outer">
@@ -295,123 +304,173 @@ const FullScreenQuizModal: React.FC<FullScreenQuizModalProps> = ({
               </Box>
             </div> */}
             {/* Main Quiz Area */}
-            <Grid item xs={12} md={12} sx={{ overflowY: "auto", maxHeight: "calc(100vh - 200px)" }}>
-              <Box>
-                <Typography variant="h6" mt={2}>
-                  {currentIndex + 1}.{" "}
-                  {isFillInTheBlank(currentQuestion)
-                    ? renderFIB(currentQuestion.questionText.field01, currentQuestion.id)
-                    : currentQuestion.questionText.field01}
-                </Typography>
-
-                {currentQuestion.questionText?.field02 && !isFillInTheBlank(currentQuestion) && (
-                  <Typography variant="subtitle1">
-                    {currentQuestion.questionText.field02}
+            <div className="do-quiz-outer">
+              <div className="do-quiz-inner">
+                <Box>
+                  <Typography variant="h6" mt={2}>
+                    {currentIndex + 1}.{" "}
+                    {isFillInTheBlank(currentQuestion)
+                      ? renderFIB(currentQuestion.questionText.field01, currentQuestion.id)
+                      : currentQuestion.questionText.field01}
                   </Typography>
-                )}
 
-                <Grid container mt={1} mb={1}>
-                  {currentQuestion.audioUrl && (
-                    <audio controls style={{ marginTop: 10 }}>
-                      <source
-                        src={currentQuestion.audioUrl.replace("dl=0", "raw=1")}
-                        type="audio/mpeg"
-                      />
-                    </audio>
+                  {currentQuestion.questionText?.field02 && !isFillInTheBlank(currentQuestion) && (
+                    <Typography variant="subtitle1">
+                      {currentQuestion.questionText.field02}
+                    </Typography>
                   )}
 
-                </Grid>
+                  <Grid container mt={1} mb={1}>
+                    {currentQuestion.audioUrl && (
+                      <audio controls style={{ marginTop: 10 }}>
+                        <source
+                          src={currentQuestion.audioUrl.replace("dl=0", "raw=1")}
+                          type="audio/mpeg"
+                        />
+                      </audio>
+                    )}
+
+                  </Grid>
 
 
-                {currentQuestion.imageUrl && (
-                  <img
-                    src={currentQuestion.imageUrl.replace("dl=0", "raw=1")}
-                    alt="Question"
-                    style={{ maxWidth: "40%", minWidth: "280px", borderRadius: 8, marginTop: 10 }}
-                  />
-                )}
+                  {currentQuestion.imageUrl && (
+                    <img
+                      src={currentQuestion.imageUrl.replace("dl=0", "raw=1")}
+                      alt="Question"
+                      style={{ maxWidth: "40%", minWidth: "280px", borderRadius: 8, marginTop: 10 }}
+                    />
+                  )}
 
-                {/* MCQ Options */}
-                {!isFillInTheBlank(currentQuestion) && (
-                  <RadioGroup
-                    name={`q-${currentQuestion.id}`}
-                    value={answers[currentQuestion.id] || ""}
-                    onChange={(e) => handleAnswer(currentQuestion.id, e.target.value)}
-                    sx={{ mt: 2, display: "flex", gap: 2, flexWrap: "wrap" }}
-                  >
-                    {[1, 2, 3, 4].map((num) => {
-                      const opt = currentQuestion.answer[`answer${num}`];
-                      if (!opt) return null;
+                  {/* MCQ Options */}
+                  {!isFillInTheBlank(currentQuestion) && (
+                    <RadioGroup
+                      name={`q-${currentQuestion.id}`}
+                      value={answers[currentQuestion.id] || ""}
+                      onChange={(e) => handleAnswer(currentQuestion.id, e.target.value)}
+                      sx={{ mt: 2, display: "flex", gap: 2, flexWrap: "wrap" }}
+                    >
+                      {[1, 2, 3, 4].map((num) => {
+                        const opt = currentQuestion.answer[`answer${num}`];
+                        if (!opt) return null;
 
-                      // If answerType == 1, opt is an image URL
-                      if (currentQuestion.answer.answerType === 1) {
+                        // If answerType == 1, opt is an image URL
+                        if (currentQuestion.answer.answerType === 1) {
+                          return (
+                            <FormControlLabel
+                              key={num}
+                              value={opt}
+                              control={<Radio />}
+                              label={
+                                <img
+                                  src={opt.replace("dl=0", "raw=1")}
+                                  alt={`Option ${num}`}
+                                  style={{ maxWidth: 320, borderRadius: 8 }}
+                                />
+                              }
+                              sx={{ flexDirection: "column" }}
+                            />
+                          );
+                        }
+
+                        // Default text option
                         return (
                           <FormControlLabel
                             key={num}
                             value={opt}
                             control={<Radio />}
-                            label={
-                              <img
-                                src={opt.replace("dl=0", "raw=1")}
-                                alt={`Option ${num}`}
-                                style={{ maxWidth: 320, borderRadius: 8 }}
-                              />
-                            }
-                            sx={{ flexDirection: "column" }}
+                            label={opt}
                           />
                         );
+                      })}
+                    </RadioGroup>
+                  )}
+
+
+                  {/* Pagination Controls */}
+                  <Box mt={3} mb={20} display="flex" justifyContent="center" gap={2} flexWrap="wrap">
+                    <Button
+                      style={{ minWidth: "20px", fontSize: "10px" }}
+                      variant="contained"
+                      onClick={() => setCurrentIndex(0)}
+                      disabled={currentIndex === 0}
+                    >
+                      First
+                    </Button>
+                    <Button
+                      style={{ minWidth: "20px", fontSize: "10px" }}
+                      variant="contained"
+                      onClick={() => setCurrentIndex((prev) => Math.max(prev - 1, 0))}
+                      disabled={currentIndex === 0}
+                    >Back
+                    </Button>
+                    <Button
+                      style={{ minWidth: "20px", fontSize: "10px" }}
+                      variant="contained"
+                      onClick={() =>
+                        setCurrentIndex((prev) => Math.min(prev + 1, questions.length - 1))
                       }
-
-                      // Default text option
-                      return (
-                        <FormControlLabel
-                          key={num}
-                          value={opt}
-                          control={<Radio />}
-                          label={opt}
-                        />
-                      );
-                    })}
-                  </RadioGroup>
-                )}
-
-
-                {/* Pagination Controls */}
-                <Box mt={3} mb={50} display="flex" justifyContent="center" gap={2} flexWrap="wrap">
-                  <Button
-                    style={{ minWidth: "20px", fontSize: "10px" }}
-                    variant="contained"
-                    onClick={() => setCurrentIndex(0)}
-                    disabled={currentIndex === 0}
-                  >
-                    First
-                  </Button>
-                  <Button
-                    style={{ minWidth: "20px", fontSize: "10px" }}
-                    variant="contained"
-                    onClick={() => setCurrentIndex((prev) => Math.max(prev - 1, 0))}
-                    disabled={currentIndex === 0}
-                  >Back
-                  </Button>
-                  <Button
-                    style={{ minWidth: "20px", fontSize: "10px" }}
-                    variant="contained"
-                    onClick={() =>
-                      setCurrentIndex((prev) => Math.min(prev + 1, questions.length - 1))
-                    }
-                    disabled={currentIndex === questions.length - 1}
-                  >Next
-                  </Button>
-                  <Button
-                    style={{ minWidth: "20px", fontSize: "10px" }}
-                    variant="contained"
-                    onClick={() => setCurrentIndex(questions.length - 1)}
-                    disabled={currentIndex === questions.length - 1}
-                  >
-                    Last
-                  </Button>
+                      disabled={currentIndex === questions.length - 1}
+                    >Next
+                    </Button>
+                    <Button
+                      style={{ minWidth: "20px", fontSize: "10px" }}
+                      variant="contained"
+                      onClick={() => setCurrentIndex(questions.length - 1)}
+                      disabled={currentIndex === questions.length - 1}
+                    >
+                      Last
+                    </Button>
+                  </Box>
                 </Box>
-              </Box>
+              </div>
+              <div className="do-quiz-inner1">
+                <Typography variant="h6">Quiz Instructions</Typography>
+                <Typography variant="body2" style={{ textAlign: "center" }}>
+                  Please read each question carefully and select the best answer.
+                </Typography>
+                <Typography
+                  variant="h4"
+                  sx={{
+                    color: "#fff",
+                    fontWeight: "bold",
+                    fontFamily: "monospace",
+                    letterSpacing: "1px",
+                  }}
+                >
+                  {formatTime(timeLeft)}
+                </Typography>
+                <Box display="flex" flexWrap="wrap" gap={1} sx={{ overflowY: "auto", marginTop: "20px" }}>
+                  {questions.map((q, idx) => {
+                    const answered = answers[q.id] !== undefined;
+                    return (
+                      <Button
+                        key={q.id}
+                        size="small"
+                        className="q-button"
+                        style={{
+                          minWidth: "40px",
+                          padding: "6px 12px",
+                          color: "white",
+                          backgroundColor:
+                            idx === currentIndex
+                              ? "#ffa33bff" // 🔶 yellow
+                              : answered
+                                ? "#4caf50" // ✅ green if answered
+                                : "#2298ce70", // 🔹 blue for default
+                        }}
+                        variant="contained"
+                        onClick={() => setCurrentIndex(idx)}
+                      >
+                        {idx + 1}
+                      </Button>
+
+                    );
+                  })}
+                </Box>
+              </div>
+            </div>
+            <Grid item xs={12} md={12} sx={{ overflowY: "auto", maxHeight: "calc(100vh - 200px)" }}>
+
             </Grid>
 
             {/* Right Sidebar (Desktop Only) */}
