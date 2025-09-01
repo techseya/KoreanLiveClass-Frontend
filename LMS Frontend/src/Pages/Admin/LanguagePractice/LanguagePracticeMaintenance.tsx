@@ -174,11 +174,7 @@ export default function LanguagePracticeMaintenance() {
     const [b, setB] = useState("");
     const [backgroundImageName, setBackgroundImageName] = useState("");
     const [activeUser, setActiveUser] = useState<"u1" | "u2">("u1");
-
-    const [firstUser, setFirstUser] = useState("");
-    const [secondUser, setSecondUser] = useState("");
-    const [firstAvatar, setFirstAvatar] = useState("");
-    const [secondAvatar, setSecondAvatar] = useState("");
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
 
     const token = localStorage.getItem("token") || "";
 
@@ -819,6 +815,21 @@ export default function LanguagePracticeMaintenance() {
                                             </Grid>
                                         </Grid>
 
+                                        <Grid item xs={12} sm={12}>
+                                            <Typography variant="subtitle1">Upload Audio</Typography>
+                                            <input
+                                                ref={fileInputRef}
+                                                type="file"
+                                                accept=".mp3,.ogg,audio/mpeg,audio/ogg"
+                                                onChange={(e) =>
+                                                    setAudioBlob(
+                                                        e.target.files && e.target.files[0] ? e.target.files[0] : null
+                                                    )
+                                                }
+                                                style={{ marginTop: "8px" }}
+                                            />
+                                        </Grid>
+
                                         <Grid item xs={12} sm={12} mt={2}>
                                             <AudioRecorder onRecordingComplete={(blob) => setAudioBlob(blob)} />
                                         </Grid>
@@ -831,7 +842,13 @@ export default function LanguagePracticeMaintenance() {
                                                     <Button
                                                         variant="outlined"
                                                         color="error"
-                                                        onClick={() => setAudioBlob(null)}
+                                                        onClick={() => {
+                                                            setAudioBlob(null);
+                                                            if (fileInputRef.current) {
+                                                                fileInputRef.current.value = "";
+                                                            }
+                                                        }
+                                                        }
                                                     >
                                                         Delete Audio
                                                     </Button>
