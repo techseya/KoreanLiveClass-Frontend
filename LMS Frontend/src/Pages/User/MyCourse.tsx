@@ -1,6 +1,6 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import "../../Common/styles/courses.css";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getRecordingsBySectionId, getSectionByCourseId } from "src/Services/course_api";
 import {
     Box,
@@ -39,6 +39,7 @@ export default function MyCourse() {
     const [confirmedAnswers, setConfirmedAnswers] = useState<Record<number, string>>({});
     const [correctAnswersIndexMap, setCorrectAnswersIndexMap] = useState<Record<number, number>>({});
     const [sectionIds, setSectionIds] = useState<any[]>([])
+    const videoRef = useRef<HTMLDivElement | null>(null);
 
     const token = localStorage.getItem("token")
     const id = localStorage.getItem("id")
@@ -124,6 +125,13 @@ export default function MyCourse() {
     const handleVideoSelection = (rec: any) => {
         setVideoType(rec.videoType); // "Vimeo" or "YouTube"
         setPlayingVideoUrl(rec.recordLink);
+
+        setTimeout(() => {
+      videoRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "center", // keeps it nicely centered
+      });
+    }, 100);
     };
 
     if (!course) {
@@ -366,7 +374,7 @@ export default function MyCourse() {
             <div className="c-inner">
                 <div className="c-inner1">
 
-                    <div className="c-in visible">
+                    <div className="c-in visible"  ref={videoRef}>
                         {playingVideoUrl ? (
                             <div className="c-thumb-wrapper">
                                 {videoType === "Vimeo" ? (
