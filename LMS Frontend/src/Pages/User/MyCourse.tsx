@@ -440,13 +440,11 @@ export default function MyCourse() {
                                                                 key={i}
                                                                 sx={{ mb: 1, display: "flex", alignItems: "center" }}
                                                             >
-                                                                <PlayCircleFilled sx={{ color: "#0D47A1", mr: 1 }} />
+                                                                <PlayCircleFilled onClick={() => handleVideoSelection(rec)} sx={{ color: "#0D47A1", mr: 1, cursor: "pointer" }} />
                                                                 <span
-                                                                    onClick={() => handleVideoSelection(rec)}
                                                                     style={{
                                                                         color: "#0D47A1",
-                                                                        fontWeight: 500,
-                                                                        cursor: "pointer",
+                                                                        fontWeight: 500
                                                                     }}
                                                                 >
                                                                     {rec.name === "" ? "View Lesson" : rec.name}
@@ -493,13 +491,11 @@ export default function MyCourse() {
                                                             key={i}
                                                             sx={{ mb: 1, display: "flex", alignItems: "center" }}
                                                         >
-                                                            <PlayCircleFilled sx={{ color: "#0D47A1", mr: 1 }} />
+                                                            <PlayCircleFilled onClick={() => handleVideoSelection(rec)} sx={{ color: "#0D47A1", mr: 1, cursor: "pointer" }} />
                                                             <span
-                                                                onClick={() => handleVideoSelection(rec)}
                                                                 style={{
                                                                     color: "#0D47A1",
-                                                                    fontWeight: 500,
-                                                                    cursor: "pointer",
+                                                                    fontWeight: 500
                                                                 }}
                                                             >
                                                                 {rec.name === "" ? "View Lesson" : rec.name}
