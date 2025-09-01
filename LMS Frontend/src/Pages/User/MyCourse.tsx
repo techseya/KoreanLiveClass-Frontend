@@ -440,7 +440,10 @@ export default function MyCourse() {
                                                                 key={i}
                                                                 sx={{ mb: 1, display: "flex", alignItems: "center" }}
                                                             >
-                                                                <PlayCircleFilled onClick={() => handleVideoSelection(rec)} sx={{ color: "#0D47A1", mr: 1, cursor: "pointer" }} />
+                                                                <PlayCircleFilled onClick={() => {
+                                                                    handleVideoSelection(rec)
+                                                                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                                                                }} sx={{ color: "#0D47A1", mr: 1, cursor: "pointer" }} />
                                                                 <span
                                                                     style={{
                                                                         color: "#0D47A1",
@@ -491,7 +494,7 @@ export default function MyCourse() {
                                                             key={i}
                                                             sx={{ mb: 1, display: "flex", alignItems: "center" }}
                                                         >
-                                                            <PlayCircleFilled onClick={() => handleVideoSelection(rec)} sx={{ color: "#0D47A1", mr: 1, cursor: "pointer" }} />
+                                                            <PlayCircleFilled onClick={() => {handleVideoSelection(rec); window.scrollTo({ top: 0, behavior: 'smooth' });}} sx={{ color: "#0D47A1", mr: 1, cursor: "pointer" }} />
                                                             <span
                                                                 style={{
                                                                     color: "#0D47A1",
