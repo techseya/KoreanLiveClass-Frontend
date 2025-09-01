@@ -1,6 +1,6 @@
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import "../../Common/styles/courses.css";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getCourseByCourseId, getRecordingsBySectionId, getSectionByCourseId } from "src/Services/course_api";
 import {
     Box,
@@ -26,6 +26,7 @@ export default function Course() {
 
     const token = localStorage.getItem("token")
     const [searchParams] = useSearchParams();
+    const videoRef = useRef<HTMLDivElement | null>(null);
 
     const navigate = useNavigate()
 
@@ -131,14 +132,14 @@ export default function Course() {
     // };
 
     const getVimeoEmbedUrl = (url: string) => {
-    const videoId = url.split("/").pop();
-    return `https://player.vimeo.com/video/${videoId}?autoplay=1`;
-};
+        const videoId = url.split("/").pop();
+        return `https://player.vimeo.com/video/${videoId}?autoplay=1`;
+    };
 
-const getYoutubeEmbedUrl = (url: string) => {
-    const videoId = url.split("/").pop();
-    return `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-};
+    const getYoutubeEmbedUrl = (url: string) => {
+        const videoId = url.split("/").pop();
+        return `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+    };
 
     const handleVideoSelection = (rec: any) => {
         scrollTop()
@@ -146,6 +147,13 @@ const getYoutubeEmbedUrl = (url: string) => {
         setPlayingVideoUrl(rec.recordLink);
         const videoParam = encodeURIComponent(rec.recordLink); // assuming rec.id is unique
         navigate(`${location.pathname}?video=${videoParam}`, { replace: false });
+
+        setTimeout(() => {
+            videoRef.current?.scrollIntoView({
+                behavior: "smooth",
+                block: "center", // keeps it nicely centered
+            });
+        }, 100);
     };
 
     return (
@@ -162,7 +170,7 @@ const getYoutubeEmbedUrl = (url: string) => {
             </div>
             <div className="c-inner">
                 <div className="c-inner1">
-                    <div className="c-in visible">
+                    <div className="c-in visible" ref={videoRef}>
                         {playingVideoUrl ? (
                             <div className="c-thumb-wrapper">
                                 {videoType === "Vimeo" ? (
