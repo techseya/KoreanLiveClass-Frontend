@@ -75,6 +75,8 @@ export default function QuizMaintenance() {
     const [isImageAnswer, setIsImageAnswer] = useState(0);
     const [isSelect, setIsSelect] = useState(false);
 
+    const fileInputRef = useRef<HTMLInputElement | null>(null);
+
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             setQuestionImage(e.target.files[0]);
@@ -319,7 +321,6 @@ export default function QuizMaintenance() {
         console.log(qTextJsonB);
         console.log(JSON.stringify(fillBlankAnswers));
 
-
         const formData = new FormData();
         formData.append("quizId", quizId);
         formData.append("questionType", qType.toString());
@@ -344,6 +345,9 @@ export default function QuizMaintenance() {
             alert(res.data.message);
             handleClearFields();
             handleGetQuestions(quizId)
+            if (fileInputRef.current) {
+                fileInputRef.current.value = "";
+            }
         } catch (error: any) {
             setLoading(false)
             alert(error.response.data.message)
@@ -407,6 +411,9 @@ export default function QuizMaintenance() {
             alert(res.data.message);
             handleClearFields();
             handleGetQuestions(quizId)
+            if (fileInputRef.current) {
+                fileInputRef.current.value = "";
+            }
         } catch (error: any) {
             setLoading(false)
             alert(error.response.data.message)
@@ -439,6 +446,9 @@ export default function QuizMaintenance() {
 
         if (imageInputRef.current) {
             imageInputRef.current.value = "";
+        }
+        if (fileInputRef.current) {
+            fileInputRef.current.value = "";
         }
     }
 
@@ -723,6 +733,21 @@ export default function QuizMaintenance() {
                                     )}
 
                                     <Grid item xs={12} sm={12}>
+                                        <Typography variant="subtitle1">Upload Audio</Typography>
+                                        <input
+                                            ref={fileInputRef}
+                                            type="file"
+                                            accept=".mp3,.ogg,audio/mpeg,audio/ogg"
+                                            onChange={(e) =>
+                                                setAudioBlob(
+                                                    e.target.files && e.target.files[0] ? e.target.files[0] : null
+                                                )
+                                            }
+                                            style={{ marginTop: "8px" }}
+                                        />
+                                    </Grid>
+
+                                    <Grid item xs={12} sm={12}>
                                         <AudioRecorder onRecordingComplete={(blob) => setAudioBlob(blob)} />
                                     </Grid>
 
@@ -740,7 +765,12 @@ export default function QuizMaintenance() {
                                                 <Button
                                                     variant="outlined"
                                                     color="error"
-                                                    onClick={() => setAudioBlob(null)}
+                                                    onClick={() => {
+                                                        setAudioBlob(null);
+                                                        if (fileInputRef.current) {
+                                                            fileInputRef.current.value = "";
+                                                        }
+                                                    }}
                                                 >
                                                     Delete Audio
                                                 </Button>
