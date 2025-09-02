@@ -175,6 +175,7 @@ export default function LanguagePracticeMaintenance() {
     const [backgroundImageName, setBackgroundImageName] = useState("");
     const [activeUser, setActiveUser] = useState<"u1" | "u2">("u1");
     const fileInputRef = useRef<HTMLInputElement | null>(null);
+    const audioInputRef = useRef<HTMLInputElement | null>(null);
 
     const token = localStorage.getItem("token") || "";
 
@@ -563,6 +564,22 @@ export default function LanguagePracticeMaintenance() {
                         fullWidth
                         variant="outlined"
                     />
+
+                    <Grid item xs={12} sm={12} mt={2}>
+                        <Typography variant="subtitle1">Upload Audio</Typography>
+                        <input
+                            ref={audioInputRef}
+                            type="file"
+                            accept=".mp3,.ogg,audio/mpeg,audio/ogg"
+                            onChange={(e) =>
+                                setNewAudioBlob(
+                                    e.target.files && e.target.files[0] ? e.target.files[0] : null
+                                )
+                            }
+                            style={{ marginTop: "8px" }}
+                        />
+                    </Grid>
+
                     <Grid item xs={12} sm={12} mt={2}>
                         <AudioRecorder onRecordingComplete={(blob) => setNewAudioBlob(blob)} />
                     </Grid>
@@ -575,7 +592,12 @@ export default function LanguagePracticeMaintenance() {
                                 <Button
                                     variant="outlined"
                                     color="error"
-                                    onClick={() => setNewAudioBlob(null)}
+                                    onClick={() => {
+                                        setNewAudioBlob(null)
+                                        if (audioInputRef.current) {
+                                            audioInputRef.current.value = ""
+                                        }
+                                    }}
                                 >
                                     Delete Audio
                                 </Button>
@@ -815,7 +837,7 @@ export default function LanguagePracticeMaintenance() {
                                             </Grid>
                                         </Grid>
 
-                                        <Grid item xs={12} sm={12}>
+                                        <Grid item xs={12} sm={12} mt={2}>
                                             <Typography variant="subtitle1">Upload Audio</Typography>
                                             <input
                                                 ref={fileInputRef}
