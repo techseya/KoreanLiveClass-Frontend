@@ -10,7 +10,9 @@ import {
     DialogContentText,
     DialogActions,
     Divider,
-    Avatar
+    Avatar,
+    ToggleButtonGroup,
+    ToggleButton
 } from "@mui/material";
 import { DataGrid, GridColDef } from "@mui/x-data-grid";
 import EditIcon from "@mui/icons-material/Edit";
@@ -177,9 +179,22 @@ export default function LanguagePracticeMaintenance() {
     const [activeUser, setActiveUser] = useState<"u1" | "u2">("u1");
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const audioInputRef = useRef<HTMLInputElement | null>(null);
-    const [color, setColor] = useState("#ff0000");
+    const [color, setColor] = useState("");
+    const [openColorPicker, setOpenColorPicker] = useState(false);
+    const [mode, setMode] = useState<"color" | "image">("color");
 
     const token = localStorage.getItem("token") || "";
+
+    const handleModeChange = (
+        event: React.MouseEvent<HTMLElement>,
+        newMode: "color" | "image" | null
+    ) => {
+        if (newMode !== null) setMode(newMode);
+        setColor("")
+        setB("")
+        setBackgroundImage("")
+        setBackgroundImageName("")
+    };
 
     const handleAvatarClick = (user: "u1" | "u2") => {
         setActiveUser(user);
@@ -204,7 +219,6 @@ export default function LanguagePracticeMaintenance() {
         setBackgroundImageName(name);
         setOpenPickerB(false);
     };
-
 
     const handleOpenFullScreenModal = (row: any) => {
         setOpenFullScreenModal(true)
@@ -756,37 +770,72 @@ export default function LanguagePracticeMaintenance() {
                                             />
                                         </Grid>
                                         <Grid item sm={12} sx={{ display: "flex", justifyContent: "flex-end", marginTop: "10px" }}>
-                                            <div>
-                                                <SketchPicker
-                                                    color={color}
-                                                    onChange={(newColor) => setColor(newColor.hex)}
-                                                />
-                                                <div
-                                                    style={{
-                                                        marginTop: "10px",
-                                                        width: "100px",
-                                                        height: "40px",
-                                                        backgroundColor: color,
-                                                    }}
-                                                />
-                                                <span>Selected: {color}</span>
-                                            </div>
-                                            <Avatar
-                                                src={backgroundMap[backgroundImage] || background}
-                                                alt="Background"
-                                                sx={{ width: 40, height: 40, marginRight: "10px" }}
-                                            />
-                                            <Button
-                                                style={{ marginRight: "10px" }}
-                                                variant="contained"
+                                            <ToggleButtonGroup
+                                                value={mode}
+                                                exclusive
                                                 size="small"
-                                                onClick={() => {
-                                                    setOpenPickerB(true);
-                                                }}
+                                                onChange={handleModeChange}
+                                                fullWidth
+                                                sx={{ marginBottom: 2, width: "200px", marginRight: "10px" }}
                                             >
-                                                Background
-                                            </Button>
-                                            <Button disabled={!u1 || !u2 || !u1Avatar || !u2Avatar} variant="contained" onClick={() => { setLangDetailsOpen(true) }}>
+                                                <ToggleButton value="color">Color</ToggleButton>
+                                                <ToggleButton value="image">Image</ToggleButton>
+                                            </ToggleButtonGroup>
+                                            {mode === "color" && (
+                                                <>
+                                                    <div style={{ marginRight: "10px", width: "40px", height: "40px", backgroundColor: color, borderRadius: "12px" }}></div>
+                                                    <Button style={{ height: "40px", marginRight: "10px" }} variant="contained" onClick={() => setOpenColorPicker(!openColorPicker)}>Pick Color</Button>
+                                                    <Dialog open={openColorPicker} onClose={() => setOpenColorPicker(false)}>
+                                                        <DialogTitle>Select a Color</DialogTitle>
+                                                        <DialogContent>
+                                                            <SketchPicker
+                                                                color={color}
+                                                                onChange={(newColor) => setColor(newColor.hex)}
+                                                            />
+                                                            <div
+                                                                style={{
+                                                                    marginTop: "10px",
+                                                                    width: "100%",
+                                                                    height: "40px",
+                                                                    backgroundColor: color,
+                                                                    borderRadius: "5px",
+                                                                    border: "1px solid #ccc",
+                                                                }}
+                                                            />
+                                                            <span>Selected: {color}</span>
+                                                        </DialogContent>
+                                                        <DialogActions>
+                                                            <Button onClick={() => setOpenColorPicker(false)}>Cancel</Button>
+                                                            <Button onClick={() => setOpenColorPicker(false)} variant="contained">
+                                                                Confirm
+                                                            </Button>
+                                                        </DialogActions>
+                                                    </Dialog>
+                                                </>
+                                            )}
+
+                                            {mode === "image" && (
+                                                <>
+                                                    <Avatar
+                                                        src={backgroundMap[backgroundImage] || background}
+                                                        alt="Background"
+                                                        sx={{ width: 40, height: 40, marginRight: "10px" }}
+                                                    />
+                                                    <Button
+                                                        style={{ marginRight: "10px", height: "40px" }}
+                                                        variant="contained"
+                                                        size="small"
+                                                        onClick={() => {
+                                                            setOpenPickerB(true);
+                                                        }}
+                                                    >
+                                                        Background
+                                                    </Button>
+                                                </>
+                                            )}
+
+
+                                            <Button style={{height: "40px"}} disabled={!u1 || !u2 || !u1Avatar || !u2Avatar} variant="contained" onClick={() => { setLangDetailsOpen(true) }}>
                                                 Confirm Users
                                             </Button>
                                         </Grid>
@@ -1074,7 +1123,7 @@ export default function LanguagePracticeMaintenance() {
 
                     </div>
                 </DialogContent>
-            </Dialog>
+            </Dialog >
 
             {!visible && (
                 <>
@@ -1095,93 +1144,96 @@ export default function LanguagePracticeMaintenance() {
                         />
                     </Paper>
                 </>
-            )}
+            )
+            }
 
-            {visible && editingLang && (
-                <Grid container spacing={2} mt={1}>
+            {
+                visible && editingLang && (
+                    <Grid container spacing={2} mt={1}>
 
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            label="Name"
-                            fullWidth
-                            value={editingLang.name || ''}
-                            onChange={(e) => handleFormChange("name", e.target.value)}
-                        />
-                    </Grid>
-
-                    <Grid item xs={12} sm={6}>
-                        <FormControl fullWidth>
-                            <InputLabel>Difficulty Level</InputLabel>
-                            <Select
-                                value={editingLang.difficultyLevel || 1}
-                                label="Difficulty Level"
-                                onChange={(e) => handleFormChange("difficultyLevel", Number(e.target.value))}
-                            >
-                                <MenuItem value={1}>Easy</MenuItem>
-                                <MenuItem value={2}>Medium</MenuItem>
-                                <MenuItem value={3}>Hard</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
-
-                    <Grid item xs={12} sm={6}>
-                        <FormControl fullWidth>
-                            <InputLabel>Is Paid</InputLabel>
-                            <Select
-                                value={editingLang.isPaid ? "Yes" : "No"}
-                                label="Is Paid"
-                                onChange={(e) => handleFormChange("isPaid", e.target.value === "Yes")}
-                            >
-                                <MenuItem value="No">No</MenuItem>
-                                <MenuItem value="Yes">Yes</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
-
-                    {editingLang.isPaid && (
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                label="Price"
+                                label="Name"
                                 fullWidth
-                                type="number"
-                                value={editingLang.price || ''}
-                                onChange={(e) => handleFormChange("price", e.target.value)}
-                                inputProps={{ min: 0 }}
+                                value={editingLang.name || ''}
+                                onChange={(e) => handleFormChange("name", e.target.value)}
                             />
                         </Grid>
-                    )}
 
-                    <Grid item xs={12} sm={12}>
-                        <TextField
-                            label="Description"
-                            fullWidth
-                            multiline
-                            rows={3}
-                            value={editingLang.descriptions || ''}
-                            onChange={(e) => handleFormChange("descriptions", e.target.value)}
-                        />
-                    </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <FormControl fullWidth>
+                                <InputLabel>Difficulty Level</InputLabel>
+                                <Select
+                                    value={editingLang.difficultyLevel || 1}
+                                    label="Difficulty Level"
+                                    onChange={(e) => handleFormChange("difficultyLevel", Number(e.target.value))}
+                                >
+                                    <MenuItem value={1}>Easy</MenuItem>
+                                    <MenuItem value={2}>Medium</MenuItem>
+                                    <MenuItem value={3}>Hard</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Grid>
 
-                    <Grid item xs={12} sm={6}>
-                        <FormControl fullWidth>
-                            <InputLabel>Status</InputLabel>
-                            <Select
-                                value={editingLang.activeStatus || 'Active'}
-                                onChange={(e) => handleFormChange("activeStatus", e.target.value)}
-                                label="Status"
-                            >
-                                <MenuItem value={1}>Active</MenuItem>
-                                <MenuItem value={2}>Inactive</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <FormControl fullWidth>
+                                <InputLabel>Is Paid</InputLabel>
+                                <Select
+                                    value={editingLang.isPaid ? "Yes" : "No"}
+                                    label="Is Paid"
+                                    onChange={(e) => handleFormChange("isPaid", e.target.value === "Yes")}
+                                >
+                                    <MenuItem value="No">No</MenuItem>
+                                    <MenuItem value="Yes">Yes</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Grid>
 
-                    <Grid item xs={12} display="flex" justifyContent="flex-end">
-                        <Button variant="outlined" onClick={handleCancel} sx={{ mr: 2 }}>Cancel</Button>
-                        <Button variant="contained" onClick={handleUpdate}>Update</Button>
+                        {editingLang.isPaid && (
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    label="Price"
+                                    fullWidth
+                                    type="number"
+                                    value={editingLang.price || ''}
+                                    onChange={(e) => handleFormChange("price", e.target.value)}
+                                    inputProps={{ min: 0 }}
+                                />
+                            </Grid>
+                        )}
+
+                        <Grid item xs={12} sm={12}>
+                            <TextField
+                                label="Description"
+                                fullWidth
+                                multiline
+                                rows={3}
+                                value={editingLang.descriptions || ''}
+                                onChange={(e) => handleFormChange("descriptions", e.target.value)}
+                            />
+                        </Grid>
+
+                        <Grid item xs={12} sm={6}>
+                            <FormControl fullWidth>
+                                <InputLabel>Status</InputLabel>
+                                <Select
+                                    value={editingLang.activeStatus || 'Active'}
+                                    onChange={(e) => handleFormChange("activeStatus", e.target.value)}
+                                    label="Status"
+                                >
+                                    <MenuItem value={1}>Active</MenuItem>
+                                    <MenuItem value={2}>Inactive</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Grid>
+
+                        <Grid item xs={12} display="flex" justifyContent="flex-end">
+                            <Button variant="outlined" onClick={handleCancel} sx={{ mr: 2 }}>Cancel</Button>
+                            <Button variant="contained" onClick={handleUpdate}>Update</Button>
+                        </Grid>
                     </Grid>
-                </Grid>
-            )}
+                )
+            }
         </>
     );
 }
