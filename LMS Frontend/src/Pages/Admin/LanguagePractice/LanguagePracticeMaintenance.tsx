@@ -474,7 +474,7 @@ export default function LanguagePracticeMaintenance() {
                 formdata.append("audioAvatar", u2AvatarName + `,${u1AvatarName}`);
             }
 
-            formdata.append("backgroundImage", backgroundImageName ? backgroundImageName : "");
+            formdata.append("backgroundImage", backgroundImageName ? backgroundImageName : color ? color : "");
             formdata.append("languagePracticeId", langId);
             formdata.append("languagePracticeQuestionId", "1");
             formdata.append("languagePracticeType", qType.toString());
@@ -483,7 +483,7 @@ export default function LanguagePracticeMaintenance() {
             formdata.append("originalSentence", "");
             formdata.append("scrambledSentence", "");
             formdata.append("order", (questions.length > 0 ? questions[0].audioFilePaths[questions[0].audioFilePaths.length - 1].order + 1 : 1).toString());
-        }
+        }        
 
         if (qType === 2) {
             formdata.append("languagePracticeId", langId);
@@ -836,7 +836,7 @@ export default function LanguagePracticeMaintenance() {
 
 
                                             <Button style={{height: "40px"}} disabled={!u1 || !u2 || !u1Avatar || !u2Avatar} variant="contained" onClick={() => { setLangDetailsOpen(true) }}>
-                                                Confirm Users
+                                                Confirm
                                             </Button>
                                         </Grid>
                                     </Grid>
@@ -962,7 +962,9 @@ export default function LanguagePracticeMaintenance() {
                                         </Grid>
 
                                         <Grid item xs={12} sm={12} mt={2} style={{
-                                            backgroundImage: `url(${backgroundMap[b] || ""})`, // fallback to b1
+                                            // b = #f5a623
+                                            backgroundImage: b !== null && b.startsWith("#") ? `none` : `url(${backgroundMap[b]})`,
+                                            backgroundColor: b !== null && b.startsWith("#") ? b : "transparent",
                                             backgroundSize: "cover",
                                             backgroundPosition: "center",
                                             maxHeight: "500px",
