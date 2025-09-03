@@ -56,6 +56,7 @@ import back7 from "../../../Assets/Images/back7.jpg";
 import back8 from "../../../Assets/Images/back8.jpg";
 import back9 from "../../../Assets/Images/back9.jpg";
 import background from "../../../Assets/Images/background.png";
+import { SketchPicker } from "react-color";
 
 function CustomNoRowsOverlay() {
     return (
@@ -176,6 +177,7 @@ export default function LanguagePracticeMaintenance() {
     const [activeUser, setActiveUser] = useState<"u1" | "u2">("u1");
     const fileInputRef = useRef<HTMLInputElement | null>(null);
     const audioInputRef = useRef<HTMLInputElement | null>(null);
+    const [color, setColor] = useState("#ff0000");
 
     const token = localStorage.getItem("token") || "";
 
@@ -754,6 +756,21 @@ export default function LanguagePracticeMaintenance() {
                                             />
                                         </Grid>
                                         <Grid item sm={12} sx={{ display: "flex", justifyContent: "flex-end", marginTop: "10px" }}>
+                                            <div>
+                                                <SketchPicker
+                                                    color={color}
+                                                    onChange={(newColor) => setColor(newColor.hex)}
+                                                />
+                                                <div
+                                                    style={{
+                                                        marginTop: "10px",
+                                                        width: "100px",
+                                                        height: "40px",
+                                                        backgroundColor: color,
+                                                    }}
+                                                />
+                                                <span>Selected: {color}</span>
+                                            </div>
                                             <Avatar
                                                 src={backgroundMap[backgroundImage] || background}
                                                 alt="Background"
