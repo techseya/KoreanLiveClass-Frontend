@@ -99,8 +99,8 @@ export default function MyLanguagePracticeDemo() {
 
                     {/* Type 1 - Audio Practice */}
                     {type === "1" && questions.length > 0 && questions.map((q: any, qIdx: number) => {
-                        const bgImage = q.audioFilePaths?.[0]?.backgroundImage
-                            ? backgroundMap[q.audioFilePaths[0].backgroundImage.trim()]
+                        const bgImage = q.audioFilePaths?.[0]?.backgroundImage !== null
+                            ? q.audioFilePaths?.[0]?.backgroundImage.startsWith("#") ? q.audioFilePaths?.[0]?.backgroundImage : backgroundMap[q.audioFilePaths[0].backgroundImage.trim()]
                             : null;
 
                         return (
@@ -110,7 +110,8 @@ export default function MyLanguagePracticeDemo() {
                                 data-aos="fade-up"
                                 data-aos-delay="100"
                                 style={{
-                                    backgroundImage: bgImage ? `url(${bgImage})` : "none",
+                                    backgroundImage: bgImage !== null && !bgImage.startsWith("#") ? `url(${bgImage})` : "none",
+                                    backgroundColor: bgImage !== null && bgImage.startsWith("#") ? bgImage : "transparent",
                                     backgroundSize: "cover",
                                     backgroundPosition: "center",
                                     borderRadius: "12px",
